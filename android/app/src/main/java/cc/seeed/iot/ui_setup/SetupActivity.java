@@ -1,21 +1,24 @@
 package cc.seeed.iot.ui_setup;
 
-import java.util.Locale;
-
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
+import android.content.Context;
 import android.os.Bundle;
+import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
+
+import java.util.Locale;
 
 import cc.seeed.iot.R;
 
@@ -37,6 +40,13 @@ public class SetupActivity extends Activity {
     ViewPager mViewPager;
     CirclePageIndicator mPagerIndicator;
 
+    // ******************************************
+    // Only for Test Dialog View, pleas delete it
+    // ******************************************
+    Button mSignup;
+    Button mSignin;
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +63,23 @@ public class SetupActivity extends Activity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mPagerIndicator.setViewPager(mViewPager);
+
+        // find the Sign Up and Sign In button
+        mSignup = (Button) this.findViewById(R.id.setup_btn_signup);
+        mSignin = (Button) this.findViewById(R.id.setup_btn_signin);
+
+        // ******************************************
+        // Only for Test Dialog View, pleas delete it
+        // ******************************************
+
+        mSignin.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Open Sign In Dialog", Toast.LENGTH_SHORT).show();
+//                new SignInDialogFragment().show(context.getSupportFragmentManager(), "Sign In");
+            }
+        });
 
     }
 
