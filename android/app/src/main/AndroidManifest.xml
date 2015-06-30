@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".ui_setup.SetupActivity"
-            android:label="@string/title_activity_main2">
+            android:label="SetupActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.viewpagerindicator.CirclePageIndicator;
@@ -36,6 +37,7 @@ public class SetupActivity extends Activity {
      */
     ViewPager mViewPager;
     CirclePageIndicator mPagerIndicator;
+    Button mButtonSignIn, mButtonSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +49,29 @@ public class SetupActivity extends Activity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         mPagerIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        mButtonSignIn = (Button) findViewById(R.id.button2);
+        mButtonSignUp = (Button) findViewById(R.id.button);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         mPagerIndicator.setViewPager(mViewPager);
+
+        mButtonSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SignInDialog(SetupActivity.this);
+            }
+        });
+
+
+        mButtonSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SignUpDialog(SetupActivity.this);
+            }
+        });
 
     }
 
