@@ -38,6 +38,7 @@ public class SetupActivity extends Activity {
      */
     ViewPager mViewPager;
     CirclePageIndicator mPagerIndicator;
+    Button mButtonSignIn, mButtonSignUp;
 
     // ******************************************
     // Only for Test Dialog View, pleas delete it
@@ -55,6 +56,8 @@ public class SetupActivity extends Activity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         mPagerIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        mButtonSignIn = (Button) findViewById(R.id.button2);
+        mButtonSignUp = (Button) findViewById(R.id.button);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -62,6 +65,7 @@ public class SetupActivity extends Activity {
 
         mPagerIndicator.setViewPager(mViewPager);
 
+<<<<<<< HEAD
         // find the Sign Up and Sign In button
         mSignup = (Button) this.findViewById(R.id.setup_btn_signup);
         mSignin = (Button) this.findViewById(R.id.setup_btn_signin);
@@ -76,6 +80,20 @@ public class SetupActivity extends Activity {
             public void onClick(View v) {
                 Toast.makeText(SetupActivity.this, "Open Sign In Dialog", Toast.LENGTH_SHORT).show();
 //                new SignInDialogFragment().show(this.getSupportFragmentManager(), "Sign In");
+=======
+        mButtonSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SignInDialog(SetupActivity.this);
+            }
+        });
+
+
+        mButtonSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new SignUpDialog(SetupActivity.this);
+>>>>>>> origin/master
             }
         });
 
