@@ -3,7 +3,6 @@ package cc.seeed.iot.ui_setup;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -45,7 +44,6 @@ public class SetupActivity extends Activity {
     // ******************************************
     Button mSignup;
     Button mSignin;
-    Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +74,8 @@ public class SetupActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Open Sign In Dialog", Toast.LENGTH_SHORT).show();
-//                new SignInDialogFragment().show(context.getSupportFragmentManager(), "Sign In");
+                Toast.makeText(SetupActivity.this, "Open Sign In Dialog", Toast.LENGTH_SHORT).show();
+//                new SignInDialogFragment().show(this.getSupportFragmentManager(), "Sign In");
             }
         });
 
