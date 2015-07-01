@@ -94,7 +94,7 @@ public class SignInDialogFragment extends DialogFragment {
         boolean cancel = false;
         View focusView = null;
 
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError("invalid Password");
             focusView = mPasswordView;
             cancel = true;
@@ -127,7 +127,7 @@ public class SignInDialogFragment extends DialogFragment {
                         alertDialog.dismiss();
                     } else {
                         showProgress(false);
-                        mEmailView.setError("email or password error.");
+                        mEmailView.setError(userResponse.msg);
                         mEmailView.requestFocus();
                     }
                 }
