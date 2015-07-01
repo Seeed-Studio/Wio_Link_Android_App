@@ -8,7 +8,6 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -18,14 +17,22 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.webapi.IotApi;
+import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.UserResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
 
 /**
  * Created by tenwong on 15/7/1.
  */
 public class SignInDialogFragment extends DialogFragment {
     Context context;
+    AlertDialog alertDialog;
+
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
 
@@ -60,9 +67,9 @@ public class SignInDialogFragment extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();    //super.onStart() is where dialog.show() is actually called on the underlying dialog, so we have to do it after this point
-        final AlertDialog d = (AlertDialog) getDialog();
-        if (d != null) {
-            Button positiveButton = (Button) d.getButton(Dialog.BUTTON_POSITIVE);
+        alertDialog = (AlertDialog) getDialog();
+        if (alertDialog != null) {
+            Button positiveButton = (Button) alertDialog.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -70,7 +77,7 @@ public class SignInDialogFragment extends DialogFragment {
                     //Do stuff, possibly set wantToCloseDialog to true then...
                     attemptLogin();
                     if (wantToCloseDialog)
-                        d.dismiss();
+                        alertDialog.dismiss();
                     //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
                 }
             });
@@ -109,6 +116,27 @@ public class SignInDialogFragment extends DialogFragment {
             focusView.requestFocus();
         } else {
             showProgress(true);
+            IotApi api = new IotApi();
+            IotService iot = api.getService();
+            iot.userLogin(email, password, new Callback<UserResponse>() {
+                @Override
+                public void success(UserResponse userResponse, retrofit.client.Response response) {
+                    String status = userResponse.status;
+                    if (status.equals("200")) {
+                        Toast.makeText(context, userResponse.msg, Toast.LENGTH_LONG).show();
+                        alertDialog.dismiss();
+                    } else {
+                        showProgress(false);
+                        mEmailView.setError("email or password error.");
+                        mEmailView.requestFocus();
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Toast.makeText(context, "连接服务器失败", Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 
