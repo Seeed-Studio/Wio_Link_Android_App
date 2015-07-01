@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
@@ -62,7 +61,9 @@ public class SetupActivity extends Activity {
         mButtonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SignInDialog(SetupActivity.this);
+//                new SignInDialog(SetupActivity.this);
+                SignInDialogFragment signInDialogFragment = new SignInDialogFragment();
+                signInDialogFragment.show(getFragmentManager(), "signIn");
             }
         });
 
@@ -70,7 +71,9 @@ public class SetupActivity extends Activity {
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new SignUpDialog(SetupActivity.this);
+//                new SignUpDialog(SetupActivity.this);
+                SignUpDialogFragment signUpDialogFragment = new SignUpDialogFragment();
+                signUpDialogFragment.show(getFragmentManager(), "signUn");
             }
         });
 
