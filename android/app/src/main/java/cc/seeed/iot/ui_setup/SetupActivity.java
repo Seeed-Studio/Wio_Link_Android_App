@@ -40,12 +40,6 @@ public class SetupActivity extends Activity {
     CirclePageIndicator mPagerIndicator;
     Button mButtonSignIn, mButtonSignUp;
 
-    // ******************************************
-    // Only for Test Dialog View, pleas delete it
-    // ******************************************
-    Button mSignup;
-    Button mSignin;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +50,8 @@ public class SetupActivity extends Activity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         mPagerIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
-        mButtonSignIn = (Button) findViewById(R.id.button2);
-        mButtonSignUp = (Button) findViewById(R.id.button);
+        mButtonSignIn = (Button) findViewById(R.id.setup_btn_signin);
+        mButtonSignUp = (Button) findViewById(R.id.setup_btn_signup);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.pager);
@@ -65,22 +59,6 @@ public class SetupActivity extends Activity {
 
         mPagerIndicator.setViewPager(mViewPager);
 
-<<<<<<< HEAD
-        // find the Sign Up and Sign In button
-        mSignup = (Button) this.findViewById(R.id.setup_btn_signup);
-        mSignin = (Button) this.findViewById(R.id.setup_btn_signin);
-
-        // ******************************************
-        // Only for Test Dialog View, pleas delete it
-        // ******************************************
-
-        mSignin.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(SetupActivity.this, "Open Sign In Dialog", Toast.LENGTH_SHORT).show();
-//                new SignInDialogFragment().show(this.getSupportFragmentManager(), "Sign In");
-=======
         mButtonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +71,6 @@ public class SetupActivity extends Activity {
             @Override
             public void onClick(View v) {
                 new SignUpDialog(SetupActivity.this);
->>>>>>> origin/master
             }
         });
 
