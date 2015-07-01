@@ -33,13 +33,14 @@
     <string name="smartconfig_btn_try_again">Try Again</string>
     <string name="smartconfig_btn_play">Let\'s Play</string>
 
-    <string name="smartconfig_tips_connect">Smart config help you to connect your
-        IoT Node devices to WiFi AP which
+    <string name="smartconfig_tips_connect">Smart config help you to connect your\n
+        IoT Node devices to WiFi AP which\n
         SSID input above.
     </string>
-    <string name="smartconfig_tips_failed">If you have any issuse, please visit:
+    <string name="smartconfig_tips_failed">If you have any issuse, please visit:\n
         http://seeedsutido.com.
     </string>
     <string name="smartconfig_tips_node_name">The Node\'s name help you identity it.</string>
+    <string name="title_activity_test">test</string>
 
 </resources>
