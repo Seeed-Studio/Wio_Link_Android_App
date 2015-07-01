@@ -12,8 +12,34 @@
     <string name="setup_signin">Sign In</string>
     <string name="setup_signup">Sign Up</string>
     <string name="signin_email">Your Email</string>
-    <string name="signin_password">Your Password</string>
+    <string name="signin_password">Password</string>
+    <string name="signin_fortgot_password">Forgot your password?</string>
     <string name="signup_email">Email</string>
     <string name="signup_password">Password</string>
     <string name="signup_verify_password">Verify Password</string>
+
+
+    <!--Smart Config-->
+    <string name="smartconfig_ready">Got Ready</string>
+    <string name="smartconfig_connect">Connect Your Node to WiFi</string>
+    <string name="smartconfig_error">Connection Failed</string>
+    <string name="smartconfig_connected">Connected</string>
+
+    <string name="smartconfig_hint_SSID">SSID</string>
+    <string name="smartconfig_hint_password">Password</string>
+    <string name="smartconfig_hint_node_name">Take a name for Node</string>
+
+    <string name="smartconfig_btn_connect">Connect</string>
+    <string name="smartconfig_btn_try_again">Try Again</string>
+    <string name="smartconfig_btn_play">Let\'s Play</string>
+
+    <string name="smartconfig_tips_connect">Smart config help you to connect your
+        IoT Node devices to WiFi AP which
+        SSID input above.
+    </string>
+    <string name="smartconfig_tips_failed">If you have any issuse, please visit:
+        http://seeedsutido.com.
+    </string>
+    <string name="smartconfig_tips_node_name">The Node\'s name help you identity it.</string>
+
 </resources>

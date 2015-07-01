@@ -16,7 +16,8 @@
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:backgroundTint="@color/apptheme_dialog_edittext" />
 
     <EditText
         android:id="@+id/password"
@@ -29,7 +30,8 @@
         android:imeOptions="actionUnspecified"
         android:inputType="textPassword"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:backgroundTint="@color/apptheme_dialog_edittext" />
 
     <EditText
         android:id="@+id/verify"
@@ -42,6 +44,7 @@
         android:imeOptions="actionUnspecified"
         android:inputType="textPassword"
         android:maxLines="1"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:backgroundTint="@color/apptheme_dialog_edittext" />
 
 </LinearLayout>
