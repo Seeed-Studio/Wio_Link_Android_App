@@ -43,4 +43,7 @@
     <string name="smartconfig_tips_node_name">The Node\'s name help you identity it.</string>
     <string name="title_activity_test">test</string>
 
+    <!--Mian Screen-->
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
 </resources>
