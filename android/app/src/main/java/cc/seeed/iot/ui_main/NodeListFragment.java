@@ -1,10 +1,10 @@
 package cc.seeed.iot.ui_main;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,19 +33,16 @@ import retrofit.client.Response;
  */
 public class NodeListFragment extends Fragment {
     View view;
-    Button bt_userCreate;
-    TextView tv_status, tv_msg;
-    ListView li_nodes;
     Context context;
+    TextView txtvName;
+    ListView li_nodes;
     SharedPreferences sp;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_node_list, container, false);
-//        bt_userCreate = (Button) view.findViewById(R.id.bt_userCreate);
-//        tv_status = (TextView) view.findViewById(R.id.tv_status);
-//        tv_msg = (TextView) view.findViewById(R.id.tv_msg);
+        txtvName = (TextView) view.findViewById(R.id.txtvName);
         li_nodes = (ListView) view.findViewById(R.id.list_nodes);
         return view;
     }
@@ -57,41 +54,24 @@ public class NodeListFragment extends Fragment {
         sp = context.getSharedPreferences("IOT", Context.MODE_PRIVATE);
 
         IotApi api = new IotApi();
-        api.setAccessToken(sp.getString("userToken", ""));
+        api.setAccessToken("sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
         final IotService iot = api.getService();
-        bt_userCreate.setOnClickListener(new View.OnClickListener() {
+
+        iot.nodesList(new Callback<NodeListResponse>() {
             @Override
-            public void onClick(View v) {
+            public void success(NodeListResponse nodeListResponse, Response response) {
+                Log.d("iot", "success");
+                ArrayList<Node> nodes = (ArrayList) nodeListResponse.nodes;
+                NodeListAdapter adapter = new NodeListAdapter(context, nodes);
+                li_nodes.setAdapter(adapter);
+            }
 
-                iot.nodesList(new Callback<NodeListResponse>() {
-                    @Override
-                    public void success(NodeListResponse nodeListResponse, Response response) {
-                        Log.d("iot", "success");
-                        tv_status.setText(nodeListResponse.status);
-                        tv_msg.setText(nodeListResponse.msg);
-
-//                        ArrayList<Node> nodes = new ArrayList<Node>();
-                        ArrayList<Node> nodes = (ArrayList) nodeListResponse.nodes;
-
-                        NodeListAdapter adapter = new NodeListAdapter(context, nodes);
-
-                        li_nodes.setAdapter(adapter);
-//                        Log.e("iot", nodeListResponse.nodes.get(0).name);
-//                        saveData(user);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.d("iot", "fail");
-                        Toast.makeText(getActivity(), "连接服务器失败", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("iot", "fail");
+                Toast.makeText(getActivity(), "连接服务器失败", Toast.LENGTH_LONG).show();
             }
         });
-
-
     }
 
 }

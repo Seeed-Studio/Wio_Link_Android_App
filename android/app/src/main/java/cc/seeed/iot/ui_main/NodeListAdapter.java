@@ -27,12 +27,8 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.main_list_item, parent, false);
         }
 
-//        TextView tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-//        TextView tv_sn = (TextView) convertView.findViewById(R.id.tv_node_sn);
-//        TextView tv_key = (TextView) convertView.findViewById(R.id.tv_node_key);
-//        tv_name.setText("name:" + node.name);
-//        tv_sn.setText("node_sn:" + node.node_sn);
-//        tv_key.setText("node_key:" + node.node_key);
+        TextView tv_name = (TextView) convertView.findViewById(R.id.txtvName);
+        tv_name.setText(node.name);
 
         return convertView;
 
