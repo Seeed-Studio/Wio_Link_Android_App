@@ -46,4 +46,6 @@
     <!--Mian Screen-->
     <string name="online">Online</string>
     <string name="offline">Offline</string>
+
+    <string name="menu_settings">Settings</string>
 </resources>

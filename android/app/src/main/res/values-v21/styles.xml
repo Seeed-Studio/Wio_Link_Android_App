@@ -8,4 +8,9 @@
         <item name="android:colorPrimaryDark">#1c9adf</item>
         <item name="android:colorAccent">#f7ce39</item>
     </style>
+
+    <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 </resources>

@@ -25,4 +25,6 @@
     <color name="background_nav_draw_lesson_review">#ffffffff</color>
     <color name="simple_item_background">@android:color/transparent</color>
     <color name="simple_item_background_pressed">#15000000</color>
+
+    <color name="window_background">#FFF5F5F5</color>
 </resources>
