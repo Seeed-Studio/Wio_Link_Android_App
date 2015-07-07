@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="192dp"
-    android:background="?attr/colorPrimaryDark"
+    android:background="@color/apptheme_blue"
     android:padding="16dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
@@ -11,7 +11,7 @@
     <ImageView
         android:layout_width="72.0dp"
         android:layout_height="72.0dp"
-        android:src="@drawable/ic_avatar_smooth"
+        android:src="@drawable/icon"
         android:layout_marginBottom="20.0dp"
         />
 
