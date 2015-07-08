@@ -21,27 +21,30 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.webapi.IotApi;
+import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.Node;
+import cc.seeed.iot.webapi.model.NodeListResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * TODO
@@ -50,7 +53,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView mRecyclerView;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +74,9 @@ public class MainScreenActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        if (viewPager != null) {
-            setupViewPager(viewPager);
+        listView = (ListView) findViewById(R.id.listview);
+        if (listView != null) {
+            setupAdapter();
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -119,16 +122,24 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-//        mCatNamesRecyclerViewAdapter = new CatNamesRecyclerViewAdapter(this);
-//        mRecyclerView.setAdapter(mCatNamesRecyclerViewAdapter);
-    }
+        IotApi api = new IotApi();
+        api.setAccessToken("sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
+        final IotService iot = api.getService();
+        iot.nodesList(new Callback<NodeListResponse>() {
+            @Override
+            public void success(NodeListResponse nodeListResponse, Response response) {
+                ArrayList<Node> nodes = (ArrayList) nodeListResponse.nodes;
+                ListAdapter adapter = new NodeListAdapter(MainScreenActivity.this, nodes);
+                listView.setAdapter(adapter);
+            }
 
-    private void setupViewPager(ViewPager viewPager) {
-        Adapter adapter = new Adapter(getSupportFragmentManager());
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("iot", "fail");
+                Toast.makeText(MainScreenActivity.this, "连接服务器失败", Toast.LENGTH_LONG).show();
+            }
+        });
 
-        NodeListFragment fragment = new NodeListFragment();
-        adapter.addFragment(fragment, "one");
-        viewPager.setAdapter(adapter);
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -156,35 +167,4 @@ public class MainScreenActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
-
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
-    }
-
 }
