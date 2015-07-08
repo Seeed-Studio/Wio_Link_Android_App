@@ -26,13 +26,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class MainScreenActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    ListView listView;
+    RecyclerView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +74,11 @@ public class MainScreenActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
-        listView = (ListView) findViewById(R.id.listview);
+        listView = (RecyclerView) findViewById(R.id.listview);
         if (listView != null) {
+            listView.setHasFixedSize(true);
+            RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
+            listView.setLayoutManager(layout);
             setupAdapter();
         }
 
@@ -129,7 +132,9 @@ public class MainScreenActivity extends AppCompatActivity {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
                 ArrayList<Node> nodes = (ArrayList) nodeListResponse.nodes;
-                ListAdapter adapter = new NodeListAdapter(MainScreenActivity.this, nodes);
+//                ListAdapter adapter = new NodeListAdapter(MainScreenActivity.this, nodes);
+//                listView.setAdapter(adapter);
+                RecyclerView.Adapter adapter = new NodeListRecyclerAdapter(nodes);
                 listView.setAdapter(adapter);
             }
 

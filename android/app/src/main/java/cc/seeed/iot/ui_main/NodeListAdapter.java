@@ -24,7 +24,8 @@ public class NodeListAdapter extends ArrayAdapter<Node> {
     public View getView(int position, View convertView, ViewGroup parent) {
         Node node = getItem(position);
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.main_list_item, parent, false);
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.main_list_item, parent, false);
         }
 
         TextView tv_name = (TextView) convertView.findViewById(R.id.txtvName);

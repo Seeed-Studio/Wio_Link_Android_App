@@ -32,4 +32,6 @@
     <color name="green">#009900</color>
     <color name="blue">#000099</color>
     <color name="orange">#FF9900</color>
+
+    <color name="backgroud">#ECEFF1</color>
 </resources>
