@@ -17,11 +17,13 @@
 package cc.seeed.iot.ui_main;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,9 +31,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import cc.seeed.iot.R;
+import cc.seeed.iot.webapi.IotApi;
+import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.Node;
+import cc.seeed.iot.webapi.model.NodeListResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * TODO
@@ -39,6 +52,8 @@ import cc.seeed.iot.R;
 public class MainScreenActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +74,25 @@ public class MainScreenActivity extends AppCompatActivity {
             setupDrawerContent(navigationView);
         }
 
+        listView = (ListView) findViewById(R.id.listview);
+        if (listView != null) {
+            setupAdapter();
+        }
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        setupAdapter();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 2500);
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -87,6 +121,27 @@ public class MainScreenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void setupAdapter() {
+        IotApi api = new IotApi();
+        api.setAccessToken("sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
+        final IotService iot = api.getService();
+        iot.nodesList(new Callback<NodeListResponse>() {
+            @Override
+            public void success(NodeListResponse nodeListResponse, Response response) {
+                ArrayList<Node> nodes = (ArrayList) nodeListResponse.nodes;
+                ListAdapter adapter = new NodeListAdapter(MainScreenActivity.this, nodes);
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.d("iot", "fail");
+                Toast.makeText(MainScreenActivity.this, "连接服务器失败", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -94,9 +149,22 @@ public class MainScreenActivity extends AppCompatActivity {
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
+
+                        Log.e("iot", "id:" + menuItem.getItemId());
+                        switch (menuItem.getItemId()) {
+                            case R.id.nav_node_list:
+                                Log.e("iot", "id_list");
+                                break;
+                            case R.id.nav_smart_config:
+                                break;
+                            case R.id.nav_about:
+                                break;
+                            case R.id.nav_logout:
+                                break;
+                        }
+
                         return true;
                     }
                 });
     }
-
 }
