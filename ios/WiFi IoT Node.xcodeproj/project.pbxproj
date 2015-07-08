@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		98249DB21B4CC60900AD4D58 /* NSString+Email.m in Sources */ = {isa = PBXBuildFile; fileRef = 98249DB11B4CC60900AD4D58 /* NSString+Email.m */; };
 		98A5B8171B4C271E00C0AFC3 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A5B7F21B4C271E00C0AFC3 /* AFHTTPRequestOperation.m */; };
 		98A5B8181B4C271E00C0AFC3 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A5B7F41B4C271E00C0AFC3 /* AFHTTPRequestOperationManager.m */; };
 		98A5B8191B4C271E00C0AFC3 /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A5B7F61B4C271E00C0AFC3 /* AFHTTPSessionManager.m */; };
@@ -25,6 +26,7 @@
 		98A5B8261B4C271E00C0AFC3 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A5B8141B4C271E00C0AFC3 /* UIRefreshControl+AFNetworking.m */; };
 		98A5B8271B4C271E00C0AFC3 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 98A5B8161B4C271E00C0AFC3 /* UIWebView+AFNetworking.m */; };
 		98AEC9DD1B4BFE4C008C22C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98AEC9DC1B4BFE4C008C22C0 /* Main.storyboard */; };
+		98C5D1E01B4D401B001811A0 /* WINServiceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C5D1DF1B4D401B001811A0 /* WINServiceManager.m */; };
 		98C610111B41787900350D47 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C610101B41787900350D47 /* main.m */; };
 		98C610141B41787900350D47 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 98C610131B41787900350D47 /* AppDelegate.m */; };
 		98C610251B41787900350D47 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98C610231B41787900350D47 /* LaunchScreen.storyboard */; };
@@ -33,6 +35,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		98249DB01B4CC60900AD4D58 /* NSString+Email.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Email.h"; sourceTree = "<group>"; };
+		98249DB11B4CC60900AD4D58 /* NSString+Email.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Email.m"; sourceTree = "<group>"; };
 		98A5B7F11B4C271E00C0AFC3 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		98A5B7F21B4C271E00C0AFC3 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPRequestOperation.m; sourceTree = "<group>"; };
 		98A5B7F31B4C271E00C0AFC3 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
@@ -71,6 +75,8 @@
 		98A5B8151B4C271E00C0AFC3 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		98A5B8161B4C271E00C0AFC3 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		98AEC9DC1B4BFE4C008C22C0 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		98C5D1DE1B4D401B001811A0 /* WINServiceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WINServiceManager.h; sourceTree = "<group>"; };
+		98C5D1DF1B4D401B001811A0 /* WINServiceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WINServiceManager.m; sourceTree = "<group>"; };
 		98C6100C1B41787900350D47 /* WiFi IoT Node.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WiFi IoT Node.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		98C610101B41787900350D47 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		98C610121B41787900350D47 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -93,6 +99,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		98249DB41B4CC63900AD4D58 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				98249DB01B4CC60900AD4D58 /* NSString+Email.h */,
+				98249DB11B4CC60900AD4D58 /* NSString+Email.m */,
+				98C5D1DE1B4D401B001811A0 /* WINServiceManager.h */,
+				98C5D1DF1B4D401B001811A0 /* WINServiceManager.m */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
 		98A5B7F01B4C271E00C0AFC3 /* AFNetworking */ = {
 			isa = PBXGroup;
 			children = (
@@ -163,6 +180,7 @@
 		98C6100E1B41787900350D47 /* WiFi IoT Node */ = {
 			isa = PBXGroup;
 			children = (
+				98249DB41B4CC63900AD4D58 /* Classes */,
 				98C61D641B44455C000DCF38 /* Assets.xcassets */,
 				98A5B7F01B4C271E00C0AFC3 /* AFNetworking */,
 				98A5B8041B4C271E00C0AFC3 /* UIKit+AFNetworking */,
@@ -271,12 +289,14 @@
 				98A5B8261B4C271E00C0AFC3 /* UIRefreshControl+AFNetworking.m in Sources */,
 				98A5B8271B4C271E00C0AFC3 /* UIWebView+AFNetworking.m in Sources */,
 				98A5B8191B4C271E00C0AFC3 /* AFHTTPSessionManager.m in Sources */,
+				98C5D1E01B4D401B001811A0 /* WINServiceManager.m in Sources */,
 				98A5B8221B4C271E00C0AFC3 /* UIAlertView+AFNetworking.m in Sources */,
 				98A5B81D1B4C271E00C0AFC3 /* AFURLRequestSerialization.m in Sources */,
 				98A5B8201B4C271E00C0AFC3 /* AFNetworkActivityIndicatorManager.m in Sources */,
 				98A5B81F1B4C271E00C0AFC3 /* AFURLSessionManager.m in Sources */,
 				98C610111B41787900350D47 /* main.m in Sources */,
 				98C61D581B44313F000DCF38 /* WelcomeViewController.m in Sources */,
+				98249DB21B4CC60900AD4D58 /* NSString+Email.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
