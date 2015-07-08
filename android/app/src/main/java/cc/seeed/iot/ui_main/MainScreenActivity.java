@@ -152,10 +152,10 @@ public class MainScreenActivity extends AppCompatActivity {
 
                         Log.e("iot", "id:" + menuItem.getItemId());
                         switch (menuItem.getItemId()) {
-                            case R.id.nav_node_list:
+                            case R.id.nav_nodes_list:
                                 Log.e("iot", "id_list");
                                 break;
-                            case R.id.nav_smart_config:
+                            case R.id.nav_smartconfig:
                                 break;
                             case R.id.nav_about:
                                 break;
