@@ -48,4 +48,12 @@
     <string name="offline">Offline</string>
 
     <string name="menu_settings">Settings</string>
+
+    <!--NavigationView-->
+    <string name="nodes_list_view">Nodes List</string>
+    <string name="smartconfig_view">Smart Config</string>
+    <string name="sn_key_view">Update SN/Key</string>
+    <string name="about_view">About</string>
+    <string name="setting_view">Setting</string>
+    <string name="logout_view">Logout</string>
 </resources>
