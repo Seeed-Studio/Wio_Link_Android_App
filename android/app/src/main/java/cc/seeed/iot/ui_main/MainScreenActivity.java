@@ -16,6 +16,7 @@
 
 package cc.seeed.iot.ui_main;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -39,11 +40,11 @@ import java.util.ArrayList;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_main.AddNodeDialogFragment.NoticeDialogListener;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
-import cc.seeed.iot.webapi.model.NodeResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -51,18 +52,20 @@ import retrofit.client.Response;
 /**
  * TODO
  */
-public class MainScreenActivity extends AppCompatActivity {
+public class MainScreenActivity extends AppCompatActivity implements NoticeDialogListener {
 
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView listView;
     RecyclerView.Adapter mAdapter;
     ArrayList<Node> nodes;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,28 +109,8 @@ public class MainScreenActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                IotApi api = new IotApi();
-                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-                api.setAccessToken(user.user_key);
-                final IotService iot = api.getService();
-                iot.nodesCreate("wteng", new Callback<NodeResponse>() {
-
-                    @Override
-                    public void success(NodeResponse nodeResponse, Response response) {
-                        Node node = new Node();
-                        node.name = "wteng";
-                        node.node_key = nodeResponse.node_key;
-                        node.node_sn = nodeResponse.node_sn;
-                        nodes.add(node);
-                        addItem(node);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-
-                    }
-                });
+                AddNodeDialogFragment addNodeDialogFragment = new AddNodeDialogFragment();
+                addNodeDialogFragment.show(getFragmentManager(), "addNode");
             }
         });
     }
@@ -171,6 +154,7 @@ public class MainScreenActivity extends AppCompatActivity {
     }
 
     private void addItem(Node node) {
+        nodes.add(node);
         mAdapter.notifyItemInserted(nodes.size());
     }
 
@@ -204,4 +188,10 @@ public class MainScreenActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onAddNode(Node node) {
+        addItem(node);
+    }
+
 }
