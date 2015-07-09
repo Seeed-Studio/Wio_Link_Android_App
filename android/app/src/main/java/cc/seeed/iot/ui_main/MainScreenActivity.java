@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,11 +36,14 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
+import cc.seeed.iot.webapi.model.NodeResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -54,6 +56,8 @@ public class MainScreenActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView listView;
+    RecyclerView.Adapter mAdapter;
+    ArrayList<Node> nodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,7 @@ public class MainScreenActivity extends AppCompatActivity {
             listView.setHasFixedSize(true);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
             listView.setLayoutManager(layout);
+
             setupAdapter();
         }
 
@@ -101,11 +106,30 @@ public class MainScreenActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                IotApi api = new IotApi();
+                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+                api.setAccessToken(user.user_key);
+                final IotService iot = api.getService();
+                iot.nodesCreate("wteng", new Callback<NodeResponse>() {
+
+                    @Override
+                    public void success(NodeResponse nodeResponse, Response response) {
+                        Node node = new Node();
+                        node.name = "wteng";
+                        node.node_key = nodeResponse.node_key;
+                        node.node_sn = nodeResponse.node_sn;
+                        nodes.add(node);
+                        addItem(node);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+
+                    }
+                });
             }
         });
-
     }
 
     @Override
@@ -126,16 +150,15 @@ public class MainScreenActivity extends AppCompatActivity {
 
     private void setupAdapter() {
         IotApi api = new IotApi();
-        api.setAccessToken("sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
+        User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+        api.setAccessToken(user.user_key);
         final IotService iot = api.getService();
         iot.nodesList(new Callback<NodeListResponse>() {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
-                ArrayList<Node> nodes = (ArrayList) nodeListResponse.nodes;
-//                ListAdapter adapter = new NodeListAdapter(MainScreenActivity.this, nodes);
-//                listView.setAdapter(adapter);
-                RecyclerView.Adapter adapter = new NodeListRecyclerAdapter(nodes);
-                listView.setAdapter(adapter);
+                nodes = (ArrayList) nodeListResponse.nodes;
+                mAdapter = new NodeListRecyclerAdapter(nodes);
+                listView.setAdapter(mAdapter);
             }
 
             @Override
@@ -145,6 +168,15 @@ public class MainScreenActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void addItem(Node node) {
+        mAdapter.notifyItemInserted(nodes.size());
+    }
+
+    private void removeItem(Node node) {
+        nodes.remove(node);
+        mAdapter.notifyItemRemoved(nodes.size());
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
