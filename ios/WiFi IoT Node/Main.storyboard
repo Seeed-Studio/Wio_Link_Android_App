@@ -57,11 +57,14 @@
                                 <state key="normal" title="Sign In">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="signInButtonPushed" destination="hNZ-gO-kf1" eventType="touchUpInside" id="sYf-Pg-CvF"/>
+                                </connections>
                             </button>
                             <imageView opaque="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="backImage" translatesAutoresizingMaskIntoConstraints="NO" id="yeR-k8-Iqq" userLabel="MaskView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <view autoresizesSubviews="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z9n-DA-0WW" userLabel="SignUpView">
+                            <view autoresizesSubviews="NO" alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z9n-DA-0WW" userLabel="dialogView">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Verify Password" minimumFontSize="17" background="textFieldHighLighted" disabledBackground="textFieldDisabled" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="t36-0E-bBM">
@@ -112,7 +115,7 @@
                                             <color key="titleColor" red="0.19215686274509805" green="0.67843137254901964" blue="0.42352941176470588" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="signUpCancelButtonPushed" destination="hNZ-gO-kf1" eventType="touchUpInside" id="H8f-or-ElN"/>
+                                            <action selector="dialogCancelButtonPushed" destination="hNZ-gO-kf1" eventType="touchUpInside" id="33t-G8-GVF"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lC4-Fu-Ow7">
@@ -121,7 +124,7 @@
                                             <color key="titleColor" red="0.19215686274509805" green="0.67843137254901964" blue="0.42352941176470588" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="signUpDoneButtonPushed" destination="hNZ-gO-kf1" eventType="touchUpInside" id="yDV-S4-OOh"/>
+                                            <action selector="dialogDoneButtonPushed" destination="hNZ-gO-kf1" eventType="touchUpInside" id="HTn-C4-HYu"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="E-mail" minimumFontSize="17" background="textFieldHighLighted" disabledBackground="textFieldDisabled" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="9O5-RY-VtI">
@@ -150,6 +153,7 @@
                                     </textField>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="onZ-ao-lL9">
                                         <rect key="frame" x="-10" y="-10" width="20" height="20"/>
+                                        <color key="color" red="0.19215686269999999" green="0.67843137249999996" blue="0.42352941179999998" alpha="1" colorSpace="calibratedRGB"/>
                                     </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -302,15 +306,18 @@
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="MaskView" destination="yeR-k8-Iqq" id="wPB-4T-oEn"/>
-                        <outlet property="SignUpView" destination="Z9n-DA-0WW" id="9rw-X1-wVp"/>
                         <outlet property="backgroundImage" destination="odA-VF-kcy" id="MYy-rb-yNu"/>
+                        <outlet property="dialogDoneButton" destination="lC4-Fu-Ow7" id="oKt-Qj-O05"/>
+                        <outlet property="dialogPasswordTextField" destination="XPa-mU-5Gd" id="yZ6-O7-Uq8"/>
+                        <outlet property="dialogPasswordVerifyTextField" destination="t36-0E-bBM" id="Adf-VX-eU4"/>
+                        <outlet property="dialogTitle" destination="hfA-EG-0EA" id="z9P-Rh-cgW"/>
+                        <outlet property="dialogView" destination="Z9n-DA-0WW" id="Pau-0M-GuX"/>
                         <outlet property="emailTextField" destination="9O5-RY-VtI" id="Nqr-IW-Cu1"/>
+                        <outlet property="maskView" destination="yeR-k8-Iqq" id="tQ5-y2-F99"/>
+                        <outlet property="networkIndicator" destination="onZ-ao-lL9" id="u4b-cH-LNe"/>
                         <outlet property="pageControl" destination="cV9-iW-WRQ" id="2Qz-rW-jDq"/>
                         <outlet property="scrollView" destination="876-7M-aMa" id="Zst-Wh-Q8t"/>
                         <outlet property="signUpDialogYlayout" destination="sxF-UI-UJM" id="jBE-tp-kQg"/>
-                        <outlet property="signUpPassTextField" destination="XPa-mU-5Gd" id="x77-sN-Xmm"/>
-                        <outlet property="signUpPassVerifyTextField" destination="t36-0E-bBM" id="POl-dq-lj5"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9QK-4H-BWv" userLabel="First Responder" sceneMemberID="firstResponder"/>

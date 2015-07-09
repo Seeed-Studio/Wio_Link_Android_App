@@ -9,141 +9,152 @@
 #import "WelcomeViewController.h"
 #import "AppDelegate.h"
 #import "AFNetworking.h"
+#import "NSString+Email.h"
+#import "WINServiceManager.h"
 
-@interface WelcomeViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate>//,NSURLConnectionDelegate>
+static NSString * const BaseURLString = @"https://iot.yuzhe.me/v1/";
+
+
+
+@interface WelcomeViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate, WINServiceDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *backgroundImage;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIPageControl *pageControl;
-@property (weak, nonatomic) IBOutlet UIImageView *MaskView;
-@property (weak, nonatomic) IBOutlet UIView *SignUpView;
+@property (weak, nonatomic) IBOutlet UIImageView *maskView;
+@property (weak, nonatomic) IBOutlet UIView *dialogView;
+@property (weak, nonatomic) IBOutlet UILabel *dialogTitle;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
-@property (weak, nonatomic) IBOutlet UITextField *signUpPassTextField;
-@property (weak, nonatomic) IBOutlet UITextField *signUpPassVerifyTextField;
+@property (weak, nonatomic) IBOutlet UITextField *dialogPasswordTextField;
+@property (weak, nonatomic) IBOutlet UITextField *dialogPasswordVerifyTextField;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *signUpDialogYlayout;
-@property (strong, nonatomic) NSMutableData *receivedData;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *networkIndicator;
+@property (weak, nonatomic) IBOutlet UIButton *dialogDoneButton;
+
+@property (strong, nonatomic) WINServiceManager *manager;
 @end
-static NSString * const BaseURLString = @"https://iot.yuzhe.me/v1/";
+
+
 
 @implementation WelcomeViewController
-- (IBAction)signUpDoneButtonPushed{
-    
 
-    
-    if ([self.emailTextField.text containsString:@"@"] &&
-        [self.emailTextField.text containsString:@"."] &&
-        self.emailTextField.text.length > 8)    //isValidEmail?
-    {
-        if ([self.signUpPassTextField.text isEqualToString:self.signUpPassVerifyTextField.text] &&
-            self.signUpPassTextField.text.length > 6)   //isvalidPassword?
-        {
-            NSURL *baseURL = [NSURL URLWithString:BaseURLString];
-            
-            NSDictionary *parameters = [NSDictionary dictionaryWithObjects:@[self.emailTextField.text, self.signUpPassTextField.text] forKeys:@[@"email", @"password"]];
-            AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
-                        
-            manager.securityPolicy.allowInvalidCertificates = YES;
-            NSLog(@"Manager securityPolicy = %@",manager.securityPolicy);
-            manager.responseSerializer = [AFJSONResponseSerializer serializer];
-            [manager POST:@"user/create" parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
-                
-                NSString *msg = [(NSDictionary *)responseObject objectForKey:@"msg"];
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Get Server response"
-                                                                    message:msg
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"Ok"
-                                                          otherButtonTitles:nil];
-                [alertView show];
-                NSLog(@"JSON: %@", responseObject);
-                
-            } failure:^(NSURLSessionDataTask *task, NSError *error) {
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
-                                                                    message:[error localizedDescription]
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"Ok"
-                                                          otherButtonTitles:nil];
-                NSLog(@"Error: %@", error);
-                
-                [alertView show];
-            }];
+- (WINServiceManager *)manager {
+    if (_manager == nil) {
+        _manager = [[WINServiceManager alloc] initWithDelegate:self];
+    }
+    return _manager;
+}
 
-        } else {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Passwords are not same"
-                                                                message:nil
-                                                               delegate:nil
-                                                      cancelButtonTitle:@"Ok"
-                                                      otherButtonTitles:nil];
-            
-            [alertView show];
+- (void)networkIndicatorStartAnimating {
+    [self.networkIndicator startAnimating];
+    self.networkIndicator.hidden = NO;
+    self.dialogDoneButton.userInteractionEnabled = NO;
+    self.dialogDoneButton.selected = YES;
+}
 
-        }
-    } else {
+- (void)networkIndicatorStopAnimating {
+    [self.networkIndicator stopAnimating];
+    self.networkIndicator.hidden = YES;
+    self.dialogDoneButton.userInteractionEnabled = YES;
+    self.dialogDoneButton.selected = NO;
+}
+
+- (IBAction)dialogDoneButtonPushed{
+    if (![self.emailTextField.text isEmail]) { // is not a valid email address?
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Please input a valid email address"
                                                             message:nil
                                                            delegate:nil
                                                   cancelButtonTitle:@"Ok"
                                                   otherButtonTitles:nil];
-        
         [alertView show];
+        
+    } else if (![self.dialogPasswordTextField.text isEqualToString:self.dialogPasswordVerifyTextField.text] &&
+               self.dialogPasswordTextField.text.length < 6)   {    //is not a validPassword?)
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"The password must have more than 6 Chars, and verify field have to be same as the password."
+                                                            message:nil
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"Ok"
+                                                  otherButtonTitles:nil];
+        [alertView show];
+        
+    } else {    //All the input messages are correct, can try to send request to server
+
+        [self networkIndicatorStartAnimating];
+        if ([self.dialogTitle.text isEqualToString:@"Sign Up"]) {
+            [self.manager requestSignUpNewAccountWhitEmail:self.emailTextField.text andPassword:self.dialogPasswordTextField.text];
+        } else if ([self.dialogTitle.text isEqualToString:@"Sign In"]) {
+            NSLog(@"Sign In request!");
+        }
 
     }
-
 }
 
-- (IBAction)signUpCancelButtonPushed {
+- (IBAction)dialogCancelButtonPushed {
     
+    [self.manager cancel];
+    [self networkIndicatorStopAnimating];
     self.emailTextField.text = nil;
-    self.signUpPassTextField.text = nil;
-    self.signUpPassVerifyTextField.text = nil;
+    self.dialogPasswordTextField.text = nil;
+    self.dialogPasswordVerifyTextField.text = nil;
     [self.emailTextField resignFirstResponder];
-    [self.signUpPassTextField resignFirstResponder];
-    [self.signUpPassVerifyTextField resignFirstResponder];
-    
-    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.SignUpView.alpha = 0;
-        self.MaskView.alpha = 0;
-    } completion:^(BOOL finished) {
-        
-    }];
-    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
-        //self.SignUpView.frame = CGRectOffset(self.SignUpView.frame, 0, -40);
-        self.signUpDialogYlayout.constant = 0;
-
-        self.SignUpView.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
-    } completion:^(BOOL finished) {
-        
-        //self.emailTextField.center = CGPointMake(self.view.center.x, 100.0);
-    }];
-
+    [self.dialogPasswordTextField resignFirstResponder];
+    [self.dialogPasswordVerifyTextField resignFirstResponder];
+    [self hideDialog];
 }
 
-- (IBAction)signUpButtonPushed:(UIButton *)sender {
-    
+- (void)showDialog {
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        self.SignUpView.alpha = 1;
-        self.MaskView.alpha = 0.5;
+        self.dialogView.alpha = 1;
+        self.maskView.alpha = 0.5;
     } completion:^(BOOL finished) {
         //
     }];
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
-        //self.SignUpView.frame = CGRectOffset(self.SignUpView.frame, 0, -40);
         self.signUpDialogYlayout.constant = -110;
-        self.SignUpView.center = CGPointMake(self.view.center.x, self.view.center.y - 110);
+        self.dialogView.center = CGPointMake(self.view.center.x, self.view.center.y - 110);
     } completion:^(BOOL finished) {
-
-        //self.emailTextField.center = CGPointMake(self.view.center.x, 100.0);
         [self.emailTextField becomeFirstResponder];
     }];
 }
+- (void)hideDialog {
+    [UIView animateWithDuration:0.5 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        self.dialogView.alpha = 0;
+        self.maskView.alpha = 0;
+    } completion:^(BOOL finished) {
+        
+    }];
+    [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        self.signUpDialogYlayout.constant = 0;
+        self.dialogView.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 2);
+    } completion:^(BOOL finished) {
+        //
+    }];
+}
+- (IBAction)signInButtonPushed {
+    self.dialogTitle.text = @"Sign In";
+    self.dialogPasswordVerifyTextField.hidden = YES;
+    [self.dialogDoneButton setTitle:@"Sign In" forState:UIControlStateNormal];
+    [self showDialog];
+}
+
+- (IBAction)signUpButtonPushed:(UIButton *)sender {
+    
+    self.dialogTitle.text = @"Sign Up";
+    self.dialogPasswordVerifyTextField.hidden = NO;
+    [self.dialogDoneButton setTitle:@"Sign Up" forState:UIControlStateNormal];
+    [self showDialog];
+}
 - (IBAction)backgroundTaped {
     [self.emailTextField resignFirstResponder];
-    [self.signUpPassTextField resignFirstResponder];
-    [self.signUpPassVerifyTextField resignFirstResponder];
+    [self.dialogPasswordTextField resignFirstResponder];
+    [self.dialogPasswordVerifyTextField resignFirstResponder];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.scrollView.frame = self.view.frame;
+    self.networkIndicator.hidden = YES;
+    self.dialogView.layer.cornerRadius = 8.0;
 
     [self createViewOne];
     [self createViewTwo];
@@ -160,7 +171,7 @@ static NSString * const BaseURLString = @"https://iot.yuzhe.me/v1/";
     singleFigureOne.numberOfTapsRequired = 1;
     singleFigureOne.delegate = self;
     
-    [self.MaskView addGestureRecognizer:singleFigureOne];
+    [self.maskView addGestureRecognizer:singleFigureOne];
 }
 
 - (void)maskViewTouchUpInside {
@@ -241,4 +252,26 @@ static NSString * const BaseURLString = @"https://iot.yuzhe.me/v1/";
 }
 */
 
+#pragma WINServiceDelegate Method
+- (void)managerRequestSignUpSucceed {
+    [self networkIndicatorStopAnimating];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Success!"
+                                                        message:nil
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+    [alertView show];
+
+}
+
+- (void)managerRequestSignUpFailedWithMessage:(nullable NSString *)msg {
+    [self networkIndicatorStopAnimating];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Failed!"
+                                                        message:msg
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
+    [alertView show];
+
+}
 @end
