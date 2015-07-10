@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,7 +20,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import cc.seeed.iot.MainActivity;
+import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.UserResponse;
@@ -31,6 +36,8 @@ import retrofit.RetrofitError;
  */
 public class SignInDialogFragment extends DialogFragment {
     Context context;
+    User user;
+
     AlertDialog alertDialog;
 
     private AutoCompleteTextView mEmailView;
@@ -43,6 +50,8 @@ public class SignInDialogFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+
+        user = ((MyApplication) getActivity().getApplication()).getUser();
     }
 
     @Override
@@ -116,6 +125,7 @@ public class SignInDialogFragment extends DialogFragment {
             focusView.requestFocus();
         } else {
             showProgress(true);
+            final String fianlEmail = email;
             IotApi api = new IotApi();
             IotService iot = api.getService();
             iot.userLogin(email, password, new Callback<UserResponse>() {
@@ -123,8 +133,13 @@ public class SignInDialogFragment extends DialogFragment {
                 public void success(UserResponse userResponse, retrofit.client.Response response) {
                     String status = userResponse.status;
                     if (status.equals("200")) {
-                        Toast.makeText(context, userResponse.msg, Toast.LENGTH_LONG).show();
+//                        Toast.makeText(context, userResponse.msg, Toast.LENGTH_LONG).show();
                         alertDialog.dismiss();
+                        user.email = fianlEmail;
+                        user.user_key = userResponse.token;
+                        ((MyApplication) getActivity().getApplication()).setUser(user);
+                        Intent intent = new Intent(context, MainScreenActivity.class);
+                        context.startActivity(intent);
                     } else {
                         showProgress(false);
                         mEmailView.setError(userResponse.msg);

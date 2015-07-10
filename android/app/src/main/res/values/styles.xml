@@ -2,18 +2,25 @@
 
     <!-- Base application theme. -->
     <!--<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">-->
-        <!-- Customize your theme here. -->
+    <!-- Customize your theme here. -->
     <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
+
     </style>
 
 
     <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+
+    </style>
+
+    <style name="Theme.NodeSet" parent="Base.Theme.DesignDemo">
+
+
     </style>
 
     <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#673AB7</item>
-        <item name="colorPrimaryDark">#512DA8</item>
-        <item name="colorAccent">#FF4081</item>
+        <item name="colorPrimary">#25aadf</item>
+        <item name="colorPrimaryDark">#1c9adf</item>
+        <item name="colorAccent">#f7ce39</item>
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 
@@ -24,4 +31,6 @@
         <item name="android:paddingBottom">24dp</item>
         <item name="android:orientation">vertical</item>
     </style>
+
+
 </resources>

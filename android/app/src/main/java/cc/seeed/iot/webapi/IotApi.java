@@ -27,8 +27,8 @@ public class IotApi {
 
 //    private String IOT_WEB_API_ENDPOINT = "http://192.168.21.83:8080/v1";
 
-    private String iot_url = "http://192.168.18.194:8080/v1";
-//    private String iot_url = "https://iot.yuzhe.me/v1";
+//    private String iot_url = "http://192.168.18.194:8080/v1";
+    private String iot_url = "https://iot.yuzhe.me/v1";
 
     private final IotService mIotService;
 

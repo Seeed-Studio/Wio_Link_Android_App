@@ -16,12 +16,14 @@
         />
 
     <TextView
+        android:id="@+id/hd_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ten Wong"
+        android:text="Seeed IOT Node"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
     <TextView
+        android:id="@+id/hd_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="awong1900@163.com"

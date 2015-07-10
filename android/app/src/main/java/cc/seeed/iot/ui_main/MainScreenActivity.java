@@ -33,6 +33,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
     private SwipeRefreshLayout mSwipeRefreshLayout;
     RecyclerView listView;
     RecyclerView.Adapter mAdapter;
+    TextView mEmail;
+
     ArrayList<Node> nodes;
     User user;
 
@@ -66,6 +69,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+        nodes = ((MyApplication) MainScreenActivity.this.getApplication()).getNodes();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -113,6 +117,9 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
                 addNodeDialogFragment.show(getFragmentManager(), "addNode");
             }
         });
+
+        mEmail = (TextView) findViewById(R.id.hd_email);
+        mEmail.setText(user.email);
     }
 
     @Override
@@ -139,9 +146,14 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
         iot.nodesList(new Callback<NodeListResponse>() {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
-                nodes = (ArrayList) nodeListResponse.nodes;
-                mAdapter = new NodeListRecyclerAdapter(nodes);
-                listView.setAdapter(mAdapter);
+                if (nodeListResponse.status.equals("200")) {
+                    nodes = (ArrayList) nodeListResponse.nodes;
+                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+                    mAdapter = new NodeListRecyclerAdapter(nodes);
+                    listView.setAdapter(mAdapter);
+                } else {
+                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -155,6 +167,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
 
     private void addItem(Node node) {
         nodes.add(node);
+        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
         mAdapter.notifyItemInserted(nodes.size());
     }
 

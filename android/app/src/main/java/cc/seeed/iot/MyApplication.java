@@ -36,6 +36,9 @@ public class MyApplication extends Application {
         return nodes;
     }
 
+    public void setNodes(ArrayList<Node> nodes) {
+        this.nodes = nodes;
+    }
     @Override
     public void onCreate() {
         super.onCreate();

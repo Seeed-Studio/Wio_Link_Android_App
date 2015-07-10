@@ -56,4 +56,5 @@
     <string name="about_view">About</string>
     <string name="setting_view">Setting</string>
     <string name="logout_view">Logout</string>
+    <string name="title_activity_setup_iot_node">SetupIotNodeActivity</string>
 </resources>

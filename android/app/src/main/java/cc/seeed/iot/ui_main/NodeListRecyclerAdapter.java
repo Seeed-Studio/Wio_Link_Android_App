@@ -3,6 +3,8 @@ package cc.seeed.iot.ui_main;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.webapi.model.Node;
 
 /**
@@ -45,7 +48,7 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
     }
 
     @Override
-    public void onBindViewHolder(MainViewHolder holder, int position) {
+    public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
         TextView tv_name = holder.tv_name;
         ImageButton pop_menu = holder.pop_menu;
@@ -54,7 +57,11 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("iot", "hha");
+                Snackbar.make(v,"Todo:set node", Snackbar.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(context,SetupIotNodeActivity.class);
+                intent.putExtra("position", position);
+                context.startActivity(intent);
             }
         });
 

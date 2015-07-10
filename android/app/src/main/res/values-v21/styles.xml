@@ -13,4 +13,13 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="Theme.NodeSet" parent="Base.Theme.DesignDemoV21"></style>
+
+    <style name="Base.Theme.DesignDemoV21" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">#25aadf</item>
+        <item name="colorPrimaryDark">#1c9adf</item>
+        <item name="colorAccent">#f7ce39</item>
+        <item name="android:windowBackground">@color/window_background</item>
+    </style>
 </resources>
