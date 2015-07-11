@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "cc.seeed.iot"
-        minSdkVersion 21
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -28,4 +28,5 @@ dependencies {
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.android.support:recyclerview-v7:+'
+    compile 'com.ikimuhendis:ldrawer:0.1'
 }
