@@ -51,22 +51,23 @@
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
-        <android.support.v7.widget.CardView
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/grove_1"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_alignTop="@+id/node_view"
             android:layout_marginTop="50dp"
-            android:layout_toStartOf="@+id/node_view">
+            android:layout_toStartOf="@+id/node_view"
+            card_view:cardBackgroundColor="@android:color/transparent">
 
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/window_background_light" />
+                    android:src="@drawable/grove_indicator_normal_left" />
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -86,7 +87,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/window_background_light" />
+                    android:src="@drawable/grove_indicator_normal_left" />
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -106,7 +107,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/window_background_light" />
+                    android:src="@drawable/grove_indicator_normal_left" />
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -119,6 +120,16 @@
             android:layout_marginTop="50dp"
             android:layout_toEndOf="@+id/node_view">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/grove_indicator_normal_right" />
+
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -129,6 +140,16 @@
             android:layout_marginTop="100dp"
             android:layout_toEndOf="@+id/node_view">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/grove_indicator_normal_right" />
+
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
@@ -139,6 +160,16 @@
             android:layout_marginTop="150dp"
             android:layout_toEndOf="@+id/node_view">
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/grove_indicator_normal_right" />
+
+            </RelativeLayout>
         </android.support.v7.widget.CardView>
 
         <RelativeLayout
@@ -149,8 +180,7 @@
 
             <ImageView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/window_background_light" />
+                android:layout_height="wrap_content" />
 
         </RelativeLayout>
 
@@ -160,19 +190,17 @@
         android:id="@+id/grove_list"
         android:layout_width="match_parent"
         android:layout_height="120dp"
-        android:layout_above="@+id/view3"
-        android:layout_marginBottom="1dp"
+        android:layout_above="@+id/grove_selector"
         android:background="@color/link_text_material_dark">
 
     </android.support.v7.widget.RecyclerView>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/view3"
+        android:id="@+id/grove_selector"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:background="@color/link_text_material_dark">
+        android:background="@color/link_text_material_light">
 
     </android.support.v7.widget.RecyclerView>
 

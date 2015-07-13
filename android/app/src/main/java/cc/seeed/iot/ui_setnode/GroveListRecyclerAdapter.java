@@ -1,25 +1,18 @@
 package cc.seeed.iot.ui_setnode;
 
 import android.content.Context;
-import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.model.GroverDriver;
-import cc.seeed.iot.webapi.model.Node;
 
 /**
  * Created by tenwong on 15/6/25.
@@ -27,6 +20,8 @@ import cc.seeed.iot.webapi.model.Node;
 public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecyclerAdapter.MainViewHolder> {
     private ArrayList<GroverDriver> groves;
     private Context context;
+
+    private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
 
     public GroveListRecyclerAdapter(ArrayList<GroverDriver> groves) {
         this.groves = groves;
@@ -82,4 +77,9 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         }
 
     }
+
+    public void setOnItemClickListener(GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener listener){
+        this.mItemClickListener = listener;
+    }
+
 }
