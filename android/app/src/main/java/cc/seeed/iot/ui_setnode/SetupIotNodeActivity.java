@@ -163,6 +163,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 inputGroves.add(g);
         }
 
+        mGroveTypeListAdapter.updateSelection(postion);
+
         if (groveType.equals("All")) {
             updateGroveListAdapter(mGroveDrivers);
 
@@ -170,9 +172,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
             updateGroveListAdapter(inputGroves);
 
         } else if (groveType.equals("Output")) {
-            TextView v = (TextView) view.findViewById(R.id.grove_type);
-            v.setTextColor(view.getResources().getColor(R.color.window_background_dark));
-
             updateGroveListAdapter(outputGroves);
 
         } else if (groveType.equals("Light")) {

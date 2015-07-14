@@ -2,6 +2,7 @@ package cc.seeed.iot.ui_setnode;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,12 @@ public class GroveFilterRecyclerAdapter extends RecyclerView.Adapter<GroveFilter
     private String[] grovesTypes;
     private MainViewHolder.MyItemClickListener mItemClickListener;
 
-    private static Context context;
-
+    private Context context;
+    private SparseBooleanArray selectedItems;
 
     public GroveFilterRecyclerAdapter(String[] grovesTypes) {
         this.grovesTypes = grovesTypes;
+        selectedItems = new SparseBooleanArray();
     }
 
     @Override
@@ -38,16 +40,11 @@ public class GroveFilterRecyclerAdapter extends RecyclerView.Adapter<GroveFilter
         final TextView mGroveTypeView = holder.mGroveTypeView;
         final View mView = holder.mView;
         mGroveTypeView.setText(groveType);
-
-//        mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
-//                mGroveTypeView.setTextColor(context.getResources().getColor(R.color.window_background_dark));
-//
-////                onSetGrvoesFilter(String groveType);
-//            }
-//        });
+        if (selectedItems.get(position, false)) {
+            mGroveTypeView.setTextColor(mView.getResources().getColor(R.color.window_background_dark));
+        } else {
+            mGroveTypeView.setTextColor(mView.getResources().getColor(R.color.window_background_light));
+        }
 
     }
 
@@ -59,6 +56,14 @@ public class GroveFilterRecyclerAdapter extends RecyclerView.Adapter<GroveFilter
     public void setOnItemClickListener(MainViewHolder.MyItemClickListener listener) {
         this.mItemClickListener = listener;
     }
+
+
+    public void updateSelection(int pos) {
+        selectedItems.clear();
+        selectedItems.put(pos, true);
+        notifyDataSetChanged();
+    }
+
 
     public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private MyItemClickListener mListener;
