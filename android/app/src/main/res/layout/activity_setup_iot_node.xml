@@ -67,7 +67,8 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/grove_indicator_normal_left" />
+                    android:clickable="true"
+                    android:src="@drawable/state_grove_indicator_left" />
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -87,7 +88,8 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/grove_indicator_normal_left" />
+                    android:clickable="true"
+                    android:src="@drawable/state_grove_indicator_left" />
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -172,18 +174,6 @@
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignTop="@+id/node_view"
-            android:layout_toEndOf="@+id/node_view">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-        </RelativeLayout>
-
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -191,7 +181,8 @@
         android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_above="@+id/grove_selector"
-        android:background="@color/link_text_material_dark">
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true">
 
     </android.support.v7.widget.RecyclerView>
 
@@ -204,4 +195,29 @@
 
     </android.support.v7.widget.RecyclerView>
 
+    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="?attr/colorPrimary"
+        app:contentInsetEnd="16dp"
+        app:contentInsetLeft="16dp"
+        app:contentInsetRight="16dp"
+        app:contentInsetStart="16dp">
+
+        <ImageButton
+            android:id="@+id/ib_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:background="@drawable/ic_cancel" />
+
+        <ImageButton
+            android:id="@+id/ib_correct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:background="@drawable/ic_correct" />
+    </android.support.v7.widget.Toolbar>
 </RelativeLayout>

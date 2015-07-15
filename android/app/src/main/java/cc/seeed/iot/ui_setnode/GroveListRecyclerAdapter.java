@@ -1,7 +1,9 @@
 package cc.seeed.iot.ui_setnode;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +23,12 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
     private ArrayList<GroverDriver> groves;
     private Context context;
 
+    SparseBooleanArray selector;
     private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
 
     public GroveListRecyclerAdapter(ArrayList<GroverDriver> groves) {
         this.groves = groves;
+        selector = new SparseBooleanArray();
     }
 
     @Override
@@ -40,23 +44,27 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         GroverDriver grove = groves.get(position);
         ImageView grove_image = holder.grove_image;
         UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL.toString());
+        holder.mView.setPressed(selector.get(position, false));
 
-//        Node node = nodes.get(position);
-//        TextView tv_name = holder.tv_name;
-//        ImageButton pop_menu = holder.pop_menu;
-//        tv_name.setText(node.name);
-//
-//        holder.mView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Snackbar.make(v,"Todo:set node", Snackbar.LENGTH_SHORT).show();
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                selectItem(position);
+                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
 //
 //                Intent intent = new Intent(context,SetupIotNodeActivity.class);
 //                intent.putExtra("position", position);
 //                context.startActivity(intent);
-//            }
-//        });
+            }
+        });
 
+    }
+
+    public void selectItem(int position) {
+        selector.clear();
+        selector.put(position, true);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -78,7 +86,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
 
     }
 
-    public void setOnItemClickListener(GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener listener){
+    public void setOnItemClickListener(GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener listener) {
         this.mItemClickListener = listener;
     }
 

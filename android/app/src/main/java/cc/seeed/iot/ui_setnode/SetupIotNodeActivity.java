@@ -29,8 +29,9 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class SetupIotNodeActivity extends AppCompatActivity
-        implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener {
+        implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener, View.OnClickListener {
     public Toolbar toolbar;
+    public Toolbar toolbar_action;
     ArrayList<Node> nodes;
     Node node;
 
@@ -48,6 +49,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toolbar_action = (Toolbar) findViewById(R.id.toolbar_bottom);
+        toolbar_action.setVisibility(View.GONE);
 
         nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
         int position = getIntent().getIntExtra("position", 1);
@@ -180,6 +184,18 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         } else if (groveType.equals("Actuator")) {
 
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ib_correct:
+
+                break;
+
+            case R.id.ib_cancel:
+                break;
         }
     }
 }
