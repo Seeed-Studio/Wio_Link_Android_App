@@ -57,6 +57,20 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         notifyDataSetChanged();
     }
 
+    public GroverDriver getSelectedItem() {
+        GroverDriver g = new GroverDriver();
+
+        for (int i = 0; i < selector.size(); i++) {
+            g = groves.get(selector.keyAt(i)); //key is position
+        }
+
+        return g;
+    }
+
+    public void clearSelectItem() {
+        selector.clear();
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
         return groves.size();
@@ -74,10 +88,6 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
 
         }
 
-    }
-
-    public void setOnItemClickListener(GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener listener) {
-        this.mItemClickListener = listener;
     }
 
 }

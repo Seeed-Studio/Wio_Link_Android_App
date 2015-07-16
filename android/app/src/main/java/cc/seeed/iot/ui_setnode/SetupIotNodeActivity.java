@@ -8,15 +8,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
@@ -49,12 +50,21 @@ public class SetupIotNodeActivity extends AppCompatActivity
     ImageButton mCorrectView;
     ImageButton mCancelView;
 
+    SparseBooleanArray nodePinSelector;
+    Map<Integer, NodePinConfig> nodePinConfigs;
+
+    ImageButton pin1View;
+    ImageButton pin2View, pin3View, pin4View, pin5View, pin6View;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_iot_node);
 
         mainOnClickListener = new MainOnClickListener(this);
+
+        nodePinSelector = new SparseBooleanArray();
+        nodePinConfigsInit();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -66,6 +76,94 @@ public class SetupIotNodeActivity extends AppCompatActivity
         mCancelView = (ImageButton) findViewById(R.id.ib_cancel);
         mCorrectView.setOnClickListener(this);
         mCancelView.setOnClickListener(this);
+
+        final ImageButton pin1View = (ImageButton) findViewById(R.id.grove_1);
+        final ImageButton pin2View = (ImageButton) findViewById(R.id.grove_2);
+        final ImageButton pin3View = (ImageButton) findViewById(R.id.grove_3);
+        final ImageButton pin4View = (ImageButton) findViewById(R.id.grove_4);
+        final ImageButton pin5View = (ImageButton) findViewById(R.id.grove_5);
+        final ImageButton pin6View = (ImageButton) findViewById(R.id.grove_6);
+        //todo why use switch onclick have error?
+        //todo bad code
+        pin1View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nodePinSelector.clear();
+                nodePinSelector.put(1, true);
+                pin1View.setSelected(nodePinSelector.get(1, false));
+                pin2View.setSelected(nodePinSelector.get(2, false));
+                pin3View.setSelected(nodePinSelector.get(3, false));
+                pin4View.setSelected(nodePinSelector.get(4, false));
+                pin5View.setSelected(nodePinSelector.get(5, false));
+                pin6View.setSelected(nodePinSelector.get(6, false));
+            }
+        });
+        pin2View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nodePinSelector.clear();
+                nodePinSelector.put(2, true);
+                pin1View.setSelected(nodePinSelector.get(1, false));
+                pin2View.setSelected(nodePinSelector.get(2, false));
+                pin3View.setSelected(nodePinSelector.get(3, false));
+                pin4View.setSelected(nodePinSelector.get(4, false));
+                pin5View.setSelected(nodePinSelector.get(5, false));
+                pin6View.setSelected(nodePinSelector.get(6, false));
+            }
+        });
+        pin3View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nodePinSelector.clear();
+                nodePinSelector.put(3, true);
+                pin1View.setSelected(nodePinSelector.get(1, false));
+                pin2View.setSelected(nodePinSelector.get(2, false));
+                pin3View.setSelected(nodePinSelector.get(3, false));
+                pin4View.setSelected(nodePinSelector.get(4, false));
+                pin5View.setSelected(nodePinSelector.get(5, false));
+                pin6View.setSelected(nodePinSelector.get(6, false));
+            }
+        });
+        pin4View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nodePinSelector.clear();
+                nodePinSelector.put(4, true);
+                pin1View.setActivated(true);
+                pin1View.setSelected(nodePinSelector.get(1, false));
+                pin2View.setSelected(nodePinSelector.get(2, false));
+                pin3View.setSelected(nodePinSelector.get(3, false));
+                pin4View.setSelected(nodePinSelector.get(4, false));
+                pin5View.setSelected(nodePinSelector.get(5, false));
+                pin6View.setSelected(nodePinSelector.get(6, false));
+            }
+        });
+        pin5View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nodePinSelector.clear();
+                nodePinSelector.put(5, true);
+                pin1View.setSelected(nodePinSelector.get(1, false));
+                pin2View.setSelected(nodePinSelector.get(2, false));
+                pin3View.setSelected(nodePinSelector.get(3, false));
+                pin4View.setSelected(nodePinSelector.get(4, false));
+                pin5View.setSelected(nodePinSelector.get(5, false));
+                pin6View.setSelected(nodePinSelector.get(6, false));
+            }
+        });
+        pin6View.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                nodePinSelector.clear();
+                nodePinSelector.put(6, true);
+                pin1View.setSelected(nodePinSelector.get(1, false));
+                pin2View.setSelected(nodePinSelector.get(2, false));
+                pin3View.setSelected(nodePinSelector.get(3, false));
+                pin4View.setSelected(nodePinSelector.get(4, false));
+                pin5View.setSelected(nodePinSelector.get(5, false));
+                pin6View.setSelected(nodePinSelector.get(6, false));
+            }
+        });
 
         nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
         int position = getIntent().getIntExtra("position", 1);
@@ -95,6 +193,13 @@ public class SetupIotNodeActivity extends AppCompatActivity
             setupGroveSetectorAdapter();
 
         }
+
+
+    }
+
+    private void nodePinConfigsInit() {
+        NodePinConfig n = new NodePinConfig();
+        //Todo need init?
     }
 
     private void setupGroveSetectorAdapter() {
@@ -204,16 +309,37 @@ public class SetupIotNodeActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_correct:
-                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(v, "Todo:set node: " + mGroveListAdapter.getSelectedItem().GroveName, Snackbar.LENGTH_SHORT).show();
                 mToolbarAction.setVisibility(View.GONE);
+                mGroveListAdapter.clearSelectItem();
                 break;
 
             case R.id.ib_cancel:
                 Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
                 mToolbarAction.setVisibility(View.GONE);
+                mGroveListAdapter.clearSelectItem();
 
                 break;
 
+            case R.id.grove_1:
+                selectPin(1);
+                break;
+            case R.id.grove_2:
+//                selectPin(2);
+                pin2View.setSelected(true);
+                break;
+            case R.id.grove_3:
+                selectPin(3);
+                break;
+            case R.id.grove_4:
+                selectPin(4);
+                break;
+            case R.id.grove_5:
+                selectPin(5);
+                break;
+            case R.id.grove_6:
+                selectPin(6);
+                break;
         }
 
     }
@@ -232,6 +358,24 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mToolbarAction.setVisibility(View.VISIBLE);
         }
 
+    }
+
+
+    public class NodePinConfig {
+        public Boolean filled;
+        public GroverDriver groverDriver;
+        public String GroveInstanceName;
+    }
+
+    public void selectPin(int pin) {
+        nodePinSelector.clear();
+        nodePinSelector.put(pin, true);
+        pin1View.setPressed(true);
+//        pin2View.setSelected(nodePinSelector.get(pin, false));
+//        pin3View.setSelected(nodePinSelector.get(pin, false));
+//        pin4View.setSelected(nodePinSelector.get(pin, false));
+//        pin5View.setSelected(nodePinSelector.get(pin, false));
+//        pin6View.setSelected(nodePinSelector.get(pin, false));
     }
 
 }
