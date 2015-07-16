@@ -1,5 +1,6 @@
 package cc.seeed.iot.ui_setnode;
 
+import android.content.Context;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +10,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -30,10 +32,12 @@ import retrofit.client.Response;
 
 public class SetupIotNodeActivity extends AppCompatActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener, View.OnClickListener {
-    public Toolbar toolbar;
-    public Toolbar toolbar_action;
+    public Toolbar mToolbar;
+    public Toolbar mToolbarAction;
     ArrayList<Node> nodes;
     Node node;
+
+    static View.OnClickListener mainOnClickListener; //Todo, no static
 
     RecyclerView mGroveListView;
     GroveListRecyclerAdapter mGroveListAdapter;
@@ -42,16 +46,26 @@ public class SetupIotNodeActivity extends AppCompatActivity
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
     private ArrayList<GroverDriver> mGroveDrivers;
 
+    ImageButton mCorrectView;
+    ImageButton mCancelView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_iot_node);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+        mainOnClickListener = new MainOnClickListener(this);
+
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        toolbar_action = (Toolbar) findViewById(R.id.toolbar_bottom);
-        toolbar_action.setVisibility(View.GONE);
+        mToolbarAction = (Toolbar) findViewById(R.id.toolbar_bottom);
+        mToolbarAction.setVisibility(View.GONE);
+        mCorrectView = (ImageButton) findViewById(R.id.ib_correct);
+        mCancelView = (ImageButton) findViewById(R.id.ib_cancel);
+        mCorrectView.setOnClickListener(this);
+        mCancelView.setOnClickListener(this);
 
         nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
         int position = getIntent().getIntExtra("position", 1);
@@ -62,7 +76,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
         mGroveListView = (RecyclerView) findViewById(R.id.grove_list);
         if (mGroveListView != null) {
             mGroveListView.setHasFixedSize(true);
-//            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
@@ -70,7 +83,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
             setupAdapter();
         }
-
 
         mGroveTypeListView = (RecyclerView) findViewById(R.id.grove_selector);
         if (mGroveTypeListView != null) {
@@ -81,6 +93,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mGroveTypeListView.setLayoutManager(layoutManager);
 
             setupGroveSetectorAdapter();
+
         }
     }
 
@@ -141,7 +154,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.update) {
             //TODO update firmware
-            Snackbar.make(toolbar, "Here's a Snackbar" + node.name, Snackbar.LENGTH_LONG).show();
+            Snackbar.make(mToolbar, "Here's a Snackbar" + node.name, Snackbar.LENGTH_LONG).show();
             return true;
         }
 
@@ -191,11 +204,34 @@ public class SetupIotNodeActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ib_correct:
-
+                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
+                mToolbarAction.setVisibility(View.GONE);
                 break;
 
             case R.id.ib_cancel:
+                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
+                mToolbarAction.setVisibility(View.GONE);
+
                 break;
+
         }
+
     }
+
+    private class MainOnClickListener implements View.OnClickListener {
+        private final Context context;
+
+        private MainOnClickListener(Context c) {
+            this.context = c;
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
+            mToolbarAction.setVisibility(View.VISIBLE);
+        }
+
+    }
+
 }

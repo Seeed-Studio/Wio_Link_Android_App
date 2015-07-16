@@ -36,6 +36,9 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         this.context = parent.getContext();
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.grove_list_item, parent, false);
+
+        v.setOnClickListener(SetupIotNodeActivity.mainOnClickListener);
+
         return new MainViewHolder(v);
     }
 
@@ -45,19 +48,6 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         ImageView grove_image = holder.grove_image;
         UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL.toString());
         holder.mView.setPressed(selector.get(position, false));
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                selectItem(position);
-                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
-//
-//                Intent intent = new Intent(context,SetupIotNodeActivity.class);
-//                intent.putExtra("position", position);
-//                context.startActivity(intent);
-            }
-        });
 
     }
 
