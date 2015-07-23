@@ -7,4 +7,5 @@ public class UserResponse {
     public String status;
     public String msg;
     public String token;
+    public String user_id;
 }

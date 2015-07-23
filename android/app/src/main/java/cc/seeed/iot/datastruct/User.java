@@ -6,5 +6,6 @@ package cc.seeed.iot.datastruct;
 public class User {
     public String email;
     public String user_key;
+    public String user_id;
 }
 

@@ -142,6 +142,7 @@ public class SignUpDialogFragment extends DialogFragment {
                         alertDialog.dismiss();
                         user.email = fianlEmail;
                         user.user_key = userResponse.token;
+                        user.user_id = userResponse.user_id;
                         ((MyApplication) getActivity().getApplication()).setUser(user);
                         Intent intent = new Intent(context, MainScreenActivity.class);
                         context.startActivity(intent);
