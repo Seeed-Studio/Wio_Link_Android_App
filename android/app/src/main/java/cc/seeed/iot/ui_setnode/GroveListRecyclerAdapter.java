@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
@@ -48,6 +49,8 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         ImageView grove_image = holder.grove_image;
         UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL.toString());
         holder.mView.setPressed(selector.get(position, false));
+        String name = grove.GroveName.replaceFirst("Grove[-_]", "");
+        holder.mGrvoeNameView.setText(name);
 
     }
 
@@ -79,12 +82,14 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
         ImageView grove_image;
+        TextView mGrvoeNameView;
         View mView;
 
         public MainViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
             grove_image = (ImageView) itemView.findViewById(R.id.grove_image);
+            mGrvoeNameView = (TextView) itemView.findViewById(R.id.grove_text);
 
         }
 

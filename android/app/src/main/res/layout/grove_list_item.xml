@@ -10,14 +10,23 @@
     android:foreground="?attr/selectableItemBackground"
     card_view:cardCornerRadius="4dp">
 
-    <ImageView
-        android:id="@+id/grove_image"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/grove_text"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <ImageView
+            android:id="@+id/grove_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/grove_text" />
 
+        <TextView
+            android:id="@+id/grove_text"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="name" />
+    </RelativeLayout>
 </android.support.v7.widget.CardView>
