@@ -54,12 +54,20 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
         ImageButton pop_menu = holder.pop_menu;
         tv_name.setText(node.name);
 
+        if (node.online) {
+            holder.mOnliceView.setText(R.string.online);
+            holder.mStausView.setImageResource(R.drawable.online_led);
+        } else {
+            holder.mOnliceView.setText(R.string.offline);
+            holder.mStausView.setImageResource(R.drawable.offline_led);
+        }
+
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Snackbar.make(v,"Todo:set node", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
 
-                Intent intent = new Intent(context,SetupIotNodeActivity.class);
+                Intent intent = new Intent(context, SetupIotNodeActivity.class);
                 intent.putExtra("position", position);
                 context.startActivity(intent);
             }
@@ -79,6 +87,8 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
     public static class MainViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name;
         ImageButton pop_menu;
+        TextView mOnliceView;
+        ImageView mStausView;
         View mView;
 
         public MainViewHolder(View itemView) {
@@ -86,6 +96,8 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
             mView = itemView;
             tv_name = (TextView) itemView.findViewById(R.id.txtvName);
             pop_menu = (ImageButton) itemView.findViewById(R.id.pop_menu);
+            mOnliceView = (TextView) itemView.findViewById(R.id.online);
+            mStausView = (ImageView) itemView.findViewById(R.id.status_led);
 
 //            itemView.setOnClickListener(this);
 //            pop_menu.setOnClickListener(this);

@@ -7,4 +7,5 @@ public class Node {
     public String node_key;
     public String name;
     public String node_sn;
+    public Boolean online;
 }

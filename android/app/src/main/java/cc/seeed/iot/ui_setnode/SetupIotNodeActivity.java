@@ -102,7 +102,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //        node = nodes.get(position);
 //        Snackbar.make(toolbar, "Here's a " + node.name, Snackbar.LENGTH_LONG).show();
 
-
+        node = new Node();
         mGroveListView = (RecyclerView) findViewById(R.id.grove_list);
         if (mGroveListView != null) {
             mGroveListView.setHasFixedSize(true);
@@ -191,8 +191,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
             return true;
         } else if (id == R.id.update) {
             //TODO update firmware
-            if (node.name == null)
-                node.name = "Node update";
+//            if (node.name == null)
+            node.name = "Node update";
             Snackbar.make(mToolbar, "Here's a Snackbar" + node.name, Snackbar.LENGTH_LONG).show();
             return true;
         }
@@ -259,6 +259,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
             case R.id.grove_1:
                 uiStateControl.activatedPin(1);
+//                mGroveListView.setActivated(true);
+//                mGroveListView.setSelected(true);
+//                mGroveListView.smoothScrollToPosition(7+2);
+//                mGroveListAdapter.selectItem(7);
                 break;
             case R.id.grove_2:
                 uiStateControl.activatedPin(2);
@@ -278,6 +282,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             case R.id.set_node:
                 if (mToolbarAction.getVisibility() == View.GONE)
                     uiStateControl.activatedClear();
+                break;
         }
 
     }
@@ -357,6 +362,18 @@ public class SetupIotNodeActivity extends AppCompatActivity
         public void activatedPin(int pin) {
             if (nodePinSelected.get(pin, false)) {
                 Snackbar.make(v, "Todo:node fill", Snackbar.LENGTH_SHORT).show();
+                pin_set_statu = true;
+                nodePinActivated.clear();
+                nodePinActivated.put(pin, true);
+                pin1View.setActivated(nodePinActivated.get(1, false));
+                pin2View.setActivated(nodePinActivated.get(2, false));
+                pin3View.setActivated(nodePinActivated.get(3, false));
+                pin4View.setActivated(nodePinActivated.get(4, false));
+                pin5View.setActivated(nodePinActivated.get(5, false));
+                pin6View.setActivated(nodePinActivated.get(6, false));
+
+                //todo, sroll to grove
+
             } else {
                 pin_set_statu = true;
                 nodePinActivated.clear();
@@ -367,6 +384,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 pin4View.setActivated(nodePinActivated.get(4, false));
                 pin5View.setActivated(nodePinActivated.get(5, false));
                 pin6View.setActivated(nodePinActivated.get(6, false));
+
+                //todo, select recyclcerview status
             }
         }
 
@@ -381,7 +400,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             pin5View.setActivated(nodePinActivated.get(5, false));
             pin6View.setActivated(nodePinActivated.get(6, false));
 
-            //Todo, clear grove list state
+            //Todo, clear grove recycleview selected state
         }
 
 
