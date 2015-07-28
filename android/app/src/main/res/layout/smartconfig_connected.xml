@@ -60,20 +60,8 @@
                 android:layout_marginRight="24dp"
                 android:layout_marginTop="16dp"
                 android:enabled="true"
-                android:hint="@string/smartconfig_hint_SSID"
+                android:hint="@string/smartconfig_hint_node_name"
                 android:inputType="none"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/wifi_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="24dp"
-                android:layout_marginRight="24dp"
-                android:hint="@string/smartconfig_hint_password"
-                android:inputType="textPassword"
-                android:minWidth="300dp"
                 android:singleLine="true" />
 
             <Button
@@ -86,7 +74,7 @@
                 android:layout_marginRight="24dp"
                 android:layout_marginTop="24dp"
                 android:background="@color/apptheme_blue"
-                android:text="@string/smartconfig_btn_connect"
+                android:text="@string/smartconfig_btn_play"
                 android:textColor="@android:color/white" />
 
         </LinearLayout>
@@ -100,7 +88,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="@string/smartconfig_tips_connect"
+        android:text="@string/smartconfig_tips_node_name"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/primary_text_default_material_dark" />
