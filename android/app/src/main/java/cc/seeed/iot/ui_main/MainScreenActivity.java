@@ -39,7 +39,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import cc.seeed.iot.MainActivity;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
