@@ -17,6 +17,7 @@
 package cc.seeed.iot.ui_main;
 
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -38,10 +39,13 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import cc.seeed.iot.MainActivity;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.AddNodeDialogFragment.NoticeDialogListener;
+import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
+import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
@@ -190,6 +194,8 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
                                 Log.e("iot", "id_list");
                                 break;
                             case R.id.nav_smartconfig:
+                                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+                                startActivity(intent);
                                 break;
                             case R.id.nav_about:
                                 break;

@@ -25,7 +25,7 @@
     <string name="smartconfig_error">Connection Failed</string>
     <string name="smartconfig_connected">Connected</string>
 
-    <string name="smartconfig_hint_SSID">SSID</string>
+    <string name="smartconfig_hint_SSID">SSID:</string>
     <string name="smartconfig_hint_password">Password</string>
     <string name="smartconfig_hint_node_name">Take a name for Node</string>
 
