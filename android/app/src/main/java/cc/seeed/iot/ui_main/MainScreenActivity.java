@@ -117,8 +117,10 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddNodeDialogFragment addNodeDialogFragment = new AddNodeDialogFragment();
-                addNodeDialogFragment.show(getFragmentManager(), "addNode");
+//                AddNodeDialogFragment addNodeDialogFragment = new AddNodeDialogFragment();
+//                addNodeDialogFragment.show(getFragmentManager(), "addNode");
+                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+                startActivity(intent);
             }
         });
 
