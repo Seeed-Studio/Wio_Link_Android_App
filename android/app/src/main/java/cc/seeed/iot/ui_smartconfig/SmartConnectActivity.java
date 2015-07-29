@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -176,8 +177,8 @@ public class SmartConnectActivity extends AppCompatActivity implements OnClickLi
         protected void onPostExecute(List<IEsptouchResult> result) {
             mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE)
                     .setEnabled(true);
-            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).setText(
-                    "Confirm");
+            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).
+                    setText("Confirm");
             IEsptouchResult firstResult = result.get(0);
             // check whether the task is cancelled and no results received
             if (!firstResult.isCancelled()) {
@@ -205,8 +206,25 @@ public class SmartConnectActivity extends AppCompatActivity implements OnClickLi
                                 + " more result(s) without showing\n");
                     }
                     mProgressDialog.setMessage(sb.toString());
+                    mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).
+                            setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //todo: display a node with Blank?
+                                    Snackbar.make(v, "todo: display node list", Snackbar.LENGTH_SHORT).show();
+                                }
+                            });
+
                 } else {
                     mProgressDialog.setMessage("Esptouch fail");
+                    mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).
+                            setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Snackbar.make(v, "todo: reconnect node!", Snackbar.LENGTH_SHORT).show();
+                                    mProgressDialog.dismiss();
+                                }
+                            });
                 }
             }
         }
