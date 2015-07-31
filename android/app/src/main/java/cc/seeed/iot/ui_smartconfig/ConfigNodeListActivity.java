@@ -121,7 +121,7 @@ public class ConfigNodeListActivity extends AppCompatActivity {
         @Override
         protected ArrayList<ConfigNodeData> doInBackground(String... params) {
             ArrayList<ConfigNodeData> configNodeDatas = new ArrayList<>();
-            udpClient.setSoTimeout(3000); //3s timeout
+            udpClient.setSoTimeout(6000); //3s timeout //todo: long wait
             udpClient.sendData(ConfigUdpSocket.CMD_BLANK, getLocalBroadcastAddress());
             while (true) {
                 try {
