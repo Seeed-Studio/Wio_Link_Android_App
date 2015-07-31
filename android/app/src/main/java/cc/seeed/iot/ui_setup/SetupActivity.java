@@ -64,6 +64,7 @@ public class SetupActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                new SignInDialog(SetupActivity.this);
                 SignInDialogFragment signInDialogFragment = new SignInDialogFragment();
+                signInDialogFragment.setCancelable(false);
                 signInDialogFragment.show(getFragmentManager(), "signIn");
             }
         });
@@ -74,6 +75,7 @@ public class SetupActivity extends AppCompatActivity {
             public void onClick(View v) {
 //                new SignUpDialog(SetupActivity.this);
                 SignUpDialogFragment signUpDialogFragment = new SignUpDialogFragment();
+                signUpDialogFragment.setCancelable(false);
                 signUpDialogFragment.show(getFragmentManager(), "signUn");
             }
         });

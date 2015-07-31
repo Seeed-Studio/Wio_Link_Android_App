@@ -105,7 +105,7 @@ public class ConfigNodeListActivity extends AppCompatActivity {
 
 
     private class searchConfigNode extends AsyncTask<String, Void, ArrayList<ConfigNodeData>> {
-
+        //todo: real-time refresh
         private ProgressDialog mProgressDialog;
 
 
