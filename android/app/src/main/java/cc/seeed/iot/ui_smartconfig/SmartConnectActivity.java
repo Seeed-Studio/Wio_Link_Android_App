@@ -2,6 +2,7 @@ package cc.seeed.iot.ui_smartconfig;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -211,7 +212,10 @@ public class SmartConnectActivity extends AppCompatActivity implements OnClickLi
                                 @Override
                                 public void onClick(View v) {
                                     //todo: display a node with Blank?
-                                    Snackbar.make(v, "todo: display node list", Snackbar.LENGTH_SHORT).show();
+//                                    Snackbar.make(v, "todo: display node list", Snackbar.LENGTH_SHORT).show();
+                                    Intent intent =new Intent(SmartConnectActivity.this, ConfigNodeListActivity.class);
+                                    startActivity(intent);
+                                    mProgressDialog.dismiss();
                                 }
                             });
 

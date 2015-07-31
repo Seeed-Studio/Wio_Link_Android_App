@@ -15,6 +15,7 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import java.util.ArrayList;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.udp.ConfigNodeData;
 import cc.seeed.iot.ui_setnode.GroveFilterRecyclerAdapter;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.webapi.model.GroverDriver;
@@ -23,13 +24,13 @@ import cc.seeed.iot.webapi.model.GroverDriver;
  * Created by tenwong on 15/6/25.
  */
 public class ConfigNodeListRecyclerAdapter extends RecyclerView.Adapter<ConfigNodeListRecyclerAdapter.MainViewHolder> {
-    private ArrayList<ConfigNodeListActivity.LocalNode> localNodes;
+    private ArrayList<ConfigNodeData> localNodes;
     private Context context;
 
     SparseBooleanArray selector;
     private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
 
-    public ConfigNodeListRecyclerAdapter(ArrayList<ConfigNodeListActivity.LocalNode> localNodes) {
+    public ConfigNodeListRecyclerAdapter(ArrayList<ConfigNodeData> localNodes) {
         this.localNodes = localNodes;
     }
 
@@ -44,7 +45,7 @@ public class ConfigNodeListRecyclerAdapter extends RecyclerView.Adapter<ConfigNo
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
-        ConfigNodeListActivity.LocalNode localNode = localNodes.get(position);
+        ConfigNodeData localNode = localNodes.get(position);
         holder.mMacView.setText(localNode.mac);
         holder.mIpView.setText(localNode.ip);
 
