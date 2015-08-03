@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -34,11 +35,13 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class SetNodeNameActivity extends AppCompatActivity {
+    public static final String NODE_LOCAL_IP_ADDRESS = "node.local.ip.address";
     public Toolbar mToolbar;
     public EditText mNodeNameView;
     public Button mGoPlayButtonView;
     private ConfigUdpSocket udpClient;
-    public Intent intent;
+    private Intent intent;
+    private String ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,7 @@ public class SetNodeNameActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         intent = getIntent();
+        ip = intent.getStringExtra(NODE_LOCAL_IP_ADDRESS);
 
         udpClient = new ConfigUdpSocket();
 
@@ -62,35 +66,26 @@ public class SetNodeNameActivity extends AppCompatActivity {
         mGoPlayButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addNode();
+                String node_name = mNodeNameView.getText().toString();
+                attemptLogin(node_name);
             }
         });
 
     }
 
-    private void addNode() {
-        String ip = intent.getStringExtra("ip");
-        String node_name = mNodeNameView.getText().toString();
-
-        Node node = attemptLogin(node_name);
+    private void GoSetNodeSn(Node node) {
 
         if (node == null)
             return;
 
         String cmd_set_sn = "KeySN: " + node.node_key + "," + node.node_sn;
+
         Log.e("iot", "cmd_sn: " + cmd_set_sn);
+        Log.e("iot", "ip: " + ip);
 
         new SetNodeSn().execute(cmd_set_sn, ip);
-
     }
 
-
-    @Override
-    public Intent getIntent() {
-        intent = super.getIntent();
-
-        return intent;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -108,7 +103,7 @@ public class SetNodeNameActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    private Node attemptLogin(final String node_name) {
+    private void attemptLogin(final String node_name) {
         final Node node = new Node();
         boolean cancel = false;
         View focusView = null;
@@ -136,7 +131,7 @@ public class SetNodeNameActivity extends AppCompatActivity {
                         node.node_key = nodeResponse.node_key;
                         node.node_sn = nodeResponse.node_sn;
 
-//                        mListener.onAddNode(node);
+                        GoSetNodeSn(node);
                     } else {
 //                        showProgress(false);
                         mProgressBar.dismiss();
@@ -153,7 +148,6 @@ public class SetNodeNameActivity extends AppCompatActivity {
                 }
             });
         }
-        return node;
     }
 
     private class SetNodeSn extends AsyncTask<String, Void, Boolean> {
@@ -173,30 +167,29 @@ public class SetNodeNameActivity extends AppCompatActivity {
         protected Boolean doInBackground(String... params) {
             String cmd = params[0];
             String ipAddr = params[1];
-            ArrayList<ConfigNodeData> configNodeDatas = new ArrayList<>();
             udpClient.setSoTimeout(1000); //1s timeout
             udpClient.sendData(cmd, ipAddr);
             for (int i = 0; i < 3; i++) {
                 try {
                     byte[] bytes = udpClient.receiveData();
-                    if (bytes.toString().equals("ok")) {
+                    if (new String(bytes).substring(0, 1 + 1).equals("ok")) {
+                        Log.e("iot", "set Node Success");
+                        //todo: upda ui is success
                         break;
                     }
                 } catch (SocketTimeoutException e) {
+                    udpClient.setSoTimeout(3000);
+                    udpClient.sendData(cmd, ipAddr);
                     continue;
                 } catch (IOException e) {
                     Log.e("iot", "Error[AsyIO]:" + e);
                 }
             }
-
-            Log.i("iot", "configNodeDatas: " + configNodeDatas);
             return true;
         }
 
         @Override
         protected void onPostExecute(Boolean b) {
-//            setupAdapter(configNodeDatas)
-            //todo
             mProgressDialog.dismiss();
             Intent intent = new Intent(SetNodeNameActivity.this, MainScreenActivity.class);
             startActivity(intent);

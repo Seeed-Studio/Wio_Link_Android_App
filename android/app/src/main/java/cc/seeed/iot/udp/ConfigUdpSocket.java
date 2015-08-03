@@ -35,7 +35,7 @@ public class ConfigUdpSocket {
         try {
             socket = new DatagramSocket();
         } catch (SocketException e) {
-            Log.e("iot", "send socket error:" + e);
+            Log.e("iot", "ConfigUdpSocket error:" + e);
         }
         buffer = new byte[1024];
         mReceivePacket = new DatagramPacket(buffer, buffer.length);
@@ -48,7 +48,7 @@ public class ConfigUdpSocket {
             DatagramPacket packet = new DatagramPacket(d, d.length, address, PORT);
             socket.send(packet);
         } catch (Exception e) {
-            Log.e("iot", "send socket error:" + e);
+            Log.e("iot", "sendData error:" + e);
         }
     }
 
@@ -71,6 +71,7 @@ public class ConfigUdpSocket {
         }
 
         d = d.replaceFirst("Node: ", "");
+        d = d.replaceAll("\r\n", "");
 
         String data[] = d.split(",");
         configNodeData.node_sn = data[0];

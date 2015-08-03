@@ -1,6 +1,8 @@
 package cc.seeed.iot.ui_smartconfig;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -45,10 +47,20 @@ public class ConfigNodeListRecyclerAdapter extends RecyclerView.Adapter<ConfigNo
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
-        ConfigNodeData localNode = localNodes.get(position);
+        final ConfigNodeData localNode = localNodes.get(position);
         holder.mMacView.setText(localNode.mac);
         holder.mIpView.setText(localNode.ip);
 
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Snackbar.make(v, "Todo:set node" + position, Snackbar.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(context, SetNodeNameActivity.class);
+                intent.putExtra(SetNodeNameActivity.NODE_LOCAL_IP_ADDRESS, localNode.ip);
+                context.startActivity(intent);
+            }
+        });
     }
 
     public void selectItem(int position) {
