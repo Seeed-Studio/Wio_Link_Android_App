@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.BitSet;
 
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.model.Node;
@@ -19,6 +20,8 @@ public class MyApplication extends Application {
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
     private User user = new User();
+
+    private Boolean configState;
 
     public User getUser() {
         return user;
@@ -39,6 +42,19 @@ public class MyApplication extends Application {
     public void setNodes(ArrayList<Node> nodes) {
         this.nodes = nodes;
     }
+
+
+    public Boolean getConfigState() {
+        return configState;
+    }
+
+    public void setConfigState(Boolean configState) {
+        this.configState = configState;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("configState", configState);
+        editor.apply();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -46,5 +62,10 @@ public class MyApplication extends Application {
         sp.getString("serverAddress", "http://192.168.21.83:8080/v1");
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
+
+        /**
+         * into smartconfig state
+         */
+        configState = sp.getBoolean("configState", false);
     }
 }

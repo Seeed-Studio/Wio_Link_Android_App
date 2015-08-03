@@ -118,6 +118,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
             public void onClick(View view) {
 //                AddNodeDialogFragment addNodeDialogFragment = new AddNodeDialogFragment();
 //                addNodeDialogFragment.show(getFragmentManager(), "addNode");
+                ((MyApplication) getApplication()).setConfigState(true);
                 Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
                 startActivity(intent);
             }
@@ -195,6 +196,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
                                 Log.e("iot", "id_list");
                                 break;
                             case R.id.nav_smartconfig:
+                                ((MyApplication) getApplication()).setConfigState(false);
                                 Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
                                 startActivity(intent);
                                 break;

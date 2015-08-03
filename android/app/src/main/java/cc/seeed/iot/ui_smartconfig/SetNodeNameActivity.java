@@ -80,8 +80,8 @@ public class SetNodeNameActivity extends AppCompatActivity {
 
         String cmd_set_sn = "KeySN: " + node.node_key + "," + node.node_sn;
 
-        Log.e("iot", "cmd_sn: " + cmd_set_sn);
-        Log.e("iot", "ip: " + ip);
+        Log.i("iot", "cmd_sn: " + cmd_set_sn);
+        Log.i("iot", "ip: " + ip);
 
         new SetNodeSn().execute(cmd_set_sn, ip);
     }

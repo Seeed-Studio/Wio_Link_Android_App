@@ -21,11 +21,13 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.esptouch.EsptouchTask;
 import cc.seeed.iot.esptouch.IEsptouchResult;
 import cc.seeed.iot.esptouch.IEsptouchTask;
 import cc.seeed.iot.esptouch.task.__IEsptouchTask;
+import cc.seeed.iot.ui_main.MainScreenActivity;
 
 public class SmartConnectActivity extends AppCompatActivity implements OnClickListener {
     private static final String TAG = "IOT";
@@ -211,10 +213,16 @@ public class SmartConnectActivity extends AppCompatActivity implements OnClickLi
                             setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    //todo: display a node with Blank?
-//                                    Snackbar.make(v, "todo: display node list", Snackbar.LENGTH_SHORT).show();
-                                    Intent intent =new Intent(SmartConnectActivity.this, ConfigNodeListActivity.class);
-                                    startActivity(intent);
+                                    if (((MyApplication) getApplication()).getConfigState()) {
+                                        Intent intent = new Intent(SmartConnectActivity.this,
+                                                ConfigNodeListActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        Intent intent = new Intent(SmartConnectActivity.this,
+                                                MainScreenActivity.class);
+                                        startActivity(intent);
+                                    }
+
                                     mProgressDialog.dismiss();
                                 }
                             });
