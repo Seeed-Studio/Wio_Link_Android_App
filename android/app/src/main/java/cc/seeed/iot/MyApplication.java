@@ -21,7 +21,26 @@ public class MyApplication extends Application {
 
     private User user = new User();
 
+    /**
+     * into smartconfig state
+     */
     private Boolean configState;
+
+    /**
+     * login state
+     */
+    private Boolean loginState;
+
+    public Boolean getLoginState() {
+        return loginState;
+    }
+
+    public void setLoginState(Boolean loginState) {
+        this.loginState = loginState;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("loginState", loginState);
+        editor.apply();
+    }
 
     public User getUser() {
         return user;
@@ -63,9 +82,9 @@ public class MyApplication extends Application {
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
 
-        /**
-         * into smartconfig state
-         */
+
         configState = sp.getBoolean("configState", false);
+
+        configState = sp.getBoolean("loginState", false);
     }
 }
