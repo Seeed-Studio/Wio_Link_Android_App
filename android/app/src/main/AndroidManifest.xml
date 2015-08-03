@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cc.seeed.iot">
+    package="cc.seeed.iot" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,34 +12,38 @@
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme" >
         <activity
             android:name=".ui_main.MainScreenActivity"
-            android:theme="@style/Theme.DesignDemo">
+            android:theme="@style/Theme.DesignDemo" >
+        </activity>
+        <activity android:name=".ui_setup.SetupActivity" >
+
+        </activity>
+        <activity
+            android:name=".ui_smartconfig.GoReadyActivity"
+            android:theme="@style/Theme.NodeSet" >
+        </activity>
+        <activity
+            android:name=".ui_smartconfig.SmartConnectActivity"
+            android:theme="@style/Theme.NodeSet" >
+        </activity>
+        <activity
+            android:name=".ui_smartconfig.ConfigNodeListActivity"
+            android:theme="@style/Theme.NodeSet" >
+        </activity>
+        <activity
+            android:name=".ui_smartconfig.SetNodeNameActivity"
+            android:theme="@style/Theme.NodeSet" >
+        </activity>
+        <activity
+            android:name=".ui_splash.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".ui_setup.SetupActivity">
-
-        </activity>
-        <activity
-            android:name=".ui_setnode.SetupIotNodeActivity"
-            android:label="Setup Node"
-            android:theme="@style/Theme.NodeSet">
-
-        </activity>
-        <activity
-            android:name=".ui_smartconfig.GoReadyActivity"
-            android:theme="@style/Theme.NodeSet">
-
-        </activity>
-        <activity
-            android:name=".ui_smartconfig.SmartConnectActivity"
-            android:theme="@style/Theme.NodeSet">
-
         </activity>
     </application>
 
