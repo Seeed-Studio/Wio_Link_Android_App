@@ -144,6 +144,14 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
     private void setupAdapter() {
         IotApi api = new IotApi();
         User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
