@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_node_list"
     android:layout_width="match_parent"
     android:layout_height="88dp"
     android:layout_marginBottom="8dp"
-    android:layout_marginTop="8dp">
+    android:layout_marginTop="8dp"
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/imgvImage"
@@ -20,11 +22,11 @@
         android:id="@+id/pop_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:gravity="center_vertical"
         android:src="@drawable/ic_more_vert_black" />
 
@@ -33,8 +35,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_toLeftOf="@id/pop_menu"
         android:layout_toStartOf="@id/pop_menu"
         android:src="@drawable/online_led" />
