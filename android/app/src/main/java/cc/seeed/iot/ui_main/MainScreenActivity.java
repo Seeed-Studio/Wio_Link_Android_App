@@ -16,6 +16,7 @@
 
 package cc.seeed.iot.ui_main;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -110,7 +111,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
                         setupAdapter();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
-                }, 2500);
+                }, 0);
             }
         });
 
@@ -142,6 +143,9 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.update:
+                setupAdapter();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -155,6 +159,11 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
     }
 
     private void setupAdapter() {
+        final ProgressDialog mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("search node list...");
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.show();
+
         IotApi api = new IotApi();
         User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
         api.setAccessToken(user.user_key);
@@ -162,6 +171,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
         iot.nodesList(new Callback<NodeListResponse>() {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
+                mProgressDialog.dismiss();
                 if (nodeListResponse.status.equals("200")) {
                     nodes = (ArrayList) nodeListResponse.nodes;
                     ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
@@ -174,7 +184,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("iot", "fail");
+                mProgressDialog.dismiss();
                 Toast.makeText(MainScreenActivity.this, "连接服务器失败", Toast.LENGTH_LONG).show();
             }
         });
