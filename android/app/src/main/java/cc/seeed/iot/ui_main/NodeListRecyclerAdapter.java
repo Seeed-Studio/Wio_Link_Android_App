@@ -51,14 +51,12 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
         TextView tv_name = holder.tv_name;
-        ImageButton pop_menu = holder.pop_menu;
+        ImageView pop_menu = holder.pop_menu;
         tv_name.setText(node.name);
 
         if (node.online) {
-            holder.mOnliceView.setText(R.string.online);
             holder.mStausView.setImageResource(R.drawable.online_led);
         } else {
-            holder.mOnliceView.setText(R.string.offline);
             holder.mStausView.setImageResource(R.drawable.offline_led);
         }
 
@@ -86,8 +84,7 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
 
     public static class MainViewHolder extends RecyclerView.ViewHolder {
         TextView tv_name;
-        ImageButton pop_menu;
-        TextView mOnliceView;
+        ImageView pop_menu;
         ImageView mStausView;
         View mView;
 
@@ -95,8 +92,7 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
             super(itemView);
             mView = itemView;
             tv_name = (TextView) itemView.findViewById(R.id.txtvName);
-            pop_menu = (ImageButton) itemView.findViewById(R.id.pop_menu);
-            mOnliceView = (TextView) itemView.findViewById(R.id.online);
+            pop_menu = (ImageView) itemView.findViewById(R.id.pop_menu);
             mStausView = (ImageView) itemView.findViewById(R.id.status_led);
 
 //            itemView.setOnClickListener(this);
