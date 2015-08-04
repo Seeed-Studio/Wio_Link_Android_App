@@ -16,7 +16,6 @@
 
 package cc.seeed.iot.ui_main;
 
-import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,7 +42,7 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.AddNodeDialogFragment.NoticeDialogListener;
-import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
+import cc.seeed.iot.ui_setup.SetupActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -60,12 +59,12 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
 
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    RecyclerView listView;
-    RecyclerView.Adapter mAdapter;
-    TextView mEmail;
+    private RecyclerView listView;
+    private RecyclerView.Adapter mAdapter;
+    private TextView mEmail;
 
-    ArrayList<Node> nodes;
-    User user;
+    private ArrayList<Node> nodes;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +77,11 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
+        if (ab != null) {
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setTitle("PION ONE");
+        }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -130,7 +132,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.sample_actions, menu);
+        getMenuInflater().inflate(R.menu.ui_main, menu);
         return true;
     }
 
@@ -197,21 +199,31 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
                         menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
-
-                        Log.e("iot", "id:" + menuItem.getItemId());
                         switch (menuItem.getItemId()) {
                             case R.id.nav_nodes_list:
                                 Log.e("iot", "id_list");
                                 break;
-                            case R.id.nav_smartconfig:
+                            case R.id.nav_smartconfig: {
                                 ((MyApplication) getApplication()).setConfigState(false);
-                                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+                                Intent intent = new Intent(MainScreenActivity.this,
+                                        GoReadyActivity.class);
                                 startActivity(intent);
-                                break;
-                            case R.id.nav_about:
-                                break;
-                            case R.id.nav_logout:
-                                break;
+                            }
+                            break;
+                            case R.id.nav_about: {
+                                Intent intent = new Intent(MainScreenActivity.this,
+                                        AboutActivity.class);
+                                startActivity(intent);
+                            }
+                            break;
+                            case R.id.nav_logout: {
+                                ((MyApplication) getApplication()).setLoginState(false);
+                                Intent intent = new Intent(MainScreenActivity.this,
+                                        SetupActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                            break;
                         }
 
                         return true;

@@ -178,7 +178,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_setup_iot_node, menu);
+        getMenuInflater().inflate(R.menu.ui_setup, menu);
         return true;
     }
 

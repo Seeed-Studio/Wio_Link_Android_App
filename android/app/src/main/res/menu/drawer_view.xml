@@ -19,16 +19,16 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_nodes_list"
-            android:icon="@drawable/ic_view_list_black_36dp"
+            android:icon="@drawable/ic_view_list_black"
             android:title="@string/nodes_list_view" />
         <item
             android:id="@+id/nav_smartconfig"
-            android:icon="@drawable/ic_wifi_black_36dp"
+            android:icon="@drawable/ic_wifi_black"
             android:title="@string/smartconfig_view" />
-        <item
-            android:id="@+id/nav_sn_key"
-            android:icon="@drawable/ic_vpn_key_black_36dp"
-            android:title="@string/sn_key_view" />
+        <!--<item-->
+            <!--android:id="@+id/nav_sn_key"-->
+            <!--android:icon="@drawable/ic_vpn_key_black"-->
+            <!--android:title="@string/sn_key_view" />-->
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info_black_36dp"
@@ -37,10 +37,10 @@
 
     <item android:title="">
         <menu>
-            <item
-                android:id="@+id/nav_setting"
-                android:icon="@drawable/ic_settings_black_36dp"
-                android:title="@string/setting_view"/>
+            <!--<item-->
+                <!--android:id="@+id/nav_setting"-->
+                <!--android:icon="@drawable/ic_settings_black"-->
+                <!--android:title="@string/setting_view"/>-->
 
             <item
                 android:id="@+id/nav_logout"
