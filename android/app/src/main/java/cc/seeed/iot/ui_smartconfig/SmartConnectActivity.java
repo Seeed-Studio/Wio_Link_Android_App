@@ -213,16 +213,7 @@ public class SmartConnectActivity extends AppCompatActivity implements OnClickLi
                             setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    if (((MyApplication) getApplication()).getConfigState()) {
-                                        Intent intent = new Intent(SmartConnectActivity.this,
-                                                ConfigNodeListActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        Intent intent = new Intent(SmartConnectActivity.this,
-                                                MainScreenActivity.class);
-                                        startActivity(intent);
-                                    }
-
+                                    nextActivity();
                                     mProgressDialog.dismiss();
                                 }
                             });
@@ -242,4 +233,15 @@ public class SmartConnectActivity extends AppCompatActivity implements OnClickLi
         }
     }
 
+
+    private void nextActivity() {
+        if (((MyApplication) getApplication()).getConfigState()) {
+            Intent intent = new Intent(SmartConnectActivity.this, ConfigNodeListActivity.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(SmartConnectActivity.this, MainScreenActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        }
+    }
 }

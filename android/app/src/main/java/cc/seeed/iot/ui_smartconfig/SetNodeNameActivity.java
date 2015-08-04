@@ -192,6 +192,7 @@ public class SetNodeNameActivity extends AppCompatActivity {
         protected void onPostExecute(Boolean b) {
             mProgressDialog.dismiss();
             Intent intent = new Intent(SetNodeNameActivity.this, MainScreenActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }
     }
