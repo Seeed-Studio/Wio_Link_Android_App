@@ -17,6 +17,7 @@
 package cc.seeed.iot.ui_main;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -42,13 +44,13 @@ import java.util.ArrayList;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.ui_main.AddNodeDialogFragment.NoticeDialogListener;
 import cc.seeed.iot.ui_setup.SetupActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
+import cc.seeed.iot.webapi.model.NodeResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -56,12 +58,13 @@ import retrofit.client.Response;
 /**
  * TODO
  */
-public class MainScreenActivity extends AppCompatActivity implements NoticeDialogListener {
+public class MainScreenActivity extends AppCompatActivity
+        implements NodeListRecyclerAdapter.NodeAction {
 
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private RecyclerView listView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView mRecyclerView;
+    private NodeListRecyclerAdapter mAdapter;
     private TextView mEmail;
 
     private ArrayList<Node> nodes;
@@ -71,6 +74,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
         nodes = ((MyApplication) MainScreenActivity.this.getApplication()).getNodes();
 
@@ -91,11 +95,11 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
             setupDrawerContent(navigationView);
         }
 
-        listView = (RecyclerView) findViewById(R.id.listview);
-        if (listView != null) {
-            listView.setHasFixedSize(true);
+        mRecyclerView = (RecyclerView) findViewById(R.id.listview);
+        if (mRecyclerView != null) {
+            mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
-            listView.setLayoutManager(layout);
+            mRecyclerView.setLayoutManager(layout);
 
             setupAdapter();
         }
@@ -129,6 +133,8 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
 
         mEmail = (TextView) findViewById(R.id.hd_email);
         mEmail.setText(user.email);
+
+
     }
 
     @Override
@@ -176,7 +182,7 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
                     nodes = (ArrayList) nodeListResponse.nodes;
                     ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
                     mAdapter = new NodeListRecyclerAdapter(nodes);
-                    listView.setAdapter(mAdapter);
+                    mRecyclerView.setAdapter(mAdapter);
                 } else {
                     Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
                 }
@@ -242,8 +248,34 @@ public class MainScreenActivity extends AppCompatActivity implements NoticeDialo
     }
 
     @Override
-    public void onAddNode(Node node) {
-        addItem(node);
+    public boolean nodeRemove(int position) {//todo: rubbish code
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Node delete...");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        final int p = position;
+        Node node = nodes.get(position);
+        IotApi api = new IotApi();
+        User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+        api.setAccessToken(user.user_key);
+        final IotService iot = api.getService();
+        iot.nodesDelete(node.node_sn, new Callback<NodeResponse>() {
+            @Override
+            public void success(NodeResponse nodeResponse, Response response) {
+                progressDialog.dismiss();
+                mAdapter.removeItem(p);
+                Log.i("iot", "Delete Node success!");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                progressDialog.dismiss();
+                Log.e("iot", "Delete Node fail!");
+            }
+        });
+
+
+        return true;
     }
 
 }

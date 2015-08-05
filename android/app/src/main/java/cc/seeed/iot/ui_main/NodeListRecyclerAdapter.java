@@ -9,7 +9,9 @@ import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -50,27 +52,13 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
-        TextView tv_name = holder.tv_name;
-        ImageView pop_menu = holder.pop_menu;
-        tv_name.setText(node.name);
+        holder.tv_name.setText(node.name);
 
         if (node.online) {
             holder.mStausView.setImageResource(R.drawable.online_led);
         } else {
             holder.mStausView.setImageResource(R.drawable.offline_led);
         }
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Snackbar.make(v, "Todo:set node", Snackbar.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(context, SetupIotNodeActivity.class);
-                intent.putExtra("position", position);
-                context.startActivity(intent);
-            }
-        });
-
     }
 
     @Override
@@ -81,12 +69,24 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
             return nodes.size();
     }
 
+    public Node getItem(int position) {
+        return nodes.get(position);
+    }
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder {
+    public Node removeItem(int position) {
+        Node node = nodes.remove(position);
+        notifyItemRemoved(position);
+        return node;
+    }
+
+    public static class MainViewHolder extends RecyclerView.ViewHolder
+            implements PopupMenu.OnMenuItemClickListener, View.OnClickListener {
         TextView tv_name;
         ImageView pop_menu;
         ImageView mStausView;
         View mView;
+
+        NodeAction nodeAction;
 
         public MainViewHolder(View itemView) {
             super(itemView);
@@ -95,10 +95,35 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
             pop_menu = (ImageView) itemView.findViewById(R.id.pop_menu);
             mStausView = (ImageView) itemView.findViewById(R.id.status_led);
 
-//            itemView.setOnClickListener(this);
-//            pop_menu.setOnClickListener(this);
+            itemView.setOnClickListener(MainScreenActivity.mainOnClickListener);
+            pop_menu.setOnClickListener(this);
 
+            nodeAction = (NodeAction) mView.getContext();
         }
 
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.remove:
+//                    mAdapter.removeItem(0);
+                    nodeAction.nodeRemove(getAdapterPosition());
+                    return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Log.e("iot", "pop_menu:");
+            PopupMenu popupMenu = new PopupMenu(mView.getContext(), v);
+            popupMenu.setOnMenuItemClickListener(this);
+            popupMenu.inflate(R.menu.ui_node_action);
+            popupMenu.show();
+        }
     }
+
+    public interface NodeAction {
+        public boolean nodeRemove(int position);
+    }
+
 }
