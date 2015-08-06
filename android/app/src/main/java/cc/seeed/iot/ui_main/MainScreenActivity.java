@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setup.SetupActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
@@ -263,6 +264,8 @@ public class MainScreenActivity extends AppCompatActivity
             @Override
             public void success(NodeResponse nodeResponse, Response response) {
                 progressDialog.dismiss();
+                nodes.remove(nodeResponse);
+                ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
                 mAdapter.removeItem(p);
                 Log.i("iot", "Delete Node success!");
             }
@@ -275,6 +278,14 @@ public class MainScreenActivity extends AppCompatActivity
         });
 
 
+        return true;
+    }
+
+    @Override
+    public boolean nodeSet(int position) {
+        Intent intent = new Intent(this, SetupIotNodeActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
         return true;
     }
 

@@ -95,7 +95,7 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
             pop_menu = (ImageView) itemView.findViewById(R.id.pop_menu);
             mStausView = (ImageView) itemView.findViewById(R.id.status_led);
 
-            itemView.setOnClickListener(MainScreenActivity.mainOnClickListener);
+            itemView.setOnClickListener(this);
             pop_menu.setOnClickListener(this);
 
             nodeAction = (NodeAction) mView.getContext();
@@ -105,7 +105,6 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
         public boolean onMenuItemClick(MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.remove:
-//                    mAdapter.removeItem(0);
                     nodeAction.nodeRemove(getAdapterPosition());
                     return true;
             }
@@ -114,16 +113,21 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
 
         @Override
         public void onClick(View v) {
-            Log.e("iot", "pop_menu:");
-            PopupMenu popupMenu = new PopupMenu(mView.getContext(), v);
-            popupMenu.setOnMenuItemClickListener(this);
-            popupMenu.inflate(R.menu.ui_node_action);
-            popupMenu.show();
+            if (v == pop_menu) {
+                PopupMenu popupMenu = new PopupMenu(mView.getContext(), v);
+                popupMenu.setOnMenuItemClickListener(this);
+                popupMenu.inflate(R.menu.ui_node_action);
+                popupMenu.show();
+            } else if (v == mView) {
+                Log.e("iot", "item:");
+                nodeAction.nodeSet(getAdapterPosition());
+            }
         }
     }
 
     public interface NodeAction {
         public boolean nodeRemove(int position);
+        public boolean nodeSet(int position);
     }
 
 }

@@ -17,6 +17,12 @@
             android:name=".ui_main.MainScreenActivity"
             android:theme="@style/Theme.DesignDemo" >
         </activity>
+
+        <activity
+            android:name=".ui_setnode.SetupIotNodeActivity"
+            android:theme="@style/Theme.NodeSet" >
+        </activity>
+
         <activity android:name=".ui_setup.SetupActivity" >
 
         </activity>
