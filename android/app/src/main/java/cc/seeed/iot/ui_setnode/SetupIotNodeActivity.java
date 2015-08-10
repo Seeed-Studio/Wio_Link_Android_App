@@ -150,8 +150,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
     }
 
     private void updateGroveListAdapter(ArrayList<GroverDriver> groverDrivers) {
-        mGroveListAdapter = new GroveListRecyclerAdapter(groverDrivers);
-        mGroveListView.setAdapter(mGroveListAdapter);
+        mGroveListAdapter.updateAll(groverDrivers);
     }
 
     private void setupAdapter() {
@@ -205,19 +204,21 @@ public class SetupIotNodeActivity extends AppCompatActivity
             Snackbar.make(mToolbar, "Here's a Snackbar" + node.name, Snackbar.LENGTH_LONG).show();
 
 //            String yaml = "" +
-//                    "Grove_Relay1:\r\n" +
-//                    "  name: Grove_Relay\r\n" +
+//                    "Grove_Example1:\r\n" +
+//                    "  name: Grove_Example\r\n" +
 //                    "  construct_arg_list:\r\n" +
-//                    "    pin: 12\r\n";
-//
-            String yaml = "" +
-                    "Grove_Example1:\r\n" +
-                    "  name: Grove_Example\r\n" +
-                    "  construct_arg_list:\r\n" +
-                    "    pinsda: 4\r\n" +
-                    "    pinscl: 5\r\n";
+//                    "    pinsda: 4\r\n" +
+//                    "    pinscl: 5\r\n";
 
-//            String yaml = getYaml();
+
+
+            NodeConfigModel nodeConfigModel = new NodeConfigModel();
+            nodeConfigModel.addPinNode(1, mGroveDrivers.get(0));
+            nodeConfigModel.addPinNode(2, mGroveDrivers.get(0));
+            nodeConfigModel.addPinNode(3, mGroveDrivers.get(0));
+            String yaml = nodeConfigModel.getConfigYaml();
+
+            Log.e("iot", "yaml" + yaml);
 
             String Base64Yaml = Base64.encodeToString(yaml.getBytes(), Base64.DEFAULT);
             updateNode(node.node_key, Base64Yaml);
@@ -388,6 +389,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
             case R.id.grove_1:
                 uiStateControl.activatedPin(1);
+                mGroveListAdapter.updateAll(
+                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
+
 //                mGroveListView.setActivated(true);
 //                mGroveListView.setSelected(true);
 //                mGroveListView.smoothScrollToPosition(7+2);
@@ -395,18 +399,28 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 break;
             case R.id.grove_2:
                 uiStateControl.activatedPin(2);
+                mGroveListAdapter.updateAll(
+                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
                 break;
             case R.id.grove_3:
                 uiStateControl.activatedPin(3);
+                mGroveListAdapter.updateAll(
+                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
                 break;
             case R.id.grove_4:
                 uiStateControl.activatedPin(4);
+                mGroveListAdapter.updateAll(
+                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG));
                 break;
             case R.id.grove_5:
                 uiStateControl.activatedPin(5);
+                mGroveListAdapter.updateAll(
+                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART));
                 break;
             case R.id.grove_6:
                 uiStateControl.activatedPin(6);
+                mGroveListAdapter.updateAll(
+                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C));
                 break;
             case R.id.set_node:
                 if (mToolbarAction.getVisibility() == View.GONE)

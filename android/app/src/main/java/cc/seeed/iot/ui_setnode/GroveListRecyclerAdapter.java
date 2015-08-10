@@ -74,6 +74,13 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         selector.clear();
         notifyDataSetChanged();
     }
+
+    public void updateAll(ArrayList<GroverDriver> groverDrivers) {
+        this.groves = groverDrivers;
+        notifyDataSetChanged();
+
+    }
+
     @Override
     public int getItemCount() {
         return groves.size();

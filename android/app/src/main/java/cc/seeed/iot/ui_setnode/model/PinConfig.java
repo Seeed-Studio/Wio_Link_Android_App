@@ -9,4 +9,5 @@ public class PinConfig {
     public int position;
     public Boolean selected;
     public GroverDriver groverDriver;
+    public String groveInstanceName;
 }
