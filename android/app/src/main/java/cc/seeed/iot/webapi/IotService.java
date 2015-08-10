@@ -3,6 +3,7 @@ package cc.seeed.iot.webapi;
 import java.util.List;
 import java.util.Map;
 
+import cc.seeed.iot.webapi.model.OtaStatusResponse;
 import cc.seeed.iot.webapi.model.PropertyResponse;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.NodeListResponse;
@@ -50,13 +51,23 @@ public interface IotService {
     @GET("/nodes/list")
     public void nodesList(Callback<NodeListResponse> callback);
 
-    @POST("/nodes/rename") //Todo add another value, such as node_sn?
-    public void nodesRename(@Query("name") String node_name, Callback<NodeResponse> callback);
+    @POST("/nodes/rename") //Todo add another value, such as node_sn! Test it
+    public void nodesRename(@Query("name") String node_name,
+                            @Query("node_sn") String node_sn,
+                            Callback<NodeResponse> callback);
 
     @POST("/nodes/delete")
     public void nodesDelete(@Query("node_sn") String node_sn, Callback<NodeResponse> callback);
 
+    @POST("/user/download")
+    public void userDownload(@Query("access_token") String node_key,
+                             @Query("yaml") String yaml,
+                             Callback<Response> callback);
 
+
+    @POST("/ota/status")
+    public void otaStatus(@Query("access_token") String node_key,
+                             Callback<OtaStatusResponse> callback);
     /**
      * Grove driver scanning APIs
      */

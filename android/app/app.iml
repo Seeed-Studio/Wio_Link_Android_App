@@ -105,6 +105,7 @@
     <orderEntry type="library" exported="" name="retrofit-1.9.0" level="project" />
     <orderEntry type="library" exported="" name="urlimageviewhelper-1.0.4" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
+    <orderEntry type="library" exported="" name="yamlbeans-1.09" level="project" />
     <orderEntry type="library" exported="" name="support-v13-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="ldrawer-0.1" level="project" />

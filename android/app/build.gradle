@@ -29,4 +29,5 @@ dependencies {
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.ikimuhendis:ldrawer:0.1'
+    compile 'com.esotericsoftware.yamlbeans:yamlbeans:1.09'
 }
