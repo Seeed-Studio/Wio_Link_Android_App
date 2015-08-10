@@ -26,6 +26,7 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_setnode.model.GroveFliter;
 import cc.seeed.iot.ui_setnode.model.NodeConfigModel;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -219,7 +220,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //            String yaml = getYaml();
 
             String Base64Yaml = Base64.encodeToString(yaml.getBytes(), Base64.DEFAULT);
-//            updateNode(node.node_key, Base64Yaml);
+            updateNode(node.node_key, Base64Yaml);
             return true;
         }
 
@@ -362,11 +363,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
             updateGroveListAdapter(outputGroves);
 
         } else if (groveType.equals("Light")) {
-
         } else if (groveType.equals("Env")) {
-
         } else if (groveType.equals("Actuator")) {
-
         }
     }
 
