@@ -9,9 +9,6 @@ public class Constant {
             "All",
             "Input",
             "Output",
-            "Light",
-            "Env",
-            "Actuator",
     };
 
 
