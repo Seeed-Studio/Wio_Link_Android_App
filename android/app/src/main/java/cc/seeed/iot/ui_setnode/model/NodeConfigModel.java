@@ -70,6 +70,12 @@ public class NodeConfigModel {
         return true;
     }
 
+    public PinConfig getPinNode(int position) {
+        PinConfig pinConfig = new PinConfig();
+        pinConfig = pinConfigs.get(position - 1);
+        return pinConfig;
+    }
+
     public String getConfigYaml() {
         String y = "";
         for (PinConfig p : pinConfigs) {
