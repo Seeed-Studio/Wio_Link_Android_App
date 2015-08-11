@@ -62,7 +62,7 @@ public interface IotService {
     @POST("/user/download")
     public void userDownload(@Query("access_token") String node_key,
                              @Query("yaml") String yaml,
-                             Callback<Response> callback);
+                             Callback<OtaStatusResponse> callback);
 
 
     @POST("/ota/status")

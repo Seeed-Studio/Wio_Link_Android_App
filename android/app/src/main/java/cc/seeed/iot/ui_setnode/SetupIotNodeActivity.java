@@ -65,12 +65,15 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     UiStateControl uiStateControl;
 
+    ProgressDialog mProgressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_iot_node);
         View view = (View) findViewById(R.id.setup_iot_node);
         uiStateControl = new UiStateControl(view);
+        mProgressDialog = new ProgressDialog(this);
 
         mainOnClickListener = new MainOnClickListener(this);
 
@@ -211,11 +214,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //                    "    pinscl: 5\r\n";
 
 
-
             NodeConfigModel nodeConfigModel = new NodeConfigModel();
             nodeConfigModel.addPinNode(1, mGroveDrivers.get(0));
             nodeConfigModel.addPinNode(2, mGroveDrivers.get(0));
-            nodeConfigModel.addPinNode(3, mGroveDrivers.get(0));
+            nodeConfigModel.addPinNode(3, mGroveDrivers.get(2));
             String yaml = nodeConfigModel.getConfigYaml();
 
             Log.e("iot", "yaml" + yaml);
@@ -229,14 +231,12 @@ public class SetupIotNodeActivity extends AppCompatActivity
     }
 
     private void updateNode(final String node_key, String base64Yaml) {
-        final ProgressDialog mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("build firmware...");
+        mProgressDialog.setMessage("Ready to ota...");
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,
                 "OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                            mProgressDialog.dismiss();
                     }
                 });
         mProgressDialog.show();
@@ -244,17 +244,14 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         IotApi api = new IotApi();
         final IotService iot = api.getService();
-        iot.userDownload(node_key, base64Yaml, new Callback<cc.seeed.iot.webapi.model.Response>() {
+        iot.userDownload(node_key, base64Yaml, new Callback<OtaStatusResponse>() {
             @Override
-            public void success(cc.seeed.iot.webapi.model.Response response, Response response2) {
-
-//                Log.e("iot", "status:" + response.status);
-//                Log.e("iot", "msg:" + response.msg);
-                if (response.status.equals("200")) {
-                    mProgressDialog.dismiss();
+            public void success(OtaStatusResponse otaStatusResponse, Response response) {
+                if (otaStatusResponse.status.equals("200")) {
+                    mProgressDialog.setMessage(otaStatusResponse.ota_msg);
                     displayStatus(node_key);
                 } else {
-                    mProgressDialog.setMessage("Error:" + response.msg);
+                    mProgressDialog.setMessage("Error:" + otaStatusResponse.ota_msg);
                     mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
                 }
             }
@@ -265,72 +262,56 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 Log.e("iot", "error:" + error);
             }
         });
-//            @Override
-//            public void success(Response nodeListResponse, Response response) {
-//                mProgressDialog.dismiss();
-//                if (nodeListResponse.status.equals("200")) {
-//                    nodes = (ArrayList) nodeListResponse.nodes;
-//                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-//                    mAdapter = new NodeListRecyclerAdapter(nodes);
-//                    mRecyclerView.setAdapter(mAdapter);
-//                } else {
-//                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
-//                }
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//                mProgressDialog.dismiss();
-//                Toast.makeText(MainScreenActivity.this, "连接服务器失败", Toast.LENGTH_LONG).show();
-//            }
-//        });
-
     }
 
     private void displayStatus(final String node_key) {
-        final ProgressDialog mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("going...");
-        mProgressDialog.setCanceledOnTouchOutside(false);
-        mProgressDialog.show();
         IotApi api = new IotApi();
         final IotService iot = api.getService();
         iot.otaStatus(node_key, new Callback<OtaStatusResponse>() {
-            @Override
-            public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                Log.e("iot", "o--status" + otaStatusResponse.status);
-                Log.e("iot", "o--msg" + otaStatusResponse.msg);
-                Log.e("iot", "o--ota_status" + otaStatusResponse.ota_status);
-                Log.e("iot", "o--ota_msg" + otaStatusResponse.ota_msg);
-                if (otaStatusResponse.status.equals("200")) {
-                    if (otaStatusResponse.ota_status.equals("going")) {
-                        displayStatus(node_key);
-                        mProgressDialog.dismiss();
-                    } else if (otaStatusResponse.ota_status.equals("error")) {
-                        mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
-                        mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
+                    @Override
+                    public void success(OtaStatusResponse otaStatusResponse, Response response) {
+                        if (otaStatusResponse.status.equals("200")) {
+                            if (otaStatusResponse.ota_status.equals("going")) {
+                                displayStatus(node_key);
+                                mProgressDialog.setMessage(otaStatusResponse.ota_msg);
+                            } else if (otaStatusResponse.ota_status.equals("done")) {
+                                mProgressDialog.setMessage(otaStatusResponse.ota_msg);
+                                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                                mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
+                                    }
+                                });
+                            } else if (otaStatusResponse.ota_status.equals("error")) {
+                                mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
+                                mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                });
                             }
-                        });
-                    }
-                } else {
-                    mProgressDialog.setMessage(otaStatusResponse.status + ":" + otaStatusResponse.msg);
-                    mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+                        } else {
+                            mProgressDialog.setMessage(otaStatusResponse.status + ":" + otaStatusResponse.msg);
+                            mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                            mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
 
+                                }
+                            });
                         }
-                    });
-                }
-            }
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e("iot", "error:" + error);
-                mProgressDialog.dismiss();
-            }
-        });
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("iot", "error:" + error);
+                        mProgressDialog.dismiss();
+                    }
+                }
+
+        );
     }
 
 
