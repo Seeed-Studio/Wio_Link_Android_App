@@ -16,7 +16,6 @@ import android.widget.TextView;
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_smartconfig.SmartConnectActivity;
 
-//todo: fix about layout
 public class AboutActivity extends AppCompatActivity {
     public Toolbar mToolbar;
     TextView aboutBodyView;

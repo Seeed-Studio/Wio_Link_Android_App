@@ -501,6 +501,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        if(mGroveDrivers == null) //todo fixed, find method do it.use database?
+            return;
         switch (v.getId()) {
             case R.id.ib_correct:
                 int position = uiStateControl.getSetPin();

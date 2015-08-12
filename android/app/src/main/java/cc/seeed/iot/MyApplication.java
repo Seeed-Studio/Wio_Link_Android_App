@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.model.Node;
 
 /**
@@ -20,6 +21,8 @@ public class MyApplication extends Application {
     private ArrayList<Node> nodes = new ArrayList<Node>();
 
     private User user = new User();
+
+    private String server_url;
 
     /**
      * into smartconfig state
@@ -62,6 +65,16 @@ public class MyApplication extends Application {
         this.nodes = nodes;
     }
 
+    public String getServer_url() {
+        return server_url;
+    }
+
+    public void setServer_url(String server_url) {
+        this.server_url = server_url;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("server_url", server_url);
+        editor.apply();
+    }
 
     public Boolean getConfigState() {
         return configState;
@@ -82,9 +95,16 @@ public class MyApplication extends Application {
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
 
+        server_url = sp.getString("server_url", "https://iot.seeed.cc/v1");
 
         configState = sp.getBoolean("configState", false);
 
         configState = sp.getBoolean("loginState", false);
+
+        init();
+    }
+
+    private void init() {
+        IotApi.SetServerUrl(server_url);
     }
 }

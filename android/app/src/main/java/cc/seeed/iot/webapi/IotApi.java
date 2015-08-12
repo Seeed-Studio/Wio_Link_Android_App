@@ -15,6 +15,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cc.seeed.iot.MyApplication;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
@@ -25,11 +26,13 @@ import retrofit.client.OkClient;
  */
 public class IotApi {
 
-    //    private String IOT_WEB_API_ENDPOINT = "http://192.168.21.83:8080/v1";
+//    private String IOT_WEB_API_ENDPOINT = "http://192.168.21.83:8080/v1";
 //    private String iot_url = "http://192.168.18.194:8080/v1";
 //    private String iot_url = "http://192.168.18.251:8080/v1"; //jacky shao
 //    private String iot_url = "https://iot.yuzhe.me/v1";
-    private String iot_url = "https://iot.seeed.cc/v1";
+//    private String iot_url = "https://iot.seeed.cc/v1";
+
+    private static String iot_url = "https://iot.seeed.cc/v1";
 
     private final IotService mIotService;
 
@@ -39,9 +42,12 @@ public class IotApi {
 //        mIotService = init(httpExecutor, callbackExecutor);
 //    }
 
+    public static void SetServerUrl(String url) {
+        iot_url = url;
+    }
 
     public IotApi() {
-//        iot_url = MySharedPreference.getSvrAdd();
+
         Executor httpExecutor = Executors.newSingleThreadExecutor();
         MainThreadExecutor callbackExecutor = new MainThreadExecutor();
         mIotService = init(httpExecutor, callbackExecutor);

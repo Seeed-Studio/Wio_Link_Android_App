@@ -47,6 +47,10 @@
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
+            android:name=".ui_main.SettingActivity"
+            android:theme="@style/Theme.NodeSet" >
+        </activity>
+        <activity
             android:name=".ui_main.NodeDetailActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>

@@ -216,12 +216,17 @@ public class MainScreenActivity extends AppCompatActivity
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()) {
                             case R.id.nav_nodes_list:
-                                Log.e("iot", "id_list");
                                 break;
                             case R.id.nav_smartconfig: {
                                 ((MyApplication) getApplication()).setConfigState(false);
                                 Intent intent = new Intent(MainScreenActivity.this,
                                         GoReadyActivity.class);
+                                startActivity(intent);
+                            }
+                            break;
+                            case R.id.nav_setting: {
+                                Intent intent = new Intent(MainScreenActivity.this,
+                                        SettingActivity.class);
                                 startActivity(intent);
                             }
                             break;
