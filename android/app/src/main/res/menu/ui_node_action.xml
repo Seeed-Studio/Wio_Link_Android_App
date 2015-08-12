@@ -6,4 +6,9 @@
         android:orderInCategory="100"
         android:title="Remove"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/detail"
+        android:orderInCategory="200"
+        android:title="Detail"
+        app:showAsAction="always" />
 </menu>

@@ -107,6 +107,9 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
                 case R.id.remove:
                     nodeAction.nodeRemove(getAdapterPosition());
                     return true;
+                case R.id.detail:
+                    nodeAction.nodeDetail(getAdapterPosition());
+                    return true;
             }
             return false;
         }
@@ -119,7 +122,6 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
                 popupMenu.inflate(R.menu.ui_node_action);
                 popupMenu.show();
             } else if (v == mView) {
-                Log.e("iot", "item:");
                 nodeAction.nodeSet(getAdapterPosition());
             }
         }
@@ -127,6 +129,7 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
 
     public interface NodeAction {
         public boolean nodeRemove(int position);
+        public boolean nodeDetail(int position);
         public boolean nodeSet(int position);
     }
 

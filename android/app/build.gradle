@@ -30,4 +30,7 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.ikimuhendis:ldrawer:0.1'
     compile 'com.esotericsoftware.yamlbeans:yamlbeans:1.09'
+    compile "com.google.zxing:android-integration:3.2.0"
+    compile 'com.google.zxing:core:3.2.0'
+
 }

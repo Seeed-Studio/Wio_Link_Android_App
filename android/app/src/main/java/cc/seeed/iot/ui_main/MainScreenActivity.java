@@ -124,8 +124,6 @@ public class MainScreenActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                AddNodeDialogFragment addNodeDialogFragment = new AddNodeDialogFragment();
-//                addNodeDialogFragment.show(getFragmentManager(), "addNode");
                 ((MyApplication) getApplication()).setConfigState(true);
                 Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
                 startActivity(intent);
@@ -192,7 +190,7 @@ public class MainScreenActivity extends AppCompatActivity
             @Override
             public void failure(RetrofitError error) {
                 mProgressDialog.dismiss();
-                Toast.makeText(MainScreenActivity.this, "连接服务器失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainScreenActivity.this, "Connect server fail...", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -278,6 +276,14 @@ public class MainScreenActivity extends AppCompatActivity
         });
 
 
+        return true;
+    }
+
+    @Override
+    public boolean nodeDetail(int position) {
+        Intent intent = new Intent(this, NodeDetailActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
         return true;
     }
 

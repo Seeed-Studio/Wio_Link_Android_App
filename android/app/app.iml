@@ -103,13 +103,15 @@
     <orderEntry type="library" exported="" name="cardview-v7-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="retrofit-1.9.0" level="project" />
+    <orderEntry type="library" exported="" name="android-integration-2.3.0" level="project" />
     <orderEntry type="library" exported="" name="urlimageviewhelper-1.0.4" level="project" />
+    <orderEntry type="library" exported="" name="core-2.2" level="project" />
     <orderEntry type="library" exported="" name="gson-2.3.1" level="project" />
     <orderEntry type="library" exported="" name="yamlbeans-1.09" level="project" />
     <orderEntry type="library" exported="" name="support-v13-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="support-v4-22.2.1" level="project" />
     <orderEntry type="library" exported="" name="ldrawer-0.1" level="project" />
-    <orderEntry type="library" exported="" name="library-2.4.1" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.2.1" level="project" />
+    <orderEntry type="library" exported="" name="library-2.4.1" level="project" />
   </component>
 </module>
