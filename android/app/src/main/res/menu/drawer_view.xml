@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2015 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,36 +15,34 @@
   -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/main"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_nodes_list"
             android:icon="@drawable/ic_view_list_black"
             android:title="@string/nodes_list_view" />
+    </group>
+
+    <group android:id="@+id/action">
         <item
             android:id="@+id/nav_smartconfig"
             android:icon="@drawable/ic_wifi_black"
             android:title="@string/smartconfig_view" />
-        <!--<item-->
-            <!--android:id="@+id/nav_sn_key"-->
-            <!--android:icon="@drawable/ic_vpn_key_black"-->
-            <!--android:title="@string/sn_key_view" />-->
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/setting_view" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info_black_36dp"
             android:title="@string/about_view" />
     </group>
 
-    <item android:title="">
-        <menu>
-            <!--<item-->
-                <!--android:id="@+id/nav_setting"-->
-                <!--android:icon="@drawable/ic_settings_black"-->
-                <!--android:title="@string/setting_view"/>-->
-
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_exit_to_app_black_36dp"
-                android:title="@string/logout_view"/>
-        </menu>
-    </item>
+    <group android:id="@+id/exit">
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_exit_to_app_black_36dp"
+            android:title="@string/logout_view" />
+    </group>
 </menu>
