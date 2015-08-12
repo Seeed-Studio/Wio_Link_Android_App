@@ -58,4 +58,27 @@
     <string name="logout_view">Logout</string>
     <string name="title_activity_setup_iot_node">SetupIotNodeActivity</string>
     <string name="title_activity_go_ready">GoReadyActivity</string>
+
+    <string name="about_body"><![CDATA[ESP8266 Based Wi-Fi Internet of Things Node<br>
+        <br>
+        <b>Copyright:</b>by <b><a href="http://www.seeed.cc/">Seeed Studio</a> 2015</b><br>
+        <br>
+        <br>
+        Get: <a href="https://github.com/awong1900/WiFi_Iot_Node_App/tree/master/android">Source and doc</a><br>
+        <br>
+        <b>Many thanks for code and ideas to:</b><br>
+        <b><a href="https://github.com/JakeWharton/ViewPagerIndicator">viewpagerindicator</a></b><br>
+        <i>by Jake Wharton</i><br><br>
+        <b><a href="https://github.com/square/retrofit">retrofit</a></b><br>
+        <i>by Square</i><br><br>
+        <b><a href="https://github.com/EsotericSoftware/yamlbeans">yamlbeans</a></b><br>
+        <i>by EsotericSoftware</i><br><br>
+        <b><a href="https://github.com/zxing/zxing">zxing</a></b><br>
+        <i>by zxing</i><br><br>
+        <br>]]>
+    </string>
+
+    <string name="title_about"><![CDATA[
+        <b>PION ONE</b>&nbsp;<font color="#888888">v%1$s</font>
+    ]]></string>
 </resources>

@@ -1,19 +1,26 @@
 package cc.seeed.iot.ui_main;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_smartconfig.SmartConnectActivity;
+
 //todo: fix about layout
 public class AboutActivity extends AppCompatActivity {
     public Toolbar mToolbar;
-    public Button mGoReadyButtonView;
+    TextView aboutBodyView;
+    TextView nameAndVersionView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,17 +30,35 @@ public class AboutActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("WIFI Iot Node");
+        getSupportActionBar().setTitle("About US");
 
+        aboutBodyView = (TextView) findViewById(R.id.about_body);
+        nameAndVersionView = (TextView) findViewById(R.id.app_name_and_version);
+        initView();
+    }
 
-        mGoReadyButtonView = (Button) findViewById(R.id.smartconfig_ready_btn);
-        mGoReadyButtonView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AboutActivity.this, SmartConnectActivity.class);
-                startActivity(intent);
-            }
-        });
+    private void initView() {
+
+        String versionName = getVersionName();
+        nameAndVersionView.setText(Html.fromHtml(getString(R.string.title_about, versionName)));
+
+        aboutBodyView.setText(Html.fromHtml(getString(R.string.about_body)));
+        aboutBodyView.setMovementMethod(new LinkMovementMethod());
+    }
+
+    private String getVersionName() {
+        String VERSION_UNAVAILABLE = "N/A";
+        PackageManager pm = getPackageManager();
+        String packageName = getPackageName();
+        String versionName;
+        try {
+            PackageInfo info = pm.getPackageInfo(packageName, 0);
+            versionName = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            versionName = VERSION_UNAVAILABLE;
+        }
+
+        return versionName;
     }
 
     @Override
