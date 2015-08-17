@@ -349,6 +349,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                                 });
                             } else if (otaStatusResponse.ota_status.equals("error")) {
                                 mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
+                                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
                                 mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
