@@ -13,7 +13,7 @@
     <string name="setup_signup">Sign Up</string>
     <string name="signin_email">Your Email</string>
     <string name="signin_password">Password</string>
-    <string name="signin_fortgot_password">Forgot your password?</string>
+    <string name="signin_fortgot_password"><u>Forgot your password?</u></string>
     <string name="signup_email">Email</string>
     <string name="signup_password">Password</string>
     <string name="signup_verify_password">Verify Password</string>

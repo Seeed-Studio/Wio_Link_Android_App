@@ -17,7 +17,6 @@
 package cc.seeed.iot.ui_main;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +28,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -45,7 +43,7 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
-import cc.seeed.iot.ui_setup.SetupActivity;
+import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;

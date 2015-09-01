@@ -1,6 +1,5 @@
-package cc.seeed.iot.ui_setup;
+package cc.seeed.iot.ui_login;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -23,20 +22,7 @@ import java.util.Locale;
 import cc.seeed.iot.R;
 
 public class SetupActivity extends AppCompatActivity {
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
-     */
     SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     ViewPager mViewPager;
     CirclePageIndicator mPagerIndicator;
     Button mButtonSignIn, mButtonSignUp;
@@ -44,11 +30,8 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.setup);
+        setContentView(R.layout.activity_login);
 
-
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         mPagerIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
         mButtonSignIn = (Button) findViewById(R.id.setup_btn_signin);
@@ -63,7 +46,6 @@ public class SetupActivity extends AppCompatActivity {
         mButtonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new SignInDialog(SetupActivity.this);
                 SignInDialogFragment signInDialogFragment = new SignInDialogFragment();
                 signInDialogFragment.setCancelable(false);
                 signInDialogFragment.show(getFragmentManager(), "signIn");
@@ -74,7 +56,6 @@ public class SetupActivity extends AppCompatActivity {
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                new SignUpDialog(SetupActivity.this);
                 SignUpDialogFragment signUpDialogFragment = new SignUpDialogFragment();
                 signUpDialogFragment.setCancelable(false);
                 signUpDialogFragment.show(getFragmentManager(), "signUn");
@@ -82,7 +63,6 @@ public class SetupActivity extends AppCompatActivity {
         });
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,10 +94,6 @@ public class SetupActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -152,9 +128,6 @@ public class SetupActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
     public static class PlaceholderFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this

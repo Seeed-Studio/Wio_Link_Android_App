@@ -8,7 +8,7 @@ import android.os.Bundle;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.ui_setup.SetupActivity;
+import cc.seeed.iot.ui_login.SetupActivity;
 
 public class SplashActivity extends AppCompatActivity {
 
