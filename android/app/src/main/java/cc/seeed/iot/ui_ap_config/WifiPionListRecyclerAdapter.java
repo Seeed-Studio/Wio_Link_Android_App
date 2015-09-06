@@ -51,6 +51,10 @@ public class WifiPionListRecyclerAdapter extends RecyclerView.Adapter<WifiRecycl
         return wifiList.size();
     }
 
+    public ScanResult getItem(int position) {
+        return wifiList.get(position);
+    }
+
     public void updateAll(ArrayList<ScanResult> wifiList) {
         this.wifiList = wifiList;
         notifyDataSetChanged();

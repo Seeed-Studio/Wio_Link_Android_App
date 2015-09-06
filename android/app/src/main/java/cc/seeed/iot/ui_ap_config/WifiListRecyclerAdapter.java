@@ -1,10 +1,8 @@
 package cc.seeed.iot.ui_ap_config;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.wifi.ScanResult;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +10,17 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 
 import cc.seeed.iot.R;
-import cc.seeed.iot.ui_smartconfig.SetNodeNameActivity;
-import cc.seeed.iot.ui_smartconfig.SmartConnectActivity;
 
 /**
  * Created by tenwong on 15/6/25.
  */
+
+
 public class WifiListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerViewHolder> {
     private final static String TAG = "WifiListRecyclerAdapter";
+    WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks;
     private ArrayList<ScanResult> wifiList;
     private Context context;
-    WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks;
 
     public WifiListRecyclerAdapter(ArrayList<ScanResult> wifiList) {
         this.wifiList = wifiList;
