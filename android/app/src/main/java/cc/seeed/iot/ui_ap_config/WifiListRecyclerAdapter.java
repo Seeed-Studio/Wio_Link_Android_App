@@ -18,16 +18,18 @@ import cc.seeed.iot.R;
 
 public class WifiListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerViewHolder> {
     private final static String TAG = "WifiListRecyclerAdapter";
-    WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks;
     private ArrayList<ScanResult> wifiList;
     private Context context;
+    WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks;
 
-    public WifiListRecyclerAdapter(ArrayList<ScanResult> wifiList) {
+    public WifiListRecyclerAdapter(ArrayList<ScanResult> wifiList,
+                                   WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks) {
         this.wifiList = wifiList;
+        this.iMyViewHolderClicks = iMyViewHolderClicks;
     }
 
     @Override
-    public WifiRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public WifiRecyclerViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.wifi_list_item, parent, false);
         this.context = parent.getContext();
@@ -45,6 +47,10 @@ public class WifiListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerVi
     @Override
     public int getItemCount() {
         return wifiList.size();
+    }
+
+    public ScanResult getItem(int position) {
+        return wifiList.get(position);
     }
 
     public void updateAll(ArrayList<ScanResult> wifiList) {

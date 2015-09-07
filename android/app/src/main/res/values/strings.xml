@@ -37,6 +37,10 @@
         IoT Node devices to WiFi AP which\n
         SSID input above.
     </string>
+    <string name="ap_config_tips_connect">This help you to connect your\n
+        IoT Node devices to WiFi AP which\n
+        SSID input above.
+    </string>
     <string name="smartconfig_tips_failed">If you have any issuse, please visit:\n
         http://seeedsutido.com.
     </string>
@@ -81,4 +85,6 @@
     <string name="title_about"><![CDATA[
         <b>PION ONE</b>&nbsp;<font color="#888888">v%1$s</font>
     ]]></string>
+
+    <string name="ap_config_hint_node_name">Node name</string>
 </resources>

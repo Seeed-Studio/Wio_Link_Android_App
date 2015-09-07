@@ -42,8 +42,8 @@ import java.util.ArrayList;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
+import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -59,7 +59,7 @@ import retrofit.client.Response;
  */
 public class MainScreenActivity extends AppCompatActivity
         implements NodeListRecyclerAdapter.NodeAction {
-
+    private final static String TAG = "MainScreenActivity";
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -177,6 +177,23 @@ public class MainScreenActivity extends AppCompatActivity
                 mProgressDialog.dismiss();
                 if (nodeListResponse.status.equals("200")) {
                     nodes = (ArrayList) nodeListResponse.nodes;
+                    for (Node n : nodes) {
+                        if (n.name.equals("node000")) {
+                            iot.nodesDelete(n.node_sn, new Callback<NodeResponse>() {
+                                @Override
+                                public void success(NodeResponse nodeResponse, Response response) {
+
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                }
+                            });
+                            nodes.remove(n);
+                        }
+                    }
+
                     ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
                     mAdapter = new NodeListRecyclerAdapter(nodes);
                     mRecyclerView.setAdapter(mAdapter);
