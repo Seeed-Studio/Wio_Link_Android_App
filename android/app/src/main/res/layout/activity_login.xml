@@ -7,7 +7,7 @@
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="cc.seeed.iot.ap.ui_login.SetupActivity" />
+        tools:context="cc.seeed.iot.ui_login.SetupActivity" />
 
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicator"

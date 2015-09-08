@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="cc.seeed.iot.ap.ui_login.test">
+    tools:context="cc.seeed.iot.ui_login.test">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
