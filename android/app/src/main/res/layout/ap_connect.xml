@@ -80,7 +80,6 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:hint="@string/smartconfig_hint_password"
-                android:inputType="textPassword"
                 android:minWidth="300dp"
                 android:singleLine="true"
                 tools:ignore="TextFields" />
@@ -93,7 +92,6 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:hint="@string/ap_config_hint_node_name"
-                android:inputType="textPassword"
                 android:minWidth="300dp"
                 android:singleLine="true"
                 tools:ignore="TextFields" />

@@ -87,4 +87,11 @@
     ]]></string>
 
     <string name="ap_config_hint_node_name">Node name</string>
+
+
+    <!-- ui_ap_config -->
+    <string name="title_pion_list_activity">Select Pion One</string>
+    <string name="title_wifi_list_activity">Select AP</string>
+    <string name="title_ap_connect_activity">Set Pion One</string>
+
 </resources>

@@ -21,7 +21,7 @@
         </activity>
 
         <activity
-            android:name="ui_setnode.SetupIotNodeActivity"
+            android:name=".ui_setnode.SetupIotNodeActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
 

@@ -35,6 +35,8 @@ public class WifiPionListActivity extends AppCompatActivity
 
     private String node_sn;
     private String node_key;
+    private String selected_ssid;
+    private Boolean state_selected; //cause wifi broadcast up when wifi broadcast register
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class WifiPionListActivity extends AppCompatActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Config Pion One");
+        getSupportActionBar().setTitle(R.string.title_pion_list_activity);
 
         mWifiListView = (RecyclerView) findViewById(R.id.wifi_list);
         if (mWifiListView != null) {
@@ -62,16 +64,18 @@ public class WifiPionListActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        state_selected = false;
+        selected_ssid = "";
 
         Intent intent = getIntent();
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
-        Log.e(TAG, "node_sn:" + node_sn);
-        Log.e(TAG, "node_key:" + node_key);
         IntentFilter actionFilter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
-        registerReceiver(wifiConnectedActionReceiver, actionFilter);
-    }
+        actionFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        registerReceiver(wifiActionReceiver, actionFilter);
 
+        new ScanWifi().start();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -91,8 +95,7 @@ public class WifiPionListActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e("iot", "onPause");
-        unregisterReceiver(wifiConnectedActionReceiver);
+        unregisterReceiver(wifiActionReceiver);
     }
 
     @Override
@@ -115,13 +118,21 @@ public class WifiPionListActivity extends AppCompatActivity
 
     @Override
     public void onItem(View caller) {
+        state_selected = true;
         int position = mWifiListView.getChildLayoutPosition(caller);
         ScanResult scanResult = mWifiListAdapter.getItem(position);
+        selected_ssid = scanResult.SSID;
 
-        mWaitDialog.setMessage("Connecting to " + scanResult.SSID + "...");
-        mWaitDialog.setCanceledOnTouchOutside(false);
-        mWaitDialog.show();
-        wifiConnect(scanResult.SSID);
+        if (selected_ssid.equals(getCurrentSsid()))
+            goWifiListActivity();
+        else {
+            wifiConnect(selected_ssid);
+
+            mWaitDialog.setMessage("Connecting to " + scanResult.SSID + "...");
+            mWaitDialog.setCanceledOnTouchOutside(false);
+            mWaitDialog.show();
+        }
+
 
     }
 
@@ -133,25 +144,57 @@ public class WifiPionListActivity extends AppCompatActivity
         int id = wifiManager.addNetwork(conf);
         wifiManager.enableNetwork(id, true);
 
-
     }
 
-    private BroadcastReceiver wifiConnectedActionReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-            NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
-            if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
-                WifiInfo wifiInfo = (WifiInfo) intent.getParcelableExtra(WifiManager.EXTRA_WIFI_INFO);
-                if (wifiInfo.getSSID().contains(PION_WIFI_PREFIX)) {
-                    mWaitDialog.dismiss();
-                    Intent intentActivity = new Intent(context, WifiListActivity.class);
-                    intentActivity.putExtra("node_key", node_key);
-                    intentActivity.putExtra("node_sn", node_sn);
-                    startActivity(intentActivity);
+            if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
+                NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
+                if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
+                    WifiInfo wifiInfo = (WifiInfo) intent.getParcelableExtra(WifiManager.EXTRA_WIFI_INFO);
+                    if (wifiInfo.getSSID().split("\"")[1].contains(selected_ssid) && state_selected) {
+                        mWaitDialog.dismiss();
+                        state_selected = false;
+                        goWifiListActivity();
+                    }
                 }
+            } else if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                Log.d(TAG, "refresh Pion list!");
+                refreshPionList();
+                new ScanWifi().start();
             }
         }
     };
 
 
+    private class ScanWifi extends Thread {
+        public void run() {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            wifiManager.startScan();
+        }
+    }
+
+    private void refreshPionList() {
+        mWifiListAdapter.updateAll(getPionWifiList());
+    }
+
+    private void goWifiListActivity() {
+        Intent intentActivity = new Intent(this, WifiListActivity.class);
+        intentActivity.putExtra("node_key", node_key);
+        intentActivity.putExtra("node_sn", node_sn);
+        startActivity(intentActivity);
+    }
+
+    private String getCurrentSsid() {
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        return wifiInfo.getSSID().split("\"")[1]; //getSSID return "ssid"
+    }
 }
 

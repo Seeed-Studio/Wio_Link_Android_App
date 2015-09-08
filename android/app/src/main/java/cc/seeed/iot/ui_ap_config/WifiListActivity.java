@@ -1,7 +1,9 @@
 package cc.seeed.iot.ui_ap_config;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -28,6 +30,7 @@ public class WifiListActivity extends AppCompatActivity
 
     private String node_sn;
     private String node_key;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +39,7 @@ public class WifiListActivity extends AppCompatActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Config Pion One");
+        getSupportActionBar().setTitle(R.string.title_wifi_list_activity);
 
         mWifiListView = (RecyclerView) findViewById(R.id.wifi_list);
         if (mWifiListView != null) {
@@ -56,8 +59,11 @@ public class WifiListActivity extends AppCompatActivity
         Intent intent = getIntent();
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
-        Log.e(TAG, "node_sn:" + node_sn);
-        Log.e(TAG, "node_key:" + node_key);
+
+        IntentFilter actionFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+        registerReceiver(wifiActionReceiver, actionFilter);
+
+        new ScanWifi().start();
     }
 
     @Override
@@ -75,6 +81,11 @@ public class WifiListActivity extends AppCompatActivity
         super.onBackPressed();
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(wifiActionReceiver);
+    }
 
     @Override
     protected void onDestroy() {
@@ -87,7 +98,6 @@ public class WifiListActivity extends AppCompatActivity
         ArrayList<ScanResult> scanResult = (ArrayList) wifiManager.getScanResults();
         for (ScanResult wifi : scanResult) {
             if (wifi.SSID.contains(PION_WIFI_PREFIX)) {
-                Log.d(TAG, "PionOne ssid:" + wifi.SSID);
                 continue;
             }
             scanPionResult.add(wifi);
@@ -100,13 +110,38 @@ public class WifiListActivity extends AppCompatActivity
     public void onItem(View caller) {
         int position = mWifiListView.getChildLayoutPosition(caller);
         ScanResult scanResult = mWifiListAdapter.getItem(position);
-        Log.e(TAG, "item:" + scanResult.SSID + " " + scanResult.level);
 
         Intent intent = new Intent(this, ApConnectActivity.class);
         intent.putExtra("ssid", scanResult.SSID);
         intent.putExtra("node_key", node_key);
         intent.putExtra("node_sn", node_sn);
         startActivity(intent);
+    }
+
+    private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                refreshWifiList();
+                new ScanWifi().start();
+            }
+        }
+    };
+
+    private class ScanWifi extends Thread {
+        public void run() {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            wifiManager.startScan();
+        }
+    }
+
+    private void refreshWifiList() {
+        mWifiListAdapter.updateAll(getWifiExceptPionList());
     }
 }
 

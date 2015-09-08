@@ -24,14 +24,14 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
-import cc.seeed.iot.webapi.IotApi;
-import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.webapi.IotApi;
+import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
 import retrofit.Callback;
@@ -40,16 +40,13 @@ import retrofit.client.Response;
 
 public class ApConnectActivity extends AppCompatActivity implements OnClickListener {
     private static final String TAG = "ApConnectActivity";
-    private static String AP_IP = "192.168.4.1";
-    private Toolbar mToolbar;
-    private TextView mSssidView;
+    private static final String AP_IP = "192.168.4.1";
+    private TextView mSsidView;
     private EditText mPasswordView;
     private EditText mNodeNameView;
     private Button mConnectBtnView;
-//    private ProgressDialog mConnectDialog;
 
     private String ssid;
-    private String password;
     private String node_name;
     private String node_sn;
     private String node_key;
@@ -61,19 +58,18 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         setContentView(R.layout.ap_connect);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("WIFI Iot Node");
+        getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
 
-        mSssidView = (TextView) findViewById(R.id.ssid);
+        mSsidView = (TextView) findViewById(R.id.ssid);
         mPasswordView = (EditText) findViewById(R.id.wifi_password);
         mNodeNameView = (EditText) findViewById(R.id.node_name);
         mConnectBtnView = (Button) findViewById(R.id.first_time_how_to_api_key);
         mConnectBtnView.setOnClickListener(this);
 
         udpClient = new ConfigUdpSocket();
-//        mConnectDialog = new ProgressDialog(this);
     }
 
     @Override
@@ -83,9 +79,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         ssid = intent.getStringExtra("ssid");
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
-        Log.e(TAG, "node_sn:" + node_sn);
-        Log.e(TAG, "node_key:" + node_key);
-        mSssidView.setText(ssid);
+        mSsidView.setText(ssid);
     }
 
     @Override
@@ -107,8 +101,9 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
     @Override
     public void onClick(View v) {
         if (v == mConnectBtnView) {
-            password = mPasswordView.getText().toString();
+            String password = mPasswordView.getText().toString();
             node_name = mNodeNameView.getText().toString();
+            //APCFG: ssid\tpassword\tkey\tsn\t
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
                     node_key + "\t" + node_sn + "\t";
 
@@ -119,7 +114,6 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
     }
 
     private class SetNodeSn extends AsyncTask<String, Void, Boolean> {
-        //todo: real-time refresh
         private ProgressDialog mProgressDialog;
 
         @Override
@@ -149,7 +143,8 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                     udpClient.sendData(cmd, ipAddr);
                     continue;
                 } catch (IOException e) {
-                    Log.e(TAG, "Error[AsyIO]:" + e);
+                    Log.e(TAG, "Error[SetNodeSn]:" + e);
+                    return false;
                 }
             }
             return true;
