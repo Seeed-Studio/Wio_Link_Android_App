@@ -1,7 +1,9 @@
 package cc.seeed.iot.ui_smartconfig;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,11 +13,11 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import cc.seeed.iot.MyApplication;
-import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.ui_ap_config.WifiPionListActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.R;
+import cc.seeed.iot.ui_ap_config.WifiPionListActivity;
 import cc.seeed.iot.webapi.model.NodeResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -45,6 +47,8 @@ public class GoReadyActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 attemptLogin("node000");
+                WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                wifiManager.startScan();
             }
         });
     }

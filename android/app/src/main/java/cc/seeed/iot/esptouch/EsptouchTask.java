@@ -3,8 +3,8 @@ package cc.seeed.iot.esptouch;
 import android.content.Context;
 
 import cc.seeed.iot.esptouch.task.EsptouchTaskParameter;
-import cc.seeed.iot.esptouch.task.IEsptouchTaskParameter;
 import cc.seeed.iot.esptouch.task.__EsptouchTask;
+import cc.seeed.iot.esptouch.task.IEsptouchTaskParameter;
 
 import java.util.List;
 

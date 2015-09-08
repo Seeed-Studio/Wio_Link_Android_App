@@ -17,16 +17,15 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
 import cc.seeed.iot.MyApplication;
-import cc.seeed.iot.R;
 import cc.seeed.iot.esptouch.EsptouchTask;
 import cc.seeed.iot.esptouch.IEsptouchResult;
 import cc.seeed.iot.esptouch.IEsptouchTask;
 import cc.seeed.iot.esptouch.task.__IEsptouchTask;
+import cc.seeed.iot.R;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 
 public class SmartConnectActivity extends AppCompatActivity implements OnClickListener {

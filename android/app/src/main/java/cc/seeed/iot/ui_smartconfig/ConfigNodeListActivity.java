@@ -2,7 +2,6 @@ package cc.seeed.iot.ui_smartconfig;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
@@ -13,21 +12,14 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 import cc.seeed.iot.R;
-import cc.seeed.iot.esptouch.IEsptouchResult;
-import cc.seeed.iot.esptouch.task.__IEsptouchTask;
 import cc.seeed.iot.udp.ConfigNodeData;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 

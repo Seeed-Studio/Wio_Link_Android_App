@@ -40,7 +40,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import cc.seeed.iot.MyApplication;
-import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
@@ -50,6 +49,7 @@ import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
+import cc.seeed.iot.R;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -177,6 +177,7 @@ public class MainScreenActivity extends AppCompatActivity
                 mProgressDialog.dismiss();
                 if (nodeListResponse.status.equals("200")) {
                     nodes = (ArrayList) nodeListResponse.nodes;
+                    ArrayList<Node> delNodes = new ArrayList<Node>();
                     for (Node n : nodes) {
                         if (n.name.equals("node000")) {
                             iot.nodesDelete(n.node_sn, new Callback<NodeResponse>() {
@@ -190,9 +191,10 @@ public class MainScreenActivity extends AppCompatActivity
 
                                 }
                             });
-                            nodes.remove(n);
+                            delNodes.add(n);
                         }
                     }
+                    nodes.removeAll(delNodes);
 
                     ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
                     mAdapter = new NodeListRecyclerAdapter(nodes);

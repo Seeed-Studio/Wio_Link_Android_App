@@ -133,6 +133,7 @@ public class WifiPionListActivity extends AppCompatActivity
         int id = wifiManager.addNetwork(conf);
         wifiManager.enableNetwork(id, true);
 
+
     }
 
     private BroadcastReceiver wifiConnectedActionReceiver = new BroadcastReceiver() {

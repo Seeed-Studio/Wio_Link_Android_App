@@ -3,10 +3,8 @@ package cc.seeed.iot;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.BitSet;
 
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.IotApi;

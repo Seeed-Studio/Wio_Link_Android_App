@@ -17,15 +17,11 @@
         <activity
             android:name=".ui_main.MainScreenActivity"
             android:theme="@style/Theme.DesignDemo" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
-            android:name=".ui_setnode.SetupIotNodeActivity"
+            android:name="ui_setnode.SetupIotNodeActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
 
@@ -33,51 +29,55 @@
 
         </activity>
         <activity
-            android:name=".ui_smartconfig.GoReadyActivity"
+            android:name="cc.seeed.iot.ui_smartconfig.GoReadyActivity"
             android:theme="@style/Theme.NodeSet" >
 
         </activity>
         <activity
-            android:name=".ui_smartconfig.SmartConnectActivity"
+            android:name="cc.seeed.iot.ui_smartconfig.SmartConnectActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_smartconfig.ConfigNodeListActivity"
+            android:name="cc.seeed.iot.ui_smartconfig.ConfigNodeListActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_smartconfig.SetNodeNameActivity"
+            android:name="cc.seeed.iot.ui_smartconfig.SetNodeNameActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-        android:name=".ui_ap_config.WifiPionListActivity"
+        android:name="cc.seeed.iot.ui_ap_config.WifiPionListActivity"
         android:theme="@style/Theme.NodeSet" >
 
         </activity>
         <activity
-            android:name=".ui_ap_config.WifiListActivity"
+            android:name="cc.seeed.iot.ui_ap_config.WifiListActivity"
             android:theme="@style/Theme.NodeSet">
 
         </activity>
         <activity
-            android:name=".ui_main.AboutActivity"
+            android:name="cc.seeed.iot.ui_main.AboutActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_main.SettingActivity"
+            android:name="cc.seeed.iot.ui_main.SettingActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_main.NodeDetailActivity"
+            android:name="cc.seeed.iot.ui_main.NodeDetailActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_splash.SplashActivity"
+            android:name="cc.seeed.iot.ui_splash.SplashActivity"
             android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
-            android:name=".ui_ap_config.ApConnectActivity"
+            android:name="cc.seeed.iot.ui_ap_config.ApConnectActivity"
             android:theme="@style/Theme.NodeSet">
 
         </activity>

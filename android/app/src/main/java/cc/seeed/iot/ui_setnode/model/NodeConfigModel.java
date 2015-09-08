@@ -1,7 +1,5 @@
 package cc.seeed.iot.ui_setnode.model;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 import cc.seeed.iot.webapi.model.GroverDriver;

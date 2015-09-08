@@ -18,12 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import cc.seeed.iot.MyApplication;
-import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.R;
+import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;

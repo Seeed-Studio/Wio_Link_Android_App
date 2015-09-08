@@ -1,30 +1,21 @@
 package cc.seeed.iot.ui_main;
 
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.seeed.iot.R;
-import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.webapi.model.Node;
+import cc.seeed.iot.R;
 
 /**
  * Created by tenwong on 15/6/25.

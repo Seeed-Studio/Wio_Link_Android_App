@@ -22,21 +22,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cc.seeed.iot.MyApplication;
-import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.ui_setnode.model.GroveFliter;
 import cc.seeed.iot.ui_setnode.model.NodeConfigModel;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.OtaStatusResponse;
+import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.Constant;
+import cc.seeed.iot.ui_setnode.model.GroveFliter;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;

@@ -78,14 +78,14 @@ public class __EsptouchTask implements __IEsptouchTask {
 				count = 0;
 			}
 			++count;
-			if (__IEsptouchTask.DEBUG) {
+			if (DEBUG) {
 				Log.d(TAG, "__putEsptouchResult(): count = " + count);
 			}
 			mBssidTaskSucCountMap.put(bssid, count);
 			isTaskSucCountEnough = count >= mParameter
 					.getThresholdSucBroadcastCount();
 			if (!isTaskSucCountEnough) {
-				if (__IEsptouchTask.DEBUG) {
+				if (DEBUG) {
 					Log.d(TAG, "__putEsptouchResult(): count = " + count
 							+ ", isn't enough");
 				}
@@ -101,7 +101,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 			}
 			// only add the result who isn't in the mEsptouchResultList
 			if (!isExist) {
-				if (__IEsptouchTask.DEBUG) {
+				if (DEBUG) {
 					Log.d(TAG, "__putEsptouchResult(): put one more result");
 				}
 				IEsptouchResult esptouchResult = new EsptouchResult(isSuc,
@@ -135,7 +135,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 
 	@Override
 	public void interrupt() {
-		if (__IEsptouchTask.DEBUG) {
+		if (DEBUG) {
 			Log.d(TAG, "interrupt()");
 		}
 		mIsCancelled.set(true);
@@ -145,14 +145,14 @@ public class __EsptouchTask implements __IEsptouchTask {
 	private void __listenAsyn(final int expectDataLen) {
 		new Thread() {
 			public void run() {
-				if (__IEsptouchTask.DEBUG) {
+				if (DEBUG) {
 					Log.d(TAG, "__listenAsyn() start");
 				}
 				long startTimestamp = System.currentTimeMillis();
 				byte[] apSsidAndPassword = ByteUtil.getBytesByString(mApSsid
 						+ mApPassword);
 				byte expectOneByte = (byte) (apSsidAndPassword.length + 9);
-				if (__IEsptouchTask.DEBUG) {
+				if (DEBUG) {
 					Log.i(TAG, "expectOneByte: " + (0 + expectOneByte));
 				}
 				byte receiveOneByte = -1;
@@ -167,7 +167,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 						receiveOneByte = -1;
 					}
 					if (receiveOneByte == expectOneByte) {
-						if (__IEsptouchTask.DEBUG) {
+						if (DEBUG) {
 							Log.i(TAG, "receive correct broadcast");
 						}
 						// change the socket's timeout
@@ -176,17 +176,17 @@ public class __EsptouchTask implements __IEsptouchTask {
 						int timeout = (int) (mParameter
 								.getWaitUdpTotalMillisecond() - consume);
 						if (timeout < 0) {
-							if (__IEsptouchTask.DEBUG) {
+							if (DEBUG) {
 								Log.i(TAG, "esptouch timeout");
 							}
 							break;
 						} else {
-							if (__IEsptouchTask.DEBUG) {
+							if (DEBUG) {
 								Log.i(TAG, "mSocketServer's new timeout is "
 										+ timeout + " milliseconds");
 							}
 							mSocketServer.setSoTimeout(timeout);
-							if (__IEsptouchTask.DEBUG) {
+							if (DEBUG) {
 								Log.i(TAG, "receive correct broadcast");
 							}
 							if (receiveBytes != null) {
@@ -204,7 +204,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 							}
 						}
 					} else {
-						if (__IEsptouchTask.DEBUG) {
+						if (DEBUG) {
 							Log.i(TAG, "receive rubbish message, just ignore");
 						}
 					}
@@ -212,7 +212,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 				mIsSuc = mEsptouchResultList.size() >= mParameter
 						.getExpectTaskResultCount();
 				__EsptouchTask.this.__interrupt();
-				if (__IEsptouchTask.DEBUG) {
+				if (DEBUG) {
 					Log.d(TAG, "__listenAsyn() finish");
 				}
 			}
@@ -231,7 +231,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 		int index = 0;
 		while (!mIsInterrupt) {
 			if (currentTime - lastTime >= mParameter.getTimeoutTotalCodeMillisecond()) {
-				if (__IEsptouchTask.DEBUG) {
+				if (DEBUG) {
 					Log.d(TAG, "send gc code ");
 				}
 				// send guide code
@@ -291,7 +291,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 		
 		mParameter.setExpectTaskResultCount(expectTaskResultCount);
 		
-		if (__IEsptouchTask.DEBUG) {
+		if (DEBUG) {
 			Log.d(TAG, "execute()");
 		}
 		if (Looper.myLooper() == Looper.getMainLooper()) {
@@ -299,7 +299,7 @@ public class __EsptouchTask implements __IEsptouchTask {
 					"Don't call the esptouch Task at Main(UI) thread directly.");
 		}
 		InetAddress localInetAddress = EspNetUtil.getLocalInetAddress(mContext);
-		if (__IEsptouchTask.DEBUG) {
+		if (DEBUG) {
 			Log.i(TAG, "localInetAddress: " + localInetAddress);
 		}
 		// generator the esptouch byte[][] to be transformed, which will cost

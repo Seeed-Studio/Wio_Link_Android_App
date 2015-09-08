@@ -1,25 +1,17 @@
 package cc.seeed.iot.ui_main;
 
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.InputType;
-import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Set;
-
 import cc.seeed.iot.MyApplication;
-import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.IotApi;
+import cc.seeed.iot.R;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
     private Toolbar mToolbar;
