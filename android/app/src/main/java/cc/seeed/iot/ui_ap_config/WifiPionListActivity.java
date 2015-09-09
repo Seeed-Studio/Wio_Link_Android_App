@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.R;
 
@@ -143,7 +144,6 @@ public class WifiPionListActivity extends AppCompatActivity
         conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         int id = wifiManager.addNetwork(conf);
         wifiManager.enableNetwork(id, true);
-
     }
 
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
@@ -155,6 +155,7 @@ public class WifiPionListActivity extends AppCompatActivity
                     if (wifiInfo.getSSID().split("\"")[1].contains(selected_ssid) && state_selected) {
                         mWaitDialog.dismiss();
                         state_selected = false;
+                        reEnableAllAps(context);
                         goWifiListActivity();
                     }
                 }
@@ -195,6 +196,16 @@ public class WifiPionListActivity extends AppCompatActivity
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
         return wifiInfo.getSSID().split("\"")[1]; //getSSID return "ssid"
+    }
+
+    private static void reEnableAllAps(final Context ctx) {
+        final WifiManager wifiMgr = (WifiManager)ctx.getSystemService(Context.WIFI_SERVICE);
+        final List<WifiConfiguration> configurations = wifiMgr.getConfiguredNetworks();
+        if(configurations != null) {
+            for(final WifiConfiguration config:configurations) {
+                wifiMgr.enableNetwork(config.networkId, false);
+            }
+        }
     }
 }
 

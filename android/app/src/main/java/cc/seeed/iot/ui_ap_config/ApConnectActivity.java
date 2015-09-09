@@ -3,6 +3,7 @@ package cc.seeed.iot.ui_ap_config;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -29,6 +30,7 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
@@ -103,6 +105,10 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         if (v == mConnectBtnView) {
             String password = mPasswordView.getText().toString();
             node_name = mNodeNameView.getText().toString();
+            if (node_name.isEmpty()) {
+                mNodeNameView.setError("Node name is empty");
+                return;
+            }
             //APCFG: ssid\tpassword\tkey\tsn\t
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
                     node_key + "\t" + node_sn + "\t";
@@ -134,8 +140,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 try {
                     byte[] bytes = udpClient.receiveData();
                     if (new String(bytes).substring(0, 1 + 1).equals("ok")) {
-                        Log.e(TAG, "set Node Success");
-                        //todo: udp ui is success
+                        Log.i(TAG, "set info to node success with udp.");
                         break;
                     }
                 } catch (SocketTimeoutException e) {
@@ -155,18 +160,16 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         protected void onPostExecute(Boolean b) {
             mProgressDialog.dismiss();
 
-            //reconnect previous wifi ap
+            //remove pion one wifi config
             WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
             List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
             for (WifiConfiguration c : wifiConfigurations) {
-                Log.e(TAG, c.SSID + c.networkId);
-                if (c.SSID.contains(ssid)) {
-                    wifiManager.enableNetwork(c.networkId, true);
-                    break;
+                if (c.SSID.contains("PionOne_")) {
+                    wifiManager.removeNetwork(c.networkId);
+                    wifiManager.saveConfiguration();
                 }
             }
 
-            //check node is online
             new checkNodeIsOnline().execute();
         }
     }
@@ -223,13 +226,21 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             mProgressDialog.dismiss();
 
             if (state_online) {
-                //rename node
                 attemptRename(node_name);
             } else {
-                //Error tip
                 AlertDialog.Builder builder = new AlertDialog.Builder(ApConnectActivity.this);
-                builder.setMessage("Set Node Error!");
-                builder.setTitle("Tip");
+                builder.setTitle("Error");
+                builder.setMessage("PION One can not connect to the router.\n" +
+                        "Maybe AP password is wrong or AP connect timeout\n" +
+                        "Please reset Pion One to config mode and try again.");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(ApConnectActivity.this, GoReadyActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                    }
+                });
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
