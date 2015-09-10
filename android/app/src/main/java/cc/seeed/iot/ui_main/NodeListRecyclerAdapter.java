@@ -14,8 +14,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.R;
+import cc.seeed.iot.webapi.model.Node;
 
 /**
  * Created by tenwong on 15/6/25.
@@ -70,6 +70,18 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
         return node;
     }
 
+    public Node updateItem(int position, Node newNode) {
+        nodes.set(position, newNode);
+        notifyItemChanged(position);
+        return newNode;
+    }
+
+    public boolean updateAll(ArrayList<Node> nodes) {
+        this.nodes = nodes;
+        notifyDataSetChanged();
+        return true;
+    }
+
     public static class MainViewHolder extends RecyclerView.ViewHolder
             implements PopupMenu.OnMenuItemClickListener, View.OnClickListener {
         TextView tv_name;
@@ -101,6 +113,9 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
                 case R.id.detail:
                     nodeAction.nodeDetail(getAdapterPosition());
                     return true;
+                case R.id.rename:
+                    nodeAction.nodeRename(getAdapterPosition());
+                    return true;
             }
             return false;
         }
@@ -120,8 +135,12 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
 
     public interface NodeAction {
         public boolean nodeRemove(int position);
+
         public boolean nodeDetail(int position);
+
         public boolean nodeSet(int position);
+
+        public boolean nodeRename(int position);
     }
 
 }

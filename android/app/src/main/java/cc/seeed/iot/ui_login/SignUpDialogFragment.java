@@ -64,7 +64,7 @@ public class SignUpDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setTitle("Sign Up");
         builder.setPositiveButton("Sign up", null);
-        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.setNegativeButton(R.string.cancel, null);
 
         return builder.create();
     }

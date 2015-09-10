@@ -16,7 +16,9 @@
 
 package cc.seeed.iot.ui_main;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,15 +33,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
@@ -49,7 +54,6 @@ import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
-import cc.seeed.iot.R;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -100,6 +104,10 @@ public class MainScreenActivity extends AppCompatActivity
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(layout);
 
+//            setupAdapter();
+            ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+            mAdapter = new NodeListRecyclerAdapter(nodes);
+            mRecyclerView.setAdapter(mAdapter);
             setupAdapter();
         }
 
@@ -196,9 +204,11 @@ public class MainScreenActivity extends AppCompatActivity
                     }
                     nodes.removeAll(delNodes);
 
-                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-                    mAdapter = new NodeListRecyclerAdapter(nodes);
-                    mRecyclerView.setAdapter(mAdapter);
+//                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+//                    mAdapter = new NodeListRecyclerAdapter(nodes);
+//                    mRecyclerView.setAdapter(mAdapter);
+                    mAdapter.updateAll(nodes);
+
                 } else {
                     Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
                 }
@@ -269,34 +279,46 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     @Override
-    public boolean nodeRemove(int position) {//todo: rubbish code
-        final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Node delete...");
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.show();
-        final int p = position;
-        Node node = nodes.get(position);
-        IotApi api = new IotApi();
-        User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-        api.setAccessToken(user.user_key);
-        final IotService iot = api.getService();
-        iot.nodesDelete(node.node_sn, new Callback<NodeResponse>() {
-            @Override
-            public void success(NodeResponse nodeResponse, Response response) {
-                progressDialog.dismiss();
-                nodes.remove(nodeResponse);
-                ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-                mAdapter.removeItem(p);
-                Log.i("iot", "Delete Node success!");
-            }
+    public boolean nodeRemove(final int position) {//todo: rubbish code
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Remove Pion One");
+        builder.setMessage("Confirm remove?");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
-            public void failure(RetrofitError error) {
-                progressDialog.dismiss();
-                Log.e("iot", "Delete Node fail!");
+            public void onClick(DialogInterface dialog, int which) {
+
+                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
+                progressDialog.setMessage("Node delete...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+                final int p = position;
+                Node node = nodes.get(position);
+                IotApi api = new IotApi();
+                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+                api.setAccessToken(user.user_key);
+                final IotService iot = api.getService();
+                iot.nodesDelete(node.node_sn, new Callback<NodeResponse>() {
+                    @Override
+                    public void success(NodeResponse nodeResponse, Response response) {
+                        progressDialog.dismiss();
+                        nodes.remove(nodeResponse);
+                        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+                        mAdapter.removeItem(p);
+                        Log.i("iot", "Delete Node success!");
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        progressDialog.dismiss();
+                        Log.e("iot", "Delete Node fail!");
+                    }
+                });
             }
         });
-
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.show();
 
         return true;
     }
@@ -314,6 +336,57 @@ public class MainScreenActivity extends AppCompatActivity
         Intent intent = new Intent(this, SetupIotNodeActivity.class);
         intent.putExtra("position", position);
         startActivity(intent);
+        return true;
+    }
+
+    @Override
+    public boolean nodeRename(final int position) {
+        final LayoutInflater inflater = this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.dialog_name_input, null);
+        final EditText nameView = (EditText) view.findViewById(R.id.new_name);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setTitle("Rename Pion One");
+        builder.setView(view);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String newName = nameView.getText().toString();
+                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
+                progressDialog.setMessage("Node rename...");
+                progressDialog.setCanceledOnTouchOutside(false);
+                progressDialog.show();
+                final int p = position;
+                Node node = nodes.get(position);
+                IotApi api = new IotApi();
+                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+                api.setAccessToken(user.user_key);
+                final IotService iot = api.getService();
+                iot.nodesRename(newName, node.node_sn, new Callback<NodeResponse>() {
+                    @Override
+                    public void success(NodeResponse nodeResponse, Response response) {
+//                        progressDialog.dismiss();
+//                        nodes.remove(nodeResponse);
+//                        for ()
+//                        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+//                        mAdapter.removeItem(p);
+//                        Log.i("iot", "Delete Node success!");
+                        progressDialog.dismiss();
+                        setupAdapter();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        progressDialog.dismiss();
+                        Log.e("iot", "Delete Node fail!");
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.show();
+
         return true;
     }
 

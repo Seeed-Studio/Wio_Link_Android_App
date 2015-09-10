@@ -66,7 +66,7 @@ public class AddNodeDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setTitle("Add Node");
         builder.setPositiveButton("Create", null);
-        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.setNegativeButton(R.string.cancel, null);
 
         return builder.create();
     }

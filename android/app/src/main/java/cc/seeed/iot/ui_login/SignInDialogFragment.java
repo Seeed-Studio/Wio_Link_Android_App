@@ -76,7 +76,7 @@ public class SignInDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setTitle("Sign In");
         builder.setPositiveButton("Sign In", null);
-        builder.setNegativeButton(android.R.string.cancel, null);
+        builder.setNegativeButton(R.string.cancel, null);
 
         return builder.create();
     }
@@ -108,8 +108,8 @@ public class SignInDialogFragment extends DialogFragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle("Reset Password");
                 builder.setView(forgetPwdView);
-                builder.setPositiveButton(android.R.string.ok, null);
-                builder.setNegativeButton(android.R.string.cancel, null);
+                builder.setPositiveButton(R.string.ok, null);
+                builder.setNegativeButton(R.string.cancel, null);
                 builder.setCancelable(false);
                 resetPasswordDialog = builder.create();
                 resetPasswordDialog.show();
@@ -208,7 +208,7 @@ public class SignInDialogFragment extends DialogFragment {
                     resetPasswordDialog.dismiss();
                     progressDialog.dismiss();
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                    builder.setPositiveButton(android.R.string.ok, null).create();
+                    builder.setPositiveButton(R.string.ok, null).create();
                     builder.setTitle("Success");
                     builder.setMessage(response.msg);
                     builder.show();

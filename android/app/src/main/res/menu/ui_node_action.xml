@@ -2,13 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/remove"
-        android:orderInCategory="100"
-        android:title="Remove"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/detail"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:title="Detail"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/rename"
+        android:orderInCategory="200"
+        android:title="Rename"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/remove"
+        android:orderInCategory="300"
+        android:title="Remove"
+        app:showAsAction="always" />
+
 </menu>

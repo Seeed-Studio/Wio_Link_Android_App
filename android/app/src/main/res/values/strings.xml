@@ -5,6 +5,9 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_main2">Main2Activity</string>
 
+    <!-- common-->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -50,8 +53,8 @@
     <!--Mian Screen-->
     <string name="online">Online</string>
     <string name="offline">Offline</string>
-
     <string name="menu_settings">Settings</string>
+    <string name="menu_name">New Pion One name</string>
 
     <!--NavigationView-->
     <string name="nodes_list_view">Nodes List</string>
