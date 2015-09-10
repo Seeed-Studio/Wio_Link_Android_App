@@ -233,7 +233,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 builder.setMessage("PION One can not connect to the router.\n" +
                         "Maybe AP password is wrong or AP connect timeout\n" +
                         "Please reset Pion One to config mode and try again.");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(ApConnectActivity.this, GoReadyActivity.class);

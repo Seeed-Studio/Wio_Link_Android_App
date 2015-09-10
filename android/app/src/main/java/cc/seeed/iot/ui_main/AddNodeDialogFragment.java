@@ -66,7 +66,7 @@ public class AddNodeDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setTitle("Add Node");
         builder.setPositiveButton("Create", null);
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(android.R.string.cancel, null);
 
         return builder.create();
     }
@@ -128,7 +128,7 @@ public class AddNodeDialogFragment extends DialogFragment {
                 @Override
                 public void failure(RetrofitError error) {
                     showProgress(false);
-                    Toast.makeText(context, "连接服务器失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Connect sever fail...", Toast.LENGTH_LONG).show();
                 }
             });
         }

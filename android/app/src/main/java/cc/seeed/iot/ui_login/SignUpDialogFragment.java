@@ -18,12 +18,12 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.webapi.IotApi;
-import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.webapi.IotApi;
+import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -64,7 +64,7 @@ public class SignUpDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setTitle("Sign Up");
         builder.setPositiveButton("Sign up", null);
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(android.R.string.cancel, null);
 
         return builder.create();
     }
@@ -78,12 +78,7 @@ public class SignUpDialogFragment extends DialogFragment {
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Boolean wantToCloseDialog = false;
-                    //Do stuff, possibly set wantToCloseDialog to true then...
                     attemptRegister();
-                    if (wantToCloseDialog)
-                        alertDialog.dismiss();
-                    //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
                 }
             });
         }
@@ -136,7 +131,6 @@ public class SignUpDialogFragment extends DialogFragment {
                 public void success(UserResponse userResponse, retrofit.client.Response response) {
                     String status = userResponse.status;
                     if (status.equals("200")) {
-//                        Toast.makeText(context, userResponse.msg, Toast.LENGTH_LONG).show();
                         alertDialog.dismiss();
                         user.email = fianlEmail;
                         user.user_key = userResponse.token;
@@ -154,7 +148,7 @@ public class SignUpDialogFragment extends DialogFragment {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Toast.makeText(context, "连接服务器失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Connect sever fail...", Toast.LENGTH_LONG).show();
                 }
             });
         }

@@ -3,10 +3,10 @@ package cc.seeed.iot.ui_setnode;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -25,16 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_setnode.model.GroveFliter;
 import cc.seeed.iot.ui_setnode.model.NodeConfigModel;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.OtaStatusResponse;
-import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.Constant;
-import cc.seeed.iot.ui_setnode.model.GroveFliter;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -207,8 +207,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("iot", "fail");
-                Toast.makeText(SetupIotNodeActivity.this, "连接服务器失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(SetupIotNodeActivity.this, "Connect sever fail...", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -249,7 +248,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Forger add grove?");
                 builder.setTitle("Tip");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -500,7 +499,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if(mGroveDrivers == null) //todo fixed, find method do it.use database?
+        if (mGroveDrivers == null) //todo fixed, find method do it.use database?
             return;
         switch (v.getId()) {
             case R.id.ib_correct:
