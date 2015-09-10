@@ -405,10 +405,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) { //grove's output is node's input
                     inputGrovesGpio.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesGpio.add(g);
             }
 
@@ -427,10 +427,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) {
                     inputGrovesAnalog.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesAnalog.add(g);
             }
 
@@ -449,10 +449,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) {
                     inputGrovesUart.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesUart.add(g);
             }
 
@@ -471,10 +471,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) {
                     inputGrovesI2c.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesI2c.add(g);
             }
 
