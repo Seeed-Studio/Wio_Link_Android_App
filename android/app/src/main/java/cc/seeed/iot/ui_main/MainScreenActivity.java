@@ -103,9 +103,6 @@ public class MainScreenActivity extends AppCompatActivity
             mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(layout);
-
-//            setupAdapter();
-            ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
             mAdapter = new NodeListRecyclerAdapter(nodes);
             mRecyclerView.setAdapter(mAdapter);
             setupAdapter();
@@ -204,9 +201,8 @@ public class MainScreenActivity extends AppCompatActivity
                     }
                     nodes.removeAll(delNodes);
 
-//                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-//                    mAdapter = new NodeListRecyclerAdapter(nodes);
-//                    mRecyclerView.setAdapter(mAdapter);
+                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+
                     mAdapter.updateAll(nodes);
 
                 } else {
@@ -366,12 +362,6 @@ public class MainScreenActivity extends AppCompatActivity
                 iot.nodesRename(newName, node.node_sn, new Callback<NodeResponse>() {
                     @Override
                     public void success(NodeResponse nodeResponse, Response response) {
-//                        progressDialog.dismiss();
-//                        nodes.remove(nodeResponse);
-//                        for ()
-//                        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-//                        mAdapter.removeItem(p);
-//                        Log.i("iot", "Delete Node success!");
                         progressDialog.dismiss();
                         setupAdapter();
                     }
