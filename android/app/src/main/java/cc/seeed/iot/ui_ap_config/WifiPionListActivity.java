@@ -152,7 +152,8 @@ public class WifiPionListActivity extends AppCompatActivity
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
                     WifiInfo wifiInfo = (WifiInfo) intent.getParcelableExtra(WifiManager.EXTRA_WIFI_INFO);
-                    if (wifiInfo.getSSID().split("\"")[1].contains(selected_ssid) && state_selected) {
+
+                    if (wifiInfo.getSSID().contains(selected_ssid) && state_selected) {
                         mWaitDialog.dismiss();
                         state_selected = false;
                         reEnableAllAps(context);
@@ -195,7 +196,7 @@ public class WifiPionListActivity extends AppCompatActivity
     private String getCurrentSsid() {
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         WifiInfo wifiInfo = wifiManager.getConnectionInfo();
-        return wifiInfo.getSSID().split("\"")[1]; //getSSID return "ssid"
+        return wifiInfo.getSSID(); //getSSID return "ssid"
     }
 
     private static void reEnableAllAps(final Context ctx) {
