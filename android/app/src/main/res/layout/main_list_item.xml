@@ -1,84 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_node_list"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/node_item"
     android:layout_width="match_parent"
-    android:layout_height="88dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginTop="8dp"
-    android:background="?attr/selectableItemBackground">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imgvImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:contentDescription="Picture"
-        android:src="@drawable/node_icon" />
+    <com.daimajia.swipe.SwipeLayout
+        android:id="@+id/swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <!-- Bottom View Start-->
+        <LinearLayout
+            android:id="@+id/bottom_wrapper"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+            <!--What you want to show-->
+            <TextView
+                android:id="@+id/rename"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/bottom_1_background"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/rename"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/bottom_text" />
 
-    <ImageButton
-        android:id="@+id/pop_menu"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:gravity="center_vertical"
-        android:background="?attr/selectableItemBackground"
-        android:src="@drawable/ic_more_vert_black" />
+            <TextView
+                android:id="@+id/detail"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/bottom_2_background"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/detail"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/bottom_text" />
 
-    <ImageView
-        android:id="@+id/status_led"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_toLeftOf="@id/pop_menu"
-        android:layout_toStartOf="@id/pop_menu"
-        android:src="@drawable/online_led" />
+            <TextView
+                android:id="@+id/remove"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/bottom_3_background"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/remove"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/bottom_text" />
+        </LinearLayout>
+        <!-- Bottom View End-->
 
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_node_list"
+            android:layout_width="match_parent"
+            android:layout_height="115dp">
 
-    <TextView
-        android:id="@+id/txtvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="72dp"
-        android:layout_marginTop="16dp"
-        android:layout_toEndOf="@id/imgvImage"
-        android:layout_toLeftOf="@id/status_led"
-        android:layout_toRightOf="@id/imgvImage"
-        android:layout_toStartOf="@id/status_led"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textSize="16sp"
-        tools:text="WiFi IoT Node" />
+            <View
+                android:id="@+id/status"
+                android:layout_width="6dp"
+                android:layout_height="match_parent"
+                tools:background="@color/offline" />
 
-    <TextView
-        android:id="@+id/txtvIP"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/txtvName"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="72dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="72dp"
-        android:layout_toEndOf="@id/imgvImage"
-        android:layout_toLeftOf="@id/status_led"
-        android:layout_toRightOf="@id/imgvImage"
-        android:layout_toStartOf="@id/status_led"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textSize="14sp"
-        tools:text="192.168.1.1" />
+            <ImageView
+                android:layout_width="52dp"
+                android:layout_height="65dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginStart="16dp"
+                android:src="@drawable/node_icon" />
 
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="12dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="21sp"
+                tools:text="Xmas LED Tree" />
 
-</RelativeLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="46dp">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/ic_access_time" />
+
+                <TextView
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="13:00, 29 Oct"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginStart="20dp"
+                    android:src="@drawable/ic_location_on" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:text="office"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="85dp"
+                android:layout_marginStart="85dp"
+                android:layout_marginTop="73dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="with:"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/grove_bulb" />
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/grove_cold" />
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/grove_drop" />
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/grove_temperature" />
+
+                <ImageView
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/grove_weather" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/favorite"
+                android:layout_width="@dimen/item_image_button"
+                android:layout_height="@dimen/item_image_button"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/item_image_button_end_margin"
+                android:layout_marginRight="@dimen/item_image_button_end_margin"
+                android:layout_marginTop="@dimen/item_image_button_top_margin"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:src="@drawable/ic_favorite_border" />
+
+            <ImageView
+                android:id="@+id/dot"
+                android:layout_width="@dimen/item_image_button"
+                android:layout_height="@dimen/item_image_button"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginEnd="@dimen/item_image_button_end_margin"
+                android:layout_marginRight="@dimen/item_image_button_end_margin"
+                android:layout_marginTop="88dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="center"
+                android:src="@drawable/ic_dot" />
+
+        </RelativeLayout>
+    </com.daimajia.swipe.SwipeLayout>
+</LinearLayout>

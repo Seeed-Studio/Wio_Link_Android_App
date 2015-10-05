@@ -16,6 +16,7 @@
 
 package cc.seeed.iot.ui_main;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,11 +28,8 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.ListPopupWindow;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -49,7 +47,6 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_login.SetupActivity;
-import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.webapi.IotApi;
@@ -64,8 +61,8 @@ import retrofit.client.Response;
 /**
  * TODO
  */
-public class MainScreenActivity extends AppCompatActivity
-        implements NodeListRecyclerAdapter.OnClickListener {
+public class MainScreenActivity_backup extends AppCompatActivity
+        implements NodeListRecyclerAdapter_backup.NodeAction {
     private final static String TAG = "MainScreenActivity";
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -81,8 +78,8 @@ public class MainScreenActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-        nodes = ((MyApplication) MainScreenActivity.this.getApplication()).getNodes();
+        user = ((MyApplication) MainScreenActivity_backup.this.getApplication()).getUser();
+        nodes = ((MyApplication) MainScreenActivity_backup.this.getApplication()).getNodes();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,13 +103,9 @@ public class MainScreenActivity extends AppCompatActivity
             mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(layout);
-            mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
             mAdapter = new NodeListRecyclerAdapter(nodes);
-            mAdapter.setOnClickListener(this);
             mRecyclerView.setAdapter(mAdapter);
             setupAdapter();
-
-
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -135,7 +128,7 @@ public class MainScreenActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
                 ((MyApplication) getApplication()).setConfigState(true);
-                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+                Intent intent = new Intent(MainScreenActivity_backup.this, GoReadyActivity.class);
                 startActivity(intent);
             }
         });
@@ -180,7 +173,7 @@ public class MainScreenActivity extends AppCompatActivity
         mProgressDialog.show();
 
         IotApi api = new IotApi();
-        User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+        User user = ((MyApplication) MainScreenActivity_backup.this.getApplication()).getUser();
         api.setAccessToken(user.user_key);
         final IotService iot = api.getService();
         iot.nodesList(new Callback<NodeListResponse>() {
@@ -208,19 +201,19 @@ public class MainScreenActivity extends AppCompatActivity
                     }
                     nodes.removeAll(delNodes);
 
-                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+                    ((MyApplication) MainScreenActivity_backup.this.getApplication()).setNodes(nodes);
 
                     mAdapter.updateAll(nodes);
 
                 } else {
-                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainScreenActivity_backup.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 mProgressDialog.dismiss();
-                Toast.makeText(MainScreenActivity.this, "Connect server fail...", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainScreenActivity_backup.this, "Connect server fail...", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -228,7 +221,7 @@ public class MainScreenActivity extends AppCompatActivity
 
     private void addItem(Node node) {
         nodes.add(node);
-        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+        ((MyApplication) MainScreenActivity_backup.this.getApplication()).setNodes(nodes);
         mAdapter.notifyItemInserted(nodes.size());
     }
 
@@ -249,26 +242,26 @@ public class MainScreenActivity extends AppCompatActivity
                                 break;
                             case R.id.nav_smartconfig: {
                                 ((MyApplication) getApplication()).setConfigState(false);
-                                Intent intent = new Intent(MainScreenActivity.this,
+                                Intent intent = new Intent(MainScreenActivity_backup.this,
                                         GoReadyActivity.class);
                                 startActivity(intent);
                             }
                             break;
                             case R.id.nav_setting: {
-                                Intent intent = new Intent(MainScreenActivity.this,
+                                Intent intent = new Intent(MainScreenActivity_backup.this,
                                         SettingActivity.class);
                                 startActivity(intent);
                             }
                             break;
                             case R.id.nav_about: {
-                                Intent intent = new Intent(MainScreenActivity.this,
+                                Intent intent = new Intent(MainScreenActivity_backup.this,
                                         AboutActivity.class);
                                 startActivity(intent);
                             }
                             break;
                             case R.id.nav_logout: {
                                 ((MyApplication) getApplication()).setLoginState(false);
-                                Intent intent = new Intent(MainScreenActivity.this,
+                                Intent intent = new Intent(MainScreenActivity_backup.this,
                                         SetupActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
@@ -282,58 +275,6 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     @Override
-    public void onClick(View v, final int position) {
-        Log.e(TAG, "pos:" + position + " id:" + v.getId());
-
-        int id = v.getId();
-        switch (id) {
-            case R.id.node_item:
-                nodeSet(position);
-                break;
-            case R.id.location:
-                break;
-            case R.id.favorite:
-                break;
-            case R.id.rename:
-                nodeRename(position);
-                break;
-            case R.id.detail:
-                nodeDetail(position);
-                break;
-            case R.id.remove:
-                nodeRemove(position);
-                break;
-            case R.id.dot:
-                PopupMenu popupMenu = new PopupMenu(this, v);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.remove:
-                                nodeRemove(position);
-                                return true;
-                            case R.id.detail:
-                                nodeDetail(position);
-                                return true;
-                            case R.id.rename:
-                                nodeRename(position);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.inflate(R.menu.ui_node_action);
-                popupMenu.show();
-                if (popupMenu.getDragToOpenListener() instanceof ListPopupWindow.ForwardingListener) {
-                    ListPopupWindow.ForwardingListener listener =
-                            (ListPopupWindow.ForwardingListener) popupMenu.getDragToOpenListener();
-                    listener.getPopup().setVerticalOffset(-v.getHeight());
-                    listener.getPopup().show();
-                }
-                break;
-        }
-    }
-
     public boolean nodeRemove(final int position) {//todo: rubbish code
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -344,14 +285,14 @@ public class MainScreenActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
-                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
+                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity_backup.this);
                 progressDialog.setMessage("Node delete...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 final int p = position;
                 Node node = nodes.get(position);
                 IotApi api = new IotApi();
-                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+                User user = ((MyApplication) MainScreenActivity_backup.this.getApplication()).getUser();
                 api.setAccessToken(user.user_key);
                 final IotService iot = api.getService();
                 iot.nodesDelete(node.node_sn, new Callback<NodeResponse>() {
@@ -359,7 +300,7 @@ public class MainScreenActivity extends AppCompatActivity
                     public void success(NodeResponse nodeResponse, Response response) {
                         progressDialog.dismiss();
                         nodes.remove(nodeResponse);
-                        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+                        ((MyApplication) MainScreenActivity_backup.this.getApplication()).setNodes(nodes);
                         mAdapter.removeItem(p);
                         Log.i("iot", "Delete Node success!");
                     }
@@ -378,6 +319,7 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
     public boolean nodeDetail(int position) {
         Intent intent = new Intent(this, NodeDetailActivity.class);
         intent.putExtra("position", position);
@@ -385,6 +327,7 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
     public boolean nodeSet(int position) {
         Intent intent = new Intent(this, SetupIotNodeActivity.class);
         intent.putExtra("position", position);
@@ -392,6 +335,7 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
     public boolean nodeRename(final int position) {
         final LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_name_input, null);
@@ -405,14 +349,14 @@ public class MainScreenActivity extends AppCompatActivity
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String newName = nameView.getText().toString();
-                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
+                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity_backup.this);
                 progressDialog.setMessage("Node rename...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 final int p = position;
                 Node node = nodes.get(position);
                 IotApi api = new IotApi();
-                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+                User user = ((MyApplication) MainScreenActivity_backup.this.getApplication()).getUser();
                 api.setAccessToken(user.user_key);
                 final IotService iot = api.getService();
                 iot.nodesRename(newName, node.node_sn, new Callback<NodeResponse>() {
