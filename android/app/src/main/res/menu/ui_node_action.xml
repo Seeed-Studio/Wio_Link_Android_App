@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/detail"
-        android:orderInCategory="100"
+        android:orderInCategory="200"
         android:title="Detail"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/rename"
-        android:orderInCategory="200"
+        android:orderInCategory="100"
         android:title="Rename"
         app:showAsAction="always" />
 

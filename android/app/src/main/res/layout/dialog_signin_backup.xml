@@ -59,7 +59,7 @@
                     android:background="@drawable/abc_btn_borderless_material"
                     android:text="Forgot your password?"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="@color/link_text_material_dark" />
+                    android:textColor="@color/primary_dark_material_dark" />
             </LinearLayout>
 
             <LinearLayout

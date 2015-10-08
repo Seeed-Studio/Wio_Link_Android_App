@@ -97,4 +97,9 @@
     <string name="title_wifi_list_activity">Select AP</string>
     <string name="title_ap_connect_activity">Set Pion One</string>
 
+    <!-- main list-->
+    <string name="rename">"  Rename  "</string>
+    <string name="detail">"  Detail  "</string>
+    <string name="remove">"  Remove  "</string>
+
 </resources>
