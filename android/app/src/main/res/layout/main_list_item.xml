@@ -122,8 +122,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:text="office"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:text="office"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -143,23 +143,26 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textSize="14sp" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/grove_image_1"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/grove_bulb" />
+                    android:src="@drawable/node_icon" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/grove_image_2"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/grove_cold" />
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/node_icon" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
@@ -167,7 +170,7 @@
                     android:layout_marginStart="5dp"
                     android:src="@drawable/grove_drop" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
@@ -175,7 +178,7 @@
                     android:layout_marginStart="5dp"
                     android:src="@drawable/grove_temperature" />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"

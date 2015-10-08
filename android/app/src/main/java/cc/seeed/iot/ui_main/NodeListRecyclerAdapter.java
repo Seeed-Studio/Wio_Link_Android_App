@@ -1,7 +1,14 @@
 package cc.seeed.iot.ui_main;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -11,12 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.model.Node;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by tenwong on 15/6/25.
@@ -62,6 +71,10 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         } else {
             holder.mStatusView.setBackgroundColor(Color.RED);
         }
+
+        UrlImageViewHelper.setUrlDrawable(holder.mGroveOneView, "http://www.seeedstudio.com/wiki/images/thumb/c/ca/Button.jpg/300px-Button.jpg");
+        UrlImageViewHelper.setUrlDrawable(holder.mGroveTwoView, "http://www.seeedstudio.com/wiki/images/6/69/Digital_Light_Sensor.jpg");
+//        holder.mGroveOneView.setImageBitmap();
     }
 
     @Override
@@ -114,6 +127,9 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         TextView mDetailView;
         TextView mRemoveView;
 
+        ImageView mGroveOneView;
+        ImageView mGroveTwoView;
+
         public MainViewHolder(View itemView, OnClickListener mOnClickListener) {
             super(itemView);
             this.mOnClickListener = mOnClickListener;
@@ -128,6 +144,9 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             mRenameView = (TextView) itemView.findViewById(R.id.rename);
             mDetailView = (TextView) itemView.findViewById(R.id.detail);
             mRemoveView = (TextView) itemView.findViewById(R.id.remove);
+
+            mGroveOneView = (CircleImageView) itemView.findViewById(R.id.grove_image_1);
+            mGroveTwoView = (CircleImageView) itemView.findViewById(R.id.grove_image_2);
 
             mItemView.setOnClickListener(this);
             mLocationView.setOnClickListener(this);
