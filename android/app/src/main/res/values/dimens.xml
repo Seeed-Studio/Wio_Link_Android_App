@@ -4,4 +4,10 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
+
+    <!-- main list -->
+    <dimen name="bottom_text_margin">5dp</dimen>
+    <dimen name="item_image_button">36dp</dimen>
+    <dimen name="item_image_button_top_margin">12dp</dimen>
+    <dimen name="item_image_button_end_margin">12dp</dimen>
 </resources>

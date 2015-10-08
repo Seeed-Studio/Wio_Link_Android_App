@@ -14,10 +14,12 @@ public class GroverDriver {
     public String GroveName;
     public Map<String, List<String>> Outputs;
     public URL ImageURL;
+    public List<String> Events;
     public String ClassName;
+    public Boolean CanGetLastError;
     public String InterfaceType;
     public Boolean HasEvent;
     public String IncludePath;
+    public int ID;
     public List<String> ConstructArgList;
-
 }

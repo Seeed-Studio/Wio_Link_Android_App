@@ -1,32 +1,53 @@
 package cc.seeed.iot.ui_main;
 
 import android.content.Context;
-import android.support.v7.widget.PopupMenu;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.model.Node;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by tenwong on 15/6/25.
  */
-public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecyclerAdapter.MainViewHolder> {
+public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecyclerAdapter.MainViewHolder> {
+    private static final String TAG = "NodeListRecyclerAdapter";
     private ArrayList<Node> nodes;
     private Context context;
 
     private final TypedValue mTypedValue = new TypedValue();
     private int mBackground;
     private List<String> mValues;
+
+    private OnClickListener mOnClickListener;
+
+    public interface OnClickListener {
+        void onClick(View v, int position);
+    }
+
+    public void setOnClickListener(OnClickListener l) {
+        mOnClickListener = l;
+    }
 
     public NodeListRecyclerAdapter(ArrayList<Node> nodes) {
         this.nodes = nodes;
@@ -37,19 +58,23 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
         this.context = parent.getContext();
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.main_list_item, parent, false);
-        return new MainViewHolder(v);
+        return new MainViewHolder(v, mOnClickListener);
     }
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
-        holder.tv_name.setText(node.name);
+        holder.mNameView.setText(node.name);
 
         if (node.online) {
-            holder.mStausView.setImageResource(R.drawable.online_led);
+            holder.mStatusView.setBackgroundColor(Color.GREEN);
         } else {
-            holder.mStausView.setImageResource(R.drawable.offline_led);
+            holder.mStatusView.setBackgroundColor(Color.RED);
         }
+
+        UrlImageViewHelper.setUrlDrawable(holder.mGroveOneView, "http://www.seeedstudio.com/wiki/images/thumb/c/ca/Button.jpg/300px-Button.jpg");
+        UrlImageViewHelper.setUrlDrawable(holder.mGroveTwoView, "http://www.seeedstudio.com/wiki/images/6/69/Digital_Light_Sensor.jpg");
+//        holder.mGroveOneView.setImageBitmap();
     }
 
     @Override
@@ -82,65 +107,62 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
         return true;
     }
 
+    @Override
+    public int getSwipeLayoutResourceId(int position) {
+        return 0;
+    }
+
     public static class MainViewHolder extends RecyclerView.ViewHolder
-            implements PopupMenu.OnMenuItemClickListener, View.OnClickListener {
-        TextView tv_name;
-        ImageView pop_menu;
-        ImageView mStausView;
-        View mView;
+            implements View.OnClickListener {
+        private OnClickListener mOnClickListener;
 
-        NodeAction nodeAction;
+        TextView mNameView;
+        TextView mLocationView;
+        ImageView mFavoriteView;
+        ImageView mPopMenuView;
+        View mStatusView;
+        View mItemView;
 
-        public MainViewHolder(View itemView) {
+        TextView mRenameView;
+        TextView mDetailView;
+        TextView mRemoveView;
+
+        ImageView mGroveOneView;
+        ImageView mGroveTwoView;
+
+        public MainViewHolder(View itemView, OnClickListener mOnClickListener) {
             super(itemView);
-            mView = itemView;
-            tv_name = (TextView) itemView.findViewById(R.id.txtvName);
-            pop_menu = (ImageView) itemView.findViewById(R.id.pop_menu);
-            mStausView = (ImageView) itemView.findViewById(R.id.status_led);
+            this.mOnClickListener = mOnClickListener;
 
-            itemView.setOnClickListener(this);
-            pop_menu.setOnClickListener(this);
+            mItemView = itemView;
+            mNameView = (TextView) itemView.findViewById(R.id.name);
+            mLocationView = (TextView) itemView.findViewById(R.id.location);
+            mFavoriteView = (ImageView) itemView.findViewById(R.id.favorite);
+            mPopMenuView = (ImageView) itemView.findViewById(R.id.dot);
+            mStatusView = itemView.findViewById(R.id.status);
 
-            nodeAction = (NodeAction) mView.getContext();
-        }
+            mRenameView = (TextView) itemView.findViewById(R.id.rename);
+            mDetailView = (TextView) itemView.findViewById(R.id.detail);
+            mRemoveView = (TextView) itemView.findViewById(R.id.remove);
 
-        @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.remove:
-                    nodeAction.nodeRemove(getAdapterPosition());
-                    return true;
-                case R.id.detail:
-                    nodeAction.nodeDetail(getAdapterPosition());
-                    return true;
-                case R.id.rename:
-                    nodeAction.nodeRename(getAdapterPosition());
-                    return true;
-            }
-            return false;
+            mGroveOneView = (CircleImageView) itemView.findViewById(R.id.grove_image_1);
+            mGroveTwoView = (CircleImageView) itemView.findViewById(R.id.grove_image_2);
+
+            mItemView.setOnClickListener(this);
+            mLocationView.setOnClickListener(this);
+            mFavoriteView.setOnClickListener(this);
+            mPopMenuView.setOnClickListener(this);
+            mRenameView.setOnClickListener(this);
+            mDetailView.setOnClickListener(this);
+            mRemoveView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            if (v == pop_menu) {
-                PopupMenu popupMenu = new PopupMenu(mView.getContext(), v);
-                popupMenu.setOnMenuItemClickListener(this);
-                popupMenu.inflate(R.menu.ui_node_action);
-                popupMenu.show();
-            } else if (v == mView) {
-                nodeAction.nodeSet(getAdapterPosition());
+            if (mOnClickListener != null) {
+                mOnClickListener.onClick(v, getLayoutPosition());
             }
+
         }
     }
-
-    public interface NodeAction {
-        public boolean nodeRemove(int position);
-
-        public boolean nodeDetail(int position);
-
-        public boolean nodeSet(int position);
-
-        public boolean nodeRename(int position);
-    }
-
 }

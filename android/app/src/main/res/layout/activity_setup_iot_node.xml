@@ -41,8 +41,8 @@
             android:layout_height="44dp"
             android:layout_alignTop="@+id/node_view"
             android:layout_marginTop="45dp"
-            android:layout_toStartOf="@+id/node_view"
             android:layout_toLeftOf="@+id/node_view"
+            android:layout_toStartOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_left"
             android:clickable="true" />
 
@@ -52,8 +52,8 @@
             android:layout_height="44dp"
             android:layout_alignTop="@+id/node_view"
             android:layout_marginTop="90dp"
-            android:layout_toStartOf="@+id/node_view"
             android:layout_toLeftOf="@+id/node_view"
+            android:layout_toStartOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_left"
             android:clickable="true" />
 
@@ -63,8 +63,8 @@
             android:layout_height="44dp"
             android:layout_alignTop="@+id/node_view"
             android:layout_marginTop="135dp"
-            android:layout_toStartOf="@+id/node_view"
             android:layout_toLeftOf="@+id/node_view"
+            android:layout_toStartOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_left"
             android:clickable="true" />
 
@@ -118,7 +118,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/link_text_material_light">
+        android:background="@color/cardview_light_background">
 
     </android.support.v7.widget.RecyclerView>
 
