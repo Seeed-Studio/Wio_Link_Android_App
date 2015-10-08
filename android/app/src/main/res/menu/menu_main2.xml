@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="cc.seeed.iot.ui_setup.SetupActivity">
+    tools:context="cc.seeed.iot.ui_login.SetupActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

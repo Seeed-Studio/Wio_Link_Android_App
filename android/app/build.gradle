@@ -4,7 +4,7 @@ android {
     buildToolsVersion "22.0.1"
 
     defaultConfig {
-        applicationId "cc.seeed.iot"
+        applicationId "cc.seeed.iot.ap"
         minSdkVersion 16
         targetSdkVersion 22
         versionCode 1

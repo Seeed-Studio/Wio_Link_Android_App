@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.1" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cc.seeed.iot" >
+    package="cc.seeed.iot">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -16,6 +17,7 @@
         <activity
             android:name=".ui_main.MainScreenActivity"
             android:theme="@style/Theme.DesignDemo" >
+
         </activity>
 
         <activity
@@ -23,35 +25,46 @@
             android:theme="@style/Theme.NodeSet" >
         </activity>
 
-        <activity android:name=".ui_setup.SetupActivity" >
+        <activity android:name=".ui_login.SetupActivity" >
 
         </activity>
         <activity
-            android:name=".ui_smartconfig.GoReadyActivity"
+            android:name="cc.seeed.iot.ui_smartconfig.GoReadyActivity"
+            android:theme="@style/Theme.NodeSet" >
+
+        </activity>
+        <activity
+            android:name="cc.seeed.iot.ui_smartconfig.SmartConnectActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_smartconfig.SmartConnectActivity"
+            android:name="cc.seeed.iot.ui_smartconfig.ConfigNodeListActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_smartconfig.ConfigNodeListActivity"
+            android:name="cc.seeed.iot.ui_smartconfig.SetNodeNameActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_smartconfig.SetNodeNameActivity"
+        android:name="cc.seeed.iot.ui_ap_config.WifiPionListActivity"
+        android:theme="@style/Theme.NodeSet" >
+
+        </activity>
+        <activity
+            android:name="cc.seeed.iot.ui_ap_config.WifiListActivity"
+            android:theme="@style/Theme.NodeSet">
+
+        </activity>
+        <activity
+            android:name="cc.seeed.iot.ui_main.AboutActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_main.AboutActivity"
+            android:name="cc.seeed.iot.ui_main.SettingActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
-            android:name=".ui_main.SettingActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-        <activity
-            android:name=".ui_main.NodeDetailActivity"
+            android:name="cc.seeed.iot.ui_main.NodeDetailActivity"
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
@@ -62,6 +75,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="cc.seeed.iot.ui_ap_config.ApConnectActivity"
+            android:theme="@style/Theme.NodeSet">
+
         </activity>
     </application>
 

@@ -3,10 +3,10 @@ package cc.seeed.iot.ui_setnode;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -22,9 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
@@ -209,8 +207,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Log.d("iot", "fail");
-                Toast.makeText(SetupIotNodeActivity.this, "连接服务器失败", Toast.LENGTH_LONG).show();
+                Toast.makeText(SetupIotNodeActivity.this, "Connect sever fail...", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -251,7 +248,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Forger add grove?");
                 builder.setTitle("Tip");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -349,6 +346,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                                 });
                             } else if (otaStatusResponse.ota_status.equals("error")) {
                                 mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
+                                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
                                 mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -407,10 +405,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) { //grove's output is node's input
                     inputGrovesGpio.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesGpio.add(g);
             }
 
@@ -429,10 +427,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) {
                     inputGrovesAnalog.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesAnalog.add(g);
             }
 
@@ -451,10 +449,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) {
                     inputGrovesUart.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesUart.add(g);
             }
 
@@ -473,10 +471,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C);
 
             for (GroverDriver g : groverGPIO) {
-                if (!g.Inputs.isEmpty()) {
+                if (!g.Outputs.isEmpty()) {
                     inputGrovesI2c.add(g);
                 }
-                if (!g.Outputs.isEmpty())
+                if (!g.Inputs.isEmpty())
                     outputGrovesI2c.add(g);
             }
 
@@ -501,7 +499,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if(mGroveDrivers == null) //todo fixed, find method do it.use database?
+        if (mGroveDrivers == null) //todo fixed, find method do it.use database?
             return;
         switch (v.getId()) {
             case R.id.ib_correct:

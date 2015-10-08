@@ -1,16 +1,11 @@
 package cc.seeed.iot.ui_main;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,11 +14,11 @@ import com.google.zxing.WriterException;
 
 import java.util.ArrayList;
 
+import cc.seeed.iot.ui_main.QrGen.Contents;
+import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.ui_main.QrGen.Contents;
 import cc.seeed.iot.ui_main.QrGen.QRCodeEncoder;
-import cc.seeed.iot.webapi.model.Node;
 
 public class NodeDetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;

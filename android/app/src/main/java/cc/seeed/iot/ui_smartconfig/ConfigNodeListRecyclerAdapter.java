@@ -4,23 +4,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 
-import cc.seeed.iot.R;
 import cc.seeed.iot.udp.ConfigNodeData;
 import cc.seeed.iot.ui_setnode.GroveFilterRecyclerAdapter;
-import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
-import cc.seeed.iot.webapi.model.GroverDriver;
+import cc.seeed.iot.R;
 
 /**
  * Created by tenwong on 15/6/25.

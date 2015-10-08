@@ -1,8 +1,8 @@
 package cc.seeed.iot.esptouch.protocol;
 
+import cc.seeed.iot.esptouch.util.CRC8;
 import cc.seeed.iot.esptouch.task.ICodeData;
 import cc.seeed.iot.esptouch.util.ByteUtil;
-import cc.seeed.iot.esptouch.util.CRC8;
 
 /**
  * one data format:(data code should have 2 to 65 data)

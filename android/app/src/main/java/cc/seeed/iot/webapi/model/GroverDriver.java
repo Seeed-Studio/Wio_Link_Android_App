@@ -1,6 +1,5 @@
 package cc.seeed.iot.webapi.model;
 
-import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;

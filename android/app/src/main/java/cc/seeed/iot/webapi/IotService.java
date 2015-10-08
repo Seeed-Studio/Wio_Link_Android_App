@@ -3,14 +3,14 @@ package cc.seeed.iot.webapi;
 import java.util.List;
 import java.util.Map;
 
-import cc.seeed.iot.webapi.model.OtaStatusResponse;
-import cc.seeed.iot.webapi.model.PropertyResponse;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
+import cc.seeed.iot.webapi.model.OtaStatusResponse;
+import cc.seeed.iot.webapi.model.PropertyResponse;
 import cc.seeed.iot.webapi.model.Response;
-import cc.seeed.iot.webapi.model.WellKnownResponse;
 import cc.seeed.iot.webapi.model.UserResponse;
+import cc.seeed.iot.webapi.model.WellKnownResponse;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.POST;
@@ -35,10 +35,12 @@ public interface IotService {
                           Callback<UserResponse> callback);
 
     @POST("/user/changepassword")
-    public void changePassword(@Query("password") String newPwd,
+    public void userChangePassword(@Query("password") String newPwd,
                                @Query("access_token") String user_token,
                                Callback<UserResponse> callback);
 
+    @POST("/user/retrievepassword")
+    public void userRetrievePassword(@Query("email") String email, Callback<Response> callback);
 
     /**
      * Node manage APIs
@@ -51,7 +53,7 @@ public interface IotService {
     @GET("/nodes/list")
     public void nodesList(Callback<NodeListResponse> callback);
 
-    @POST("/nodes/rename") //Todo add another value, such as node_sn! Test it
+    @POST("/nodes/rename")
     public void nodesRename(@Query("name") String node_name,
                             @Query("node_sn") String node_sn,
                             Callback<NodeResponse> callback);
@@ -67,7 +69,8 @@ public interface IotService {
 
     @POST("/ota/status")
     public void otaStatus(@Query("access_token") String node_key,
-                             Callback<OtaStatusResponse> callback);
+                          Callback<OtaStatusResponse> callback);
+
     /**
      * Grove driver scanning APIs
      */

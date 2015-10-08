@@ -1,10 +1,13 @@
 <resources>
-    <string name="app_name">iot</string>
+    <string name="app_name">iot_ap</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_main2">Main2Activity</string>
 
+    <!-- common-->
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -13,7 +16,7 @@
     <string name="setup_signup">Sign Up</string>
     <string name="signin_email">Your Email</string>
     <string name="signin_password">Password</string>
-    <string name="signin_fortgot_password">Forgot your password?</string>
+    <string name="signin_forgot_password"><u>Forgot your password?</u></string>
     <string name="signup_email">Email</string>
     <string name="signup_password">Password</string>
     <string name="signup_verify_password">Verify Password</string>
@@ -37,6 +40,10 @@
         IoT Node devices to WiFi AP which\n
         SSID input above.
     </string>
+    <string name="ap_config_tips_connect">This help you to connect your\n
+        IoT Node devices to WiFi AP which\n
+        SSID input above.
+    </string>
     <string name="smartconfig_tips_failed">If you have any issuse, please visit:\n
         http://seeedsutido.com.
     </string>
@@ -46,8 +53,8 @@
     <!--Mian Screen-->
     <string name="online">Online</string>
     <string name="offline">Offline</string>
-
     <string name="menu_settings">Settings</string>
+    <string name="menu_name">New Pion One name</string>
 
     <!--NavigationView-->
     <string name="nodes_list_view">Nodes List</string>
@@ -81,4 +88,13 @@
     <string name="title_about"><![CDATA[
         <b>PION ONE</b>&nbsp;<font color="#888888">v%1$s</font>
     ]]></string>
+
+    <string name="ap_config_hint_node_name">Node name</string>
+
+
+    <!-- ui_ap_config -->
+    <string name="title_pion_list_activity">Select Pion One</string>
+    <string name="title_wifi_list_activity">Select AP</string>
+    <string name="title_ap_connect_activity">Set Pion One</string>
+
 </resources>

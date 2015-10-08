@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:backgroundTint="@color/apptheme_dialog_edittext"
-            android:hint="Email"
+            android:hint="@string/signin_email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true" />
@@ -41,17 +41,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:backgroundTint="@color/apptheme_dialog_edittext"
-            android:hint="Password"
+            android:hint="@string/signin_password"
             android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true" />
 
         <TextView
+            android:id="@+id/forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="end"
             android:layout_marginTop="4dp"
-            android:text="@string/signin_fortgot_password"
+            android:layout_marginBottom="4dp"
+            android:text="@string/signin_forgot_password"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/background_dark" />
         <!--android:textSize="?" />-->

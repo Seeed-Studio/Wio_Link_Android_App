@@ -1,29 +1,20 @@
 package cc.seeed.iot.ui_main;
 
-import android.app.SearchManager;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
-import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.webapi.model.Node;
 
 /**
@@ -79,6 +70,18 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
         return node;
     }
 
+    public Node updateItem(int position, Node newNode) {
+        nodes.set(position, newNode);
+        notifyItemChanged(position);
+        return newNode;
+    }
+
+    public boolean updateAll(ArrayList<Node> nodes) {
+        this.nodes = nodes;
+        notifyDataSetChanged();
+        return true;
+    }
+
     public static class MainViewHolder extends RecyclerView.ViewHolder
             implements PopupMenu.OnMenuItemClickListener, View.OnClickListener {
         TextView tv_name;
@@ -110,6 +113,9 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
                 case R.id.detail:
                     nodeAction.nodeDetail(getAdapterPosition());
                     return true;
+                case R.id.rename:
+                    nodeAction.nodeRename(getAdapterPosition());
+                    return true;
             }
             return false;
         }
@@ -129,8 +135,12 @@ public class NodeListRecyclerAdapter extends RecyclerView.Adapter<NodeListRecycl
 
     public interface NodeAction {
         public boolean nodeRemove(int position);
+
         public boolean nodeDetail(int position);
+
         public boolean nodeSet(int position);
+
+        public boolean nodeRename(int position);
     }
 
 }

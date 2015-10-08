@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_setup;
+package cc.seeed.iot.ui_login;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -6,7 +6,9 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,10 +16,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import cc.seeed.iot.MyApplication;
@@ -26,94 +28,124 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.Response;
 import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
 /**
- * Created by tenwong on 15/6/30.
+ * Created by tenwong on 15/7/1.
  */
-public class SignUpDialogFragment extends DialogFragment {
+public class SignInDialogFragment extends DialogFragment {
+    public static final String TAG = "SignInDialogFragment";
     Context context;
     User user;
 
-    AutoCompleteTextView mEmailView;
-    EditText mPasswordView;
-    EditText mPasswordVerifyView;
+    AlertDialog alertDialog;
+    AlertDialog resetPasswordDialog;
+
+    private AutoCompleteTextView mEmailView;
+    private EditText mPasswordView;
+    private TextView mForgotPwdView;
+
     private View mProgressView;
-    private View mLoginRegisterView;
-    private AlertDialog alertDialog;
+    private View mLoginFormView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+
         user = ((MyApplication) getActivity().getApplication()).getUser();
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.sign_up, null);
+        View view = inflater.inflate(R.layout.dialog_sign_in, null);
+
 
         mEmailView = (AutoCompleteTextView) view.findViewById(R.id.email);
         mPasswordView = (EditText) view.findViewById(R.id.password);
-        mPasswordVerifyView = (EditText) view.findViewById(R.id.verify);
+        mForgotPwdView = (TextView) view.findViewById(R.id.forgot_password);
         mProgressView = view.findViewById(R.id.login_progress);
-        mLoginRegisterView = view.findViewById(R.id.email_register_form);
+        mLoginFormView = view.findViewById(R.id.email_login_form);
 
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
-        builder.setTitle("Sign Up");
-        builder.setPositiveButton("Sign up", null);
-        builder.setNegativeButton("Cancel", null);
+        builder.setTitle("Sign In");
+        builder.setPositiveButton("Sign In", null);
+        builder.setNegativeButton(R.string.cancel, null);
 
         return builder.create();
     }
 
     @Override
     public void onStart() {
-        super.onStart();
+        super.onStart();    //super.onStart() is where dialog.show() is actually called on the underlying dialog, so we have to do it after this point
         alertDialog = (AlertDialog) getDialog();
         if (alertDialog != null) {
-            Button positiveButton = (Button) alertDialog.getButton(Dialog.BUTTON_POSITIVE);
+            Button positiveButton;
+            positiveButton = (Button) alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Boolean wantToCloseDialog = false;
-                    //Do stuff, possibly set wantToCloseDialog to true then...
-                    attemptRegister();
-                    if (wantToCloseDialog)
-                        alertDialog.dismiss();
-                    //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
+                    attemptLogin();
                 }
             });
         }
+
+        mForgotPwdView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+
+                LayoutInflater inflater = getActivity().getLayoutInflater();
+                View forgetPwdView = inflater.inflate(R.layout.dialog_email_input, null);
+                final AutoCompleteTextView emailView =
+                        (AutoCompleteTextView) forgetPwdView.findViewById(R.id.email);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Reset Password");
+                builder.setView(forgetPwdView);
+                builder.setPositiveButton(R.string.ok, null);
+                builder.setNegativeButton(R.string.cancel, null);
+                builder.setCancelable(false);
+                resetPasswordDialog = builder.create();
+                resetPasswordDialog.show();
+
+                Button positiveButton = resetPasswordDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e(TAG, "sd");
+                        String email = emailView.getText().toString();
+                        if (!isEmailValid(email)) {
+                            emailView.setError("Invalid email");
+                            return;
+                        }
+                        resetPassword(email, emailView);
+                    }
+                });
+            }
+        });
     }
 
-    private void attemptRegister() {
+    private void attemptLogin() {
         mEmailView.setError(null);
         mPasswordView.setError(null);
 
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
-        String passwordVerify = mPasswordVerifyView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
-
-        if (!(password.equals(passwordVerify))) {
-            mPasswordVerifyView.setError("not same password");
-            focusView = mPasswordVerifyView;
-            cancel = true;
-        }
 
         if (TextUtils.isEmpty(password) || !isPasswordValid(password)) {
             mPasswordView.setError("invalid Password");
             focusView = mPasswordView;
             cancel = true;
         }
-
 
         if (TextUtils.isEmpty(email)) {
             mEmailView.setError("Require email");
@@ -133,12 +165,11 @@ public class SignUpDialogFragment extends DialogFragment {
             final String fianlEmail = email;
             IotApi api = new IotApi();
             IotService iot = api.getService();
-            iot.userCreate(email, password, new Callback<UserResponse>() {
+            iot.userLogin(email, password, new Callback<UserResponse>() {
                 @Override
                 public void success(UserResponse userResponse, retrofit.client.Response response) {
                     String status = userResponse.status;
                     if (status.equals("200")) {
-//                        Toast.makeText(context, userResponse.msg, Toast.LENGTH_LONG).show();
                         alertDialog.dismiss();
                         user.email = fianlEmail;
                         user.user_key = userResponse.token;
@@ -156,20 +187,46 @@ public class SignUpDialogFragment extends DialogFragment {
 
                 @Override
                 public void failure(RetrofitError error) {
-                    Toast.makeText(context, "连接服务器失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "connect server fail...", Toast.LENGTH_LONG).show();
                 }
             });
         }
     }
 
-    private boolean isEmailValid(String email) {
-        return email.contains("@");
-    }
+    private boolean resetPassword(String email, final AutoCompleteTextView emailView) {
+        final ProgressDialog progressDialog = new ProgressDialog(context);
+        progressDialog.setMessage("Resetting your password...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        IotApi api = new IotApi();
+        IotService iot = api.getService();
+        iot.userRetrievePassword(email, new Callback<Response>() {
+            @Override
+            public void success(Response response, retrofit.client.Response response1) {
+                String status = response.status;
+                if (status.equals("200")) {
+                    resetPasswordDialog.dismiss();
+                    progressDialog.dismiss();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setPositiveButton(R.string.ok, null).create();
+                    builder.setTitle("Success");
+                    builder.setMessage(response.msg);
+                    builder.show();
+                } else {
+                    progressDialog.dismiss();
+                    emailView.setError(response.msg);
+                    emailView.requestFocus();
+                }
+            }
 
-    private boolean isPasswordValid(String password) {
-        return password.length() >= 6;
-    }
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(context, "connect server fail...", Toast.LENGTH_LONG).show();
+            }
+        });
 
+        return true;
+    }
 
     /**
      * Shows the progress UI and hides the login form.
@@ -182,12 +239,12 @@ public class SignUpDialogFragment extends DialogFragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mLoginRegisterView.setVisibility(show ? View.GONE : View.VISIBLE);
-            mLoginRegisterView.animate().setDuration(shortAnimTime).alpha(
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                     show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    mLoginRegisterView.setVisibility(show ? View.GONE : View.VISIBLE);
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
                 }
             });
 
@@ -203,7 +260,18 @@ public class SignUpDialogFragment extends DialogFragment {
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            mLoginRegisterView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
+
+    private boolean isEmailValid(String email) {
+        return email.contains("@");
+    }
+
+    private boolean isPasswordValid(String password) {
+        return password.length() >= 6;
+    }
+
 }
+
+

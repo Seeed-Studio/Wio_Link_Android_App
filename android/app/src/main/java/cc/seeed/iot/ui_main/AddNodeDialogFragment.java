@@ -10,23 +10,19 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import cc.seeed.iot.MyApplication;
-import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
+import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.model.NodeResponse;
-import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -70,7 +66,7 @@ public class AddNodeDialogFragment extends DialogFragment {
         builder.setView(view);
         builder.setTitle("Add Node");
         builder.setPositiveButton("Create", null);
-        builder.setNegativeButton("Cancel", null);
+        builder.setNegativeButton(R.string.cancel, null);
 
         return builder.create();
     }
@@ -132,7 +128,7 @@ public class AddNodeDialogFragment extends DialogFragment {
                 @Override
                 public void failure(RetrofitError error) {
                     showProgress(false);
-                    Toast.makeText(context, "连接服务器失败", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Connect sever fail...", Toast.LENGTH_LONG).show();
                 }
             });
         }

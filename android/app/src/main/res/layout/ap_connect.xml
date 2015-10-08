@@ -80,7 +80,18 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginRight="24dp"
                 android:hint="@string/smartconfig_hint_password"
-                android:inputType="textPassword"
+                android:minWidth="300dp"
+                android:singleLine="true"
+                tools:ignore="TextFields" />
+
+            <EditText
+                android:id="@+id/node_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:hint="@string/ap_config_hint_node_name"
                 android:minWidth="300dp"
                 android:singleLine="true"
                 tools:ignore="TextFields" />
@@ -109,7 +120,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="@string/smartconfig_tips_connect"
+        android:text="@string/ap_config_tips_connect"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/primary_text_default_material_dark" />
