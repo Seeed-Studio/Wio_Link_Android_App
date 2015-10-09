@@ -14,6 +14,19 @@
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="PionOne.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="1" />
+
+
+        <meta-data
+            android:name="AA_MODELS"
+            android:value="cc.seeed.iot.webapi.model.Node, cc.seeed.iot.webapi.model.GroverDriver" />
+
         <activity
             android:name=".ui_main.MainScreenActivity"
             android:theme="@style/Theme.DesignDemo" >
