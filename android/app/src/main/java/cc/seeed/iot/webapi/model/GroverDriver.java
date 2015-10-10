@@ -4,7 +4,6 @@ import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ public class GroverDriver extends Model {
     public Map<String, List<String>> Outputs;
 
     @Column(name = "image_url")
-    public URL ImageURL;
+    public String ImageURL;
 
     public List<String> Events;
 
@@ -49,4 +48,7 @@ public class GroverDriver extends Model {
     public int ID;
 
     public List<String> ConstructArgList;
+
+    @Column(name = "image_url_path")
+    public String ImageUrlPath;
 }

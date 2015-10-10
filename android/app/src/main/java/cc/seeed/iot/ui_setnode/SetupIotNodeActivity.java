@@ -44,7 +44,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
         View.OnClickListener, View.OnLongClickListener {
     public Toolbar mToolbar;
     public Toolbar mToolbarAction;
-    ArrayList<Node> nodes;
+    List<Node> nodes;
     Node node;
     User user;
 
@@ -56,7 +56,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     RecyclerView mGroveTypeListView;
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
-    private ArrayList<GroverDriver> mGroveDrivers;
+    private List<GroverDriver> mGroveDrivers;
 
     ImageButton mCorrectView;
     ImageButton mCancelView;
@@ -178,7 +178,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
         mGroveTypeListView.setAdapter(mGroveTypeListAdapter);
     }
 
-    private void updateGroveListAdapter(ArrayList<GroverDriver> groverDrivers) {
+    private void updateGroveListAdapter(List<GroverDriver> groverDrivers) {
         mGroveListAdapter.updateAll(groverDrivers);
     }
 
@@ -190,19 +190,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
         iot.scanDrivers(new Callback<List<GroverDriver>>() {
             @Override
             public void success(List<GroverDriver> groverDrivers, Response response) {
-//                if (groverDriver.status.equals("200")) {
-//                    nodes = (ArrayList) nodeListResponse.nodes;
-//                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-//                    mGroveListAdapter = new NodeListRecyclerAdapter(nodes);
-
-                mGroveDrivers = (ArrayList) groverDrivers;
-                mGroveListAdapter = new GroveListRecyclerAdapter((ArrayList) groverDrivers);
+                mGroveDrivers = groverDrivers;
+                mGroveListAdapter = new GroveListRecyclerAdapter(groverDrivers);
                 mGroveListView.setAdapter(mGroveListAdapter);
 
-//                } else {
-//                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
-//                }
-//                mGroveListAdapter.
             }
 
             @Override

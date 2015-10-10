@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.model.GroverDriver;
@@ -20,13 +21,13 @@ import cc.seeed.iot.webapi.model.GroverDriver;
  * Created by tenwong on 15/6/25.
  */
 public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecyclerAdapter.MainViewHolder> {
-    private ArrayList<GroverDriver> groves;
+    private List<GroverDriver> groves = new ArrayList<>();
     private Context context;
 
     SparseBooleanArray selector;
     private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
 
-    public GroveListRecyclerAdapter(ArrayList<GroverDriver> groves) {
+    public GroveListRecyclerAdapter(List<GroverDriver> groves) {
         this.groves = groves;
         selector = new SparseBooleanArray();
     }
@@ -72,7 +73,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         notifyDataSetChanged();
     }
 
-    public void updateAll(ArrayList<GroverDriver> groverDrivers) {
+    public void updateAll(List<GroverDriver> groverDrivers) {
         this.groves = groverDrivers;
         notifyDataSetChanged();
 

@@ -1,14 +1,7 @@
 package cc.seeed.iot.ui_main;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -32,7 +25,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecyclerAdapter.MainViewHolder> {
     private static final String TAG = "NodeListRecyclerAdapter";
-    private ArrayList<Node> nodes;
+    private List<Node> nodes = new ArrayList<>();
     private Context context;
 
     private final TypedValue mTypedValue = new TypedValue();
@@ -49,7 +42,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         mOnClickListener = l;
     }
 
-    public NodeListRecyclerAdapter(ArrayList<Node> nodes) {
+    public NodeListRecyclerAdapter(List<Node> nodes) {
         this.nodes = nodes;
     }
 
@@ -101,7 +94,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return newNode;
     }
 
-    public boolean updateAll(ArrayList<Node> nodes) {
+    public boolean updateAll(List<Node> nodes) {
         this.nodes = nodes;
         notifyDataSetChanged();
         return true;

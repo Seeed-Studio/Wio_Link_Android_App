@@ -1,7 +1,6 @@
 package cc.seeed.iot;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,8 +12,6 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.security.auth.login.LoginException;
 
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.IotApi;
@@ -30,9 +27,11 @@ import retrofit.client.Response;
  * Created by tenwong on 15/7/9.
  */
 public class MyApplication extends com.activeandroid.app.Application {
+    private String grove_dir;
+
     private SharedPreferences sp;
 
-    private ArrayList<Node> nodes = new ArrayList<Node>();
+    private List<Node> nodes = new ArrayList<Node>();
 
     private User user = new User();
 
@@ -71,11 +70,11 @@ public class MyApplication extends com.activeandroid.app.Application {
         editor.apply();
     }
 
-    public ArrayList<Node> getNodes() {
+    public List<Node> getNodes() {
         return nodes;
     }
 
-    public void setNodes(ArrayList<Node> nodes) {
+    public void setNodes(List<Node> nodes) {
         this.nodes = nodes;
     }
 
@@ -104,6 +103,8 @@ public class MyApplication extends com.activeandroid.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        grove_dir = getFilesDir() + "/groves";
+
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
         sp.getString("serverAddress", "http://192.168.21.83:8080/v1");
         user.email = sp.getString("userName", "awong1900@163.com");
@@ -135,8 +136,9 @@ public class MyApplication extends com.activeandroid.app.Application {
             @Override
             public void success(List<GroverDriver> groverDrivers, retrofit.client.Response response) {
                 for (GroverDriver groveDriver : groverDrivers) {
+                    groveDriver.ImageUrlPath = grove_dir + "/" + groveDriver.ID;
                     groveDriver.save();
-//                    new DownloadImageAsyncTask().execute(groveDriver);
+                    new DownloadImageAsyncTask().execute(groveDriver);
                 }
             }
 
@@ -156,7 +158,7 @@ public class MyApplication extends com.activeandroid.app.Application {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
                 if (nodeListResponse.status.equals("200")) {
-                    nodes = (ArrayList) nodeListResponse.nodes;
+                    nodes = nodeListResponse.nodes;
                     for (Node node : nodes) {
                         node.save();
                     }
@@ -180,7 +182,7 @@ public class MyApplication extends com.activeandroid.app.Application {
             Bitmap bitmap = null;
             for (GroverDriver groverDriver : groverDrivers) {
                 try {
-                    URL imageUrl = groverDriver.ImageURL;
+                    URL imageUrl = new URL(groverDriver.ImageURL);
                     imageUrl.openConnection();
                     bitmap = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
                 } catch (Exception e) {
@@ -195,12 +197,13 @@ public class MyApplication extends com.activeandroid.app.Application {
     }
 
     private String saveToInternalSorage(Bitmap bitmapImage, String fileName) {
-        final String DIR = "grove";
-        ContextWrapper cw = new ContextWrapper(getApplicationContext());
-        // path to /data/data/yourapp/app_data/imageDir
-        File directory = cw.getDir(DIR, Context.MODE_PRIVATE);
-        Log.e(getClass().getName(), directory.getPath());
-        // Create imageDir
+        String directory = getFilesDir() + "/groves";
+        File dir = new File(directory);
+        Boolean result = dir.mkdirs();
+        if (!result && !dir.isDirectory()) {
+            Log.e(getClass().getName(), directory + " create fail!");
+        }
+
         File file = new File(directory, fileName);
 
         FileOutputStream fos = null;
@@ -214,6 +217,6 @@ public class MyApplication extends com.activeandroid.app.Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return directory.getAbsolutePath();
+        return file.getPath();
     }
 }
