@@ -2,23 +2,20 @@ package cc.seeed.iot;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.util.Log;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
+import cc.seeed.iot.yaml.IotYaml;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -121,6 +118,7 @@ public class MyApplication extends com.activeandroid.app.Application {
         getGrovesData();
 
         getNodesData();
+
     }
 
     private void init() {
@@ -136,9 +134,7 @@ public class MyApplication extends com.activeandroid.app.Application {
             @Override
             public void success(List<GroverDriver> groverDrivers, retrofit.client.Response response) {
                 for (GroverDriver groveDriver : groverDrivers) {
-                    groveDriver.ImageUrlPath = grove_dir + "/" + groveDriver.ID;
                     groveDriver.save();
-                    new DownloadImageAsyncTask().execute(groveDriver);
                 }
             }
 
@@ -158,9 +154,12 @@ public class MyApplication extends com.activeandroid.app.Application {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
                 if (nodeListResponse.status.equals("200")) {
+                    DBHelper.delNodesAll();
                     nodes = nodeListResponse.nodes;
                     for (Node node : nodes) {
                         node.save();
+                        //todo delete config with delete's node_sn
+                        getNodesConfig(node);
                     }
                 } else {
                     Log.e(getClass().getName(), nodeListResponse.msg);
@@ -175,48 +174,34 @@ public class MyApplication extends com.activeandroid.app.Application {
     }
 
 
-    class DownloadImageAsyncTask extends AsyncTask<GroverDriver, String, Void> {
-
-        @Override
-        protected Void doInBackground(GroverDriver... groverDrivers) {
-            Bitmap bitmap = null;
-            for (GroverDriver groverDriver : groverDrivers) {
-                try {
-                    URL imageUrl = new URL(groverDriver.ImageURL);
-                    imageUrl.openConnection();
-                    bitmap = BitmapFactory.decodeStream(imageUrl.openConnection().getInputStream());
-                } catch (Exception e) {
-                    Log.e(getClass().getName(), e.toString());
+    public void getNodesConfig(final Node node) {
+        IotApi api = new IotApi();
+        api.setAccessToken(node.node_key);
+        final IotService iot = api.getService();
+        iot.nodeConfig(new Callback<cc.seeed.iot.webapi.model.Response>() {
+            @Override
+            public void success(cc.seeed.iot.webapi.model.Response response, Response response2) {
+                if (response.status.equals("200")) {
+                    String yaml = response.msg;
+                    saveToDB(yaml);
+                } else {
+                    Log.e(getClass().getName(), response.msg);
                 }
-
-                saveToInternalSorage(bitmap, Integer.toString(groverDriver.ID));
             }
 
-            return null;
-        }
-    }
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(getClass().getName(), error.toString());
+            }
 
-    private String saveToInternalSorage(Bitmap bitmapImage, String fileName) {
-        String directory = getFilesDir() + "/groves";
-        File dir = new File(directory);
-        Boolean result = dir.mkdirs();
-        if (!result && !dir.isDirectory()) {
-            Log.e(getClass().getName(), directory + " create fail!");
-        }
-
-        File file = new File(directory, fileName);
-
-        FileOutputStream fos = null;
-        try {
-
-            fos = new FileOutputStream(file);
-
-            // Use the compress method on the BitMap object to write image to the OutputStream
-            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fos);
-            fos.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return file.getPath();
+            private void saveToDB(String yaml) {
+                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
+                for (PinConfig pinConfig : pinConfigs) {
+                    pinConfig.node_sn = node.node_sn;
+//                    Log.e(getClass().getName(), pinConfig.toString());
+                    pinConfig.save();
+                }
+            }
+        });
     }
 }

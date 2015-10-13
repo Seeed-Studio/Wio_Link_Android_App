@@ -48,7 +48,4 @@ public class GroverDriver extends Model {
     public int ID;
 
     public List<String> ConstructArgList;
-
-    @Column(name = "image_url_path")
-    public String ImageUrlPath;
 }

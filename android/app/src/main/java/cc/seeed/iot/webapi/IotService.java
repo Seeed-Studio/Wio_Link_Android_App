@@ -61,11 +61,13 @@ public interface IotService {
     @POST("/nodes/delete")
     public void nodesDelete(@Query("node_sn") String node_sn, Callback<NodeResponse> callback);
 
+    @GET("/node/config")
+    public void nodeConfig(Callback<Response> callback);
+
     @POST("/user/download")
     public void userDownload(@Query("access_token") String node_key,
                              @Query("yaml") String yaml,
                              Callback<OtaStatusResponse> callback);
-
 
     @POST("/ota/status")
     public void otaStatus(@Query("access_token") String node_key,

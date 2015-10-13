@@ -1,13 +1,36 @@
 package cc.seeed.iot.ui_setnode.model;
 
-import cc.seeed.iot.webapi.model.GroverDriver;
+import com.activeandroid.Model;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
 /**
  * Created by tenwong on 15/8/10.
  */
-public class PinConfig {
+@Table(name = "pin_configs")
+public class PinConfig extends Model {
+
+    @Column()
+    public String node_sn;
+
+    @Column()
     public int position;
+//    @Column()
+//    public int sub_position;
+
+    @Column()
     public Boolean selected;
-    public GroverDriver groverDriver;
+
+    @Column()
+    public int grove_id;
+
+    @Column(name = "grove_instance_name", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String groveInstanceName;
+
+    @Override
+    public String toString() {
+        String s = "node_sn=" + node_sn + " position=" + position + " selected=" + selected +
+                " grove_id=" + grove_id + " groveInstanceName=" + groveInstanceName;
+        return s;
+    }
 }

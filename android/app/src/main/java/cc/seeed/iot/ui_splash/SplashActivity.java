@@ -42,7 +42,7 @@ public class SplashActivity extends AppCompatActivity {
 
         List<GroverDriver> groverDrivers= DBHelper.getGrovesAll();
         for (GroverDriver groverDriver:groverDrivers) {
-            Log.e(getClass().getName(), groverDriver.ID + " " + groverDriver.GroveName + " " + groverDriver.ImageUrlPath );
+            Log.e(getClass().getName(), groverDriver.ID + " " + groverDriver.GroveName + " " + groverDriver.ImageURL );
         }
     }
 

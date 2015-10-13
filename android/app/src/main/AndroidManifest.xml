@@ -25,7 +25,8 @@
 
         <meta-data
             android:name="AA_MODELS"
-            android:value="cc.seeed.iot.webapi.model.Node, cc.seeed.iot.webapi.model.GroverDriver" />
+            android:value="cc.seeed.iot.webapi.model.Node, cc.seeed.iot.webapi.model.GroverDriver,
+            cc.seeed.iot.ui_setnode.model.PinConfig" />
 
         <activity
             android:name=".ui_main.MainScreenActivity"
