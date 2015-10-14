@@ -1,6 +1,8 @@
 package cc.seeed.iot.ui_setnode;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -13,15 +15,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ContextMenu;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +31,9 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.GroveFliter;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
-import cc.seeed.iot.ui_setnode.model.PinConfig;
-import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -46,7 +46,7 @@ import retrofit.client.Response;
 
 public class SetupIotNodeActivity extends AppCompatActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
-        View.OnClickListener, View.OnLongClickListener {
+        View.OnClickListener, View.OnDragListener {
 
     private static final String TAG = "SetupIotNodeActivity";
     public Toolbar mToolbar;
@@ -74,7 +74,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
     NodeConfigHelper nodeConfigModel;
 
     View mSetNodeLayout;
-    ImageButton pin1View, pin2View, pin3View, pin4View, pin5View, pin6View;
+    //    ImageButton pin1View, pin2View, pin3View, pin4View, pin5View, pin6View;
+    GrovePinsView grovePinsView;
 
     UiStateControl uiStateControl;
 
@@ -143,7 +144,11 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         nodeConfigModel = new NodeConfigHelper(node.node_sn);
 
-        pinViewInit();
+        grovePinsView = new GrovePinsView(view, node);
+        for (ImageView pinView : grovePinsView.pinViews) {
+            pinView.setOnDragListener(this);
+            pinView.setOnClickListener(this);
+        }
 
 //        Snackbar.make(mToolbar, "Here's a " + node.name, Snackbar.LENGTH_LONG).show();
         getSupportActionBar().setTitle(node.name);
@@ -173,48 +178,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
             setupGroveSelectorAdapter();
 
-        }
-    }
-
-    private void pinViewInit() {
-        pin1View = (ImageButton) findViewById(R.id.grove_1);
-        pin2View = (ImageButton) findViewById(R.id.grove_2);
-        pin3View = (ImageButton) findViewById(R.id.grove_3);
-        pin4View = (ImageButton) findViewById(R.id.grove_4);
-        pin5View = (ImageButton) findViewById(R.id.grove_5);
-        pin6View = (ImageButton) findViewById(R.id.grove_6);
-
-        List<PinConfig> pinConfigs = new ArrayList<>();
-        pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
-
-        for (PinConfig pinConfig : pinConfigs) {
-            String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
-            switch (pinConfig.position) {
-                case 1:
-                    UrlImageViewHelper.setUrlDrawable(pin1View, url, R.drawable.grove_cold,
-                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
-                    break;
-                case 2:
-                    UrlImageViewHelper.setUrlDrawable(pin2View, url, R.drawable.grove_cold,
-                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
-                    break;
-                case 3:
-                    UrlImageViewHelper.setUrlDrawable(pin3View, url, R.drawable.grove_cold,
-                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
-                    break;
-                case 4:
-                    UrlImageViewHelper.setUrlDrawable(pin4View, url, R.drawable.grove_cold,
-                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
-                    break;
-                case 5:
-                    UrlImageViewHelper.setUrlDrawable(pin5View, url, R.drawable.grove_cold,
-                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
-                    break;
-                case 6:
-                    UrlImageViewHelper.setUrlDrawable(pin6View, url, R.drawable.grove_cold,
-                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
-                    break;
-            }
         }
     }
 
@@ -570,149 +533,169 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        if (mGroveDrivers == null) //todo fixed, find method do it.use database?
-            return;
-        switch (v.getId()) {
-            case R.id.ib_correct:
-                int position = uiStateControl.getSetPin();
-                nodeConfigModel.addPinNode(position, mGroveListAdapter.getSelectedItem());
-                mToolbarAction.setVisibility(View.GONE);
-                mGroveListAdapter.clearSelectItem();
-                uiStateControl.activatedClear();
-                uiStateControl.selectedPin();
-                break;
-            case R.id.ib_cancel:
-                mToolbarAction.setVisibility(View.GONE);
-                uiStateControl.activatedClear();
-                mGroveListAdapter.clearSelectItem();
-                break;
-            case R.id.grove_1:
-                uiStateControl.activatedPin(1);
-//                if (nodeConfigModel.getPinNode(1).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(1).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
-                break;
-            case R.id.grove_2:
-                uiStateControl.activatedPin(2);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
-//                if (nodeConfigModel.getPinNode(2).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(2).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                break;
-            case R.id.grove_3:
-                uiStateControl.activatedPin(3);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
-//                if (nodeConfigModel.getPinNode(3).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(3).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                break;
-            case R.id.grove_4:
-                uiStateControl.activatedPin(4);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG));
-//                if (nodeConfigModel.getPinNode(4).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(4).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                break;
-            case R.id.grove_5:
-                uiStateControl.activatedPin(5);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART));
-//                if (nodeConfigModel.getPinNode(5).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(5).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                break;
-            case R.id.grove_6:
-                uiStateControl.activatedPin(6);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C));
-//                if (nodeConfigModel.getPinNode(6).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(6).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                break;
-            case R.id.set_node:
-                if (mToolbarAction.getVisibility() == View.GONE)
-                    uiStateControl.activatedClear();
-                break;
-        }
+//        if (mGroveDrivers == null) //todo fixed, find method do it.use database?
+//            return;
+//        switch (v.getId()) {
+//            case R.id.ib_correct:
+//                int position = uiStateControl.getSetPin();
+//                nodeConfigModel.addPinNode(position, mGroveListAdapter.getSelectedItem());
+//                mToolbarAction.setVisibility(View.GONE);
+//                mGroveListAdapter.clearSelectItem();
+//                uiStateControl.activatedClear();
+//                uiStateControl.selectedPin();
+//                break;
+//            case R.id.ib_cancel:
+//                mToolbarAction.setVisibility(View.GONE);
+//                uiStateControl.activatedClear();
+//                mGroveListAdapter.clearSelectItem();
+//                break;
+//            case R.id.grove_1:
+//                uiStateControl.activatedPin(1);
+////                if (nodeConfigModel.getPinNode(1).selected) {
+////                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(1).groverDriver.GroveName,
+////                            Snackbar.LENGTH_LONG).show();
+////                }
+//                mGroveListAdapter.updateAll(
+//                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
+//                break;
+//            case R.id.grove_2:
+//                uiStateControl.activatedPin(2);
+//                mGroveListAdapter.updateAll(
+//                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
+////                if (nodeConfigModel.getPinNode(2).selected) {
+////                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(2).groverDriver.GroveName,
+////                            Snackbar.LENGTH_LONG).show();
+////                }
+//                break;
+//            case R.id.grove_3:
+//                uiStateControl.activatedPin(3);
+//                mGroveListAdapter.updateAll(
+//                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
+////                if (nodeConfigModel.getPinNode(3).selected) {
+////                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(3).groverDriver.GroveName,
+////                            Snackbar.LENGTH_LONG).show();
+////                }
+//                break;
+//            case R.id.grove_4:
+//                uiStateControl.activatedPin(4);
+//                mGroveListAdapter.updateAll(
+//                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG));
+////                if (nodeConfigModel.getPinNode(4).selected) {
+////                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(4).groverDriver.GroveName,
+////                            Snackbar.LENGTH_LONG).show();
+////                }
+//                break;
+//            case R.id.grove_5:
+//                uiStateControl.activatedPin(5);
+//                mGroveListAdapter.updateAll(
+//                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART));
+////                if (nodeConfigModel.getPinNode(5).selected) {
+////                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(5).groverDriver.GroveName,
+////                            Snackbar.LENGTH_LONG).show();
+////                }
+//                break;
+//            case R.id.grove_6:
+//                uiStateControl.activatedPin(6);
+//                mGroveListAdapter.updateAll(
+//                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C));
+////                if (nodeConfigModel.getPinNode(6).selected) {
+////                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(6).groverDriver.GroveName,
+////                            Snackbar.LENGTH_LONG).show();
+////                }
+//                break;
+//            case R.id.set_node:
+//                if (mToolbarAction.getVisibility() == View.GONE)
+//                    uiStateControl.activatedClear();
+//                break;
+//        }
 
     }
 
+//    @Override
+//    public boolean onLongClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.grove_1:
+//                if (uiStateControl.getSelectedPinStatus(1)) {
+//                    pin1View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//                        @Override
+//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                            menu.add(0, 1, 0, "Remove");
+//                        }
+//                    });
+//                }
+//                break;
+//            case R.id.grove_2:
+//                if (uiStateControl.getSelectedPinStatus(2)) {
+//                    pin2View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//                        @Override
+//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                            menu.add(0, 2, 0, "Remove");
+//                        }
+//                    });
+//                }
+//                break;
+//            case R.id.grove_3:
+//                if (uiStateControl.getSelectedPinStatus(3)) {
+//                    pin3View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//                        @Override
+//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                            menu.add(0, 3, 0, "Remove");
+//                        }
+//                    });
+//                }
+//                break;
+//            case R.id.grove_4:
+//                if (uiStateControl.getSelectedPinStatus(4)) {
+//                    pin4View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//                        @Override
+//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                            menu.add(0, 4, 0, "Remove");
+//                        }
+//                    });
+//                }
+//                break;
+//            case R.id.grove_5:
+//                if (uiStateControl.getSelectedPinStatus(5)) {
+//                    pin5View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//                        @Override
+//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                            menu.add(0, 5, 0, "Remove");
+//                        }
+//                    });
+//                }
+//                break;
+//            case R.id.grove_6:
+//                if (uiStateControl.getSelectedPinStatus(6)) {
+//                    pin6View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
+//                        @Override
+//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+//                            menu.add(0, 6, 0, "Remove");
+//                        }
+//                    });
+//                }
+//                break;
+//        }
+//        return false;
+//    }
+
     @Override
-    public boolean onLongClick(View v) {
-        switch (v.getId()) {
-            case R.id.grove_1:
-                if (uiStateControl.getSelectedPinStatus(1)) {
-                    pin1View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 1, 0, "Remove");
-                        }
-                    });
-                }
-                break;
-            case R.id.grove_2:
-                if (uiStateControl.getSelectedPinStatus(2)) {
-                    pin2View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 2, 0, "Remove");
-                        }
-                    });
-                }
-                break;
-            case R.id.grove_3:
-                if (uiStateControl.getSelectedPinStatus(3)) {
-                    pin3View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 3, 0, "Remove");
-                        }
-                    });
-                }
-                break;
-            case R.id.grove_4:
-                if (uiStateControl.getSelectedPinStatus(4)) {
-                    pin4View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 4, 0, "Remove");
-                        }
-                    });
-                }
-                break;
-            case R.id.grove_5:
-                if (uiStateControl.getSelectedPinStatus(5)) {
-                    pin5View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 5, 0, "Remove");
-                        }
-                    });
-                }
-                break;
-            case R.id.grove_6:
-                if (uiStateControl.getSelectedPinStatus(6)) {
-                    pin6View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 6, 0, "Remove");
-                        }
-                    });
-                }
+    public boolean onDrag(View v, DragEvent event) {
+        int action = event.getAction();
+        Log.e("iot", "action" + action);
+        GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
+        String interfaceType = tag.interfaceType;
+        GroverDriver groverDriver = (GroverDriver) event.getLocalState();
+        if (!interfaceType.equals(groverDriver.InterfaceType)) {
+            Log.e("iot", groverDriver.InterfaceType);
+            return false;
+        }
+
+        switch (action) {
+            case DragEvent.ACTION_DRAG_STARTED:
+                v.setActivated(true);
                 break;
         }
-        return false;
+        return true;
     }
 
     private class MainOnClickListener implements View.OnClickListener, View.OnLongClickListener {
@@ -736,9 +719,20 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         @Override
         public boolean onLongClick(View v) {
-            Snackbar.make(v, "Todo:grove detail page", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(v, "Todo:grove detail page", Snackbar.LENGTH_SHORT).show();
 
-            return false;
+            String label = "grove_interface";
+            String[] mimeTypes = {ClipDescription.MIMETYPE_TEXT_PLAIN};
+            ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
+            ClipData.Item item = new ClipData.Item("drag grove");
+            ClipData clipData = new ClipData(clipDescription, item);
+            View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
+
+            mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
+            GroverDriver grove = mGroveListAdapter.getSelectedItem();
+
+            v.startDrag(clipData, shadowBuiler, grove, 0);
+            return true;
         }
     }
 
