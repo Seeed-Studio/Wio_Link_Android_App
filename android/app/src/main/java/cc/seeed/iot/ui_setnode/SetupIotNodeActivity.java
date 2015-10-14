@@ -21,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,8 @@ import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_setnode.model.GroveFliter;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
+import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -43,6 +47,8 @@ import retrofit.client.Response;
 public class SetupIotNodeActivity extends AppCompatActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
         View.OnClickListener, View.OnLongClickListener {
+
+    private static final String TAG = "SetupIotNodeActivity";
     public Toolbar mToolbar;
     public Toolbar mToolbarAction;
     List<Node> nodes;
@@ -113,26 +119,21 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         mSetNodeLayout = (View) findViewById(R.id.set_node);
         mSetNodeLayout.setOnClickListener(this);
-        pin1View = (ImageButton) findViewById(R.id.grove_1);
-        pin2View = (ImageButton) findViewById(R.id.grove_2);
-        pin3View = (ImageButton) findViewById(R.id.grove_3);
-        pin4View = (ImageButton) findViewById(R.id.grove_4);
-        pin5View = (ImageButton) findViewById(R.id.grove_5);
-        pin6View = (ImageButton) findViewById(R.id.grove_6);
 
-        pin1View.setOnClickListener(this);
-        pin2View.setOnClickListener(this);
-        pin3View.setOnClickListener(this);
-        pin4View.setOnClickListener(this);
-        pin5View.setOnClickListener(this);
-        pin6View.setOnClickListener(this);
 
-        pin1View.setOnLongClickListener(this);
-        pin2View.setOnLongClickListener(this);
-        pin3View.setOnLongClickListener(this);
-        pin4View.setOnLongClickListener(this);
-        pin5View.setOnLongClickListener(this);
-        pin6View.setOnLongClickListener(this);
+//        pin1View.setOnClickListener(this);
+//        pin2View.setOnClickListener(this);
+//        pin3View.setOnClickListener(this);
+//        pin4View.setOnClickListener(this);
+//        pin5View.setOnClickListener(this);
+//        pin6View.setOnClickListener(this);
+//
+//        pin1View.setOnLongClickListener(this);
+//        pin2View.setOnLongClickListener(this);
+//        pin3View.setOnLongClickListener(this);
+//        pin4View.setOnLongClickListener(this);
+//        pin5View.setOnLongClickListener(this);
+//        pin6View.setOnLongClickListener(this);
 
 //        nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
         nodes = DBHelper.getNodesAll();
@@ -141,6 +142,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
         node = nodes.get(position);
 
         nodeConfigModel = new NodeConfigHelper(node.node_sn);
+
+        pinViewInit();
 
 //        Snackbar.make(mToolbar, "Here's a " + node.name, Snackbar.LENGTH_LONG).show();
         getSupportActionBar().setTitle(node.name);
@@ -168,8 +171,50 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
             mGroveTypeListView.setLayoutManager(layoutManager);
 
-            setupGroveSetectorAdapter();
+            setupGroveSelectorAdapter();
 
+        }
+    }
+
+    private void pinViewInit() {
+        pin1View = (ImageButton) findViewById(R.id.grove_1);
+        pin2View = (ImageButton) findViewById(R.id.grove_2);
+        pin3View = (ImageButton) findViewById(R.id.grove_3);
+        pin4View = (ImageButton) findViewById(R.id.grove_4);
+        pin5View = (ImageButton) findViewById(R.id.grove_5);
+        pin6View = (ImageButton) findViewById(R.id.grove_6);
+
+        List<PinConfig> pinConfigs = new ArrayList<>();
+        pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
+
+        for (PinConfig pinConfig : pinConfigs) {
+            String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
+            switch (pinConfig.position) {
+                case 1:
+                    UrlImageViewHelper.setUrlDrawable(pin1View, url, R.drawable.grove_cold,
+                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    break;
+                case 2:
+                    UrlImageViewHelper.setUrlDrawable(pin2View, url, R.drawable.grove_cold,
+                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    break;
+                case 3:
+                    UrlImageViewHelper.setUrlDrawable(pin3View, url, R.drawable.grove_cold,
+                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    break;
+                case 4:
+                    UrlImageViewHelper.setUrlDrawable(pin4View, url, R.drawable.grove_cold,
+                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    break;
+                case 5:
+                    UrlImageViewHelper.setUrlDrawable(pin5View, url, R.drawable.grove_cold,
+                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    break;
+                case 6:
+                    UrlImageViewHelper.setUrlDrawable(pin6View, url, R.drawable.grove_cold,
+                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    break;
+            }
         }
     }
 
@@ -178,7 +223,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
     //Todo need init?
 //    }
 
-    private void setupGroveSetectorAdapter() {
+    private void setupGroveSelectorAdapter() {
         mGroveTypeListAdapter = new GroveFilterRecyclerAdapter(Constant.groveTypes);
         mGroveTypeListAdapter.setOnItemClickListener(this);
         mGroveTypeListView.setAdapter(mGroveTypeListAdapter);
@@ -207,9 +252,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 Toast.makeText(SetupIotNodeActivity.this, "Connect sever fail...", Toast.LENGTH_LONG).show();
             }
         });
-
-
-
     }
 
     @Override
@@ -375,126 +417,156 @@ public class SetupIotNodeActivity extends AppCompatActivity
         );
     }
 
-
     @Override
-    public void onItemClick(View view, int postion) {
-        String groveType = Constant.groveTypes[postion];
+    public void onItemClick(View view, int position) {
+        String groveType = Constant.groveTypes[position];
 
         ArrayList<GroverDriver> inputGroves = new ArrayList<GroverDriver>();
         ArrayList<GroverDriver> outputGroves = new ArrayList<GroverDriver>();
 
+
         if (mGroveDrivers == null)
             return;
 
-        for (GroverDriver g : mGroveDrivers) {
-            if (!g.Inputs.isEmpty()) {
-                outputGroves.add(g);
-            }
-            if (!g.Outputs.isEmpty())
-                inputGroves.add(g);
-        }
+//        for (GroverDriver g : mGroveDrivers) {
+//            if (!g.Inputs.isEmpty()) {
+//                outputGroves.add(g);
+//            }
+//            if (!g.Outputs.isEmpty())
+//                inputGroves.add(g);
+//        }
+//
+//        mGroveTypeListAdapter.updateSelection(position);
+//
+//        if (groveType.equals("All")) {
+//            updateGroveListAdapter(mGroveDrivers);
+//        } else if (groveType.equals("Input")) {
+//            updateGroveListAdapter(inputGroves);
+//        } else if (groveType.equals("Output")) {
+//            updateGroveListAdapter(outputGroves);
+//        }
 
-        mGroveTypeListAdapter.updateSelection(postion);
-
-        if (uiStateControl.getSetPin() == 1 || uiStateControl.getSetPin() == 2 || uiStateControl.getSetPin() == 3) {
-            ArrayList<GroverDriver> inputGrovesGpio = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesGpio = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) { //grove's output is node's input
-                    inputGrovesGpio.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesGpio.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesGpio);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesGpio);
-            }
-        } else if (uiStateControl.getSetPin() == 4) {
-            ArrayList<GroverDriver> inputGrovesAnalog = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesAnalog = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) {
-                    inputGrovesAnalog.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesAnalog.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesAnalog);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesAnalog);
-            }
-        } else if (uiStateControl.getSetPin() == 5) {
-            ArrayList<GroverDriver> inputGrovesUart = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesUart = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) {
-                    inputGrovesUart.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesUart.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesUart);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesUart);
-            }
-        } else if (uiStateControl.getSetPin() == 6) {
-            ArrayList<GroverDriver> inputGrovesI2c = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesI2c = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) {
-                    inputGrovesI2c.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesI2c.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesI2c);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesI2c);
-            }
-
-        } else {
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(mGroveDrivers);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGroves);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGroves);
-            }
-        }
     }
+
+//    @Override
+//    public void onItemClick(View view, int position) {
+//        String groveType = Constant.groveTypes[position];
+//
+//        ArrayList<GroverDriver> inputGroves = new ArrayList<GroverDriver>();
+//        ArrayList<GroverDriver> outputGroves = new ArrayList<GroverDriver>();
+//
+//        if (mGroveDrivers == null)
+//            return;
+//
+//        for (GroverDriver g : mGroveDrivers) {
+//            if (!g.Inputs.isEmpty()) {
+//                outputGroves.add(g);
+//            }
+//            if (!g.Outputs.isEmpty())
+//                inputGroves.add(g);
+//        }
+//
+//        mGroveTypeListAdapter.updateSelection(position);
+//
+//        if (uiStateControl.getSetPin() == 1 || uiStateControl.getSetPin() == 2 || uiStateControl.getSetPin() == 3) {
+//            ArrayList<GroverDriver> inputGrovesGpio = new ArrayList<GroverDriver>();
+//            ArrayList<GroverDriver> outputGrovesGpio = new ArrayList<GroverDriver>();
+//
+//            ArrayList<GroverDriver> groverGPIO =
+//                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO);
+//
+//            for (GroverDriver g : groverGPIO) {
+//                if (!g.Outputs.isEmpty()) { //grove's output is node's input
+//                    inputGrovesGpio.add(g);
+//                }
+//                if (!g.Inputs.isEmpty())
+//                    outputGrovesGpio.add(g);
+//            }
+//
+//            if (groveType.equals("All")) {
+//                updateGroveListAdapter(groverGPIO);
+//            } else if (groveType.equals("Input")) {
+//                updateGroveListAdapter(inputGrovesGpio);
+//            } else if (groveType.equals("Output")) {
+//                updateGroveListAdapter(outputGrovesGpio);
+//            }
+//        } else if (uiStateControl.getSetPin() == 4) {
+//            ArrayList<GroverDriver> inputGrovesAnalog = new ArrayList<GroverDriver>();
+//            ArrayList<GroverDriver> outputGrovesAnalog = new ArrayList<GroverDriver>();
+//
+//            ArrayList<GroverDriver> groverGPIO =
+//                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG);
+//
+//            for (GroverDriver g : groverGPIO) {
+//                if (!g.Outputs.isEmpty()) {
+//                    inputGrovesAnalog.add(g);
+//                }
+//                if (!g.Inputs.isEmpty())
+//                    outputGrovesAnalog.add(g);
+//            }
+//
+//            if (groveType.equals("All")) {
+//                updateGroveListAdapter(groverGPIO);
+//            } else if (groveType.equals("Input")) {
+//                updateGroveListAdapter(inputGrovesAnalog);
+//            } else if (groveType.equals("Output")) {
+//                updateGroveListAdapter(outputGrovesAnalog);
+//            }
+//        } else if (uiStateControl.getSetPin() == 5) {
+//            ArrayList<GroverDriver> inputGrovesUart = new ArrayList<GroverDriver>();
+//            ArrayList<GroverDriver> outputGrovesUart = new ArrayList<GroverDriver>();
+//
+//            ArrayList<GroverDriver> groverGPIO =
+//                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART);
+//
+//            for (GroverDriver g : groverGPIO) {
+//                if (!g.Outputs.isEmpty()) {
+//                    inputGrovesUart.add(g);
+//                }
+//                if (!g.Inputs.isEmpty())
+//                    outputGrovesUart.add(g);
+//            }
+//
+//            if (groveType.equals("All")) {
+//                updateGroveListAdapter(groverGPIO);
+//            } else if (groveType.equals("Input")) {
+//                updateGroveListAdapter(inputGrovesUart);
+//            } else if (groveType.equals("Output")) {
+//                updateGroveListAdapter(outputGrovesUart);
+//            }
+//        } else if (uiStateControl.getSetPin() == 6) {
+//            ArrayList<GroverDriver> inputGrovesI2c = new ArrayList<GroverDriver>();
+//            ArrayList<GroverDriver> outputGrovesI2c = new ArrayList<GroverDriver>();
+//
+//            ArrayList<GroverDriver> groverGPIO =
+//                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C);
+//
+//            for (GroverDriver g : groverGPIO) {
+//                if (!g.Outputs.isEmpty()) {
+//                    inputGrovesI2c.add(g);
+//                }
+//                if (!g.Inputs.isEmpty())
+//                    outputGrovesI2c.add(g);
+//            }
+//
+//            if (groveType.equals("All")) {
+//                updateGroveListAdapter(groverGPIO);
+//            } else if (groveType.equals("Input")) {
+//                updateGroveListAdapter(inputGrovesI2c);
+//            } else if (groveType.equals("Output")) {
+//                updateGroveListAdapter(outputGrovesI2c);
+//            }
+//
+//        } else {
+//            if (groveType.equals("All")) {
+//                updateGroveListAdapter(mGroveDrivers);
+//            } else if (groveType.equals("Input")) {
+//                updateGroveListAdapter(inputGroves);
+//            } else if (groveType.equals("Output")) {
+//                updateGroveListAdapter(outputGroves);
+//            }
+//        }
+//    }
 
     @Override
     public void onClick(View v) {

@@ -44,7 +44,8 @@
             android:layout_toLeftOf="@+id/node_view"
             android:layout_toStartOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_left"
-            android:clickable="true" />
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
         <ImageButton
             android:id="@+id/grove_2"
@@ -55,7 +56,8 @@
             android:layout_toLeftOf="@+id/node_view"
             android:layout_toStartOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_left"
-            android:clickable="true" />
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
         <ImageButton
             android:id="@+id/grove_3"
@@ -66,7 +68,8 @@
             android:layout_toLeftOf="@+id/node_view"
             android:layout_toStartOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_left"
-            android:clickable="true" />
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
         <ImageButton
             android:id="@+id/grove_4"
@@ -77,7 +80,8 @@
             android:layout_toEndOf="@+id/node_view"
             android:layout_toRightOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_right"
-            android:clickable="true" />
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
         <ImageButton
             android:id="@+id/grove_5"
@@ -88,7 +92,8 @@
             android:layout_toEndOf="@+id/node_view"
             android:layout_toRightOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_right"
-            android:clickable="true" />
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
         <ImageButton
             android:id="@+id/grove_6"
@@ -99,7 +104,8 @@
             android:layout_toEndOf="@+id/node_view"
             android:layout_toRightOf="@+id/node_view"
             android:background="@drawable/state_grove_indicator_right"
-            android:clickable="true" />
+            android:clickable="true"
+            android:scaleType="centerCrop" />
 
     </RelativeLayout>
 
