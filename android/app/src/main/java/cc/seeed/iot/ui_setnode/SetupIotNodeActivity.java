@@ -29,7 +29,8 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_setnode.model.GroveFliter;
-import cc.seeed.iot.ui_setnode.model.NodeConfigModel;
+import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
+import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroverDriver;
@@ -44,7 +45,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
         View.OnClickListener, View.OnLongClickListener {
     public Toolbar mToolbar;
     public Toolbar mToolbarAction;
-    ArrayList<Node> nodes;
+    List<Node> nodes;
     Node node;
     User user;
 
@@ -56,7 +57,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     RecyclerView mGroveTypeListView;
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
-    private ArrayList<GroverDriver> mGroveDrivers;
+    private List<GroverDriver> mGroveDrivers;
 
     ImageButton mCorrectView;
     ImageButton mCancelView;
@@ -64,7 +65,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     SparseBooleanArray nodePinSelector;
     //    Map<Integer, NodePinConfig> nodePinConfigs;
-    NodeConfigModel nodeConfigModel;
+    NodeConfigHelper nodeConfigModel;
 
     View mSetNodeLayout;
     ImageButton pin1View, pin2View, pin3View, pin4View, pin5View, pin6View;
@@ -94,7 +95,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         nodePinSelector = new SparseBooleanArray();
 //        nodePinConfigsInit();
-        nodeConfigModel = new NodeConfigModel();
+
+        mGroveDrivers = DBHelper.getGrovesAll();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -132,10 +134,14 @@ public class SetupIotNodeActivity extends AppCompatActivity
         pin5View.setOnLongClickListener(this);
         pin6View.setOnLongClickListener(this);
 
-        nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
+//        nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
+        nodes = DBHelper.getNodesAll();
         int position = getIntent().getIntExtra("position", 1);
         node = new Node();
         node = nodes.get(position);
+
+        nodeConfigModel = new NodeConfigHelper(node.node_sn);
+
 //        Snackbar.make(mToolbar, "Here's a " + node.name, Snackbar.LENGTH_LONG).show();
         getSupportActionBar().setTitle(node.name);
 
@@ -148,8 +154,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
             mGroveListView.setLayoutManager(layoutManager);
+            mGroveListAdapter = new GroveListRecyclerAdapter(mGroveDrivers);
+            mGroveListView.setAdapter(mGroveListAdapter);
 
-            setupAdapter();
+//            setupAdapter();
         }
 
         mGroveTypeListView = (RecyclerView) findViewById(R.id.grove_selector);
@@ -163,8 +171,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
             setupGroveSetectorAdapter();
 
         }
-
-
     }
 
 //    private void nodePinConfigsInit() {
@@ -178,7 +184,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
         mGroveTypeListView.setAdapter(mGroveTypeListAdapter);
     }
 
-    private void updateGroveListAdapter(ArrayList<GroverDriver> groverDrivers) {
+    private void updateGroveListAdapter(List<GroverDriver> groverDrivers) {
         mGroveListAdapter.updateAll(groverDrivers);
     }
 
@@ -190,19 +196,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
         iot.scanDrivers(new Callback<List<GroverDriver>>() {
             @Override
             public void success(List<GroverDriver> groverDrivers, Response response) {
-//                if (groverDriver.status.equals("200")) {
-//                    nodes = (ArrayList) nodeListResponse.nodes;
-//                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-//                    mGroveListAdapter = new NodeListRecyclerAdapter(nodes);
-
-                mGroveDrivers = (ArrayList) groverDrivers;
-                mGroveListAdapter = new GroveListRecyclerAdapter((ArrayList) groverDrivers);
+                mGroveDrivers = groverDrivers;
+                mGroveListAdapter = new GroveListRecyclerAdapter(groverDrivers);
                 mGroveListView.setAdapter(mGroveListAdapter);
 
-//                } else {
-//                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
-//                }
-//                mGroveListAdapter.
             }
 
             @Override
@@ -210,6 +207,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 Toast.makeText(SetupIotNodeActivity.this, "Connect sever fail...", Toast.LENGTH_LONG).show();
             }
         });
+
+
 
     }
 
@@ -271,27 +270,27 @@ public class SetupIotNodeActivity extends AppCompatActivity
     public boolean onContextItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case 1:
-                nodeConfigModel.removePinNode(1);
+//                nodeConfigModel.removePinNode(1);
                 uiStateControl.removeSelectedPin(1);
                 break;
             case 2:
-                nodeConfigModel.removePinNode(2);
+//                nodeConfigModel.removePinNode(2);
                 uiStateControl.removeSelectedPin(2);
                 break;
             case 3:
-                nodeConfigModel.removePinNode(3);
+//                nodeConfigModel.removePinNode(3);
                 uiStateControl.removeSelectedPin(3);
                 break;
             case 4:
-                nodeConfigModel.removePinNode(4);
+//                nodeConfigModel.removePinNode(4);
                 uiStateControl.removeSelectedPin(4);
                 break;
             case 5:
-                nodeConfigModel.removePinNode(5);
+//                nodeConfigModel.removePinNode(5);
                 uiStateControl.removeSelectedPin(5);
                 break;
             case 6:
-                nodeConfigModel.removePinNode(6);
+//                nodeConfigModel.removePinNode(6);
                 uiStateControl.removeSelectedPin(6);
                 break;
         }
@@ -517,10 +516,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 break;
             case R.id.grove_1:
                 uiStateControl.activatedPin(1);
-                if (nodeConfigModel.getPinNode(1).selected) {
-                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(1).groverDriver.GroveName,
-                            Snackbar.LENGTH_LONG).show();
-                }
+//                if (nodeConfigModel.getPinNode(1).selected) {
+//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(1).groverDriver.GroveName,
+//                            Snackbar.LENGTH_LONG).show();
+//                }
                 mGroveListAdapter.updateAll(
                         new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
                 break;
@@ -528,46 +527,46 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 uiStateControl.activatedPin(2);
                 mGroveListAdapter.updateAll(
                         new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
-                if (nodeConfigModel.getPinNode(2).selected) {
-                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(2).groverDriver.GroveName,
-                            Snackbar.LENGTH_LONG).show();
-                }
+//                if (nodeConfigModel.getPinNode(2).selected) {
+//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(2).groverDriver.GroveName,
+//                            Snackbar.LENGTH_LONG).show();
+//                }
                 break;
             case R.id.grove_3:
                 uiStateControl.activatedPin(3);
                 mGroveListAdapter.updateAll(
                         new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
-                if (nodeConfigModel.getPinNode(3).selected) {
-                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(3).groverDriver.GroveName,
-                            Snackbar.LENGTH_LONG).show();
-                }
+//                if (nodeConfigModel.getPinNode(3).selected) {
+//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(3).groverDriver.GroveName,
+//                            Snackbar.LENGTH_LONG).show();
+//                }
                 break;
             case R.id.grove_4:
                 uiStateControl.activatedPin(4);
                 mGroveListAdapter.updateAll(
                         new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG));
-                if (nodeConfigModel.getPinNode(4).selected) {
-                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(4).groverDriver.GroveName,
-                            Snackbar.LENGTH_LONG).show();
-                }
+//                if (nodeConfigModel.getPinNode(4).selected) {
+//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(4).groverDriver.GroveName,
+//                            Snackbar.LENGTH_LONG).show();
+//                }
                 break;
             case R.id.grove_5:
                 uiStateControl.activatedPin(5);
                 mGroveListAdapter.updateAll(
                         new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART));
-                if (nodeConfigModel.getPinNode(5).selected) {
-                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(5).groverDriver.GroveName,
-                            Snackbar.LENGTH_LONG).show();
-                }
+//                if (nodeConfigModel.getPinNode(5).selected) {
+//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(5).groverDriver.GroveName,
+//                            Snackbar.LENGTH_LONG).show();
+//                }
                 break;
             case R.id.grove_6:
                 uiStateControl.activatedPin(6);
                 mGroveListAdapter.updateAll(
                         new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C));
-                if (nodeConfigModel.getPinNode(6).selected) {
-                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(6).groverDriver.GroveName,
-                            Snackbar.LENGTH_LONG).show();
-                }
+//                if (nodeConfigModel.getPinNode(6).selected) {
+//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(6).groverDriver.GroveName,
+//                            Snackbar.LENGTH_LONG).show();
+//                }
                 break;
             case R.id.set_node:
                 if (mToolbarAction.getVisibility() == View.GONE)

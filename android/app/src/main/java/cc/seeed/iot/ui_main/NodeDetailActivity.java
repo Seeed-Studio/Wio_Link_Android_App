@@ -13,6 +13,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.ui_main.QrGen.Contents;
 import cc.seeed.iot.webapi.model.Node;
@@ -26,7 +27,7 @@ public class NodeDetailActivity extends AppCompatActivity {
     private TextView mUrlTextView;
 
     private Node node;
-    private ArrayList<Node> nodes;
+    private List<Node> nodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class NodeDetailActivity extends AppCompatActivity {
 
     private void init() {
         node = new Node();
+        nodes = new ArrayList<Node>();
         nodes = ((MyApplication) NodeDetailActivity.this.getApplication()).getNodes();
         int position = getIntent().getIntExtra("position", -1); //todo: check -1?
         node = nodes.get(position);

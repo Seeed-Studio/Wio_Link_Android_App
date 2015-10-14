@@ -18,6 +18,11 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:support-v13:23.0.1'
@@ -34,5 +39,6 @@ dependencies {
     compile 'com.google.zxing:core:3.2.0'
     compile "com.daimajia.swipelayout:library:1.1.8@aar"
     compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
 
 }

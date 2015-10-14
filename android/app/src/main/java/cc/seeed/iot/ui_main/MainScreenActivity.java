@@ -44,6 +44,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
@@ -52,6 +53,7 @@ import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
+import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
@@ -73,7 +75,7 @@ public class MainScreenActivity extends AppCompatActivity
     private NodeListRecyclerAdapter mAdapter;
     private TextView mEmail;
 
-    private ArrayList<Node> nodes;
+    private List<Node> nodes;
     private User user;
 
     @Override
@@ -82,8 +84,11 @@ public class MainScreenActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-        nodes = ((MyApplication) MainScreenActivity.this.getApplication()).getNodes();
-
+//        nodes = ((MyApplication) MainScreenActivity.this.getApplication()).getNodes();
+        nodes = DBHelper.getNodesAll();
+        for (Node node:nodes){
+            Log.e(getClass().getName(), "get node " + node.name);
+        }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -110,9 +115,6 @@ public class MainScreenActivity extends AppCompatActivity
             mAdapter = new NodeListRecyclerAdapter(nodes);
             mAdapter.setOnClickListener(this);
             mRecyclerView.setAdapter(mAdapter);
-            setupAdapter();
-
-
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -188,7 +190,7 @@ public class MainScreenActivity extends AppCompatActivity
             public void success(NodeListResponse nodeListResponse, Response response) {
                 mProgressDialog.dismiss();
                 if (nodeListResponse.status.equals("200")) {
-                    nodes = (ArrayList) nodeListResponse.nodes;
+                    nodes = nodeListResponse.nodes;
                     ArrayList<Node> delNodes = new ArrayList<Node>();
                     for (Node n : nodes) {
                         if (n.name.equals("node000")) {
@@ -208,8 +210,11 @@ public class MainScreenActivity extends AppCompatActivity
                     }
                     nodes.removeAll(delNodes);
 
-                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-
+//                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
+                    for (Node node : nodes) {
+                        Log.e(getClass().getName(), "save " + node.name);
+                        node.save();
+                    }
                     mAdapter.updateAll(nodes);
 
                 } else {
