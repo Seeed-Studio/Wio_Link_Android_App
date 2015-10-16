@@ -98,6 +98,8 @@ public class IotYaml {
             }
         } catch (IOException e) {
             Log.e("iot", "error:" + e);
+        } catch (IndexOutOfBoundsException e) {
+            Log.e("iot", "error:" + e);
         }
 
         return pinConfigs;

@@ -74,8 +74,7 @@ public class NodeConfigHelper {
         return pinConfigs;
     }
 
-    public String getConfigYaml() {
-        List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node_sn);
+    public static String getConfigYaml(List<PinConfig> pinConfigs) {
         String y = "";
         for (PinConfig p : pinConfigs) {
             if (p.selected) {

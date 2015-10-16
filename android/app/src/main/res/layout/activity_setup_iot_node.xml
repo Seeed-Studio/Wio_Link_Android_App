@@ -107,6 +107,17 @@
             android:clickable="true"
             android:scaleType="centerCrop" />
 
+        <TextView
+            android:id="@+id/i2c_device_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/node_view"
+            android:layout_marginTop="135dp"
+            android:layout_toEndOf="@+id/grove_6"
+            android:layout_toRightOf="@+id/grove_6"
+            android:text="+2"
+            android:textColor="@color/green" />
+
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView

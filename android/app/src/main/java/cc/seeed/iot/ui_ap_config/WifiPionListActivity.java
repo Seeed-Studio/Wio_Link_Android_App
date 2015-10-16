@@ -104,10 +104,10 @@ public class WifiPionListActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    private ArrayList<ScanResult> getPionWifiList() {
-        ArrayList<ScanResult> scanPionResult = new ArrayList<>();
+    private List<ScanResult> getPionWifiList() {
+        List<ScanResult> scanPionResult = new ArrayList<>();
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        ArrayList<ScanResult> scanResult = (ArrayList) wifiManager.getScanResults();
+        List<ScanResult> scanResult = wifiManager.getScanResults();
         for (ScanResult wifi : scanResult) {
             if (wifi.SSID.contains(PION_WIFI_PREFIX)) {
                 Log.d(TAG, "PionOne ssid:" + wifi.SSID);

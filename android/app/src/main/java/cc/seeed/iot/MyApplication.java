@@ -2,6 +2,7 @@ package cc.seeed.iot;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.design.widget.TabLayout;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -195,6 +196,7 @@ public class MyApplication extends com.activeandroid.app.Application {
             }
 
             private void saveToDB(String yaml) {
+                Log.e(getClass().getName(), "yaml: " + yaml);
                 List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
                 for (PinConfig pinConfig : pinConfigs) {
                     pinConfig.node_sn = node.node_sn;
