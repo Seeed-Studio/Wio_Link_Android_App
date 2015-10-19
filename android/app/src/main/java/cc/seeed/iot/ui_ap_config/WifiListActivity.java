@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.R;
 
@@ -95,7 +96,7 @@ public class WifiListActivity extends AppCompatActivity
     private ArrayList<ScanResult> getWifiExceptPionList() {
         ArrayList<ScanResult> scanPionResult = new ArrayList<>();
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        ArrayList<ScanResult> scanResult = (ArrayList) wifiManager.getScanResults();
+        List<ScanResult> scanResult = wifiManager.getScanResults();
         for (ScanResult wifi : scanResult) {
             if (wifi.SSID.contains(PION_WIFI_PREFIX)) {
                 continue;
