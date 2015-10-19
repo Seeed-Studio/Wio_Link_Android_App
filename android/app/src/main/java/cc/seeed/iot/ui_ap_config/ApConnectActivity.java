@@ -110,8 +110,12 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 return;
             }
             //APCFG: ssid\tpassword\tkey\tsn\t
+//            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
+//                    node_key + "\t" + node_sn + "\t";
+            String ota_server = "192.168.21.48";
+            String client_server = "192.168.21.48";
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
-                    node_key + "\t" + node_sn + "\t";
+                    node_key + "\t" + node_sn + "\t" + ota_server + "\t" + client_server +"\t";
 
             Log.i(TAG, "cmd_connect: " + cmd_connect);
             Log.i(TAG, "ip: " + AP_IP);

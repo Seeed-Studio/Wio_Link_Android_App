@@ -15,11 +15,11 @@ import com.google.zxing.WriterException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.seeed.iot.ui_main.QrGen.Contents;
-import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.ui_main.QrGen.Contents;
 import cc.seeed.iot.ui_main.QrGen.QRCodeEncoder;
+import cc.seeed.iot.webapi.model.Node;
 
 public class NodeDetailActivity extends AppCompatActivity {
     private Toolbar mToolbar;
@@ -56,9 +56,10 @@ public class NodeDetailActivity extends AppCompatActivity {
 
 
     private void initView() {
-        String server_url = "https://iot.seeed.cc/v1/node/resources?"; //todo, changeable server url;
+        String server_url = ((MyApplication) NodeDetailActivity.this.getApplication()).getServer_url();
+        String server_endpoint = server_url + "/node/resources?"; //todo, changeable server url;
         String node_key = node.node_key;
-        String url = server_url + "access_token=" + node_key;
+        String url = server_endpoint + "access_token=" + node_key;
         Log.i("iot", "Url:" + url);
 
 //        Bitmap myBitmap = QRCode.from(url).bitmap();

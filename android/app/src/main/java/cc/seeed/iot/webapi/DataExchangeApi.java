@@ -1,9 +1,7 @@
 package cc.seeed.iot.webapi;
 
-import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
-import java.lang.reflect.Modifier;
 import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -19,16 +17,15 @@ import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
 import retrofit.client.OkClient;
-import retrofit.converter.GsonConverter;
 
 //import cc.seeed.iot.storge.MySharedPreference;
 
 /**
  * Created by tenwong on 15/6/23.
  */
-public class IotApi {
+public class DataExchangeApi {
 
-    private static String iot_url = "http://192.168.21.48:8080/v1";
+    private static String data_exchange_url = "http://192.168.21.48:8080/v1";
 //    private String iot_url = "http://192.168.18.194:8080/v1";
 //    private String iot_url = "http://192.168.18.251:8080/v1"; //jacky shao
 //    private String iot_url = "https://iot.yuzhe.me/v1";
@@ -45,10 +42,10 @@ public class IotApi {
 //    }
 
     public static void SetServerUrl(String url) {
-        iot_url = url;
+        data_exchange_url = url;
     }
 
-    public IotApi() {
+    public DataExchangeApi() {
 
         Executor httpExecutor = Executors.newSingleThreadExecutor();
         MainThreadExecutor callbackExecutor = new MainThreadExecutor();
@@ -61,13 +58,9 @@ public class IotApi {
         final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setExecutors(httpExecutor, callbackExecutor)
-                .setEndpoint(iot_url)
+                .setEndpoint(data_exchange_url)
                 .setRequestInterceptor(new WebApiAuthenticator())
                 .setClient(new OkClient(client))
-                .setConverter(new GsonConverter(new GsonBuilder()
-                        .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
-                        .serializeNulls()
-                        .create()))
                 .build();
 
         return restAdapter.create(IotService.class);
@@ -127,7 +120,7 @@ public class IotApi {
     }
 
 
-    public IotApi setAccessToken(String accessToken) {
+    public DataExchangeApi setAccessToken(String accessToken) {
         mAccessToken = accessToken;
         return this;
     }

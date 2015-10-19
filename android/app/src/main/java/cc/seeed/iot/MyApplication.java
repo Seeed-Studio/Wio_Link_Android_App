@@ -104,11 +104,12 @@ public class MyApplication extends com.activeandroid.app.Application {
         grove_dir = getFilesDir() + "/groves";
 
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
-        sp.getString("serverAddress", "http://192.168.21.83:8080/v1");
+//        sp.getString("serverAddress", "http://192.168.21.48:8080/v1");
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
 
-        server_url = sp.getString("server_url", "https://iot.seeed.cc/v1");
+//        server_url = sp.getString("server_url", "https://iot.seeed.cc/v1");
+        server_url = sp.getString("server_url", "http://192.168.21.48:8080/v1");
 
         configState = sp.getBoolean("configState", false);
 
