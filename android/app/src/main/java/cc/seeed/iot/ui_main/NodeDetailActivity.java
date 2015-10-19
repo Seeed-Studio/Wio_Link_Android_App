@@ -56,7 +56,7 @@ public class NodeDetailActivity extends AppCompatActivity {
 
 
     private void initView() {
-        String server_url = ((MyApplication) NodeDetailActivity.this.getApplication()).getServer_url();
+        String server_url = ((MyApplication) NodeDetailActivity.this.getApplication()).getServerUrl();
         String server_endpoint = server_url + "/node/resources?"; //todo, changeable server url;
         String node_key = node.node_key;
         String url = server_endpoint + "access_token=" + node_key;

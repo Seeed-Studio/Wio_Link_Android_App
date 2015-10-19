@@ -1,7 +1,9 @@
 package cc.seeed.iot.webapi;
 
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
+import java.lang.reflect.Modifier;
 import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -17,20 +19,15 @@ import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
 import retrofit.client.OkClient;
+import retrofit.converter.GsonConverter;
 
 //import cc.seeed.iot.storge.MySharedPreference;
 
 /**
  * Created by tenwong on 15/6/23.
  */
-public class DataExchangeApi {
-
+public class ExchangeApi {
     private static String data_exchange_url = "http://192.168.21.48:8080/v1";
-//    private String iot_url = "http://192.168.18.194:8080/v1";
-//    private String iot_url = "http://192.168.18.251:8080/v1"; //jacky shao
-//    private String iot_url = "https://iot.yuzhe.me/v1";
-//    private String iot_url = "https://iot.seeed.cc/v1";
-
 //    private static String iot_url = "https://iot.seeed.cc/v1";
 
     private final IotService mIotService;
@@ -45,7 +42,7 @@ public class DataExchangeApi {
         data_exchange_url = url;
     }
 
-    public DataExchangeApi() {
+    public ExchangeApi() {
 
         Executor httpExecutor = Executors.newSingleThreadExecutor();
         MainThreadExecutor callbackExecutor = new MainThreadExecutor();
@@ -61,6 +58,10 @@ public class DataExchangeApi {
                 .setEndpoint(data_exchange_url)
                 .setRequestInterceptor(new WebApiAuthenticator())
                 .setClient(new OkClient(client))
+                .setConverter(new GsonConverter(new GsonBuilder()
+                        .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+                        .serializeNulls()
+                        .create()))
                 .build();
 
         return restAdapter.create(IotService.class);
@@ -120,7 +121,7 @@ public class DataExchangeApi {
     }
 
 
-    public DataExchangeApi setAccessToken(String accessToken) {
+    public ExchangeApi setAccessToken(String accessToken) {
         mAccessToken = accessToken;
         return this;
     }
@@ -134,6 +135,5 @@ public class DataExchangeApi {
             }
         }
     }
-
 
 }
