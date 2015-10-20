@@ -47,7 +47,7 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void choice() {
-        Boolean loginState = ((MyApplication) getApplication()).getConfigState();
+        Boolean loginState = ((MyApplication) getApplication()).getLoginState();
         if (loginState) {
             Intent intent = new Intent(this, MainScreenActivity.class);
             startActivity(intent);

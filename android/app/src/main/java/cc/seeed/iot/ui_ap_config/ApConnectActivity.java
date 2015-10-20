@@ -31,6 +31,7 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
@@ -112,10 +113,10 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             //APCFG: ssid\tpassword\tkey\tsn\t
 //            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
 //                    node_key + "\t" + node_sn + "\t";
-            String ota_server = "192.168.21.48";
-            String client_server = "192.168.21.48";
+            String ota_server = ((MyApplication) getApplication()).getServerUrl().split("/")[2];
+            String exchange_server = ((MyApplication) getApplication()).getExchangeServerUrl().split("/")[2];
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
-                    node_key + "\t" + node_sn + "\t" + ota_server + "\t" + client_server +"\t";
+                    node_key + "\t" + node_sn + "\t" + ota_server + "\t" + exchange_server +"\t";
 
             Log.i(TAG, "cmd_connect: " + cmd_connect);
             Log.i(TAG, "ip: " + AP_IP);

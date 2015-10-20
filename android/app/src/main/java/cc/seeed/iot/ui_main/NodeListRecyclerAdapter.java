@@ -108,6 +108,13 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return node;
     }
 
+    public Node removeItem(Node node) {
+        nodes.remove(node);
+        int position = nodes.indexOf(node);
+        notifyItemRemoved(position);
+        return node;
+    }
+
     public Node updateItem(int position, Node newNode) {
         nodes.set(position, newNode);
         notifyItemChanged(position);

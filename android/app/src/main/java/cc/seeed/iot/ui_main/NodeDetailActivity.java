@@ -19,6 +19,7 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_main.QrGen.Contents;
 import cc.seeed.iot.ui_main.QrGen.QRCodeEncoder;
+import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 
 public class NodeDetailActivity extends AppCompatActivity {
@@ -27,7 +28,6 @@ public class NodeDetailActivity extends AppCompatActivity {
     private TextView mUrlTextView;
 
     private Node node;
-    private List<Node> nodes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,23 +47,17 @@ public class NodeDetailActivity extends AppCompatActivity {
     }
 
     private void init() {
-        node = new Node();
-        nodes = new ArrayList<Node>();
-        nodes = ((MyApplication) NodeDetailActivity.this.getApplication()).getNodes();
-        int position = getIntent().getIntExtra("position", -1); //todo: check -1?
-        node = nodes.get(position);
+        String node_sn = getIntent().getStringExtra("node_sn");
+        node = DBHelper.getNodes(node_sn).get(0);
     }
 
 
     private void initView() {
-        String server_url = ((MyApplication) NodeDetailActivity.this.getApplication()).getServerUrl();
-        String server_endpoint = server_url + "/node/resources?"; //todo, changeable server url;
+        String server_url = ((MyApplication) NodeDetailActivity.this.getApplication()).getExchangeServerUrl();
+        String server_endpoint = server_url + "/node/resources?"; //todo add &data_server=120.25.216.117 ?
         String node_key = node.node_key;
         String url = server_endpoint + "access_token=" + node_key;
         Log.i("iot", "Url:" + url);
-
-//        Bitmap myBitmap = QRCode.from(url).bitmap();
-//        mQrImageView.setImageBitmap(myBitmap);
 
         QRCodeEncoder qrCodeEncoder = new QRCodeEncoder(url, null,
                 Contents.Type.TEXT, BarcodeFormat.QR_CODE.toString(), 500);

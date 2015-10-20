@@ -27,11 +27,8 @@ import retrofit.converter.GsonConverter;
  * Created by tenwong on 15/6/23.
  */
 public class ExchangeApi {
-    private static String data_exchange_url = "http://192.168.21.48:8080/v1";
-//    private static String iot_url = "https://iot.seeed.cc/v1";
-
+    private static String data_exchange_url = "";
     private final IotService mIotService;
-
     private String mAccessToken;
 
 //    public IotApi(Executor httpExecutor, Executor callbackExecutor) {

@@ -15,6 +15,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cc.seeed.iot.MyApplication;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
@@ -28,17 +29,9 @@ import retrofit.converter.GsonConverter;
  */
 public class IotApi {
 
-    private static String iot_url = "http://192.168.21.48:8080/v1";
-//    private String iot_url = "http://192.168.18.194:8080/v1";
-//    private String iot_url = "http://192.168.18.251:8080/v1"; //jacky shao
-//    private String iot_url = "https://iot.yuzhe.me/v1";
-//    private String iot_url = "https://iot.seeed.cc/v1";
-
-//    private static String iot_url = "https://iot.seeed.cc/v1";
-
     private final IotService mIotService;
-
     private String mAccessToken;
+    private static String iot_url = "";
 
 //    public IotApi(Executor httpExecutor, Executor callbackExecutor) {
 //        mIotService = init(httpExecutor, callbackExecutor);
@@ -72,6 +65,7 @@ public class IotApi {
 
         return restAdapter.create(IotService.class);
     }
+
 
     /**
      * Do not check certificate,Todo use keyStore

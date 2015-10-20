@@ -54,7 +54,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
     private static final String TAG = "SetupIotNodeActivity";
     public Toolbar mToolbar;
     public Toolbar mToolbarAction;
-    List<Node> nodes;
     Node node;
     User user;
     List<PinConfig> pinConfigs = new ArrayList<>();
@@ -125,11 +124,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
         mSetNodeLayout.setOnClickListener(this);
 
 
-//        nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
-        nodes = DBHelper.getNodesAll();
-        int position = getIntent().getIntExtra("position", 1);
-        node = new Node();
-        node = nodes.get(position);
+        String node_sn = getIntent().getStringExtra("node_sn");
+        node = DBHelper.getNodes(node_sn).get(0);
 
         nodeConfigModel = new NodeConfigHelper(node.node_sn);
 
