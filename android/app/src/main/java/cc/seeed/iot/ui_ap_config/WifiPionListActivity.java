@@ -129,12 +129,10 @@ public class WifiPionListActivity extends AppCompatActivity
     private void getScanningResults() {
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         List<ScanResult> scanResult = wifiManager.getScanResults();
-        Log.e(TAG, "scanResult " + scanResult);
         scanPionResult.clear();
         for (ScanResult wifi : scanResult) {
-            Log.e(TAG, "scan " + wifi.SSID);
             if (wifi.SSID.contains(PION_WIFI_PREFIX)) {
-                Log.d(TAG, "PionOne ssid:" + wifi.SSID);
+                Log.i(TAG, "PionOne ssid:" + wifi.SSID);
                 scanPionResult.add(wifi);
             }
         }
