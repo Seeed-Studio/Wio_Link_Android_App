@@ -84,11 +84,8 @@ public class MainScreenActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-//        nodes = ((MyApplication) MainScreenActivity.this.getApplication()).getNodes();
         nodes = DBHelper.getNodesAll();
-        for (Node node:nodes){
-            Log.e(getClass().getName(), "get node " + node.name);
-        }
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -233,7 +230,6 @@ public class MainScreenActivity extends AppCompatActivity
 
     private void addItem(Node node) {
         nodes.add(node);
-        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
         mAdapter.notifyItemInserted(nodes.size());
     }
 
@@ -289,24 +285,24 @@ public class MainScreenActivity extends AppCompatActivity
     @Override
     public void onClick(View v, final int position) {
         Log.e(TAG, "pos:" + position + " id:" + v.getId());
-
+        final Node node = mAdapter.getItem(position);
         int id = v.getId();
         switch (id) {
             case R.id.node_item:
-                nodeSet(position);
+                nodeSet(node);
                 break;
             case R.id.location:
                 break;
             case R.id.favorite:
                 break;
             case R.id.rename:
-                nodeRename(position);
+                nodeRename(node);
                 break;
             case R.id.detail:
-                nodeDetail(position);
+                nodeDetail(node);
                 break;
             case R.id.remove:
-                nodeRemove(position);
+                nodeRemove(node);
                 break;
             case R.id.dot:
                 PopupMenu popupMenu = new PopupMenu(this, v);
@@ -315,13 +311,13 @@ public class MainScreenActivity extends AppCompatActivity
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.remove:
-                                nodeRemove(position);
+                                nodeRemove(node);
                                 return true;
                             case R.id.detail:
-                                nodeDetail(position);
+                                nodeDetail(node);
                                 return true;
                             case R.id.rename:
-                                nodeRename(position);
+                                nodeRename(node);
                                 return true;
                         }
                         return false;
@@ -339,7 +335,7 @@ public class MainScreenActivity extends AppCompatActivity
         }
     }
 
-    public boolean nodeRemove(final int position) {//todo: rubbish code
+    public boolean nodeRemove(final Node node) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -353,8 +349,6 @@ public class MainScreenActivity extends AppCompatActivity
                 progressDialog.setMessage("Node delete...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
-                final int p = position;
-                Node node = nodes.get(position);
                 IotApi api = new IotApi();
                 User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
                 api.setAccessToken(user.user_key);
@@ -364,8 +358,7 @@ public class MainScreenActivity extends AppCompatActivity
                     public void success(NodeResponse nodeResponse, Response response) {
                         progressDialog.dismiss();
                         nodes.remove(nodeResponse);
-                        ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
-                        mAdapter.removeItem(p);
+                        mAdapter.removeItem(node);
                         Log.i("iot", "Delete Node success!");
                     }
 
@@ -383,21 +376,21 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
-    public boolean nodeDetail(int position) {
+    public boolean nodeDetail(Node node) {
         Intent intent = new Intent(this, NodeDetailActivity.class);
-        intent.putExtra("position", position);
+        intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;
     }
 
-    public boolean nodeSet(int position) {
+    public boolean nodeSet(Node node) {
         Intent intent = new Intent(this, SetupIotNodeActivity.class);
-        intent.putExtra("position", position);
+        intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;
     }
 
-    public boolean nodeRename(final int position) {
+    public boolean nodeRename(final Node node) {
         final LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_name_input, null);
         final EditText nameView = (EditText) view.findViewById(R.id.new_name);
@@ -414,8 +407,6 @@ public class MainScreenActivity extends AppCompatActivity
                 progressDialog.setMessage("Node rename...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
-                final int p = position;
-                Node node = nodes.get(position);
                 IotApi api = new IotApi();
                 User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
                 api.setAccessToken(user.user_key);

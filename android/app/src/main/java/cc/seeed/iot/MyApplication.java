@@ -2,15 +2,14 @@ package cc.seeed.iot;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.webapi.ExchangeApi;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroverDriver;
@@ -26,14 +25,10 @@ import retrofit.client.Response;
  */
 public class MyApplication extends com.activeandroid.app.Application {
     private String grove_dir;
-
     private SharedPreferences sp;
-
-    private List<Node> nodes = new ArrayList<Node>();
-
     private User user = new User();
-
-    private String server_url;
+    private String ota_server_url;
+    private String exchange_server_url;
 
     /**
      * into smartconfig state
@@ -68,22 +63,26 @@ public class MyApplication extends com.activeandroid.app.Application {
         editor.apply();
     }
 
-    public List<Node> getNodes() {
-        return nodes;
+    public String getServerUrl() {
+        return ota_server_url;
     }
 
-    public void setNodes(List<Node> nodes) {
-        this.nodes = nodes;
-    }
-
-    public String getServer_url() {
-        return server_url;
-    }
-
-    public void setServer_url(String server_url) {
-        this.server_url = server_url;
+    public void setServerUrl(String server_url) {
+        this.ota_server_url = server_url;
+        IotApi.SetServerUrl(server_url);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("server_url", server_url);
+        editor.putString("ota_server_url", server_url);
+        editor.apply();
+    }
+
+    public String getExchangeServerUrl() {
+        return exchange_server_url;
+    }
+
+    public void setExchangeServerUrl(String server_url) {
+        this.exchange_server_url = server_url;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("exchange_server_url", server_url);
         editor.apply();
     }
 
@@ -104,15 +103,15 @@ public class MyApplication extends com.activeandroid.app.Application {
         grove_dir = getFilesDir() + "/groves";
 
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
-        sp.getString("serverAddress", "http://192.168.21.83:8080/v1");
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
 
-        server_url = sp.getString("server_url", "https://iot.seeed.cc/v1");
-
+//        ota_server_url = sp.getString("ota_server_url", "https://iot.seeed.cc/v1");
+//        ota_server_url = sp.getString("ota_server_url", "http://192.168.21.48:8080/v1");
+        ota_server_url = sp.getString("ota_server_url", "https://120.25.216.117/v1");
+        exchange_server_url = sp.getString("exchange_server_url", "https://120.25.216.117/v1");
         configState = sp.getBoolean("configState", false);
-
-        configState = sp.getBoolean("loginState", false);
+        loginState = sp.getBoolean("loginState", false);
 
         init();
 
@@ -123,7 +122,8 @@ public class MyApplication extends com.activeandroid.app.Application {
     }
 
     private void init() {
-        IotApi.SetServerUrl(server_url);
+        IotApi.SetServerUrl(ota_server_url);
+        ExchangeApi.SetServerUrl(exchange_server_url);
     }
 
     public void getGrovesData() {
@@ -156,7 +156,7 @@ public class MyApplication extends com.activeandroid.app.Application {
             public void success(NodeListResponse nodeListResponse, Response response) {
                 if (nodeListResponse.status.equals("200")) {
                     DBHelper.delNodesAll();
-                    nodes = nodeListResponse.nodes;
+                    List<Node> nodes = nodeListResponse.nodes;
                     for (Node node : nodes) {
                         node.save();
                         //todo delete config with delete's node_sn
@@ -173,7 +173,6 @@ public class MyApplication extends com.activeandroid.app.Application {
             }
         });
     }
-
 
     public void getNodesConfig(final Node node) {
         IotApi api = new IotApi();

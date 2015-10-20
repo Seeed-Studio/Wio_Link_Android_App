@@ -15,7 +15,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import cc.seeed.iot.MyApplication;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
@@ -27,21 +26,20 @@ import retrofit.converter.GsonConverter;
 /**
  * Created by tenwong on 15/6/23.
  */
-public class IotApi {
-
+public class ExchangeApi {
+    private static String data_exchange_url = "";
     private final IotService mIotService;
     private String mAccessToken;
-    private static String iot_url = "";
 
 //    public IotApi(Executor httpExecutor, Executor callbackExecutor) {
 //        mIotService = init(httpExecutor, callbackExecutor);
 //    }
 
     public static void SetServerUrl(String url) {
-        iot_url = url;
+        data_exchange_url = url;
     }
 
-    public IotApi() {
+    public ExchangeApi() {
 
         Executor httpExecutor = Executors.newSingleThreadExecutor();
         MainThreadExecutor callbackExecutor = new MainThreadExecutor();
@@ -54,7 +52,7 @@ public class IotApi {
         final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.FULL)
                 .setExecutors(httpExecutor, callbackExecutor)
-                .setEndpoint(iot_url)
+                .setEndpoint(data_exchange_url)
                 .setRequestInterceptor(new WebApiAuthenticator())
                 .setClient(new OkClient(client))
                 .setConverter(new GsonConverter(new GsonBuilder()
@@ -65,7 +63,6 @@ public class IotApi {
 
         return restAdapter.create(IotService.class);
     }
-
 
     /**
      * Do not check certificate,Todo use keyStore
@@ -121,7 +118,7 @@ public class IotApi {
     }
 
 
-    public IotApi setAccessToken(String accessToken) {
+    public ExchangeApi setAccessToken(String accessToken) {
         mAccessToken = accessToken;
         return this;
     }
@@ -135,6 +132,5 @@ public class IotApi {
             }
         }
     }
-
 
 }

@@ -14,6 +14,8 @@
     <string name="title_section3">Section 3</string>
     <string name="setup_signin">Sign In</string>
     <string name="setup_signup">Sign Up</string>
+    <string name="setup_switch_international">Switch to 国际版</string>
+    <string name="setup_switch_china">Switch to China</string>
     <string name="signin_email">Your Email</string>
     <string name="signin_password">Password</string>
     <string name="signin_forgot_password"><u>Forgot your password?</u></string>
