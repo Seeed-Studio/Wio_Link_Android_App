@@ -10,7 +10,9 @@ import cc.seeed.iot.webapi.model.Node;
 
 public class DBHelper {
     public static List<Node> getNodesAll() {
-        return new Select().from(Node.class).orderBy("node_sn").execute();
+        return new Select()
+                .from(Node.class)
+                .execute();
     }
 
     public static List<Node> getNodes(String node_sn) {

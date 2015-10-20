@@ -31,10 +31,6 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     private List<Node> nodes = new ArrayList<>();
     private Context context;
 
-    private final TypedValue mTypedValue = new TypedValue();
-    private int mBackground;
-    private List<String> mValues;
-
     private OnClickListener mOnClickListener;
 
     public interface OnClickListener {
@@ -115,10 +111,10 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return node;
     }
 
-    public Node updateItem(int position, Node newNode) {
-        nodes.set(position, newNode);
+    public Node updateItem(Node node) {
+        int position = nodes.indexOf(node);
         notifyItemChanged(position);
-        return newNode;
+        return node;
     }
 
     public boolean updateAll(List<Node> nodes) {

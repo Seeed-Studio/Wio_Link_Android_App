@@ -105,10 +105,7 @@ public class MyApplication extends com.activeandroid.app.Application {
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
-
-//        ota_server_url = sp.getString("ota_server_url", "https://iot.seeed.cc/v1");
-//        ota_server_url = sp.getString("ota_server_url", "http://192.168.21.48:8080/v1");
-        ota_server_url = sp.getString("ota_server_url", "https://120.25.216.117/v1");
+        ota_server_url = sp.getString("ota_server_url", "https://120.25.216.117/v1"); //https://iot.seeed.cc/v1
         exchange_server_url = sp.getString("exchange_server_url", "https://120.25.216.117/v1");
         configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);

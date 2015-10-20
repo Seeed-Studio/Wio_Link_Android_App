@@ -52,6 +52,7 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
+import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
@@ -59,6 +60,7 @@ import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
+import cc.seeed.iot.yaml.IotYaml;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -112,6 +114,7 @@ public class MainScreenActivity extends AppCompatActivity
             mAdapter = new NodeListRecyclerAdapter(nodes);
             mAdapter.setOnClickListener(this);
             mRecyclerView.setAdapter(mAdapter);
+            setupAdapter();
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -207,11 +210,12 @@ public class MainScreenActivity extends AppCompatActivity
                     }
                     nodes.removeAll(delNodes);
 
-//                    ((MyApplication) MainScreenActivity.this.getApplication()).setNodes(nodes);
                     for (Node node : nodes) {
                         Log.e(getClass().getName(), "save " + node.name);
                         node.save();
+//                        getNodesConfig(node);
                     }
+
                     mAdapter.updateAll(nodes);
 
                 } else {
@@ -284,7 +288,6 @@ public class MainScreenActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v, final int position) {
-        Log.e(TAG, "pos:" + position + " id:" + v.getId());
         final Node node = mAdapter.getItem(position);
         int id = v.getId();
         switch (id) {
@@ -430,6 +433,39 @@ public class MainScreenActivity extends AppCompatActivity
         builder.show();
 
         return true;
+    }
+
+    public void getNodesConfig(final Node node) {
+        IotApi api = new IotApi();
+        api.setAccessToken(node.node_key);
+        final IotService iot = api.getService();
+        iot.nodeConfig(new Callback<cc.seeed.iot.webapi.model.Response>() {
+            @Override
+            public void success(cc.seeed.iot.webapi.model.Response response, Response response2) {
+                if (response.status.equals("200")) {
+                    String yaml = response.msg;
+                    saveToDB(yaml);
+                    mAdapter.updateItem(node);
+                } else {
+                    Log.e(getClass().getName(), response.msg);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(getClass().getName(), error.toString());
+            }
+
+            private void saveToDB(String yaml) {
+                Log.e(getClass().getName(), "yaml: " + yaml);
+                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
+                for (PinConfig pinConfig : pinConfigs) {
+                    pinConfig.node_sn = node.node_sn;
+//                    Log.e(getClass().getName(), pinConfig.toString());
+                    pinConfig.save();
+                }
+            }
+        });
     }
 
 }
