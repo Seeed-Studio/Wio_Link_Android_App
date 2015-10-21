@@ -146,6 +146,9 @@ public class MainScreenActivity extends AppCompatActivity
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        Message message = Message.obtain();
+                        message.what = MESSAGE_NODE_LIST_START;
+                        mHandler.sendMessage(message);
                         getNodeList();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
