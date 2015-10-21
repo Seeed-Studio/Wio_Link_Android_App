@@ -3,6 +3,7 @@ package cc.seeed.iot.ui_main;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -98,21 +99,12 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return nodes.get(position);
     }
 
-    public Node removeItem(int position) {
-        Node node = nodes.remove(position);
+    public void removeItem(int position) {
         notifyItemRemoved(position);
-        return node;
     }
 
-    public Node removeItem(Node node) {
-        nodes.remove(node);
-        int position = nodes.indexOf(node);
-        notifyItemRemoved(position);
-        return node;
-    }
-
-    public Node updateItem(Node node) {
-        int position = nodes.indexOf(node);
+    public Node updateItem(int position) {
+        Node node = nodes.get(position);
         notifyItemChanged(position);
         return node;
     }

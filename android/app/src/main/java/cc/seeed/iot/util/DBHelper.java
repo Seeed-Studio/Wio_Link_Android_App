@@ -22,6 +22,13 @@ public class DBHelper {
                 .execute();
     }
 
+    public static void delNode(String node_sn) {
+        new Delete().
+                from(Node.class)
+                .where("node_sn = ?", node_sn)
+                .execute();
+    }
+
     public static void delNodesAll() {
         new Delete()
                 .from(Node.class)

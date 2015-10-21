@@ -21,6 +21,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -53,10 +54,12 @@ import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
@@ -70,7 +73,13 @@ import retrofit.client.Response;
  */
 public class MainScreenActivity extends AppCompatActivity
         implements NodeListRecyclerAdapter.OnClickListener {
-    private final static String TAG = "MainScreenActivity";
+    private static final String TAG = "MainScreenActivity";
+    private static final int MESSAGE_GROVE_LIST_START = 0x00;
+    private static final int MESSAGE_GROVE_LIST_COMPLETE = 0x01;
+    private static final int MESSAGE_NODE_LIST_START = 0x02;
+    private static final int MESSAGE_NODE_LIST_COMPLETE = 0x03;
+    private static final int MESSAGE_NODE_CONFIG_COMPLETE = 0x04;
+
     private DrawerLayout mDrawerLayout;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -79,15 +88,28 @@ public class MainScreenActivity extends AppCompatActivity
 
     private List<Node> nodes;
     private User user;
+    private boolean firstUseState;
+
+    private Handler mHandler;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-        nodes = DBHelper.getNodesAll();
+        initData();
+        initView();
 
+        if (firstUseState) {
+            Message message = Message.obtain();
+            message.what = MESSAGE_GROVE_LIST_START;
+            mHandler.sendMessage(message);
+            getGrovesData();
+        }
+    }
+
+    private void initView() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -114,7 +136,6 @@ public class MainScreenActivity extends AppCompatActivity
             mAdapter = new NodeListRecyclerAdapter(nodes);
             mAdapter.setOnClickListener(this);
             mRecyclerView.setAdapter(mAdapter);
-            setupAdapter();
         }
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
@@ -125,7 +146,7 @@ public class MainScreenActivity extends AppCompatActivity
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        setupAdapter();
+                        getNodeList();
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }, 0);
@@ -145,7 +166,51 @@ public class MainScreenActivity extends AppCompatActivity
         mEmail = (TextView) findViewById(R.id.hd_email);
         mEmail.setText(user.email);
 
+        mProgressDialog = new ProgressDialog(this);
+    }
 
+    private void initData() {
+
+        user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+        nodes = DBHelper.getNodesAll();
+        firstUseState = ((MyApplication) MainScreenActivity.this.getApplication()).getFirstUseState();
+
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case MESSAGE_GROVE_LIST_START:
+                        mProgressDialog.setMessage("update grove list...");
+                        mProgressDialog.setCanceledOnTouchOutside(false);
+                        mProgressDialog.show();
+                        break;
+                    case MESSAGE_GROVE_LIST_COMPLETE:
+                        mProgressDialog.dismiss();
+                        ((MyApplication) MainScreenActivity.this.getApplication()).setFirstUseState(false);
+                        break;
+                    case MESSAGE_NODE_LIST_START:
+                        mProgressDialog.setMessage("update pion one...");
+                        mProgressDialog.setCanceledOnTouchOutside(false);
+                        mProgressDialog.show();
+                        break;
+
+                    case MESSAGE_NODE_LIST_COMPLETE:
+                        mProgressDialog.dismiss();
+                        if (msg.arg2 == 1) {
+                            mAdapter.updateAll(nodes);
+                            for (Node n : nodes) {
+                                getNodesConfig(n, nodes.indexOf(n));
+                            }
+                        }
+                        break;
+                    case MESSAGE_NODE_CONFIG_COMPLETE:
+                        Node node = (Node) msg.obj;
+                        int position = msg.arg1;
+                        mAdapter.updateItem(position);
+                        break;
+                }
+            }
+        };
     }
 
     @Override
@@ -161,7 +226,10 @@ public class MainScreenActivity extends AppCompatActivity
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.update:
-                setupAdapter();
+                Message message = Message.obtain();
+                message.what = MESSAGE_NODE_LIST_START;
+                mHandler.sendMessage(message);
+                getNodeList();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -175,71 +243,10 @@ public class MainScreenActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void setupAdapter() {
-        final ProgressDialog mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("search node list...");
-        mProgressDialog.setCanceledOnTouchOutside(false);
-        mProgressDialog.show();
-
-        IotApi api = new IotApi();
-        User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-        api.setAccessToken(user.user_key);
-        final IotService iot = api.getService();
-        iot.nodesList(new Callback<NodeListResponse>() {
-            @Override
-            public void success(NodeListResponse nodeListResponse, Response response) {
-                mProgressDialog.dismiss();
-                if (nodeListResponse.status.equals("200")) {
-                    nodes = nodeListResponse.nodes;
-                    ArrayList<Node> delNodes = new ArrayList<Node>();
-                    for (Node n : nodes) {
-                        if (n.name.equals("node000")) {
-                            iot.nodesDelete(n.node_sn, new Callback<NodeResponse>() {
-                                @Override
-                                public void success(NodeResponse nodeResponse, Response response) {
-
-                                }
-
-                                @Override
-                                public void failure(RetrofitError error) {
-
-                                }
-                            });
-                            delNodes.add(n);
-                        }
-                    }
-                    nodes.removeAll(delNodes);
-
-                    for (Node node : nodes) {
-                        Log.e(getClass().getName(), "save " + node.name);
-                        node.save();
-//                        getNodesConfig(node);
-                    }
-
-                    mAdapter.updateAll(nodes);
-
-                } else {
-                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                mProgressDialog.dismiss();
-                Toast.makeText(MainScreenActivity.this, "Connect server fail...", Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
-
-    private void addItem(Node node) {
-        nodes.add(node);
-        mAdapter.notifyItemInserted(nodes.size());
-    }
-
-    private void removeItem(Node node) {
-        nodes.remove(node);
-        mAdapter.notifyItemRemoved(nodes.size());
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getNodeList();
     }
 
     private void setupDrawerContent(NavigationView navigationView) {
@@ -273,6 +280,8 @@ public class MainScreenActivity extends AppCompatActivity
                             break;
                             case R.id.nav_logout: {
                                 ((MyApplication) getApplication()).setLoginState(false);
+                                DBHelper.delNodesAll();
+                                PinConfigDBHelper.delPinConfigAll();
                                 Intent intent = new Intent(MainScreenActivity.this,
                                         SetupActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -299,13 +308,13 @@ public class MainScreenActivity extends AppCompatActivity
             case R.id.favorite:
                 break;
             case R.id.rename:
-                nodeRename(node);
+                nodeRename(node, position);
                 break;
             case R.id.detail:
                 nodeDetail(node);
                 break;
             case R.id.remove:
-                nodeRemove(node);
+                nodeRemove(node, position);
                 break;
             case R.id.dot:
                 PopupMenu popupMenu = new PopupMenu(this, v);
@@ -314,13 +323,13 @@ public class MainScreenActivity extends AppCompatActivity
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.remove:
-                                nodeRemove(node);
+                                nodeRemove(node, position);
                                 return true;
                             case R.id.detail:
                                 nodeDetail(node);
                                 return true;
                             case R.id.rename:
-                                nodeRename(node);
+                                nodeRename(node, position);
                                 return true;
                         }
                         return false;
@@ -338,7 +347,7 @@ public class MainScreenActivity extends AppCompatActivity
         }
     }
 
-    public boolean nodeRemove(final Node node) {
+    public boolean nodeRemove(final Node node, final int position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
@@ -360,15 +369,16 @@ public class MainScreenActivity extends AppCompatActivity
                     @Override
                     public void success(NodeResponse nodeResponse, Response response) {
                         progressDialog.dismiss();
-                        nodes.remove(nodeResponse);
-                        mAdapter.removeItem(node);
-                        Log.i("iot", "Delete Node success!");
+                        nodes.remove(node);
+                        DBHelper.delNode(node.node_sn);
+                        mAdapter.removeItem(position);
+                        Log.i(TAG, "Remove Node success!");
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         progressDialog.dismiss();
-                        Log.e("iot", "Delete Node fail!");
+                        Log.e(TAG, "Remove Node fail!");
                     }
                 });
             }
@@ -393,7 +403,7 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
-    public boolean nodeRename(final Node node) {
+    public boolean nodeRename(final Node node, final int position) {
         final LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_name_input, null);
         final EditText nameView = (EditText) view.findViewById(R.id.new_name);
@@ -418,7 +428,9 @@ public class MainScreenActivity extends AppCompatActivity
                     @Override
                     public void success(NodeResponse nodeResponse, Response response) {
                         progressDialog.dismiss();
-                        setupAdapter();
+                        nodes.get(position).name = newName;
+                        node.save();
+                        mAdapter.updateItem(position);
                     }
 
                     @Override
@@ -435,7 +447,68 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
-    public void getNodesConfig(final Node node) {
+    private void getNodeList() {
+        IotApi api = new IotApi();
+        api.setAccessToken(user.user_key);
+        final IotService iot = api.getService();
+        iot.nodesList(new Callback<NodeListResponse>() {
+            @Override
+            public void success(NodeListResponse nodeListResponse, Response response) {
+                if (nodeListResponse.status.equals("200")) {
+                    List<Node> get_nodes = nodeListResponse.nodes;
+                    ArrayList<Node> delNodes = new ArrayList<Node>();
+                    for (Node n : get_nodes) {
+                        if (n.name.equals("node000")) {
+                            iot.nodesDelete(n.node_sn, new Callback<NodeResponse>() {
+                                @Override
+                                public void success(NodeResponse nodeResponse, Response response) {
+
+                                }
+
+                                @Override
+                                public void failure(RetrofitError error) {
+
+                                }
+                            });
+                            delNodes.add(n);
+                        }
+                    }
+                    get_nodes.removeAll(delNodes);
+                    nodes = get_nodes;
+
+                    DBHelper.delNodesAll();
+                    for (Node node : nodes) {
+                        node.save();
+                    }
+
+                    Message message = Message.obtain();
+                    message.arg2 = 1;
+                    message.what = MESSAGE_NODE_LIST_COMPLETE;
+                    mHandler.sendMessage(message);
+
+                } else {
+                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
+                    Message message = Message.obtain();
+                    message.arg2 = 0;
+                    message.what = MESSAGE_NODE_LIST_COMPLETE;
+                    mHandler.sendMessage(message);
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Message message = Message.obtain();
+                message.arg2 = 0;
+                message.what = MESSAGE_NODE_LIST_COMPLETE;
+                mHandler.sendMessage(message);
+
+                Toast.makeText(MainScreenActivity.this, "Connect server fail!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+    private void getNodesConfig(final Node node, final int position) {
         IotApi api = new IotApi();
         api.setAccessToken(node.node_key);
         final IotService iot = api.getService();
@@ -445,25 +518,56 @@ public class MainScreenActivity extends AppCompatActivity
                 if (response.status.equals("200")) {
                     String yaml = response.msg;
                     saveToDB(yaml);
-                    mAdapter.updateItem(node);
                 } else {
-                    Log.e(getClass().getName(), response.msg);
+                    Log.i(TAG, response.msg);
                 }
+
+                Message message = Message.obtain();
+                message.arg1 = position;
+                message.what = MESSAGE_NODE_CONFIG_COMPLETE;
+                mHandler.sendMessage(message);
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(getClass().getName(), error.toString());
+
             }
 
             private void saveToDB(String yaml) {
-                Log.e(getClass().getName(), "yaml: " + yaml);
                 List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
+                PinConfigDBHelper.delPinConfig(node.node_sn);
                 for (PinConfig pinConfig : pinConfigs) {
                     pinConfig.node_sn = node.node_sn;
-//                    Log.e(getClass().getName(), pinConfig.toString());
                     pinConfig.save();
                 }
+            }
+        });
+    }
+
+    private void getGrovesData() {
+        IotApi api = new IotApi();
+        String token = user.user_key;
+        api.setAccessToken(token);
+        IotService iot = api.getService();
+        iot.scanDrivers(new Callback<List<GroverDriver>>() {
+            @Override
+            public void success(List<GroverDriver> groverDrivers, retrofit.client.Response response) {
+                for (GroverDriver groveDriver : groverDrivers) {
+                    groveDriver.save();
+                }
+
+                Message message = Message.obtain();
+                message.what = MESSAGE_GROVE_LIST_COMPLETE;
+                mHandler.sendMessage(message);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, error.toString());
+                Message message = Message.obtain();
+                message.what = MESSAGE_GROVE_LIST_COMPLETE;
+                mHandler.sendMessage(message);
             }
         });
     }

@@ -27,7 +27,20 @@ public class PinConfigDBHelper {
     public static void delPinConfig(String groveInstanceName, String node_sn) {
         new Delete()
                 .from(PinConfig.class)
-                .where("groveInstanceName = ? and node _sn = ?", groveInstanceName, node_sn)
+                .where("grove_instance_name = ? and node_sn = ?", groveInstanceName, node_sn)
+                .execute();
+    }
+
+    public static void delPinConfig(String node_sn) {
+        new Delete()
+                .from(PinConfig.class)
+                .where("node_sn = ?", node_sn)
+                .execute();
+    }
+
+    public static void delPinConfigAll() {
+        new Delete()
+                .from(PinConfig.class)
                 .execute();
     }
 }

@@ -2,23 +2,10 @@ package cc.seeed.iot;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import java.util.List;
 
 import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.ui_setnode.model.PinConfig;
-import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.ExchangeApi;
 import cc.seeed.iot.webapi.IotApi;
-import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.GroverDriver;
-import cc.seeed.iot.webapi.model.Node;
-import cc.seeed.iot.webapi.model.NodeListResponse;
-import cc.seeed.iot.yaml.IotYaml;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by tenwong on 15/7/9.
@@ -40,6 +27,8 @@ public class MyApplication extends com.activeandroid.app.Application {
      */
     private Boolean loginState;
 
+    private Boolean firstUseState;
+
     public Boolean getLoginState() {
         return loginState;
     }
@@ -48,6 +37,17 @@ public class MyApplication extends com.activeandroid.app.Application {
         this.loginState = loginState;
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("loginState", loginState);
+        editor.apply();
+    }
+
+    public Boolean getFirstUseState() {
+        return firstUseState;
+    }
+
+    public void setFirstUseState(Boolean firstUseState) {
+        this.firstUseState = firstUseState;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("firstUseState", firstUseState);
         editor.apply();
     }
 
@@ -109,12 +109,9 @@ public class MyApplication extends com.activeandroid.app.Application {
         exchange_server_url = sp.getString("exchange_server_url", "https://120.25.216.117/v1");
         configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);
+        firstUseState = sp.getBoolean("firstUseState", true);
 
         init();
-
-        getGrovesData();
-
-        getNodesData();
 
     }
 
@@ -123,83 +120,4 @@ public class MyApplication extends com.activeandroid.app.Application {
         ExchangeApi.SetServerUrl(exchange_server_url);
     }
 
-    public void getGrovesData() {
-        IotApi api = new IotApi();
-        String token = user.user_key;
-        api.setAccessToken(token);
-        IotService iot = api.getService();
-        iot.scanDrivers(new Callback<List<GroverDriver>>() {
-            @Override
-            public void success(List<GroverDriver> groverDrivers, retrofit.client.Response response) {
-                for (GroverDriver groveDriver : groverDrivers) {
-                    groveDriver.save();
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e(getClass().getName(), error.toString());
-            }
-        });
-    }
-
-    public void getNodesData() {
-        IotApi api = new IotApi();
-        String token = user.user_key;
-        api.setAccessToken(token);
-        final IotService iot = api.getService();
-        iot.nodesList(new Callback<NodeListResponse>() {
-            @Override
-            public void success(NodeListResponse nodeListResponse, Response response) {
-                if (nodeListResponse.status.equals("200")) {
-                    DBHelper.delNodesAll();
-                    List<Node> nodes = nodeListResponse.nodes;
-                    for (Node node : nodes) {
-                        node.save();
-                        //todo delete config with delete's node_sn
-                        getNodesConfig(node);
-                    }
-                } else {
-                    Log.e(getClass().getName(), nodeListResponse.msg);
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e(getClass().getName(), error.toString());
-            }
-        });
-    }
-
-    public void getNodesConfig(final Node node) {
-        IotApi api = new IotApi();
-        api.setAccessToken(node.node_key);
-        final IotService iot = api.getService();
-        iot.nodeConfig(new Callback<cc.seeed.iot.webapi.model.Response>() {
-            @Override
-            public void success(cc.seeed.iot.webapi.model.Response response, Response response2) {
-                if (response.status.equals("200")) {
-                    String yaml = response.msg;
-                    saveToDB(yaml);
-                } else {
-                    Log.e(getClass().getName(), response.msg);
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e(getClass().getName(), error.toString());
-            }
-
-            private void saveToDB(String yaml) {
-                Log.e(getClass().getName(), "yaml: " + yaml);
-                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
-                for (PinConfig pinConfig : pinConfigs) {
-                    pinConfig.node_sn = node.node_sn;
-//                    Log.e(getClass().getName(), pinConfig.toString());
-                    pinConfig.save();
-                }
-            }
-        });
-    }
 }
