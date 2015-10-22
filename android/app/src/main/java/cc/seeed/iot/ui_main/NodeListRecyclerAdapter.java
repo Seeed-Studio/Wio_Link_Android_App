@@ -3,14 +3,13 @@ package cc.seeed.iot.ui_main;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
@@ -58,11 +57,18 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
         holder.mNameView.setText(node.name);
+        holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Left);
 
         if (node.online) {
             holder.mStatusView.setBackgroundColor(Color.GREEN);
+            holder.mRenameView.setBackgroundColor(Color.GREEN);
+            holder.mDetailView.setBackgroundColor(Color.GREEN);
+            holder.mRemoveView.setBackgroundColor(Color.GREEN);
         } else {
             holder.mStatusView.setBackgroundColor(Color.RED);
+            holder.mRenameView.setBackgroundColor(Color.RED);
+            holder.mDetailView.setBackgroundColor(Color.RED);
+            holder.mRemoveView.setBackgroundColor(Color.RED);
         }
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
@@ -138,10 +144,13 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         List<ImageView> mGroveViews;
         TextView mGroveOverView;
 
+        SwipeLayout mSwipeLayout;
+
         public MainViewHolder(View itemView, OnClickListener mOnClickListener) {
             super(itemView);
             this.mOnClickListener = mOnClickListener;
 
+            mSwipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe_layout);
             mItemView = itemView;
             mNameView = (TextView) itemView.findViewById(R.id.name);
             mLocationView = (TextView) itemView.findViewById(R.id.location);
