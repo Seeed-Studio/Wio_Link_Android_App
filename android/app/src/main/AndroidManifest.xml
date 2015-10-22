@@ -61,6 +61,11 @@
             android:theme="@style/Theme.NodeSet" >
         </activity>
         <activity
+            android:name="cc.seeed.iot.ui_ap_config.GoReadyActivity"
+            android:theme="@style/Theme.NodeSet" >
+
+        </activity>
+        <activity
         android:name="cc.seeed.iot.ui_ap_config.WifiPionListActivity"
         android:theme="@style/Theme.NodeSet" >
 
