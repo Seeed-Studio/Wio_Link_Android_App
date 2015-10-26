@@ -126,6 +126,11 @@ public class MainScreenActivity extends AppCompatActivity
         if (navigationView != null) {
             setupDrawerContent(navigationView);
         }
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+        if(headerLayout != null) {
+            mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
+            mEmail.setText(user.email);
+        }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.listview);
         if (mRecyclerView != null) {
@@ -166,15 +171,13 @@ public class MainScreenActivity extends AppCompatActivity
             }
         });
 
-        mEmail = (TextView) findViewById(R.id.hd_email);
-        mEmail.setText(user.email);
-
         mProgressDialog = new ProgressDialog(this);
     }
 
     private void initData() {
 
         user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+        Log.e(TAG, "email " + user.email);
         nodes = DBHelper.getNodesAll();
         firstUseState = ((MyApplication) MainScreenActivity.this.getApplication()).getFirstUseState();
 
