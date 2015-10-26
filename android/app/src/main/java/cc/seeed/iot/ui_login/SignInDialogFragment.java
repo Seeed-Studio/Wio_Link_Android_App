@@ -75,12 +75,12 @@ public class SignInDialogFragment extends DialogFragment {
         mProgressView = view.findViewById(R.id.login_progress);
         mLoginFormView = view.findViewById(R.id.email_login_form);
 
-        boolean result = Util.checkIsChina(getActivity());
-        if (result) {
+//        boolean result = Util.checkIsChina(getActivity());
+//        if (result) {
             mSwitchAreaView.setVisibility(View.VISIBLE);
-        } else {
-            mSwitchAreaView.setVisibility(View.GONE);
-        }
+//        } else {
+//            mSwitchAreaView.setVisibility(View.GONE);
+//        }
 
         if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL))
             mSwitchAreaView.setText(R.string.setup_switch_international);

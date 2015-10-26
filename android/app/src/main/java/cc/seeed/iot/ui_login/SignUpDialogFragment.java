@@ -66,12 +66,17 @@ public class SignUpDialogFragment extends DialogFragment {
         mLoginRegisterView = view.findViewById(R.id.email_register_form);
         mSwitchAreaView = (TextView) view.findViewById(R.id.switch_area);
 
-        boolean result = Util.checkIsChina(getActivity());
-        if (result) {
+//        boolean result = Util.checkIsChina(getActivity());
+//        if (result) {
             mSwitchAreaView.setVisibility(View.VISIBLE);
-        } else {
-            mSwitchAreaView.setVisibility(View.GONE);
-        }
+//        } else {
+//            mSwitchAreaView.setVisibility(View.GONE);
+//        }
+
+        if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL))
+            mSwitchAreaView.setText(R.string.setup_switch_international);
+        else
+            mSwitchAreaView.setText(R.string.setup_switch_china);
 
         builder.setView(view);
         builder.setTitle("Sign Up");
