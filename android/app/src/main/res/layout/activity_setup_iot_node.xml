@@ -30,10 +30,11 @@
 
         <ImageView
             android:id="@+id/node_view"
-            android:layout_width="145dp"
-            android:layout_height="200dp"
+            android:layout_width="204dp"
+            android:layout_height="195dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/node_pcba" />
+            android:background="@drawable/node_pcba"
+            android:scaleType="centerCrop"/>
 
         <ImageButton
             android:id="@+id/grove_1"
@@ -43,7 +44,7 @@
             android:layout_marginTop="45dp"
             android:layout_toLeftOf="@+id/node_view"
             android:layout_toStartOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_left"
+            android:background="@drawable/grove_shape"
             android:clickable="true"
             android:scaleType="centerCrop" />
 
@@ -55,7 +56,7 @@
             android:layout_marginTop="90dp"
             android:layout_toLeftOf="@+id/node_view"
             android:layout_toStartOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_left"
+            android:background="@drawable/grove_shape"
             android:clickable="true"
             android:scaleType="centerCrop" />
 
@@ -67,7 +68,7 @@
             android:layout_marginTop="135dp"
             android:layout_toLeftOf="@+id/node_view"
             android:layout_toStartOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_left"
+            android:background="@drawable/grove_shape"
             android:clickable="true"
             android:scaleType="centerCrop" />
 
@@ -79,7 +80,7 @@
             android:layout_marginTop="45dp"
             android:layout_toEndOf="@+id/node_view"
             android:layout_toRightOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_right"
+            android:background="@drawable/grove_shape"
             android:clickable="true"
             android:scaleType="centerCrop" />
 
@@ -91,7 +92,7 @@
             android:layout_marginTop="90dp"
             android:layout_toEndOf="@+id/node_view"
             android:layout_toRightOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_right"
+            android:background="@drawable/grove_shape"
             android:clickable="true"
             android:scaleType="centerCrop" />
 
@@ -103,7 +104,7 @@
             android:layout_marginTop="135dp"
             android:layout_toEndOf="@+id/node_view"
             android:layout_toRightOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_right"
+            android:background="@drawable/grove_shape"
             android:clickable="true"
             android:scaleType="centerCrop" />
 
@@ -145,6 +146,7 @@
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
         android:background="?attr/colorPrimary"
+        android:visibility="gone"
         app:contentInsetEnd="0dp"
         app:contentInsetLeft="0dp"
         app:contentInsetRight="0dp"
