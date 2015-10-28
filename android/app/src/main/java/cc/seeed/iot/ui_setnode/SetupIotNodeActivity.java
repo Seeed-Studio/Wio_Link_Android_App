@@ -5,6 +5,8 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -550,73 +552,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
         builder.create().show();
     }
 
-//    @Override
-//    public boolean onLongClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.grove_1:
-//                if (uiStateControl.getSelectedPinStatus(1)) {
-//                    pin1View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//                        @Override
-//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                            menu.add(0, 1, 0, "Remove");
-//                        }
-//                    });
-//                }
-//                break;
-//            case R.id.grove_2:
-//                if (uiStateControl.getSelectedPinStatus(2)) {
-//                    pin2View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//                        @Override
-//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                            menu.add(0, 2, 0, "Remove");
-//                        }
-//                    });
-//                }
-//                break;
-//            case R.id.grove_3:
-//                if (uiStateControl.getSelectedPinStatus(3)) {
-//                    pin3View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//                        @Override
-//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                            menu.add(0, 3, 0, "Remove");
-//                        }
-//                    });
-//                }
-//                break;
-//            case R.id.grove_4:
-//                if (uiStateControl.getSelectedPinStatus(4)) {
-//                    pin4View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//                        @Override
-//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                            menu.add(0, 4, 0, "Remove");
-//                        }
-//                    });
-//                }
-//                break;
-//            case R.id.grove_5:
-//                if (uiStateControl.getSelectedPinStatus(5)) {
-//                    pin5View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//                        @Override
-//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                            menu.add(0, 5, 0, "Remove");
-//                        }
-//                    });
-//                }
-//                break;
-//            case R.id.grove_6:
-//                if (uiStateControl.getSelectedPinStatus(6)) {
-//                    pin6View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-//                        @Override
-//                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-//                            menu.add(0, 6, 0, "Remove");
-//                        }
-//                    });
-//                }
-//                break;
-//        }
-//        return false;
-//    }
-
     @Override
     public boolean onDrag(View v, DragEvent event) {
         int action = event.getAction();
@@ -632,16 +567,20 @@ public class SetupIotNodeActivity extends AppCompatActivity
         switch (action) {
             case DragEvent.ACTION_DRAG_STARTED:
                 v.setActivated(true);
+                ((ImageView) v).setImageAlpha(10);
                 break;
             case DragEvent.ACTION_DRAG_ENTERED:
                 Log.e(TAG, "entered");
                 v.setActivated(false);
+                ((ImageView) v).setImageAlpha(10);
                 break;
             case DragEvent.ACTION_DRAG_EXITED:
                 v.setActivated(true);
+                ((ImageView) v).setImageAlpha(10);
                 break;
             case DragEvent.ACTION_DRAG_ENDED:
                 v.setActivated(false);
+                ((ImageView) v).setImageAlpha(255);
                 break;
             case DragEvent.ACTION_DROP:
                 Log.e(TAG, "Drop " + groverDriver.GroveName);
@@ -766,149 +705,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
         }
     }
 
-//    public interface UiSet {
-//        public void activatedPin(int pin);
-//
-//        public void activatedClear();
-//
-//        public void selectedPin();
-//
-//        public void removeSelectedPin(int pin);
-//
-//        public void selectGrove(GroveListRecyclerAdapter adapter);
-//
-//        public Boolean pinSetIsTrue();
-//
-//        public int getSetPin();
-//
-//        public boolean getSelectedPinStatus(int pin);
-//    }
-//
-//    public static class UiStateControl implements UiSet {
-//        private Boolean pin_set_statu;
-//        private SparseBooleanArray nodePinActivated;
-//        private SparseBooleanArray nodePinSelected;
-//
-//        View v;
-//        ImageButton pin1View, pin2View, pin3View, pin4View, pin5View, pin6View;
-//        RecyclerView mGroveListView;
-//        Toolbar mToolbarAction;
-//
-//
-//        public UiStateControl(View view) {
-//            pin_set_statu = false;
-//            nodePinActivated = new SparseBooleanArray();
-//            nodePinSelected = new SparseBooleanArray();
-//
-//            this.v = view;
-//            pin1View = (ImageButton) view.findViewById(R.id.grove_1);
-//            pin2View = (ImageButton) view.findViewById(R.id.grove_2);
-//            pin3View = (ImageButton) view.findViewById(R.id.grove_3);
-//            pin4View = (ImageButton) view.findViewById(R.id.grove_4);
-//            pin5View = (ImageButton) view.findViewById(R.id.grove_5);
-//            pin6View = (ImageButton) view.findViewById(R.id.grove_6);
-//
-//            mGroveListView = (RecyclerView) view.findViewById(R.id.grove_list);
-//            mToolbarAction = (Toolbar) view.findViewById(R.id.toolbar_bottom);
-//        }
-//
-//        @Override
-//        public void activatedPin(int pin) {
-//            if (nodePinSelected.get(pin, false)) {
-//                pin_set_statu = true;
-//                nodePinActivated.clear();
-//                nodePinActivated.put(pin, true);
-//                pin1View.setActivated(nodePinActivated.get(1, false));
-//                pin2View.setActivated(nodePinActivated.get(2, false));
-//                pin3View.setActivated(nodePinActivated.get(3, false));
-//                pin4View.setActivated(nodePinActivated.get(4, false));
-//                pin5View.setActivated(nodePinActivated.get(5, false));
-//                pin6View.setActivated(nodePinActivated.get(6, false));
-//
-//            } else {
-//                pin_set_statu = true;
-//                nodePinActivated.clear();
-//                nodePinActivated.put(pin, true);
-//                pin1View.setActivated(nodePinActivated.get(1, false));
-//                pin2View.setActivated(nodePinActivated.get(2, false));
-//                pin3View.setActivated(nodePinActivated.get(3, false));
-//                pin4View.setActivated(nodePinActivated.get(4, false));
-//                pin5View.setActivated(nodePinActivated.get(5, false));
-//                pin6View.setActivated(nodePinActivated.get(6, false));
-//
-//                //todo, select recyclcerview status
-//            }
-//        }
-//
-//        @Override
-//        public void activatedClear() {
-//            pin_set_statu = false;
-//            nodePinActivated.clear();
-//            Log.e("iot", "pin:" + nodePinActivated.keyAt(0));
-//            pin1View.setActivated(nodePinActivated.get(1, false));
-//            pin2View.setActivated(nodePinActivated.get(2, false));
-//            pin3View.setActivated(nodePinActivated.get(3, false));
-//            pin4View.setActivated(nodePinActivated.get(4, false));
-//            pin5View.setActivated(nodePinActivated.get(5, false));
-//            pin6View.setActivated(nodePinActivated.get(6, false));
-//
-//            //Todo, clear grove recycleview selected state
-//        }
-//
-//
-//        @Override
-//        public void selectedPin() {
-//            pin_set_statu = false;
-//            int pin = nodePinActivated.keyAt(0);
-//            nodePinSelected.put(pin, true);
-//            pin1View.setSelected(nodePinSelected.get(1, false));
-//            pin2View.setSelected(nodePinSelected.get(2, false));
-//            pin3View.setSelected(nodePinSelected.get(3, false));
-//            pin4View.setSelected(nodePinSelected.get(4, false));
-//            pin5View.setSelected(nodePinSelected.get(5, false));
-//            pin6View.setSelected(nodePinSelected.get(6, false));
-//
-//
-//        }
-//
-//        @Override
-//        public void removeSelectedPin(int pin) {
-//            nodePinSelected.put(pin, false);
-//            pin1View.setSelected(nodePinSelected.get(1, false));
-//            pin2View.setSelected(nodePinSelected.get(2, false));
-//            pin3View.setSelected(nodePinSelected.get(3, false));
-//            pin4View.setSelected(nodePinSelected.get(4, false));
-//            pin5View.setSelected(nodePinSelected.get(5, false));
-//            pin6View.setSelected(nodePinSelected.get(6, false));
-//        }
-//
-//        @Override
-//        public void selectGrove(GroveListRecyclerAdapter adapter) {
-//            adapter.selectItem(mGroveListView.getChildAdapterPosition(v));
-//            mToolbarAction.setVisibility(View.VISIBLE);
-//        }
-//
-//        @Override
-//        public Boolean pinSetIsTrue() {
-//            return pin_set_statu;
-//        }
-//
-//        @Override
-//        public int getSetPin() {
-//            if (pin_set_statu) {
-//                int pin = nodePinActivated.keyAt(0);
-//                return pin;
-//            } else {
-//                return -1;
-//            }
-//        }
-//
-//        @Override
-//        public boolean getSelectedPinStatus(int pin) {
-//            boolean status = nodePinSelected.get(pin, false);
-//            return status;
-//        }
-//    }
 }
 
 

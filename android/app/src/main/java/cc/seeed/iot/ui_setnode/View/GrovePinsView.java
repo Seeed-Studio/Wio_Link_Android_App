@@ -69,30 +69,6 @@ public class GrovePinsView {
 
     }
 
-    public void activatedPin(int pin) {
-        pinViews[pin - 1].setActivated(true);
-    }
-
-    public void removeActivatedPin(int pin) {
-        pinViews[pin - 1].setActivated(false);
-    }
-
-    public void selectedPin(int pin) {
-        pinViews[pin - 1].setSelected(true);
-    }
-
-    public void removeSelectedPin(int pin) {
-        pinViews[pin - 1].setSelected(false);
-    }
-
-    public void setImage(int pin, int resId) {
-        pinViews[pin - 1].setImageResource(resId);
-    }
-
-    public void RemoveImage(int pin) {
-        pinViews[pin - 1].setImageResource(0);
-    }
-
     public class Tag {
         public int position;
         public String interfaceType;
