@@ -27,6 +27,14 @@
         android:layout_alignParentStart="false"
         android:layout_below="@+id/toolbar">
 
+        <ImageView
+            android:id="@+id/grove_remove"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_cancel"
+            android:visibility="invisible" />
 
         <ImageView
             android:id="@+id/node_view"
@@ -34,7 +42,7 @@
             android:layout_height="195dp"
             android:layout_centerInParent="true"
             android:background="@drawable/node_pcba"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <ImageButton
             android:id="@+id/grove_1"
