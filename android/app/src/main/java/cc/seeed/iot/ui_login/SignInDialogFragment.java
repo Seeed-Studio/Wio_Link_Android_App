@@ -84,8 +84,10 @@ public class SignInDialogFragment extends DialogFragment {
 
         if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL))
             mSwitchAreaView.setText(R.string.setup_switch_international);
-        else
+        else if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_INTERNATIONAL_URL))
             mSwitchAreaView.setText(R.string.setup_switch_china);
+        else
+            mSwitchAreaView.setText(((MyApplication) getActivity().getApplication()).getServerUrl());
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
