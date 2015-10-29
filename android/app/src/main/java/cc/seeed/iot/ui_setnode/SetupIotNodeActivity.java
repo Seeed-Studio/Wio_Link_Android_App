@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -163,6 +164,12 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mGroveTypeListView.setLayoutManager(layoutManager);
             setupGroveSelectorAdapter();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getGrovesData();
     }
 
     private void setupGroveSelectorAdapter() {
@@ -758,7 +765,27 @@ public class SetupIotNodeActivity extends AppCompatActivity
         }
     }
 
+    private void getGrovesData() {
+        IotApi api = new IotApi();
+        String token = user.user_key;
+        api.setAccessToken(token);
+        IotService iot = api.getService();
+        iot.scanDrivers(new Callback<List<GroverDriver>>() {
+            @Override
+            public void success(List<GroverDriver> groverDrivers, retrofit.client.Response response) {
+                for (GroverDriver groveDriver : groverDrivers) {
+                    groveDriver.save();
+                }
 
+                updateGroveListAdapter(groverDrivers);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, error.toString());
+            }
+        });
+    }
 }
 
 
