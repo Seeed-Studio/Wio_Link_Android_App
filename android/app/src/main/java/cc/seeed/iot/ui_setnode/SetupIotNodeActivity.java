@@ -589,12 +589,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         pinConfig.node_sn = node.node_sn;
 
                         if (pinConfig.position != 6) {
-                            Log.e(TAG, "remove config");
                             Boolean status = false;
                             PinConfig dup_pinConfig = new PinConfig();
                             for (PinConfig p : pinConfigs)
                                 if (p.position == pinConfig.position) {
-                                    Log.e(TAG, "remove config 2");
                                     status = true;
                                     dup_pinConfig = p;
                                 }
@@ -634,8 +632,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         if (!event.getClipDescription().hasMimeType(GROVE_REMOVE)) {
                             return false;
                         }
-//                        ImageView view = (ImageView) event.getLocalState();
-//                        view.setImageDrawable(null);
                         break;
                     }
                     case DragEvent.ACTION_DRAG_ENTERED:
@@ -644,13 +640,12 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     case DragEvent.ACTION_DRAG_EXITED:
                         ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
                     case DragEvent.ACTION_DROP: {
-                        //todo remove pinconfig and imageview
                         ImageView view = (ImageView) event.getLocalState();
                         Log.e(TAG, ((GrovePinsView.Tag) view.getTag()).position + "");
                         view.setImageDrawable(null);
                         int position = ((GrovePinsView.Tag) view.getTag()).position;
 
-//                        pinConfigs.remove();
+                        removePinConfig(position);
                         break;
                     }
                     case DragEvent.ACTION_DRAG_ENDED:
@@ -663,6 +658,17 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 break;
         }
         return true;
+    }
+
+    private void removePinConfig(int position) {
+        if (position < 1 || position > 5)
+            return;
+        PinConfig rp = new PinConfig();
+        for(PinConfig p : pinConfigs) {
+            if(p.position == position)
+                rp = p;
+        }
+        pinConfigs.remove(rp);
     }
 
     @Override
@@ -711,9 +717,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
         ClipData clipData = new ClipData(clipDescription, item);
         View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
 
-//                mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
-//                GroverDriver grove = mGroveListAdapter.getSelectedItem();
-//        GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
         v.startDrag(clipData, shadowBuiler, v, 0);
     }
 
@@ -754,6 +757,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             return true;
         }
     }
+
 
 }
 
