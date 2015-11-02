@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -56,6 +55,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     private static final String TAG = "SetupIotNodeActivity";
     public static final String GROVE_REMOVE = "grove/remove";
+    public static final String GROVE_REMOVE_PIN6 = "grove/remove/6";
     public static final String GROVE_ADD = "grove/add";
     public Toolbar mToolbar;
     public Toolbar mToolbarAction;
@@ -65,6 +65,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     static View.OnClickListener mainOnClickListener; //Todo, no static
     static View.OnLongClickListener mainOnLongClickListener; //Todo, no static
+    static View.OnLongClickListener pin6OnLongClickListener; //Todo, no static
+
+    RecyclerView mGroveI2cListView;
+    GroveI2cListRecyclerAdapter mGroveI2cListAdapter;
 
     RecyclerView mGroveListView;
     GroveListRecyclerAdapter mGroveListAdapter;
@@ -102,6 +106,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         mainOnClickListener = new MainOnClickListener(this);
         mainOnLongClickListener = new MainOnClickListener(this);
+        pin6OnLongClickListener = new Pin6OnClickListener(this);
 
         nodePinSelector = new SparseBooleanArray();
 
@@ -154,6 +159,16 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mGroveListView.setLayoutManager(layoutManager);
             mGroveListAdapter = new GroveListRecyclerAdapter(mGroveDrivers);
             mGroveListView.setAdapter(mGroveListAdapter);
+        }
+
+        mGroveI2cListView = (RecyclerView) findViewById(R.id.grove_i2c_list);
+        if (mGroveI2cListView != null) {
+            mGroveI2cListView.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            mGroveI2cListView.setLayoutManager(layoutManager);
+            mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
+            mGroveI2cListView.setAdapter(mGroveI2cListAdapter);
         }
 
         mGroveTypeListView = (RecyclerView) findViewById(R.id.grove_selector);
@@ -510,14 +525,24 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 Snackbar.make(v, "Grove name:" + pinDeviceCount(5), Snackbar.LENGTH_LONG).show();
                 break;
             case R.id.grove_6:
-                Snackbar.make(v, "Grove name:" + pinDeviceCount(6), Snackbar.LENGTH_LONG).show();
                 if (pinDeviceCount(6) == 0) {
                     ;
                 } else if (pinDeviceCount(6) == 1) {
-                    ;
+                    Snackbar.make(v, "Grove name:" + pinDeviceCount(5), Snackbar.LENGTH_LONG).show();
                 } else if (pinDeviceCount(6) > 1) {
-                    openI2cDeviceFolder();
+                    if (mGroveI2cListView.getVisibility() == View.VISIBLE)
+                        mGroveI2cListView.setVisibility(View.INVISIBLE);
+                    else {
+                        mGroveI2cListView.setVisibility(View.VISIBLE);
+                        List<PinConfig> pin6Configs = new ArrayList<>();
+                        for (PinConfig p : pinConfigs) {
+                            if (p.position == 6)
+                                pin6Configs.add(p);
+                        }
+                        mGroveI2cListAdapter.updateAll(pin6Configs);
+                    }
                 }
+
                 break;
         }
 
@@ -535,17 +560,11 @@ public class SetupIotNodeActivity extends AppCompatActivity
         return sparseIntArray.get(position, 0);
     }
 
-    private void openI2cDeviceFolder() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("I2C Device List");
-//        builder.setView();
-        builder.create().show();
-    }
 
     @Override
     public boolean onDrag(View v, DragEvent event) {
-        Log.e(TAG, v.toString());
-        Log.e(TAG, event.toString());
+//        Log.e(TAG, v.toString());
+//        Log.e(TAG, event.toString());
         int action = event.getAction();
 
         switch (v.getId()) {
@@ -554,6 +573,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             case R.id.grove_3:
             case R.id.grove_4:
             case R.id.grove_5:
+            case R.id.grove_6:
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED: {
                         if (!event.getClipDescription().hasMimeType(GROVE_ADD))
@@ -563,7 +583,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
 
                         if (!interfaceType.equals(groverDriver.InterfaceType)) {
-                            Log.e(TAG, groverDriver.InterfaceType);
+//                            Log.e(TAG, groverDriver.InterfaceType);
                             return false;
                         }
                         v.setActivated(true);
@@ -628,6 +648,16 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         pinConfigs.add(pinConfig);
                         Log.e(TAG, "drag pinConfigs " + pinConfigs);
 
+                        if (v.getId() == R.id.grove_6) {
+
+                            List<PinConfig> pin6Configs = new ArrayList<>();
+                            for (PinConfig p : pinConfigs) {
+                                if (p.position == 6)
+                                    pin6Configs.add(p);
+                            }
+                            mGroveI2cListAdapter.updateAll(pinConfigs);
+                            mGroveNameView.setText("+" + (pinDeviceCount(6)-1));
+                        }
                         //todo change i2c number textview
                     }
                     break;
@@ -636,10 +666,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
             case R.id.grove_remove:
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED: {
-                        if (!event.getClipDescription().hasMimeType(GROVE_REMOVE)) {
-                            return false;
-                        }
-                        break;
+                        return event.getClipDescription().hasMimeType(GROVE_REMOVE) ||
+                                event.getClipDescription().hasMimeType(GROVE_REMOVE_PIN6);
                     }
                     case DragEvent.ACTION_DRAG_ENTERED:
                         ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
@@ -647,12 +675,27 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     case DragEvent.ACTION_DRAG_EXITED:
                         ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
                     case DragEvent.ACTION_DROP: {
-                        ImageView view = (ImageView) event.getLocalState();
-                        Log.e(TAG, ((GrovePinsView.Tag) view.getTag()).position + "");
-                        view.setImageDrawable(null);
-                        int position = ((GrovePinsView.Tag) view.getTag()).position;
+                        if (event.getClipDescription().hasMimeType(GROVE_REMOVE)) {
+                            ImageView view = (ImageView) event.getLocalState();
+                            Log.e(TAG, ((GrovePinsView.Tag) view.getTag()).position + "");
+                            view.setImageDrawable(null);
+                            int position = ((GrovePinsView.Tag) view.getTag()).position;
 
-                        removePinConfig(position);
+                            removePinConfig(position);
+                        } else if (event.getClipDescription().hasMimeType(GROVE_REMOVE_PIN6)) {
+                            PinConfig pinConfig = (PinConfig) event.getLocalState();
+                            Log.e(TAG, pinConfig.groveInstanceName);
+                            removePinConfig(pinConfig.groveInstanceName);
+
+                            if (pinDeviceCount(6) < 2)
+                                mGroveI2cListView.setVisibility(View.INVISIBLE);
+                            List<PinConfig> pin6Configs = new ArrayList<>();
+                            for (PinConfig p : pinConfigs) {
+                                if (p.position == 6)
+                                    pin6Configs.add(p);
+                            }
+                            mGroveI2cListAdapter.updateAll(pin6Configs);
+                        }
                         break;
                     }
                     case DragEvent.ACTION_DRAG_ENDED:
@@ -668,15 +711,25 @@ public class SetupIotNodeActivity extends AppCompatActivity
     }
 
     private void removePinConfig(int position) {
-        if (position < 1 || position > 5)
+        if (position < 1 || position > 6)
             return;
         PinConfig rp = new PinConfig();
-        for(PinConfig p : pinConfigs) {
-            if(p.position == position)
+        for (PinConfig p : pinConfigs) {
+            if (p.position == position)
                 rp = p;
         }
         pinConfigs.remove(rp);
     }
+
+    private void removePinConfig(String groveInstanceName) {
+        PinConfig rp = new PinConfig();
+        for (PinConfig p : pinConfigs) {
+            if (p.groveInstanceName == groveInstanceName)
+                rp = p;
+        }
+        pinConfigs.remove(rp);
+    }
+
 
     @Override
     public boolean onLongClick(View v) {
@@ -705,9 +758,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 if (pinDeviceCount(6) == 0) {
                     ;
                 } else if (pinDeviceCount(6) == 1) {
-                    ;
+                    startDragRemove(v);
                 } else if (pinDeviceCount(6) > 1) {
-                    openI2cDeviceFolder();
+//                    openI2cDeviceFolder();
                 }
                 break;
         }
@@ -785,6 +838,31 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 Log.e(TAG, error.toString());
             }
         });
+    }
+
+    private class Pin6OnClickListener implements View.OnLongClickListener {
+        public Pin6OnClickListener(SetupIotNodeActivity setupIotNodeActivity) {
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            mDragRemoveView.setVisibility(View.VISIBLE);
+
+            String label = "grove_remove_6";
+            String[] mimeTypes = {GROVE_REMOVE_PIN6};
+            ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
+            ClipData.Item item = new ClipData.Item("drag grove");
+            ClipData clipData = new ClipData(clipDescription, item);
+            View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
+
+//            mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
+//            GroverDriver grove = mGroveListAdapter.getSelectedItem();
+
+            PinConfig pinConfig = mGroveI2cListAdapter.getItem(mGroveI2cListView.getChildAdapterPosition(v));
+
+            v.startDrag(clipData, shadowBuiler, pinConfig, 0);
+            return true;
+        }
     }
 }
 

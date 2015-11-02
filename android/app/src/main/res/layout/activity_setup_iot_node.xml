@@ -130,6 +130,18 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/grove_i2c_list"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_above="@+id/grove_list"
+        android:layout_margin="10dp"
+        android:background="@color/red"
+        android:clickable="true"
+        android:visibility="invisible">
+
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/grove_list"
         android:layout_width="match_parent"
         android:layout_height="100dp"
