@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.R;
 
@@ -16,12 +17,12 @@ import cc.seeed.iot.R;
  */
 public class WifiPionListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerViewHolder> {
     private final static String TAG = "WifiListRecyclerAdapter";
-    private ArrayList<ScanResult> wifiList;
+    private List<ScanResult> wifiList;
     private Context context;
     WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks;
 
     public WifiPionListRecyclerAdapter
-            (ArrayList<ScanResult> wifiList,
+            (List<ScanResult> wifiList,
              WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks) {
         this.wifiList = wifiList;
         this.iMyViewHolderClicks = iMyViewHolderClicks;
@@ -52,7 +53,7 @@ public class WifiPionListRecyclerAdapter extends RecyclerView.Adapter<WifiRecycl
         return wifiList.get(position);
     }
 
-    public void updateAll(ArrayList<ScanResult> wifiList) {
+    public void updateAll(List<ScanResult> wifiList) {
         this.wifiList = wifiList;
         notifyDataSetChanged();
     }

@@ -16,12 +16,14 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.UserResponse;
@@ -41,6 +43,7 @@ public class SignUpDialogFragment extends DialogFragment {
     private View mProgressView;
     private View mLoginRegisterView;
     private AlertDialog alertDialog;
+    private TextView mSwitchAreaView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,21 @@ public class SignUpDialogFragment extends DialogFragment {
         mPasswordVerifyView = (EditText) view.findViewById(R.id.verify);
         mProgressView = view.findViewById(R.id.login_progress);
         mLoginRegisterView = view.findViewById(R.id.email_register_form);
+        mSwitchAreaView = (TextView) view.findViewById(R.id.switch_area);
+
+//        boolean result = Util.checkIsChina(getActivity());
+//        if (result) {
+        mSwitchAreaView.setVisibility(View.VISIBLE);
+//        } else {
+//            mSwitchAreaView.setVisibility(View.GONE);
+//        }
+
+        if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL))
+            mSwitchAreaView.setText(R.string.setup_switch_international);
+        else if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_INTERNATIONAL_URL))
+            mSwitchAreaView.setText(R.string.setup_switch_china);
+        else
+            mSwitchAreaView.setText(((MyApplication) getActivity().getApplication()).getServerUrl());
 
         builder.setView(view);
         builder.setTitle("Sign Up");
@@ -82,7 +100,21 @@ public class SignUpDialogFragment extends DialogFragment {
                 }
             });
         }
+
+        mSwitchAreaView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSwitchAreaView.getText().toString().equals(getString(R.string.setup_switch_international))) {
+                    mSwitchAreaView.setText(R.string.setup_switch_china);
+                    ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_INTERNATIONAL_URL);
+                } else {
+                    mSwitchAreaView.setText(R.string.setup_switch_international);
+                    ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_CHINA_URL);
+                }
+            }
+        });
     }
+
 
     private void attemptRegister() {
         mEmailView.setError(null);

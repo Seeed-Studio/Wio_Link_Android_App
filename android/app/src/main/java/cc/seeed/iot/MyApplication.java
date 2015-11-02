@@ -1,26 +1,20 @@
 package cc.seeed.iot;
 
-import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.ArrayList;
-
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.webapi.ExchangeApi;
 import cc.seeed.iot.webapi.IotApi;
-import cc.seeed.iot.webapi.model.Node;
 
 /**
  * Created by tenwong on 15/7/9.
  */
-public class MyApplication extends Application {
+public class MyApplication extends com.activeandroid.app.Application {
     private SharedPreferences sp;
-
-    private ArrayList<Node> nodes = new ArrayList<Node>();
-
     private User user = new User();
-
-    private String server_url;
+    private String ota_server_url;
+    private String exchange_server_url;
 
     /**
      * into smartconfig state
@@ -32,6 +26,30 @@ public class MyApplication extends Application {
      */
     private Boolean loginState;
 
+    private Boolean firstUseState;
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
+        user.email = sp.getString("userName", "awong1900@163.com");
+        user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
+        ota_server_url = sp.getString("ota_server_url", "https://iot.seeed.cc/v1"); //https://iot.seeed.cc/v1 //https://120.25.216.117/v1
+        exchange_server_url = sp.getString("exchange_server_url", "https://120.25.216.117/v1");
+        configState = sp.getBoolean("configState", false);
+        loginState = sp.getBoolean("loginState", false);
+        firstUseState = sp.getBoolean("firstUseState", true);
+
+        init();
+
+    }
+
+    private void init() {
+        IotApi.SetServerUrl(ota_server_url);
+        ExchangeApi.SetServerUrl(exchange_server_url);
+    }
+
     public Boolean getLoginState() {
         return loginState;
     }
@@ -40,6 +58,17 @@ public class MyApplication extends Application {
         this.loginState = loginState;
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("loginState", loginState);
+        editor.apply();
+    }
+
+    public Boolean getFirstUseState() {
+        return firstUseState;
+    }
+
+    public void setFirstUseState(Boolean firstUseState) {
+        this.firstUseState = firstUseState;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean("firstUseState", firstUseState);
         editor.apply();
     }
 
@@ -55,22 +84,26 @@ public class MyApplication extends Application {
         editor.apply();
     }
 
-    public ArrayList<Node> getNodes() {
-        return nodes;
+    public String getServerUrl() {
+        return ota_server_url;
     }
 
-    public void setNodes(ArrayList<Node> nodes) {
-        this.nodes = nodes;
-    }
-
-    public String getServer_url() {
-        return server_url;
-    }
-
-    public void setServer_url(String server_url) {
-        this.server_url = server_url;
+    public void setServerUrl(String server_url) {
+        this.ota_server_url = server_url;
+        IotApi.SetServerUrl(server_url);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("server_url", server_url);
+        editor.putString("ota_server_url", server_url);
+        editor.apply();
+    }
+
+    public String getExchangeServerUrl() {
+        return exchange_server_url;
+    }
+
+    public void setExchangeServerUrl(String server_url) {
+        this.exchange_server_url = server_url;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("exchange_server_url", server_url);
         editor.apply();
     }
 
@@ -85,24 +118,4 @@ public class MyApplication extends Application {
         editor.apply();
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
-        sp.getString("serverAddress", "http://192.168.21.83:8080/v1");
-        user.email = sp.getString("userName", "awong1900@163.com");
-        user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
-
-        server_url = sp.getString("server_url", "https://iot.seeed.cc/v1");
-
-        configState = sp.getBoolean("configState", false);
-
-        configState = sp.getBoolean("loginState", false);
-
-        init();
-    }
-
-    private void init() {
-        IotApi.SetServerUrl(server_url);
-    }
 }

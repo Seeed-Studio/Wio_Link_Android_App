@@ -1,12 +1,12 @@
 package cc.seeed.iot.webapi;
 
+import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 
+import java.lang.reflect.Modifier;
 import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-//import cc.seeed.iot.storge.MySharedPreference;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -15,27 +15,23 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cc.seeed.iot.MyApplication;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
 import retrofit.client.OkClient;
+import retrofit.converter.GsonConverter;
+
+//import cc.seeed.iot.storge.MySharedPreference;
 
 /**
  * Created by tenwong on 15/6/23.
  */
 public class IotApi {
 
-//    private String IOT_WEB_API_ENDPOINT = "http://192.168.21.83:8080/v1";
-//    private String iot_url = "http://192.168.18.194:8080/v1";
-//    private String iot_url = "http://192.168.18.251:8080/v1"; //jacky shao
-//    private String iot_url = "https://iot.yuzhe.me/v1";
-//    private String iot_url = "https://iot.seeed.cc/v1";
-
-    private static String iot_url = "https://iot.seeed.cc/v1";
-
     private final IotService mIotService;
-
     private String mAccessToken;
+    private static String iot_url = "";
 
 //    public IotApi(Executor httpExecutor, Executor callbackExecutor) {
 //        mIotService = init(httpExecutor, callbackExecutor);
@@ -61,10 +57,15 @@ public class IotApi {
                 .setEndpoint(iot_url)
                 .setRequestInterceptor(new WebApiAuthenticator())
                 .setClient(new OkClient(client))
+                .setConverter(new GsonConverter(new GsonBuilder()
+                        .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
+                        .serializeNulls()
+                        .create()))
                 .build();
 
         return restAdapter.create(IotService.class);
     }
+
 
     /**
      * Do not check certificate,Todo use keyStore

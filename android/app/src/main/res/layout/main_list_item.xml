@@ -163,6 +163,7 @@
                     android:src="@drawable/node_icon" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/grove_image_3"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
@@ -171,6 +172,7 @@
                     android:src="@drawable/grove_drop" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/grove_image_4"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
@@ -178,13 +180,13 @@
                     android:layout_marginStart="5dp"
                     android:src="@drawable/grove_temperature" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <TextView
+                    android:id="@+id/grove_over"
                     android:layout_width="34dp"
                     android:layout_height="34dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:src="@drawable/grove_weather" />
+                    android:layout_marginStart="5dp" />
 
             </LinearLayout>
 

@@ -1,22 +1,15 @@
 package cc.seeed.iot.ui_main;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.RectF;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
@@ -24,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,12 +28,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecyclerAdapter.MainViewHolder> {
     private static final String TAG = "NodeListRecyclerAdapter";
-    private ArrayList<Node> nodes;
+    private List<Node> nodes = new ArrayList<>();
     private Context context;
-
-    private final TypedValue mTypedValue = new TypedValue();
-    private int mBackground;
-    private List<String> mValues;
 
     private OnClickListener mOnClickListener;
 
@@ -49,7 +41,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         mOnClickListener = l;
     }
 
-    public NodeListRecyclerAdapter(ArrayList<Node> nodes) {
+    public NodeListRecyclerAdapter(List<Node> nodes) {
         this.nodes = nodes;
     }
 
@@ -65,16 +57,40 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
         holder.mNameView.setText(node.name);
+        holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Left);
 
         if (node.online) {
             holder.mStatusView.setBackgroundColor(Color.GREEN);
+            holder.mRenameView.setBackgroundColor(Color.GREEN);
+            holder.mDetailView.setBackgroundColor(Color.GREEN);
+            holder.mRemoveView.setBackgroundColor(Color.GREEN);
         } else {
             holder.mStatusView.setBackgroundColor(Color.RED);
+            holder.mRenameView.setBackgroundColor(Color.RED);
+            holder.mDetailView.setBackgroundColor(Color.RED);
+            holder.mRemoveView.setBackgroundColor(Color.RED);
         }
 
-        UrlImageViewHelper.setUrlDrawable(holder.mGroveOneView, "http://www.seeedstudio.com/wiki/images/thumb/c/ca/Button.jpg/300px-Button.jpg");
-        UrlImageViewHelper.setUrlDrawable(holder.mGroveTwoView, "http://www.seeedstudio.com/wiki/images/6/69/Digital_Light_Sensor.jpg");
-//        holder.mGroveOneView.setImageBitmap();
+        List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
+        for (int i = 0; i < 4; i++) {
+            try {
+                holder.mGroveViews.get(i).setVisibility(View.VISIBLE);
+                PinConfig pinConfig = pinConfigs.get(i);
+                String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
+                UrlImageViewHelper.setUrlDrawable(holder.mGroveViews.get(i), url, R.drawable.grove_cold,
+                        UrlImageViewHelper.CACHE_DURATION_INFINITE);
+            } catch (IndexOutOfBoundsException e) {
+                holder.mGroveViews.get(i).setVisibility(View.GONE);
+            }
+        }
+
+        if (pinConfigs.size() > 4) {
+            Integer over_num = pinConfigs.size() - 4;
+            holder.mGroveOverView.setVisibility(View.VISIBLE);
+            holder.mGroveOverView.setText("+" + String.valueOf(over_num));
+        } else {
+            holder.mGroveOverView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -89,19 +105,17 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return nodes.get(position);
     }
 
-    public Node removeItem(int position) {
-        Node node = nodes.remove(position);
+    public void removeItem(int position) {
         notifyItemRemoved(position);
+    }
+
+    public Node updateItem(int position) {
+        Node node = nodes.get(position);
+        notifyItemChanged(position);
         return node;
     }
 
-    public Node updateItem(int position, Node newNode) {
-        nodes.set(position, newNode);
-        notifyItemChanged(position);
-        return newNode;
-    }
-
-    public boolean updateAll(ArrayList<Node> nodes) {
+    public boolean updateAll(List<Node> nodes) {
         this.nodes = nodes;
         notifyDataSetChanged();
         return true;
@@ -127,13 +141,16 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         TextView mDetailView;
         TextView mRemoveView;
 
-        ImageView mGroveOneView;
-        ImageView mGroveTwoView;
+        List<ImageView> mGroveViews;
+        TextView mGroveOverView;
+
+        SwipeLayout mSwipeLayout;
 
         public MainViewHolder(View itemView, OnClickListener mOnClickListener) {
             super(itemView);
             this.mOnClickListener = mOnClickListener;
 
+            mSwipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe_layout);
             mItemView = itemView;
             mNameView = (TextView) itemView.findViewById(R.id.name);
             mLocationView = (TextView) itemView.findViewById(R.id.location);
@@ -145,8 +162,12 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             mDetailView = (TextView) itemView.findViewById(R.id.detail);
             mRemoveView = (TextView) itemView.findViewById(R.id.remove);
 
-            mGroveOneView = (CircleImageView) itemView.findViewById(R.id.grove_image_1);
-            mGroveTwoView = (CircleImageView) itemView.findViewById(R.id.grove_image_2);
+            mGroveViews = new ArrayList<>();
+            mGroveViews.add(0, (CircleImageView) itemView.findViewById(R.id.grove_image_1));
+            mGroveViews.add(1, (CircleImageView) itemView.findViewById(R.id.grove_image_2));
+            mGroveViews.add(2, (CircleImageView) itemView.findViewById(R.id.grove_image_3));
+            mGroveViews.add(3, (CircleImageView) itemView.findViewById(R.id.grove_image_4));
+            mGroveOverView = (TextView) itemView.findViewById(R.id.grove_over);
 
             mItemView.setOnClickListener(this);
             mLocationView.setOnClickListener(this);

@@ -1,6 +1,7 @@
 package cc.seeed.iot.ui_setnode.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.webapi.model.GroverDriver;
 
@@ -13,9 +14,10 @@ public class GroveFliter {
     public static final String UART = "UART";
     public static final String ANALOG = "ANALOG";
 
-    public ArrayList<GroverDriver> groverDrivers;
+    public List<GroverDriver> groverDrivers;
 
-    public GroveFliter(ArrayList<GroverDriver> groverDrivers) {
+    public GroveFliter(List<GroverDriver> groverDrivers) {
+        groverDrivers = new ArrayList<>();
         this.groverDrivers = groverDrivers;
     }
 
