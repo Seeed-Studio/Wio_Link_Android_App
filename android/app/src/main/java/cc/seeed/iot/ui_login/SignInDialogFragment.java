@@ -122,9 +122,11 @@ public class SignInDialogFragment extends DialogFragment {
                 if (mSwitchAreaView.getText().toString().equals(getString(R.string.setup_switch_international))) {
                     mSwitchAreaView.setText(R.string.setup_switch_china);
                     ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_INTERNATIONAL_URL);
+                    ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.OTA_INTERNATIONAL_URL);
                 } else {
                     mSwitchAreaView.setText(R.string.setup_switch_international);
                     ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_CHINA_URL);
+                    ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.OTA_CHINA_URL);
                 }
             }
         });

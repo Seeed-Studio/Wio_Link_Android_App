@@ -30,7 +30,6 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.ui_smartconfig.GoReadyActivity;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -113,10 +112,18 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             //APCFG: ssid\tpassword\tkey\tsn\t
 //            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
 //                    node_key + "\t" + node_sn + "\t";
-            String ota_server = ((MyApplication) getApplication()).getServerUrl().split("/")[2];
-            String exchange_server = ((MyApplication) getApplication()).getExchangeServerUrl().split("/")[2];
+            String ota_server = ((MyApplication) getApplication()).getServerUrl();
+            String exchange_server = ((MyApplication) getApplication()).getExchangeServerUrl();
+
+            if (ota_server.equals(Common.OTA_CHINA_URL)) {
+                ota_server = Common.OTA_CHINA_IP;
+                exchange_server = Common.OTA_CHINA_IP;
+            } else if (ota_server.equals(Common.OTA_INTERNATIONAL_URL)) {
+                ota_server = Common.OTA_INTERNATIONAL_IP;
+                exchange_server = Common.OTA_INTERNATIONAL_IP;
+            }
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
-                    node_key + "\t" + node_sn + "\t" + ota_server + "\t" + exchange_server +"\t";
+                    node_key + "\t" + node_sn + "\t" + ota_server + "\t" + exchange_server + "\t";
 
             Log.i(TAG, "cmd_connect: " + cmd_connect);
             Log.i(TAG, "ip: " + AP_IP);

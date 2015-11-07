@@ -7,8 +7,8 @@ android {
         applicationId "cc.seeed.iot.ap"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 2
-        versionName "1.3"
+        versionCode 3
+        versionName "1.4"
     }
     buildTypes {
         release {
