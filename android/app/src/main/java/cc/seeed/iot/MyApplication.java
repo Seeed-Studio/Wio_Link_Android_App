@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.ExchangeApi;
 import cc.seeed.iot.webapi.IotApi;
 
@@ -35,8 +36,8 @@ public class MyApplication extends com.activeandroid.app.Application {
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
-        ota_server_url = sp.getString("ota_server_url", "https://iot.seeed.cc/v1"); //https://iot.seeed.cc/v1 //https://120.25.216.117/v1
-        exchange_server_url = sp.getString("exchange_server_url", "https://120.25.216.117/v1");
+        ota_server_url = sp.getString("ota_server_url", Common.OTA_INTERNATIONAL_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
+        exchange_server_url = sp.getString("exchange_server_url", Common.EXCHANGE_INTERNATIONAL_URL); //https://cn.iot.seeed.cc/v1  //"https://iot.seeed.cc/v1";
         configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);
         firstUseState = sp.getBoolean("firstUseState", true);

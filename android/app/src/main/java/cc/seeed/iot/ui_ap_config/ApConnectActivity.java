@@ -117,10 +117,10 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
 
             if (ota_server.equals(Common.OTA_CHINA_URL)) {
                 ota_server = Common.OTA_CHINA_IP;
-                exchange_server = Common.OTA_CHINA_IP;
+                exchange_server = Common.EXCHANGE_CHINA_IP;
             } else if (ota_server.equals(Common.OTA_INTERNATIONAL_URL)) {
                 ota_server = Common.OTA_INTERNATIONAL_IP;
-                exchange_server = Common.OTA_INTERNATIONAL_IP;
+                exchange_server = Common.EXCHANGE_INTERNATIONAL_IP;
             }
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
                     node_key + "\t" + node_sn + "\t" + ota_server + "\t" + exchange_server + "\t";
