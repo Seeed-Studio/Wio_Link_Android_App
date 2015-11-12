@@ -104,4 +104,7 @@
     <string name="detail">"  API  "</string>
     <string name="remove">"  Remove  "</string>
 
+    <!-- set node config-->
+    <string name="update">Update Firmware</string>
+
 </resources>

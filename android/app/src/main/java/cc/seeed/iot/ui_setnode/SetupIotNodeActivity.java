@@ -60,6 +60,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
     public static final String GROVE_ADD = "grove/add";
     private static final int ADD_I2C_GROVE = 0x00;
     private static final int RMV_I2C_GROVE = 0x01;
+
+    private static final int MESSAGE_UPDATE_DONE = 0x10;
+
     public Toolbar mToolbar;
     public Toolbar mToolbarAction;
     Node node;
@@ -220,6 +223,15 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         mGrovePinsView.updatePin6(pinConfigs);
                         break;
 
+                    case MESSAGE_UPDATE_DONE: {
+                        String message = (String) msg.obj;
+                        new AlertDialog.Builder(SetupIotNodeActivity.this)
+                                .setTitle(R.string.update)
+                                .setMessage(message)
+                                .setPositiveButton(R.string.ok, null)
+                                .show();
+                    }
+                    break;
                 }
             }
         };
@@ -373,14 +385,13 @@ public class SetupIotNodeActivity extends AppCompatActivity
                                 displayStatus(node_key);
                                 mProgressDialog.setMessage(otaStatusResponse.ota_msg);
                             } else if (otaStatusResponse.ota_status.equals("done")) {
-                                mProgressDialog.setMessage(otaStatusResponse.ota_msg);
-                                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                                mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                mProgressDialog.dismiss();
 
-                                    }
-                                });
+                                Message message = Message.obtain();
+                                message.what = MESSAGE_UPDATE_DONE;
+                                message.obj = otaStatusResponse.ota_msg;
+                                mHandler.sendMessage(message);
+
                             } else if (otaStatusResponse.ota_status.equals("error")) {
                                 mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
                                 mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);

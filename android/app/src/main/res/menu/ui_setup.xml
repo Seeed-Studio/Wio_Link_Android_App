@@ -5,6 +5,6 @@
     <item
         android:id="@+id/update"
         android:orderInCategory="100"
-        android:title="Update Firmware"
+        android:title="@string/update"
         app:showAsAction="always" />
 </menu>
