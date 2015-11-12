@@ -273,13 +273,14 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 return true;
 //            String yaml = "" +
 //                    "GroveMultiChannelGas:\r\n" +
+//                    "  sku: 101020088\r\n" +
 //                    "  name: Grove-Multichannel Gas Sensor\r\n" +
 //                    "  construct_arg_list:\r\n" +
 //                    "    pinsda: 4\r\n" +
 //                    "    pinscl: 5\r\n";
 
             String yaml = NodeConfigHelper.getConfigYaml(pinConfigs);
-            Log.e("iot", "yaml:" + yaml);
+            Log.i(TAG, "yaml:\n" + yaml);
             if (yaml.isEmpty()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Forger add grove?");

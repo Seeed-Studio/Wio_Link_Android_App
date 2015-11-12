@@ -81,8 +81,9 @@ public class NodeConfigHelper {
                 int position = p.position;
                 String groveInstanceName = p.groveInstanceName;
                 GroverDriver groverDriver = DBHelper.getGroves(p.grove_id).get(0);
+                String sku = groverDriver.SKU;
                 String groveName = groverDriver.GroveName;
-                y = y + IotYaml.genYamlItem(position, groveInstanceName, groveName);
+                y = y + IotYaml.genYamlItem(position, groveInstanceName, sku, groveName);
             }
         }
         return y;

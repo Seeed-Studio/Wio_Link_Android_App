@@ -14,6 +14,9 @@ import java.util.Map;
 public class GroverDriver extends Model {
     public List<String> Files;
 
+    @Column(name = "sku")
+    public String SKU;
+
     public Map<String, List<String>> Inputs;
 
     @Column(name = "class_file")

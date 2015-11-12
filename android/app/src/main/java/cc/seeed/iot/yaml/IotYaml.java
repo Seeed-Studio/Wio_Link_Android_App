@@ -21,9 +21,10 @@ import cc.seeed.iot.webapi.model.GroverDriver;
 public class IotYaml {
     private static final String TAG = "IotYaml";
 
-    static public String genYamlItem(int position, String groveInstanceName, String groveName) {
+    static public String genYamlItem(int position, String groveInstanceName, String sku, String groveName) {
         String d = groveInstanceName + ":" + "\r\n";
         d = d + "  name: " + groveName + "\r\n";
+        d = d + "  sku: " + sku + "\r\n";
         d = d + "  construct_arg_list:" + "\r\n";
         switch (position) {
             case 1: {
