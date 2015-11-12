@@ -57,18 +57,18 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
         holder.mNameView.setText(node.name);
-        holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Left);
+        holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
 
         if (node.online) {
-            holder.mStatusView.setBackgroundColor(Color.GREEN);
-            holder.mRenameView.setBackgroundColor(Color.GREEN);
-            holder.mDetailView.setBackgroundColor(Color.GREEN);
-            holder.mRemoveView.setBackgroundColor(Color.GREEN);
+            holder.mStatusView.setBackgroundResource(R.color.online);
+            holder.mRenameView.setBackgroundResource(R.color.online);
+            holder.mDetailView.setBackgroundResource(R.color.online);
+            holder.mRemoveView.setBackgroundResource(R.color.online);
         } else {
-            holder.mStatusView.setBackgroundColor(Color.RED);
-            holder.mRenameView.setBackgroundColor(Color.RED);
-            holder.mDetailView.setBackgroundColor(Color.RED);
-            holder.mRemoveView.setBackgroundColor(Color.RED);
+            holder.mStatusView.setBackgroundResource(R.color.offline);
+            holder.mRenameView.setBackgroundResource(R.color.offline);
+            holder.mDetailView.setBackgroundResource(R.color.offline);
+            holder.mRemoveView.setBackgroundResource(R.color.offline);
         }
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);

@@ -101,7 +101,7 @@
 
     <!-- main list-->
     <string name="rename">"  Rename  "</string>
-    <string name="detail">"  Detail  "</string>
+    <string name="detail">"  API  "</string>
     <string name="remove">"  Remove  "</string>
 
 </resources>
