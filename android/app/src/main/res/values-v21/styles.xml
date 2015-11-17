@@ -4,9 +4,9 @@
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar" />
 
     <style name="AppTheme" parent="AppBaseTheme">
-        <item name="android:colorPrimary">#25aadf</item>
-        <item name="android:colorPrimaryDark">#1c9adf</item>
-        <!--<item name="android:colorAccent">#f7ce39</item>-->
+        <item name="android:colorPrimary">@color/primary</item>
+        <item name="android:colorPrimaryDark">@color/primary</item>
+        <item name="android:colorAccent">@color/third_color</item>
     </style>
 
     <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
@@ -17,9 +17,9 @@
     <style name="Theme.NodeSet" parent="Base.Theme.DesignDemoV21"></style>
 
     <style name="Base.Theme.DesignDemoV21" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#25aadf</item>
-        <item name="colorPrimaryDark">#1c9adf</item>
-        <item name="colorAccent">#f7ce39</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary</item>
+        <item name="colorAccent">@color/third_color</item>
         <item name="android:windowBackground">@color/window_background</item>
     </style>
 

@@ -9,6 +9,6 @@
         android:layout_height="match_parent"
         android:background="@color/setup_blue"
         android:contentDescription="splash"
-        android:scaleType="centerInside"
+        android:scaleType="centerCrop"
         android:src="@drawable/logo" />
 </RelativeLayout>

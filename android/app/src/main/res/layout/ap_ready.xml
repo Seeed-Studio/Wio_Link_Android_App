@@ -14,9 +14,11 @@
     </android.support.v7.widget.Toolbar>
 
     <ImageView
+        android:layout_below="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/ap_configure" />
+        android:src="@drawable/ap_configure"
+        android:scaleType="centerCrop"/>
 
     <Button
         android:id="@+id/smartconfig_ready_btn"

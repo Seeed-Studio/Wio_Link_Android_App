@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="setup_blue">#ff33b5e5</color>
-    <color name="apptheme_dialog_button">#4BBC8D</color>
-    <color name="apptheme_dialog_edittext">#FF6EAE0D</color>
-    <color name="apptheme_blue">#ff33b5e5</color>
+    <color name="setup_blue">@color/third_color</color>
+    <color name="apptheme_dialog_button">@color/primary</color>
+    <color name="apptheme_dialog_edittext">@color/primary</color>
+    <color name="apptheme_blue">@color/third_color</color>
 
     <!-- App Theme Colors -->
     <color name="apptheme_main">#bbbbc1</color>
@@ -34,7 +34,12 @@
     <color name="orange">#FF9900</color>
 
     <color name="background">#ECEFF1</color>
-    
+
+    <!-- Common -->
+    <color name="primary">#96141E</color>
+    <color name="second_color">#25467d</color>
+    <color name="third_color">#5a5a5a</color>
+
     <!-- Main List-->
     <color name="online">#A4EA32</color>
     <color name="offline">#F32E2E</color>
