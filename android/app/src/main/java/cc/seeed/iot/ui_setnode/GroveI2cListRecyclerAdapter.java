@@ -43,7 +43,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
         PinConfig pinConfig = pinConfigs.get(position);
         ImageView grove_image = holder.grove_image;
         GroverDriver groverDriver = DBHelper.getGroves(pinConfig.grove_id).get(0);
-        UrlImageViewHelper.setUrlDrawable(grove_image, groverDriver.ImageURL, R.drawable.grove_cold,
+        UrlImageViewHelper.setUrlDrawable(grove_image, groverDriver.ImageURL, R.drawable.grove_no,
                 UrlImageViewHelper.CACHE_DURATION_INFINITE);
     }
 

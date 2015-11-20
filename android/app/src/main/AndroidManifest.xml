@@ -9,12 +9,13 @@
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
-        android:name=".MyApplication"
+        android:name="cc.seeed.iot.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
 
         <meta-data
             android:name="AA_DB_NAME"
@@ -22,85 +23,30 @@
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="1" />
-
-
         <meta-data
             android:name="AA_MODELS"
             android:value="cc.seeed.iot.webapi.model.Node, cc.seeed.iot.webapi.model.GroverDriver,
             cc.seeed.iot.ui_setnode.model.PinConfig" />
 
+        <activity android:name="cc.seeed.iot.ui_main.MainScreenActivity"
+            android:theme="@style/DrawTheme"/>
+        <activity android:name="cc.seeed.iot.ui_setnode.SetupIotNodeActivity" />
+        <activity android:name="cc.seeed.iot.ui_login.SetupActivity" />
+        <activity android:name="cc.seeed.iot.ui_ap_config.GoReadyActivity" />
+        <activity android:name="cc.seeed.iot.ui_ap_config.WifiPionListActivity" />
+        <activity android:name="cc.seeed.iot.ui_ap_config.WifiListActivity" />
+        <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
+        <activity android:name="cc.seeed.iot.ui_main.SettingActivity" />
+        <activity android:name="cc.seeed.iot.ui_main.NodeDetailActivity" />
         <activity
-            android:name=".ui_main.MainScreenActivity"
-            android:theme="@style/Theme.DesignDemo" >
-
-        </activity>
-
-        <activity
-            android:name=".ui_setnode.SetupIotNodeActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-
-        <activity android:name=".ui_login.SetupActivity" >
-
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_smartconfig.GoReadyActivity"
-            android:theme="@style/Theme.NodeSet" >
-
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_smartconfig.SmartConnectActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_smartconfig.ConfigNodeListActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_smartconfig.SetNodeNameActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_ap_config.GoReadyActivity"
-            android:theme="@style/Theme.NodeSet" >
-
-        </activity>
-        <activity
-        android:name="cc.seeed.iot.ui_ap_config.WifiPionListActivity"
-        android:theme="@style/Theme.NodeSet" >
-
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_ap_config.WifiListActivity"
-            android:theme="@style/Theme.NodeSet">
-
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_main.AboutActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_main.SettingActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_main.NodeDetailActivity"
-            android:theme="@style/Theme.NodeSet" >
-        </activity>
-        <activity
-            android:name=".ui_splash.SplashActivity"
+            android:name="cc.seeed.iot.ui_splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="cc.seeed.iot.ui_ap_config.ApConnectActivity"
-            android:theme="@style/Theme.NodeSet">
-
-        </activity>
+        <activity android:name="cc.seeed.iot.ui_ap_config.ApConnectActivity" />
     </application>
 
 </manifest>

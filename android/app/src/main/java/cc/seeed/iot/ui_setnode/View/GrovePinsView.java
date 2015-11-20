@@ -48,7 +48,7 @@ public class GrovePinsView {
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         for (PinConfig pinConfig : pinConfigs) {
             String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
-            UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_cold,
+            UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
                     UrlImageViewHelper.CACHE_DURATION_INFINITE);
         }
 
@@ -58,7 +58,7 @@ public class GrovePinsView {
         for (PinConfig pinConfig : pinConfigs) {
             if (pinConfig.position == 6) {
                 String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
-                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_cold,
+                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
                         UrlImageViewHelper.CACHE_DURATION_INFINITE);
             }
         }

@@ -1,43 +1,71 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <!--<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">-->
-    <!-- Customize your theme here. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
+    <!--&lt;!&ndash;<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">&ndash;&gt;-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
 
+    <!--</style>-->
+
+
+    <!--<style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">-->
+
+    <!--</style>-->
+
+    <!--<style name="Theme.NodeSet" parent="Base.Theme.DesignDemo">-->
+
+
+    <!--</style>-->
+
+    <!--<style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">-->
+    <!--<item name="colorPrimary">#25aadf</item>-->
+    <!--<item name="colorPrimaryDark">#1c9adf</item>-->
+    <!--&lt;!&ndash;<item name="colorAccent">#f7ce39</item>&ndash;&gt;-->
+    <!--<item name="android:windowBackground">@color/window_background</item>-->
+    <!--</style>-->
+
+    <!--<style name="Widget.CardContent" parent="android:Widget">-->
+    <!--<item name="android:paddingLeft">16dp</item>-->
+    <!--<item name="android:paddingRight">16dp</item>-->
+    <!--<item name="android:paddingTop">24dp</item>-->
+    <!--<item name="android:paddingBottom">24dp</item>-->
+    <!--<item name="android:orientation">vertical</item>-->
+    <!--</style>-->
+
+
+    <!--<style name="SplashTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">-->
+    <!--<item name="android:windowNoTitle">true</item>-->
+    <!--<item name="windowActionBar">false</item>-->
+    <!--<item name="android:windowFullscreen">true</item>-->
+    <!--<item name="android:windowContentOverlay">@null</item>-->
+    <!--</style>-->
+
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primaryDark</item>
+        <item name="colorAccent">@color/primary</item>
+        <item name="alertDialogTheme">@style/MyAlertDialogStyle</item>
     </style>
 
+    <style name="DrawTheme" parent="AppTheme" />
 
-    <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
-
-    </style>
-
-    <style name="Theme.NodeSet" parent="Base.Theme.DesignDemo">
-
-
-    </style>
-
-    <style name="Base.Theme.DesignDemo" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#25aadf</item>
-        <item name="colorPrimaryDark">#1c9adf</item>
-        <!--<item name="colorAccent">#f7ce39</item>-->
-        <item name="android:windowBackground">@color/window_background</item>
-    </style>
-
-    <style name="Widget.CardContent" parent="android:Widget">
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:paddingTop">24dp</item>
-        <item name="android:paddingBottom">24dp</item>
-        <item name="android:orientation">vertical</item>
-    </style>
-
-
-    <style name="SplashTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="SplashTheme" parent="AppBaseTheme">
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--<item name="colorAccent">@color/primary</item>-->
+        <!--<item name="android:textColorPrimary">@color/primary</item>-->
+    </style>
+
+    <style name="MyProgressDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/primary</item>
+        <item name="android:textColorPrimary">@color/primary</item>
     </style>
 
 </resources>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/node_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -150,7 +151,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/node_icon" />
+                    android:src="@drawable/node_icon"
+                    app:civ_border_color="@color/primary"
+                    app:civ_border_width="@dimen/civ_border_width" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/grove_image_2"
@@ -160,7 +163,9 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/node_icon" />
+                    android:src="@drawable/node_icon"
+                    app:civ_border_color="@color/primary"
+                    app:civ_border_width="@dimen/civ_border_width" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/grove_image_3"
@@ -169,7 +174,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/grove_drop" />
+                    android:src="@drawable/grove_drop"
+                    app:civ_border_color="@color/primary"
+                    app:civ_border_width="@dimen/civ_border_width" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/grove_image_4"
@@ -178,7 +185,9 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/grove_temperature" />
+                    android:src="@drawable/grove_temperature"
+                    app:civ_border_color="@color/primary"
+                    app:civ_border_width="@dimen/civ_border_width" />
 
                 <TextView
                     android:id="@+id/grove_over"

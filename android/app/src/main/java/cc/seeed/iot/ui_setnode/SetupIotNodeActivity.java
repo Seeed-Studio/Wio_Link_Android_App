@@ -671,7 +671,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
 
                         Log.e(TAG, "Drop " + groverDriver.GroveName);
-                        UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL, R.drawable.grove_cold,
+                        UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL, R.drawable.grove_no,
                                 UrlImageViewHelper.CACHE_DURATION_INFINITE);
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = ((GrovePinsView.Tag) v.getTag()).position;

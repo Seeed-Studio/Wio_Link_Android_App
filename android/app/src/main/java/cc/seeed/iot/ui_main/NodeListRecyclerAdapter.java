@@ -77,7 +77,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
                 holder.mGroveViews.get(i).setVisibility(View.VISIBLE);
                 PinConfig pinConfig = pinConfigs.get(i);
                 String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
-                UrlImageViewHelper.setUrlDrawable(holder.mGroveViews.get(i), url, R.drawable.grove_cold,
+                UrlImageViewHelper.setUrlDrawable(holder.mGroveViews.get(i), url, R.drawable.grove_no,
                         UrlImageViewHelper.CACHE_DURATION_INFINITE);
             } catch (IndexOutOfBoundsException e) {
                 holder.mGroveViews.get(i).setVisibility(View.GONE);

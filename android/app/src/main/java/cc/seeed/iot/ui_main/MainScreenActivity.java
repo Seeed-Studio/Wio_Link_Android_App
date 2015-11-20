@@ -127,7 +127,7 @@ public class MainScreenActivity extends AppCompatActivity
             setupDrawerContent(navigationView);
         }
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
-        if(headerLayout != null) {
+        if (headerLayout != null) {
             mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
             mEmail.setText(user.email);
         }
@@ -143,8 +143,10 @@ public class MainScreenActivity extends AppCompatActivity
             mRecyclerView.setAdapter(mAdapter);
         }
 
+        // Do not need refresh
+        /*
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -160,6 +162,7 @@ public class MainScreenActivity extends AppCompatActivity
                 }, 0);
             }
         });
+        */
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
