@@ -43,6 +43,8 @@ import retrofit.client.Response;
 public class ApConnectActivity extends AppCompatActivity implements OnClickListener {
     private static final String TAG = "ApConnectActivity";
     private static final String AP_IP = "192.168.4.1";
+    private final static String PION_WIFI_PREFIX = "PionOne_";
+    private final static String WIO_WIFI_PREFIX = "WioLink_";
     private TextView mSsidView;
     private EditText mPasswordView;
     private EditText mNodeNameView;
@@ -137,7 +139,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Sending wifi password to Pion One...");
+            mProgressDialog.setMessage("Sending wifi password to Wio Link...");
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
         }
@@ -172,11 +174,11 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         protected void onPostExecute(Boolean b) {
             mProgressDialog.dismiss();
 
-            //remove pion one wifi config
+            //remove Wio Link wifi config
             WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
             List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
             for (WifiConfiguration c : wifiConfigurations) {
-                if (c.SSID.contains("PionOne_")) {
+                if (c.SSID.contains(PION_WIFI_PREFIX) || c.SSID.contains(WIO_WIFI_PREFIX)) {
                     wifiManager.removeNetwork(c.networkId);
                     wifiManager.saveConfiguration();
                 }
@@ -193,7 +195,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Waiting Pion One get ip address...");
+            mProgressDialog.setMessage("Waiting Wio Link get ip address...");
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
         }
@@ -242,9 +244,9 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ApConnectActivity.this);
                 builder.setTitle("Error");
-                builder.setMessage("PION One can not connect to the router.\n" +
+                builder.setMessage("Wio Link can not connect to the router.\n" +
                         "Maybe AP password is wrong or AP connect timeout\n" +
-                        "Please reset Pion One to config mode and try again.");
+                        "Please reset Wio Link to config mode and try again.");
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -261,7 +263,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         private void attemptRename(final String node_name) {
             final ProgressDialog mProgressBar = new ProgressDialog(ApConnectActivity.this);
 
-            mProgressBar.setMessage("Setting Pion One name...");
+            mProgressBar.setMessage("Setting Wio Link name...");
             mProgressBar.show();
             IotApi api = new IotApi();
             User user = ((MyApplication) getApplication()).getUser();

@@ -37,10 +37,10 @@ public class GoReadyActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("WIFI Iot Node");
+        getSupportActionBar().setTitle(R.string.app_name);
 
 
-        mGoReadyButtonView = (Button) findViewById(R.id.smartconfig_ready_btn);
+        mGoReadyButtonView = (Button) findViewById(R.id.ap_ready_btn);
         mGoReadyButtonView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

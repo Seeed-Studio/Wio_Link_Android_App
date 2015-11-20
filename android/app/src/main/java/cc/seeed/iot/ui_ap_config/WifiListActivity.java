@@ -25,7 +25,7 @@ public class WifiListActivity extends AppCompatActivity
         implements WifiRecyclerViewHolder.IMyViewHolderClicks {
     private final static String TAG = "WifiListActivity";
     private final static String PION_WIFI_PREFIX = "PionOne";
-    private final static String Wio_WIFI_PREFIX = "WioLink";
+    private final static String WIO_WIFI_PREFIX = "WioLink";
     private Toolbar mToolbar;
     private RecyclerView mWifiListView;
     private WifiListRecyclerAdapter mWifiListAdapter;
@@ -114,7 +114,7 @@ public class WifiListActivity extends AppCompatActivity
 
         //delete pion wifi
         for (ScanResult s : scanResult) {
-            if (s.SSID.contains(PION_WIFI_PREFIX) || s.SSID.contains(Wio_WIFI_PREFIX)) {
+            if (s.SSID.contains(PION_WIFI_PREFIX) || s.SSID.contains(WIO_WIFI_PREFIX)) {
                 continue;
             }
             scanNoPionResult.add(s);

@@ -37,7 +37,7 @@ public class NodeDetailActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Node Detail");
+        getSupportActionBar().setTitle("API");
 
         mQrImageView = (ImageView) findViewById(R.id.qr_image);
         mUrlTextView = (TextView) findViewById(R.id.qr_url);

@@ -42,7 +42,7 @@
                 android:layout_alignParentTop="true"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="Unknow Pion one"
+                android:text="Unknow Wio Link"
                 android:textSize="16sp" />
 
             <TextView

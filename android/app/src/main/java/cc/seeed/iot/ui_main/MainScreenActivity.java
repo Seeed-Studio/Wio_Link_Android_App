@@ -117,7 +117,7 @@ public class MainScreenActivity extends AppCompatActivity
         if (ab != null) {
             ab.setHomeAsUpIndicator(R.drawable.ic_menu);
             ab.setDisplayHomeAsUpEnabled(true);
-            ab.setTitle("PION ONE");
+            ab.setTitle(R.string.app_name);
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -198,7 +198,7 @@ public class MainScreenActivity extends AppCompatActivity
                         ((MyApplication) MainScreenActivity.this.getApplication()).setFirstUseState(false);
                         break;
                     case MESSAGE_NODE_LIST_START:
-                        mProgressDialog.setMessage("update pion one...");
+                        mProgressDialog.setMessage("update wio link...");
                         mProgressDialog.setCanceledOnTouchOutside(false);
                         mProgressDialog.show();
                         break;
@@ -360,14 +360,14 @@ public class MainScreenActivity extends AppCompatActivity
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Remove Pion One");
+        builder.setTitle("Remove Wio Link");
         builder.setMessage("Confirm remove?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
-                progressDialog.setMessage("Node delete...");
+                progressDialog.setMessage("Wio link remove...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
@@ -381,13 +381,13 @@ public class MainScreenActivity extends AppCompatActivity
                         nodes.remove(node);
                         DBHelper.delNode(node.node_sn);
                         mAdapter.removeItem(position);
-                        Log.i(TAG, "Remove Node success!");
+                        Log.i(TAG, "Remove wio link success!");
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         progressDialog.dismiss();
-                        Log.e(TAG, "Remove Node fail!");
+                        Log.e(TAG, "Remove wio link fail!");
                     }
                 });
             }
@@ -419,14 +419,14 @@ public class MainScreenActivity extends AppCompatActivity
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Rename Pion One");
+        builder.setTitle("Rename Wio Link");
         builder.setView(view);
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String newName = nameView.getText().toString();
                 final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
-                progressDialog.setMessage("Node rename...");
+                progressDialog.setMessage("Wio link rename...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
@@ -445,7 +445,7 @@ public class MainScreenActivity extends AppCompatActivity
                     @Override
                     public void failure(RetrofitError error) {
                         progressDialog.dismiss();
-                        Log.e("iot", "Delete Node fail!");
+                        Log.e(TAG, "Delete wio link failure!");
                     }
                 });
             }
