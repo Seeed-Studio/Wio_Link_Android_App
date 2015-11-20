@@ -789,7 +789,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
     private void removePinConfig(String groveInstanceName) {
         PinConfig rp = new PinConfig();
         for (PinConfig p : pinConfigs) {
-            if (p.groveInstanceName == groveInstanceName)
+            if (p.groveInstanceName.equals(groveInstanceName))
                 rp = p;
         }
         pinConfigs.remove(rp);

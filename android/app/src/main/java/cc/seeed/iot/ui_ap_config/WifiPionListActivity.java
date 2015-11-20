@@ -33,6 +33,7 @@ public class WifiPionListActivity extends AppCompatActivity
     private final static String TAG = "WifiPionListActivity";
     private final static int PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION = 0x00;
     private final static String PION_WIFI_PREFIX = "PionOne_";
+    private final static String Wio_WIFI_PREFIX = "WioLink_";
     private Toolbar mToolbar;
     private RecyclerView mWifiListView;
     private WifiPionListRecyclerAdapter mWifiListAdapter;
@@ -131,7 +132,7 @@ public class WifiPionListActivity extends AppCompatActivity
         List<ScanResult> scanResult = wifiManager.getScanResults();
         scanPionResult.clear();
         for (ScanResult wifi : scanResult) {
-            if (wifi.SSID.contains(PION_WIFI_PREFIX)) {
+            if (wifi.SSID.contains(PION_WIFI_PREFIX) || wifi.SSID.contains(Wio_WIFI_PREFIX)) {
                 Log.i(TAG, "PionOne ssid:" + wifi.SSID);
                 scanPionResult.add(wifi);
             }
