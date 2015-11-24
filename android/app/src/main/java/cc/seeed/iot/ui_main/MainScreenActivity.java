@@ -268,19 +268,19 @@ public class MainScreenActivity extends AppCompatActivity
                         switch (menuItem.getItemId()) {
                             case R.id.nav_nodes_list:
                                 break;
-                            case R.id.nav_smartconfig: {
-                                ((MyApplication) getApplication()).setConfigState(false);
-                                Intent intent = new Intent(MainScreenActivity.this,
-                                        GoReadyActivity.class);
-                                startActivity(intent);
-                            }
-                            break;
-                            case R.id.nav_setting: {
-                                Intent intent = new Intent(MainScreenActivity.this,
-                                        SettingActivity.class);
-                                startActivity(intent);
-                            }
-                            break;
+//                            case R.id.nav_smartconfig: {
+//                                ((MyApplication) getApplication()).setConfigState(false);
+//                                Intent intent = new Intent(MainScreenActivity.this,
+//                                        GoReadyActivity.class);
+//                                startActivity(intent);
+//                            }
+//                            break;
+//                            case R.id.nav_setting: {
+//                                Intent intent = new Intent(MainScreenActivity.this,
+//                                        SettingActivity.class);
+//                                startActivity(intent);
+//                            }
+//                            break;
                             case R.id.nav_about: {
                                 Intent intent = new Intent(MainScreenActivity.this,
                                         AboutActivity.class);
