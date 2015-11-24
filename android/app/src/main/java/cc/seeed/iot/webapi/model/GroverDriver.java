@@ -12,11 +12,13 @@ import java.util.Map;
  */
 @Table(name = "groves")
 public class GroverDriver extends Model {
+    @Column(name = "files")
     public List<String> Files;
 
     @Column(name = "sku")
     public String SKU;
 
+    @Column(name = "inputs")
     public Map<String, List<String>> Inputs;
 
     @Column(name = "class_file")
@@ -25,11 +27,13 @@ public class GroverDriver extends Model {
     @Column(name = "grove_name")
     public String GroveName;
 
+    @Column(name = "outputs")
     public Map<String, List<String>> Outputs;
 
     @Column(name = "image_url")
     public String ImageURL;
 
+    @Column(name = "events")
     public List<String> Events;
 
     @Column(name = "class_name")
@@ -50,5 +54,7 @@ public class GroverDriver extends Model {
     @Column(name = "grove_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public int ID;
 
+    @Column(name = "construct_arg_list")
     public List<String> ConstructArgList;
 }
+
