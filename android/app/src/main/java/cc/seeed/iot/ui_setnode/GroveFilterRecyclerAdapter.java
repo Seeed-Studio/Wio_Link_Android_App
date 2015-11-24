@@ -41,9 +41,9 @@ public class GroveFilterRecyclerAdapter extends RecyclerView.Adapter<GroveFilter
         final View mView = holder.mView;
         mGroveTypeView.setText(groveType);
         if (selectedItems.get(position, false)) {
-            mGroveTypeView.setTextColor(mView.getResources().getColor(R.color.window_background_dark));
+            mGroveTypeView.setTextColor(mView.getResources().getColor(android.R.color.white));
         } else {
-            mGroveTypeView.setTextColor(mView.getResources().getColor(R.color.window_background_light));
+            mGroveTypeView.setTextColor(mView.getResources().getColor(android.R.color.black));
         }
 
     }
@@ -91,6 +91,4 @@ public class GroveFilterRecyclerAdapter extends RecyclerView.Adapter<GroveFilter
             public void onItemClick(View view, int postion);
         }
     }
-
-
 }

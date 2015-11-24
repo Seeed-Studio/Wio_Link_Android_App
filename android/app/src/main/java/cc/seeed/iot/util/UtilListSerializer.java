@@ -1,8 +1,5 @@
 package cc.seeed.iot.util;
 
-import android.support.design.widget.TabLayout;
-import android.util.Log;
-
 import com.activeandroid.serializer.TypeSerializer;
 
 import java.util.ArrayList;

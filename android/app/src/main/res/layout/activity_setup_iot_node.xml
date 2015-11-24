@@ -4,7 +4,7 @@
     android:id="@+id/setup_iot_node"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/apptheme_blue"
+    android:background="@color/third_color"
     android:orientation="vertical"
     tools:context="cc.seeed.iot.ui_setnode.SetupIotNodeActivity">
 
@@ -125,7 +125,7 @@
             android:layout_toEndOf="@+id/grove_6"
             android:layout_toRightOf="@+id/grove_6"
             android:text="+2"
-            android:textColor="@color/green" />
+            android:textColor="@color/second_color" />
 
     </RelativeLayout>
 
@@ -156,44 +156,8 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/cardview_light_background">
+        android:background="@color/primary">
 
     </android.support.v7.widget.RecyclerView>
 
-    <android.support.v7.widget.Toolbar xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/toolbar_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:background="?attr/colorPrimary"
-        android:visibility="gone"
-        app:contentInsetEnd="0dp"
-        app:contentInsetLeft="0dp"
-        app:contentInsetRight="0dp"
-        app:contentInsetStart="0dp">
-
-        <ImageButton
-            android:id="@+id/ib_cancel"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="left"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_cancel" />
-
-        <TextView
-            android:id="@+id/ib_name"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginRight="48dp"
-            android:gravity="center"
-            tools:text="Grove_relay" />
-
-        <ImageButton
-            android:id="@+id/ib_correct"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="right"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_correct" />
-    </android.support.v7.widget.Toolbar>
 </RelativeLayout>
