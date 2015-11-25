@@ -44,8 +44,8 @@ public class IotYaml {
             }
             break;
             case 5: {
-                d = d + "    pintx: 3" + "\r\n";
-                d = d + "    pinrx: 1" + "\r\n";
+                d = d + "    pintx: 1" + "\r\n";
+                d = d + "    pinrx: 3" + "\r\n";
             }
             break;
             case 6: {
