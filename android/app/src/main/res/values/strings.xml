@@ -107,6 +107,7 @@
     <string name="detail">"  API  "</string>
 
     <!-- set node config-->
-    <string name="update">Update Firmware</string>
+    <string name="update">Update</string>
+    <string name="api">API</string>
 
 </resources>

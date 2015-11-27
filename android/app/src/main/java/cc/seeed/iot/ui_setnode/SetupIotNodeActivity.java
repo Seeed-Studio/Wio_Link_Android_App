@@ -5,8 +5,10 @@ import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -277,7 +279,18 @@ public class SetupIotNodeActivity extends AppCompatActivity
         if (id == android.R.id.home) {
             finish();
             return true;
-        } else if (id == R.id.update) {
+        } else if(id == R.id.api){
+            String server_url = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getExchangeServerUrl();
+            String server_endpoint = server_url + "/node/resources?";
+            String node_key = node.node_key;
+            String url = server_endpoint + "access_token=" + node_key;
+            Log.i(TAG, "URL:" + url);
+
+            Uri uri = Uri.parse(url);
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            startActivity(intent);
+        }
+        else if (id == R.id.update) {
             //TODO update firmware
             if (node.name == null)
                 return true;
