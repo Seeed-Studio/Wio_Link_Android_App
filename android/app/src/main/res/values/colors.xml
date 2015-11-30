@@ -42,8 +42,8 @@
     <color name="third_color">#5a5a5a</color>
 
     <!-- Main List-->
-    <color name="online">#25467d</color>
-    <color name="offline">#96141E</color>
+    <color name="online">@color/second_color</color>
+    <color name="offline">@color/primary</color>
     <color name="bottom_1_background">#bbbbc1</color>
     <color name="bottom_2_background">#f88b07</color>
     <color name="bottom_3_background">#f52025</color>
