@@ -21,4 +21,30 @@ public class Node extends Model {
 
     @Column()
     public Boolean online;
+
+    @Column()
+    public Boolean favorite;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof Node)) {
+            return false;
+        }
+
+        Node obj = (Node) o;
+
+        return this.node_sn.equals(obj.node_sn);
+    }
+
+    @Override
+    public int hashCode() {
+        final int PRIME = 31;
+        int result = 1;
+        result = PRIME * result + node_sn.hashCode();
+        return result;
+    }
 }

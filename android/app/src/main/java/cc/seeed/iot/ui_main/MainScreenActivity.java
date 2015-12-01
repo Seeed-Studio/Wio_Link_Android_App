@@ -312,10 +312,10 @@ public class MainScreenActivity extends AppCompatActivity
             case R.id.node_item:
                 nodeSet(node);
                 break;
-            case R.id.location:
-                break;
-            case R.id.favorite:
-                break;
+//            case R.id.location:
+//                break;
+//            case R.id.favorite:
+//                break;
             case R.id.rename:
                 nodeRename(node, position);
                 break;
@@ -325,34 +325,34 @@ public class MainScreenActivity extends AppCompatActivity
             case R.id.remove:
                 nodeRemove(node, position);
                 break;
-            case R.id.dot:
-                PopupMenu popupMenu = new PopupMenu(this, v);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.remove:
-                                nodeRemove(node, position);
-                                return true;
-                            case R.id.detail:
-                                nodeDetail(node);
-                                return true;
-                            case R.id.rename:
-                                nodeRename(node, position);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.inflate(R.menu.ui_node_action);
-                popupMenu.show();
-                if (popupMenu.getDragToOpenListener() instanceof ListPopupWindow.ForwardingListener) {
-                    ListPopupWindow.ForwardingListener listener =
-                            (ListPopupWindow.ForwardingListener) popupMenu.getDragToOpenListener();
-                    listener.getPopup().setVerticalOffset(-v.getHeight());
-                    listener.getPopup().show();
-                }
-                break;
+//            case R.id.dot:
+//                PopupMenu popupMenu = new PopupMenu(this, v);
+//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        switch (item.getItemId()) {
+//                            case R.id.remove:
+//                                nodeRemove(node, position);
+//                                return true;
+//                            case R.id.detail:
+//                                nodeDetail(node);
+//                                return true;
+//                            case R.id.rename:
+//                                nodeRename(node, position);
+//                                return true;
+//                        }
+//                        return false;
+//                    }
+//                });
+//                popupMenu.inflate(R.menu.ui_node_action);
+//                popupMenu.show();
+//                if (popupMenu.getDragToOpenListener() instanceof ListPopupWindow.ForwardingListener) {
+//                    ListPopupWindow.ForwardingListener listener =
+//                            (ListPopupWindow.ForwardingListener) popupMenu.getDragToOpenListener();
+//                    listener.getPopup().setVerticalOffset(-v.getHeight());
+//                    listener.getPopup().show();
+//                }
+//                break;
         }
     }
 
@@ -485,10 +485,7 @@ public class MainScreenActivity extends AppCompatActivity
                     get_nodes.removeAll(delNodes);
                     nodes = get_nodes;
 
-                    DBHelper.delNodesAll();
-                    for (Node node : nodes) {
-                        node.save();
-                    }
+                    DBHelper.saveNodes(nodes);
 
                     Message message = Message.obtain();
                     message.arg2 = 1;

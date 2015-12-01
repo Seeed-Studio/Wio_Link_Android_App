@@ -61,11 +61,15 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
 
         if (node.online) {
             holder.mStatusView.setBackgroundResource(R.color.online);
+            holder.mOnlineLedView.setImageResource(R.drawable.online_led);
+            holder.mOnlineView.setText(R.string.online);
             holder.mRenameView.setBackgroundResource(R.color.online);
             holder.mDetailView.setBackgroundResource(R.color.online);
             holder.mRemoveView.setBackgroundResource(R.color.online);
         } else {
             holder.mStatusView.setBackgroundResource(R.color.offline);
+            holder.mOnlineLedView.setImageResource(R.drawable.offline_led);
+            holder.mOnlineView.setText(R.string.offline);
             holder.mRenameView.setBackgroundResource(R.color.offline);
             holder.mDetailView.setBackgroundResource(R.color.offline);
             holder.mRemoveView.setBackgroundResource(R.color.offline);
@@ -131,7 +135,8 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         private OnClickListener mOnClickListener;
 
         TextView mNameView;
-        TextView mLocationView;
+        TextView mOnlineView;
+        ImageView mOnlineLedView;
         ImageView mFavoriteView;
         ImageView mPopMenuView;
         View mStatusView;
@@ -153,9 +158,10 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             mSwipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe_layout);
             mItemView = itemView;
             mNameView = (TextView) itemView.findViewById(R.id.name);
-            mLocationView = (TextView) itemView.findViewById(R.id.location);
-            mFavoriteView = (ImageView) itemView.findViewById(R.id.favorite);
-            mPopMenuView = (ImageView) itemView.findViewById(R.id.dot);
+            mOnlineView = (TextView) itemView.findViewById(R.id.online);
+            mOnlineLedView = (ImageView) itemView.findViewById(R.id.online_led);
+//            mFavoriteView = (ImageView) itemView.findViewById(R.id.favorite);
+//            mPopMenuView = (ImageView) itemView.findViewById(R.id.dot);
             mStatusView = itemView.findViewById(R.id.status);
 
             mRenameView = (TextView) itemView.findViewById(R.id.rename);
@@ -170,9 +176,9 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             mGroveOverView = (TextView) itemView.findViewById(R.id.grove_over);
 
             mItemView.setOnClickListener(this);
-            mLocationView.setOnClickListener(this);
-            mFavoriteView.setOnClickListener(this);
-            mPopMenuView.setOnClickListener(this);
+//            mLocationView.setOnClickListener(this);
+//            mFavoriteView.setOnClickListener(this);
+//            mPopMenuView.setOnClickListener(this);
             mRenameView.setOnClickListener(this);
             mDetailView.setOnClickListener(this);
             mRemoveView.setOnClickListener(this);

@@ -56,5 +56,24 @@ public class GroverDriver extends Model {
 
     @Column(name = "construct_arg_list")
     public List<String> ConstructArgList;
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (!(obj instanceof GroverDriver)) return false;
+
+        GroverDriver o = (GroverDriver) obj;
+        return o.ID == this.ID;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 1;
+        int PRIME = 17;
+
+        result = result + PRIME + ID;
+
+        return result;
+    }
 }
 

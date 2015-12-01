@@ -22,6 +22,10 @@ public class DBHelper {
                 .execute();
     }
 
+    public static void delNode(Node node) {
+        delNode(node.node_sn);
+    }
+
     public static void delNode(String node_sn) {
         new Delete().
                 from(Node.class)
@@ -34,6 +38,7 @@ public class DBHelper {
                 .from(Node.class)
                 .execute();
     }
+
 
     public static List<GroverDriver> getGrovesAll() {
         return new Select().from(GroverDriver.class).orderBy("grove_id ASC").execute();
@@ -51,5 +56,23 @@ public class DBHelper {
                 .from(GroverDriver.class)
                 .where("grove_name = ?", grove_name)
                 .execute();
+    }
+
+    public static List<Node> saveNodes(List<Node> nodes) {
+        for (Node node : getNodesAll()) {
+            if (!nodes.contains(node)) {
+                delNode(node);
+            }
+        }
+
+        for (Node node : nodes) {
+            node.save();
+        }
+        return nodes;
+    }
+
+    public static Node saveNode(Node node) {
+        node.save();
+        return node;
     }
 }

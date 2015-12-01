@@ -93,32 +93,11 @@
                 android:layout_marginStart="85dp"
                 android:layout_marginTop="46dp">
 
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/ic_access_time" />
-
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginStart="5dp"
-                    android:text="13:00, 29 Oct"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textSize="14sp" />
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginStart="20dp"
-                    android:src="@drawable/ic_location_on" />
 
                 <TextView
-                    android:id="@+id/location"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
