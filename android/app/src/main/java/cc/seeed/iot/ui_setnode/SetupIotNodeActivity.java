@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,6 +37,7 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
@@ -280,14 +280,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
             finish();
             return true;
         } else if(id == R.id.api){
-            String server_url = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getExchangeServerUrl();
-            String server_endpoint = server_url + "/node/resources?";
-            String node_key = node.node_key;
-            String url = server_endpoint + "access_token=" + node_key;
-            Log.i(TAG, "URL:" + url);
-
-            Uri uri = Uri.parse(url);
-            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            Intent intent = new Intent(this, NodeApiActivity.class);
+            intent.putExtra("node_sn", node.node_sn);
             startActivity(intent);
         }
         else if (id == R.id.update) {

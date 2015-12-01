@@ -31,8 +31,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.ListPopupWindow;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -399,7 +397,7 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     public boolean nodeDetail(Node node) {
-        Intent intent = new Intent(this, NodeDetailActivity.class);
+        Intent intent = new Intent(this, NodeApiActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;

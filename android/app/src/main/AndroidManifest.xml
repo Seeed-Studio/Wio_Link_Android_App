@@ -41,7 +41,7 @@
         <activity android:name="cc.seeed.iot.ui_ap_config.WifiListActivity" />
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
         <activity android:name="cc.seeed.iot.ui_main.SettingActivity" />
-        <activity android:name="cc.seeed.iot.ui_main.NodeDetailActivity" />
+        <activity android:name="cc.seeed.iot.ui_main.NodeApiActivity" />
         <activity
             android:name="cc.seeed.iot.ui_splash.SplashActivity"
             android:theme="@style/SplashTheme">

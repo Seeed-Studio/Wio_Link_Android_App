@@ -109,5 +109,6 @@
     <!-- set node config-->
     <string name="update">Update</string>
     <string name="api">API</string>
+    <string name="share_api_to">Share API to…</string>
 
 </resources>
