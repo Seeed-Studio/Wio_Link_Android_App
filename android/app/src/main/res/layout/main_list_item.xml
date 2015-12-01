@@ -18,18 +18,6 @@
             android:weightSum="1">
             <!--What you want to show-->
             <TextView
-                android:id="@+id/rename"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:background="@color/bottom_1_background"
-                android:clickable="true"
-                android:gravity="center"
-                android:text="@string/rename"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/bottom_text" />
-
-            <TextView
                 android:id="@+id/detail"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -38,6 +26,18 @@
                 android:clickable="true"
                 android:gravity="center"
                 android:text="@string/detail"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="@color/bottom_text" />
+
+            <TextView
+                android:id="@+id/rename"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@color/bottom_1_background"
+                android:clickable="true"
+                android:gravity="center"
+                android:text="@string/rename"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/bottom_text" />
 
@@ -60,12 +60,6 @@
             android:id="@+id/main_node_list"
             android:layout_width="match_parent"
             android:layout_height="115dp">
-
-            <View
-                android:id="@+id/status"
-                android:layout_width="6dp"
-                android:layout_height="match_parent"
-                tools:background="@color/offline" />
 
             <ImageView
                 android:layout_width="52dp"
@@ -93,11 +87,31 @@
                 android:layout_marginStart="85dp"
                 android:layout_marginTop="46dp">
 
+                <!--<ImageView-->
+                <!--android:layout_width="18dp"-->
+                <!--android:layout_height="18dp"-->
+                <!--android:src="@drawable/ic_access_time" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/time"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_vertical"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:layout_marginStart="5dp"-->
+                <!--android:text="13:00, 29 Oct"-->
+                <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+                <!--android:textSize="14sp" />-->
 
                 <ImageView
+                    android:id="@+id/online_led"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:layout_gravity="center_vertical"
+                    android:src="@drawable/offline_led" />
 
                 <TextView
+                    android:id="@+id/online"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
@@ -178,32 +192,38 @@
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/favorite"
-                android:layout_width="@dimen/item_image_button"
-                android:layout_height="@dimen/item_image_button"
+            <!--<ImageView-->
+            <!--android:id="@+id/favorite"-->
+            <!--android:layout_width="@dimen/item_image_button"-->
+            <!--android:layout_height="@dimen/item_image_button"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginEnd="@dimen/item_image_button_end_margin"-->
+            <!--android:layout_marginRight="@dimen/item_image_button_end_margin"-->
+            <!--android:layout_marginTop="@dimen/item_image_button_top_margin"-->
+            <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+            <!--android:scaleType="center"-->
+            <!--android:src="@drawable/ic_favorite_border" />-->
+
+            <!--<ImageView-->
+            <!--android:id="@+id/dot"-->
+            <!--android:layout_width="@dimen/item_image_button"-->
+            <!--android:layout_height="@dimen/item_image_button"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginEnd="@dimen/item_image_button_end_margin"-->
+            <!--android:layout_marginRight="@dimen/item_image_button_end_margin"-->
+            <!--android:layout_marginTop="88dp"-->
+            <!--android:background="?attr/selectableItemBackgroundBorderless"-->
+            <!--android:scaleType="center"-->
+            <!--android:src="@drawable/ic_dot" />-->
+            <View
+                android:id="@+id/status"
+                android:layout_width="6dp"
+                android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginEnd="@dimen/item_image_button_end_margin"
-                android:layout_marginRight="@dimen/item_image_button_end_margin"
-                android:layout_marginTop="@dimen/item_image_button_top_margin"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="center"
-                android:src="@drawable/ic_favorite_border" />
-
-            <ImageView
-                android:id="@+id/dot"
-                android:layout_width="@dimen/item_image_button"
-                android:layout_height="@dimen/item_image_button"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginEnd="@dimen/item_image_button_end_margin"
-                android:layout_marginRight="@dimen/item_image_button_end_margin"
-                android:layout_marginTop="88dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="center"
-                android:src="@drawable/ic_dot" />
-
+                tools:background="@color/offline" />
         </RelativeLayout>
     </com.daimajia.swipe.SwipeLayout>
 </LinearLayout>
