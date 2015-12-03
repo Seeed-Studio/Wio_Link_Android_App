@@ -279,12 +279,11 @@ public class SetupIotNodeActivity extends AppCompatActivity
         if (id == android.R.id.home) {
             finish();
             return true;
-        } else if(id == R.id.api){
+        } else if (id == R.id.api) {
             Intent intent = new Intent(this, NodeApiActivity.class);
             intent.putExtra("node_sn", node.node_sn);
             startActivity(intent);
-        }
-        else if (id == R.id.update) {
+        } else if (id == R.id.update) {
             //TODO update firmware
             if (node.name == null)
                 return true;
@@ -589,21 +588,32 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         }
 
                         String groveInstanceName;
-                        List<String> groveInstanceNames = new ArrayList<>();
-                        for (PinConfig p : pinConfigs) {
-                            groveInstanceNames.add(p.groveInstanceName);
-                        }
-                        groveInstanceName = groverDriver.ClassName;
-                        int i = 1;
-                        while (true) {
-                            if (groveInstanceNames.contains(groveInstanceName)) {
-                                groveInstanceName = groveInstanceName.split("_0")[0] + "_0" + Integer.toString(i);
-                            } else {
-                                groveInstanceNames.add(groveInstanceName);
-                                break;
-                            }
-                            i++;
-                        }
+//                        List<String> groveInstanceNames = new ArrayList<>();
+//                        for (PinConfig p : pinConfigs) {
+//                            groveInstanceNames.add(p.groveInstanceName);
+//                        }
+//                        groveInstanceName = groverDriver.ClassName;
+//                        int i = 1;
+//                        while (true) {
+//                            if (groveInstanceNames.contains(groveInstanceName)) {
+//                                groveInstanceName = groveInstanceName.split("_0")[0] + "_0" + Integer.toString(i);
+//                            } else {
+//                                groveInstanceNames.add(groveInstanceName);
+//                                break;
+//                            }
+//                            i++;
+//                        }
+                        if (pinConfig.position >= 1 && pinConfig.position <= 3)
+                            groveInstanceName = groverDriver.ClassName + "_Digital" + (pinConfig.position - 1);
+                        else if (pinConfig.position == 4)
+                            groveInstanceName = groverDriver.ClassName + "_Analog";
+                        else if (pinConfig.position == 5)
+                            groveInstanceName = groverDriver.ClassName + "_UART";
+                        else if (pinConfig.position == 6)
+                            groveInstanceName = groverDriver.ClassName + "_I2C";
+                        else
+                            groveInstanceName = groverDriver.ClassName;
+
                         pinConfig.groveInstanceName = groveInstanceName;
 
                         pinConfigs.add(pinConfig);
