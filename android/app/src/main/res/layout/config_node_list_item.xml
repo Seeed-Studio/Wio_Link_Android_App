@@ -22,7 +22,7 @@
             android:layout_marginTop="16dp"
             android:contentDescription="Picture"
             android:scaleType="centerCrop"
-            android:src="@drawable/node_icon" />
+            android:src="@drawable/node_small" />
 
         <RelativeLayout
             android:layout_width="0dp"

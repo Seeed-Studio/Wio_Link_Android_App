@@ -17,7 +17,7 @@
         android:id="@+id/pb"
         style="@android:style/Widget.ProgressBar.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="3dp"
         android:visibility="gone" />
 
     <WebView

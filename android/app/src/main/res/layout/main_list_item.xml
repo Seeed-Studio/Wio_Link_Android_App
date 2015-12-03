@@ -63,11 +63,11 @@
 
             <ImageView
                 android:layout_width="52dp"
-                android:layout_height="65dp"
+                android:layout_height="52dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/node_icon" />
+                android:src="@drawable/node_small" />
 
             <TextView
                 android:id="@+id/name"
@@ -144,7 +144,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/node_icon"
+                    android:src="@drawable/node_small"
                     app:civ_border_color="@color/primary"
                     app:civ_border_width="@dimen/civ_border_width" />
 
@@ -156,7 +156,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/node_icon"
+                    android:src="@drawable/node_small"
                     app:civ_border_color="@color/primary"
                     app:civ_border_width="@dimen/civ_border_width" />
 
