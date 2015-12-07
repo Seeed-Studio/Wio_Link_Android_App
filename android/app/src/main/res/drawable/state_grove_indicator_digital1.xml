@@ -5,6 +5,6 @@
     <!-- pressed -->
     <item android:drawable="@drawable/grove_shape_pressed" android:state_selected="true" />
     <!-- focused -->
-    <item android:drawable="@drawable/grove_shape_normal" />
+    <item android:drawable="@drawable/grove_shape_normal_digital1" />
     <!-- default -->
 </selector>
