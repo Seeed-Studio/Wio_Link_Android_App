@@ -1,7 +1,6 @@
 package cc.seeed.iot.ui_main;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,7 +48,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.main_list_item, parent, false);
+                .inflate(R.layout.item_node, parent, false);
         return new MainViewHolder(v, mOnClickListener);
     }
 

@@ -26,7 +26,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -54,6 +53,7 @@ import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -79,7 +79,7 @@ public class MainScreenActivity extends AppCompatActivity
     private static final int MESSAGE_NODE_CONFIG_COMPLETE = 0x04;
 
     private DrawerLayout mDrawerLayout;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    //    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private NodeListRecyclerAdapter mAdapter;
     private TextView mEmail;
@@ -123,12 +123,22 @@ public class MainScreenActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
+
         }
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
         if (headerLayout != null) {
             mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
-            mEmail.setText(user.email);
+            String server = "";
+            if (((MyApplication) getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL)) {
+                server = "China";
+            } else if (((MyApplication) getApplication()).getServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
+                server = "International";
+            } else
+                server = "Customer";
+            mEmail.setText(user.email + " (" + server + ")");
+
         }
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.listview);
         if (mRecyclerView != null) {
@@ -261,11 +271,19 @@ public class MainScreenActivity extends AppCompatActivity
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()) {
-                            case R.id.nav_nodes_list:
+                            case R.id.nav_node_list:
+                                Log.e(TAG, "nodes");
+                                menuItem.setChecked(true);
                                 break;
+                            case R.id.nav_grove_list: {
+                                Log.e(TAG, "groves");
+                                Intent intent = new Intent(MainScreenActivity.this,
+                                        GrovesActivity.class);
+                                startActivity(intent);
+                            }
+                            break;
 //                            case R.id.nav_smartconfig: {
 //                                ((MyApplication) getApplication()).setConfigState(false);
 //                                Intent intent = new Intent(MainScreenActivity.this,

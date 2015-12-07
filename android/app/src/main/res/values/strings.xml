@@ -60,7 +60,8 @@
 
 
     <!--NavigationView-->
-    <string name="nodes_list_view">Nodes List</string>
+    <string name="node_list_view">Nodes</string>
+    <string name="grove_list_view">Groves</string>
     <string name="smartconfig_view">Smart Config</string>
     <string name="sn_key_view">Update SN/Key</string>
     <string name="about_view">About</string>
@@ -110,5 +111,6 @@
     <string name="update">Update</string>
     <string name="api">API</string>
     <string name="share_api_to">Share API to…</string>
+    <string name="groves">Grove List</string>
 
 </resources>
