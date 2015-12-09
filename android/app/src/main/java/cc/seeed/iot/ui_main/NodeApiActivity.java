@@ -23,7 +23,8 @@ import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 
 public class NodeApiActivity extends AppCompatActivity {
-    final static String TAG = "NodeApiActivity";
+    private final static String TAG = "NodeApiActivity";
+    private final static String RESOURCE = "/v1/node/resources?";
     private Toolbar mToolbar;
 
     private ProgressBar mProgressBar;
@@ -123,7 +124,7 @@ public class NodeApiActivity extends AppCompatActivity {
 
     private String getApiUrl() {
         String server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getExchangeServerUrl();
-        String server_endpoint = server_url + "/node/resources?";
+        String server_endpoint = server_url + RESOURCE;
         String node_key = node.node_key;
         String url = server_endpoint + "access_token=" + node_key;
         Log.i("iot", "Url:" + url);
