@@ -17,6 +17,7 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.UserResponse;
@@ -48,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         user = ((MyApplication) getApplication()).getUser();
+
+
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -81,6 +84,23 @@ public class LoginActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refresh_layout();
+    }
+
+    private void refresh_layout() {
+        String ota_server_ip = ((MyApplication) getApplication()).getOtaServerIP();
+        if (ota_server_ip.equals(Common.OTA_INTERNATIONAL_IP)) {
+            _serverLink.setText(getString(R.string.serverOn) + " International" + getString(R.string.change));
+        } else if (ota_server_ip.equals(Common.OTA_CHINA_IP)) {
+            _serverLink.setText(getString(R.string.serverOn) + " China" + getString(R.string.change));
+        } else {
+            _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_ip + getString(R.string.change));
+        }
     }
 
     public void login() {
@@ -156,7 +176,6 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void success(UserResponse userResponse, retrofit.client.Response response) {
                 String status = userResponse.status;
-                progressDialog.dismiss();
                 if (status.equals("200")) {
                     onLoginSuccess(email, userResponse);
                 } else {
@@ -164,6 +183,7 @@ public class LoginActivity extends AppCompatActivity {
                     _emailText.setError(userResponse.msg);
                     _emailText.requestFocus();
                 }
+                progressDialog.dismiss();
             }
 
             @Override

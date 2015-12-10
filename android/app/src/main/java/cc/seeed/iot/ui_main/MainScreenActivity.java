@@ -129,9 +129,9 @@ public class MainScreenActivity extends AppCompatActivity
         if (headerLayout != null) {
             mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
             String server = "";
-            if (((MyApplication) getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL)) {
+            if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_CHINA_URL)) {
                 server = "China";
-            } else if (((MyApplication) getApplication()).getServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
+            } else if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
                 server = "International";
             } else
                 server = "Customer";

@@ -43,13 +43,15 @@
         <activity
             android:name="cc.seeed.iot.ui_login.SignupActivity"
             android:theme="@style/AppTheme.Dark"
-            android:windowSoftInputMode="stateAlwaysHidden"/>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="cc.seeed.iot.ui_login.ResetActivity"
-            android:theme="@style/AppTheme.Dark" />
+            android:theme="@style/AppTheme.Dark"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name="cc.seeed.iot.ui_login.SelServerActivity"
-            android:theme="@style/AppTheme.Dark" />
+            android:theme="@style/AppTheme.Dark"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name="cc.seeed.iot.ui_ap_config.GoReadyActivity" />
         <activity android:name="cc.seeed.iot.ui_ap_config.WifiPionListActivity" />
         <activity android:name="cc.seeed.iot.ui_ap_config.WifiListActivity" />

@@ -39,7 +39,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
-        server_url = ((MyApplication) getApplication()).getServerUrl();
+        server_url = ((MyApplication) getApplication()).getOtaServerUrl();
         mUrlView.setText(server_url);
         mUrlView.setEnabled(false);
         mChangeView.setText("Change");
@@ -81,7 +81,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void saveServerUrl(String s) {
-        ((MyApplication) getApplication()).setServerUrl(s);
+        ((MyApplication) getApplication()).setOtaServerUrl(s);
         IotApi.SetServerUrl(s);
     }
 

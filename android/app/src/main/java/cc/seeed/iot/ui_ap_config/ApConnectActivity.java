@@ -114,7 +114,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             //APCFG: ssid\tpassword\tkey\tsn\t
 //            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
 //                    node_key + "\t" + node_sn + "\t";
-            String ota_server = ((MyApplication) getApplication()).getServerUrl();
+            String ota_server = ((MyApplication) getApplication()).getOtaServerUrl();
             String exchange_server = ((MyApplication) getApplication()).getExchangeServerUrl();
 
             if (ota_server.equals(Common.OTA_CHINA_URL)) {

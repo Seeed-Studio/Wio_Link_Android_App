@@ -119,5 +119,7 @@
     <string name="share_api_to">Share API to…</string>
     <string name="groves">Grove List</string>
     <string name="ConnectServerFail">Can\'t conncet server...</string>
+    <string name="serverOn">Server on</string>
+    <string name="change">. Change?</string>
 
 </resources>

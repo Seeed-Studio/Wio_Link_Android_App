@@ -81,14 +81,14 @@ public class SignInDialogFragment extends DialogFragment {
 //            mSwitchAreaView.setVisibility(View.GONE);
 //        }
 
-        if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL)) {
+        if (((MyApplication) getActivity().getApplication()).getOtaServerUrl().equals(Common.OTA_CHINA_URL)) {
             mSwitchAreaView.setText(R.string.setup_switch_international);
             ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_CHINA_URL);
-        } else if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
+        } else if (((MyApplication) getActivity().getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
             mSwitchAreaView.setText(R.string.setup_switch_china);
             ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_INTERNATIONAL_URL);
         } else
-            mSwitchAreaView.setText(((MyApplication) getActivity().getApplication()).getServerUrl());
+            mSwitchAreaView.setText(((MyApplication) getActivity().getApplication()).getOtaServerUrl());
 
 
 
@@ -123,11 +123,11 @@ public class SignInDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 if (mSwitchAreaView.getText().toString().equals(getString(R.string.setup_switch_international))) {
                     mSwitchAreaView.setText(R.string.setup_switch_china);
-                    ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_INTERNATIONAL_URL);
+                    ((MyApplication) getActivity().getApplication()).setOtaServerUrl(Common.OTA_INTERNATIONAL_URL);
                     ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_INTERNATIONAL_URL);
                 } else {
                     mSwitchAreaView.setText(R.string.setup_switch_international);
-                    ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_CHINA_URL);
+                    ((MyApplication) getActivity().getApplication()).setOtaServerUrl(Common.OTA_CHINA_URL);
                     ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_CHINA_URL);
                 }
             }
