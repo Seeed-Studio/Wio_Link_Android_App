@@ -37,9 +37,21 @@
 
     <!-- Common -->
     <color name="primary">#96141E</color>
-    <color name="primaryDark">#750f17</color>
+    <color name="primary_dark">#8c141e</color>
+    <color name="primary_darker">#82141e</color>
     <color name="second_color">#25467d</color>
     <color name="third_color">#5a5a5a</color>
+    <color name="accent">#FFFFFF</color>
+
+    <color name="black">#000000</color>
+    <color name="jet">#222222</color>
+    <color name="oil">#333333</color>
+    <color name="monsoon">#777777</color>
+    <color name="jumbo">#888888</color>
+    <color name="aluminum">#999999</color>
+    <color name="base">#AAAAAA</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
 
     <!-- Main List-->
     <color name="online">@color/second_color</color>

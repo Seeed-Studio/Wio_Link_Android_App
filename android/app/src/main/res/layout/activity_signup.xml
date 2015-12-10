@@ -34,7 +34,7 @@
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
-        <!--  Password Label -->
+        <!-- Password Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -49,42 +49,49 @@
                 android:inputType="textPassword" />
         </android.support.design.widget.TextInputLayout>
 
+        <!--&lt;!&ndash; Verify Password Label &ndash;&gt;-->
+        <!--<android.support.design.widget.TextInputLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginTop="8dp">-->
+
+            <!--<EditText-->
+                <!--android:id="@+id/input_pwd_verify"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:hint="Verify Password"-->
+                <!--android:inputType="textPassword" />-->
+        <!--</android.support.design.widget.TextInputLayout>-->
+
+        <!-- Signup Button -->
         <TextView
             android:id="@+id/link_server"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:gravity="center"
-            android:text="Server on 192.168.111.192. Change?"
+            android:text="Server on International. Change?"
             android:textSize="16sp" />
 
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_signup"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:padding="12dp"
-            android:text="Login" />
+            android:text="Create Account" />
+
 
 
         <TextView
-            android:id="@+id/forgot_pwd"
+            android:id="@+id/link_login"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:text="Forgot your password?"
+            android:text="Already a member? Login"
             android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/link_signup"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="No account yet? Create one"
-            android:textSize="16sp" />
-
     </LinearLayout>
 </ScrollView>

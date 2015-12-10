@@ -40,5 +40,6 @@ dependencies {
     compile "com.daimajia.swipelayout:library:1.1.8@aar"
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
+    compile 'com.jakewharton:butterknife:6.1.0'
 
 }

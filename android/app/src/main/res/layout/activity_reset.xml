@@ -19,7 +19,7 @@
             android:layout_marginBottom="24dp"
             android:src="@drawable/logo_mini" />
 
-        <!--  Email Label -->
+        <!--  email Label -->
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,57 +34,23 @@
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
-        <!--  Password Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
-
-            <EditText
-                android:id="@+id/input_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            android:id="@+id/link_server"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:text="Server on 192.168.111.192. Change?"
-            android:textSize="16sp" />
-
         <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_login"
+            android:id="@+id/btn_reset"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_marginTop="24dp"
             android:padding="12dp"
-            android:text="Login" />
+            android:text="Reset" />
 
 
         <TextView
-            android:id="@+id/forgot_pwd"
+            android:id="@+id/link_cancel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:gravity="center"
-            android:text="Forgot your password?"
+            android:text="Cancel"
             android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/link_signup"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="No account yet? Create one"
-            android:textSize="16sp" />
-
     </LinearLayout>
 </ScrollView>
