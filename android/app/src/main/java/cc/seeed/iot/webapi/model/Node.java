@@ -23,7 +23,7 @@ public class Node extends Model {
     public Boolean online;
 
     @Column()
-    public Boolean favorite;
+    public String dataxserver;
 
     @Override
     public boolean equals(Object o) {

@@ -128,15 +128,13 @@ public class MainScreenActivity extends AppCompatActivity
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
         if (headerLayout != null) {
             mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
-            String server = "";
             if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_CHINA_URL)) {
-                server = "China";
+                mEmail.setText(user.email + " (China)");
             } else if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
-                server = "International";
+                mEmail.setText(user.email + " (International)");
             } else
-                server = "Customer";
-            mEmail.setText(user.email + " (" + server + ")");
-
+            mEmail.setText(user.email + " (Customer)\n" +
+                    ((MyApplication) getApplication()).getOtaServerIP());
         }
 
 

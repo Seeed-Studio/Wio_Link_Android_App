@@ -36,8 +36,8 @@ public interface IotService {
 
     @POST("/v1/user/changepassword")
     public void userChangePassword(@Query("password") String newPwd,
-                               @Query("access_token") String user_token,
-                               Callback<UserResponse> callback);
+                                   @Query("access_token") String user_token,
+                                   Callback<UserResponse> callback);
 
     @POST("/v1/user/retrievepassword")
     public void userRetrievePassword(@Query("email") String email, Callback<Response> callback);
@@ -57,6 +57,9 @@ public interface IotService {
     public void nodesRename(@Query("name") String node_name,
                             @Query("node_sn") String node_sn,
                             Callback<NodeResponse> callback);
+
+    @POST("/v1/nodes/setting/dataxserver/{ip}")
+    public void settingDataxserver(@Path("ip") String property, Callback<Response> callback);
 
     @POST("/v1/nodes/delete")
     public void nodesDelete(@Query("node_sn") String node_sn, Callback<NodeResponse> callback);

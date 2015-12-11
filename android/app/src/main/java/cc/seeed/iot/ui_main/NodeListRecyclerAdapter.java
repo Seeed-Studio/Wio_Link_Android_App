@@ -57,6 +57,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         Node node = nodes.get(position);
         holder.mNameView.setText(node.name);
         holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
+        holder.mXserverView.setText(node.dataxserver);
 
         if (node.online) {
             holder.mStatusView.setBackgroundResource(R.color.online);
@@ -136,6 +137,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         TextView mNameView;
         TextView mOnlineView;
         ImageView mOnlineLedView;
+        TextView mXserverView;
         ImageView mFavoriteView;
         ImageView mPopMenuView;
         View mStatusView;
@@ -159,6 +161,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             mNameView = (TextView) itemView.findViewById(R.id.name);
             mOnlineView = (TextView) itemView.findViewById(R.id.online);
             mOnlineLedView = (ImageView) itemView.findViewById(R.id.online_led);
+            mXserverView = (TextView) itemView.findViewById(R.id.xserver_ip);
 //            mFavoriteView = (ImageView) itemView.findViewById(R.id.favorite);
 //            mPopMenuView = (ImageView) itemView.findViewById(R.id.dot);
             mStatusView = itemView.findViewById(R.id.status);
