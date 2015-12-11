@@ -101,7 +101,7 @@ public class SelServerActivity extends AppCompatActivity {
     }
 
     public void onSaveFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Save failed", Toast.LENGTH_LONG).show();
 
         _serverIpText.setEnabled(true);
     }
@@ -109,11 +109,12 @@ public class SelServerActivity extends AppCompatActivity {
     public void saveServerIP() {
         Log.d(TAG, "SaveServeIP");
 
-        if (!validate()) {
-            onSaveFailed();
-            return;
+        if (_serverSpinner.getSelectedItemPosition() == 2) {
+            if (!validate()) {
+                onSaveFailed();
+                return;
+            }
         }
-
         _saveButton.setEnabled(false);
 
         final ProgressDialog progressDialog = new ProgressDialog(SelServerActivity.this,

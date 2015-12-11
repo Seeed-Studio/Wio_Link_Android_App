@@ -189,7 +189,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void failure(RetrofitError error) {
                 progressDialog.dismiss();
-                Toast.makeText(LoginActivity.this, R.string.ConnectServerFail, Toast.LENGTH_LONG).show();
+                onLoginFailed();
+//                Toast.makeText(LoginActivity.this, R.string.ConnectServerFail, Toast.LENGTH_LONG).show();
             }
         });
     }

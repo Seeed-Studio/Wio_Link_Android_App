@@ -184,8 +184,9 @@ public class SignupActivity extends AppCompatActivity {
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(SignupActivity.this, R.string.ConnectServerFail, Toast.LENGTH_LONG).show();
+//                Toast.makeText(SignupActivity.this, R.string.ConnectServerFail, Toast.LENGTH_LONG).show();
                 progressDialog.dismiss();
+                onSignupFailed();
 
             }
         });
