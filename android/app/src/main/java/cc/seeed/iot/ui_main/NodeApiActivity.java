@@ -123,8 +123,8 @@ public class NodeApiActivity extends AppCompatActivity {
     }
 
     private String getApiUrl() {
-        String server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getExchangeServerUrl();
-        String server_endpoint = server_url + RESOURCE;
+        String ota_server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerUrl();
+        String server_endpoint = ota_server_url + RESOURCE;
         String node_key = node.node_key;
         String url = server_endpoint + "access_token=" + node_key;
         Log.i("iot", "Url:" + url);

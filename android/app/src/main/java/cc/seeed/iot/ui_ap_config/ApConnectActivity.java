@@ -30,7 +30,6 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
@@ -114,21 +113,22 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             //APCFG: ssid\tpassword\tkey\tsn\t
 //            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
 //                    node_key + "\t" + node_sn + "\t";
-            String ota_server = ((MyApplication) getApplication()).getOtaServerUrl();
-            String exchange_server = ((MyApplication) getApplication()).getExchangeServerUrl();
+            String ota_server_ip = ((MyApplication) getApplication()).getOtaServerIP();
+            String exchange_server_ip = ota_server_ip;
 
-            if (ota_server.equals(Common.OTA_CHINA_URL)) {
-                ota_server = Common.OTA_CHINA_IP;
-                exchange_server = Common.EXCHANGE_CHINA_IP;
-            } else if (ota_server.equals(Common.OTA_INTERNATIONAL_URL)) {
-                ota_server = Common.OTA_INTERNATIONAL_IP;
-                exchange_server = Common.EXCHANGE_INTERNATIONAL_IP;
-            }
+//            if (ota_server.equals(Common.OTA_CHINA_URL)) {
+//                ota_server = Common.OTA_CHINA_IP;
+//                exchange_server = Common.EXCHANGE_CHINA_IP;
+//            } else if (ota_server.equals(Common.OTA_INTERNATIONAL_URL)) {
+//                ota_server = Common.OTA_INTERNATIONAL_IP;
+//                exchange_server = Common.EXCHANGE_INTERNATIONAL_IP;
+//            }
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
-                    node_key + "\t" + node_sn + "\t" + ota_server + "\t" + exchange_server + "\t";
+                    node_key + "\t" + node_sn + "\t" + exchange_server_ip + "\t"
+                    + ota_server_ip + "\t";
 
             Log.i(TAG, "cmd_connect: " + cmd_connect);
-            Log.i(TAG, "ip: " + AP_IP);
+            Log.i(TAG, "AP ip: " + AP_IP);
             new SetNodeSn().execute(cmd_connect, AP_IP);
         }
     }
@@ -210,10 +210,12 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 iot.nodesList(new Callback<NodeListResponse>() {
                     @Override
                     public void success(NodeListResponse nodeListResponse, Response response) {
-                        for (Node n : nodeListResponse.nodes) {
-                            if (n.node_sn.equals(node_sn) && n.online) {
-                                state_online = true;
-                                break;
+                        if (nodeListResponse.status.equals("200")) {
+                            for (Node n : nodeListResponse.nodes) {
+                                if (n.node_sn.equals(node_sn) && n.online) {
+                                    state_online = true;
+                                    break;
+                                }
                             }
                         }
                     }
