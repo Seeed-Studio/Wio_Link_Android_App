@@ -109,7 +109,7 @@
     <string name="ap_config_progress_msg">Setting Wio link name...</string>
 
     <!-- main list-->
-    <string name="rename">"  Rename  "</string>
+    <string name="setting">"  Setting  "</string>
     <string name="remove">"  Remove  "</string>
     <string name="detail">"  API  "</string>
 

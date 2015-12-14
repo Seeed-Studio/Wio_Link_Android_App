@@ -18,6 +18,7 @@ import java.util.List;
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -57,7 +58,13 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         Node node = nodes.get(position);
         holder.mNameView.setText(node.name);
         holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
-        holder.mXserverView.setText(node.dataxserver);
+
+
+        if (node.dataxserver == null || node.dataxserver.equals(Common.OTA_INTERNATIONAL_IP)
+                || node.dataxserver.equals(Common.OTA_CHINA_IP))
+            holder.mXserverView.setText("");
+        else
+            holder.mXserverView.setText(node.dataxserver);
 
         if (node.online) {
             holder.mStatusView.setBackgroundResource(R.color.online);
@@ -166,8 +173,8 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
 //            mPopMenuView = (ImageView) itemView.findViewById(R.id.dot);
             mStatusView = itemView.findViewById(R.id.status);
 
-            mRenameView = (TextView) itemView.findViewById(R.id.rename);
-            mDetailView = (TextView) itemView.findViewById(R.id.detail);
+            mRenameView = (TextView) itemView.findViewById(R.id.setting);
+            mDetailView = (TextView) itemView.findViewById(R.id.api);
             mRemoveView = (TextView) itemView.findViewById(R.id.remove);
 
             mGroveViews = new ArrayList<>();

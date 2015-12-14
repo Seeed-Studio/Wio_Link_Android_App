@@ -29,7 +29,7 @@ import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.Response;
+import cc.seeed.iot.webapi.model.CommonResponse;
 import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -237,9 +237,9 @@ public class SignInDialogFragment extends DialogFragment {
         progressDialog.show();
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userRetrievePassword(email, new Callback<Response>() {
+        iot.userRetrievePassword(email, new Callback<CommonResponse>() {
             @Override
-            public void success(Response response, retrofit.client.Response response1) {
+            public void success(CommonResponse response, retrofit.client.Response response1) {
                 String status = response.status;
                 if (status.equals("200")) {
                     resetPasswordDialog.dismiss();

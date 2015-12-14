@@ -8,7 +8,7 @@ import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
 import cc.seeed.iot.webapi.model.OtaStatusResponse;
 import cc.seeed.iot.webapi.model.PropertyResponse;
-import cc.seeed.iot.webapi.model.Response;
+import cc.seeed.iot.webapi.model.CommonResponse;
 import cc.seeed.iot.webapi.model.UserResponse;
 import cc.seeed.iot.webapi.model.WellKnownResponse;
 import retrofit.Callback;
@@ -40,7 +40,7 @@ public interface IotService {
                                    Callback<UserResponse> callback);
 
     @POST("/v1/user/retrievepassword")
-    public void userRetrievePassword(@Query("email") String email, Callback<Response> callback);
+    public void userRetrievePassword(@Query("email") String email, Callback<CommonResponse> callback);
 
     /**
      * Node manage APIs
@@ -58,14 +58,14 @@ public interface IotService {
                             @Query("node_sn") String node_sn,
                             Callback<NodeResponse> callback);
 
-    @POST("/v1/nodes/setting/dataxserver/{ip}")
-    public void settingDataxserver(@Path("ip") String property, Callback<Response> callback);
+    @POST("/v1/node/setting/dataxserver/{ip}")
+    public void nodeSettingDataxserver(@Path("ip") String property, Callback<CommonResponse> callback);
 
     @POST("/v1/nodes/delete")
     public void nodesDelete(@Query("node_sn") String node_sn, Callback<NodeResponse> callback);
 
     @GET("/v1/node/config")
-    public void nodeConfig(Callback<Response> callback);
+    public void nodeConfig(Callback<CommonResponse> callback);
 
     @POST("/v1/user/download")
     public void userDownload(@Query("access_token") String node_key,
@@ -84,7 +84,7 @@ public interface IotService {
     public void scanDrivers(Callback<List<GroverDriver>> callback);
 
     @GET("/v1/scan/status")
-    public void scanStatus(Callback<Response> callback);
+    public void scanStatus(Callback<CommonResponse> callback);
 
 
     /**
@@ -105,5 +105,5 @@ public interface IotService {
     //  ...-d "a=10&b=10.5&c=445566" https://iot.yuzhe.me/v1/node/Grove_Example1/multi_value
     @POST("/v1/node/{property}")
     public void writePropert(@Path("property") String property, @QueryMap Map<String, Object> option,
-                             Callback<Response> callback);
+                             Callback<CommonResponse> callback);
 }

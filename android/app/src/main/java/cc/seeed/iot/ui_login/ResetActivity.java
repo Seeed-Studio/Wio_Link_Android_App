@@ -16,7 +16,7 @@ import butterknife.InjectView;
 import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.Response;
+import cc.seeed.iot.webapi.model.CommonResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
@@ -102,9 +102,9 @@ public class ResetActivity extends AppCompatActivity {
     private boolean resetPassword(String email, final ProgressDialog progressDialog) {
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userRetrievePassword(email, new Callback<Response>() {
+        iot.userRetrievePassword(email, new Callback<CommonResponse>() {
             @Override
-            public void success(Response response, retrofit.client.Response response1) {
+            public void success(CommonResponse response, retrofit.client.Response response1) {
                 String status = response.status;
                 progressDialog.dismiss();
                 if (status.equals("200")) {

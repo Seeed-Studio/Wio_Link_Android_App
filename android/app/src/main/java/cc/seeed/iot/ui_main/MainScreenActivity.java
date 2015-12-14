@@ -57,6 +57,7 @@ import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.CommonResponse;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
@@ -330,11 +331,11 @@ public class MainScreenActivity extends AppCompatActivity
 //                break;
 //            case R.id.favorite:
 //                break;
-            case R.id.rename:
-                nodeRename(node, position);
+            case R.id.setting:
+                nodeSetting(node);
                 break;
-            case R.id.detail:
-                nodeDetail(node);
+            case R.id.api:
+                nodeApi(node);
                 break;
             case R.id.remove:
                 nodeRemove(node, position);
@@ -349,7 +350,7 @@ public class MainScreenActivity extends AppCompatActivity
 //                                nodeRemove(node, position);
 //                                return true;
 //                            case R.id.detail:
-//                                nodeDetail(node);
+//                                nodeApi(node);
 //                                return true;
 //                            case R.id.rename:
 //                                nodeRename(node, position);
@@ -368,6 +369,12 @@ public class MainScreenActivity extends AppCompatActivity
 //                }
 //                break;
         }
+    }
+
+    private void nodeSetting(Node node) {
+        Intent intent = new Intent(this, NodeSettingActivity.class);
+        intent.putExtra("node_sn", node.node_sn);
+        startActivity(intent);
     }
 
     public boolean nodeRemove(final Node node, final int position) {
@@ -412,7 +419,7 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
-    public boolean nodeDetail(Node node) {
+    public boolean nodeApi(Node node) {
         Intent intent = new Intent(this, NodeApiActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
@@ -423,50 +430,6 @@ public class MainScreenActivity extends AppCompatActivity
         Intent intent = new Intent(this, SetupIotNodeActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
-        return true;
-    }
-
-    public boolean nodeRename(final Node node, final int position) {
-        final LayoutInflater inflater = this.getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_name_input, null);
-        final EditText nameView = (EditText) view.findViewById(R.id.new_name);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle("Rename Wio Link");
-        builder.setView(view);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String newName = nameView.getText().toString();
-                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
-                progressDialog.setMessage("Wio link rename...");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
-                IotApi api = new IotApi();
-                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-                api.setAccessToken(user.user_key);
-                final IotService iot = api.getService();
-                iot.nodesRename(newName, node.node_sn, new Callback<NodeResponse>() {
-                    @Override
-                    public void success(NodeResponse nodeResponse, Response response) {
-                        progressDialog.dismiss();
-                        nodes.get(position).name = newName;
-                        node.save();
-                        mAdapter.updateItem(position);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        progressDialog.dismiss();
-                        Log.e(TAG, "Delete wio link failure!");
-                    }
-                });
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.show();
-
         return true;
     }
 
@@ -532,9 +495,9 @@ public class MainScreenActivity extends AppCompatActivity
         IotApi api = new IotApi();
         api.setAccessToken(node.node_key);
         final IotService iot = api.getService();
-        iot.nodeConfig(new Callback<cc.seeed.iot.webapi.model.Response>() {
+        iot.nodeConfig(new Callback<CommonResponse>() {
             @Override
-            public void success(cc.seeed.iot.webapi.model.Response response, Response response2) {
+            public void success(CommonResponse response, Response response2) {
                 if (response.status.equals("200")) {
                     String yaml = response.msg;
                     saveToDB(yaml);

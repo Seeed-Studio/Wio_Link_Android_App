@@ -18,7 +18,7 @@
             android:weightSum="1">
             <!--What you want to show-->
             <TextView
-                android:id="@+id/detail"
+                android:id="@+id/api"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
@@ -30,14 +30,14 @@
                 android:textColor="@color/bottom_text" />
 
             <TextView
-                android:id="@+id/rename"
+                android:id="@+id/setting"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:background="@color/bottom_1_background"
                 android:clickable="true"
                 android:gravity="center"
-                android:text="@string/rename"
+                android:text="@string/setting"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/bottom_text" />
 
