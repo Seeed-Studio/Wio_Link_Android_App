@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 
@@ -123,10 +124,15 @@ public class NodeApiActivity extends AppCompatActivity {
     }
 
     private String getApiUrl() {
+        String url;
         String ota_server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerUrl();
         String server_endpoint = ota_server_url + RESOURCE;
         String node_key = node.node_key;
-        String url = server_endpoint + "access_token=" + node_key;
+        String dataxserver = node.dataxserver;
+        if(dataxserver.equals(Common.OTA_CHINA_IP) || dataxserver.equals(Common.OTA_INTERNATIONAL_IP))
+            url = server_endpoint + "access_token=" + node_key;
+        else
+            url = server_endpoint + "access_token=" + node_key + "&dataxserver=" + dataxserver;
         Log.i("iot", "Url:" + url);
 
         return url;
