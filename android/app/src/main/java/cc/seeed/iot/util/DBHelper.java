@@ -39,6 +39,24 @@ public class DBHelper {
                 .execute();
     }
 
+    public static List<Node> saveNodes(List<Node> nodes) {
+        for (Node node : getNodesAll()) {
+            if (!nodes.contains(node)) {
+                delNode(node);
+            }
+        }
+
+        for (Node node : nodes) {
+            node.save();
+        }
+        return nodes;
+    }
+
+    public static Node saveNode(Node node) {
+        node.save();
+        return node;
+    }
+
 
     public static List<GroverDriver> getGrovesAll() {
         return new Select().from(GroverDriver.class).orderBy("grove_id ASC").execute();
@@ -58,21 +76,11 @@ public class DBHelper {
                 .execute();
     }
 
-    public static List<Node> saveNodes(List<Node> nodes) {
-        for (Node node : getNodesAll()) {
-            if (!nodes.contains(node)) {
-                delNode(node);
-            }
-        }
-
-        for (Node node : nodes) {
-            node.save();
-        }
-        return nodes;
+    public static void delGrovesAll(){
+        new Delete()
+                .from(GroverDriver.class)
+                .execute();
     }
 
-    public static Node saveNode(Node node) {
-        node.save();
-        return node;
-    }
+
 }

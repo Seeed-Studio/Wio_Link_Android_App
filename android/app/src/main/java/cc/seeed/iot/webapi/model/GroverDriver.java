@@ -75,5 +75,10 @@ public class GroverDriver extends Model {
 
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "GroveName:" + GroveName + ",GroveID:" + ID + ",GroveSKU:" + SKU;
+    }
 }
 

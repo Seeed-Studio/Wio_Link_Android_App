@@ -187,7 +187,6 @@ public class MainScreenActivity extends AppCompatActivity
     private void initData() {
 
         user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-        Log.e(TAG, "email " + user.email);
         nodes = DBHelper.getNodesAll();
         firstUseState = ((MyApplication) MainScreenActivity.this.getApplication()).getFirstUseState();
 
@@ -273,11 +272,9 @@ public class MainScreenActivity extends AppCompatActivity
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()) {
                             case R.id.nav_node_list:
-                                Log.e(TAG, "nodes");
                                 menuItem.setChecked(true);
                                 break;
                             case R.id.nav_grove_list: {
-                                Log.e(TAG, "groves");
                                 Intent intent = new Intent(MainScreenActivity.this,
                                         GrovesActivity.class);
                                 startActivity(intent);
@@ -304,7 +301,9 @@ public class MainScreenActivity extends AppCompatActivity
                             break;
                             case R.id.nav_logout: {
                                 ((MyApplication) getApplication()).setLoginState(false);
+                                ((MyApplication) getApplication()).setFirstUseState(true);
                                 DBHelper.delNodesAll();
+                                DBHelper.delGrovesAll();
                                 PinConfigDBHelper.delPinConfigAll();
                                 Intent intent = new Intent(MainScreenActivity.this,
                                         SetupActivity.class);
@@ -402,13 +401,11 @@ public class MainScreenActivity extends AppCompatActivity
                         nodes.remove(node);
                         DBHelper.delNode(node.node_sn);
                         mAdapter.removeItem(position);
-                        Log.i(TAG, "Remove wio link success!");
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         progressDialog.dismiss();
-                        Log.e(TAG, "Remove wio link fail!");
                     }
                 });
             }
