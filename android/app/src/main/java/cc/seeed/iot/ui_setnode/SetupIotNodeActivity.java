@@ -640,6 +640,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         break;
                     case DragEvent.ACTION_DRAG_EXITED:
                         ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
+                        break;
                     case DragEvent.ACTION_DROP: {
                         if (event.getClipDescription().hasMimeType(GROVE_REMOVE)) {
                             ImageView view = (ImageView) event.getLocalState();
