@@ -145,7 +145,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
 
         pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
-        Log.e(TAG, "ori_pinconfig" + pinConfigs.toString());
+//        Log.e(TAG, "ori_pinconfig" + pinConfigs.toString());
 
         getSupportActionBar().setTitle(node.name);
 
@@ -296,6 +296,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //                    "    pinscl: 5\r\n";
 
             String yaml = NodeConfigHelper.getConfigYaml(pinConfigs);
+//            Log.i(TAG, pinConfigs.toString());
             Log.i(TAG, "yaml:\n" + yaml);
             if (yaml.isEmpty()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -481,7 +482,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 if (pinDeviceCount(6) == 0) {
                     ;
                 } else if (pinDeviceCount(6) == 1) {
-                    Snackbar.make(v, "Grove name:" + pinDeviceCount(5), Snackbar.LENGTH_LONG).show();
+//                    Snackbar.make(v, "Grove name:" + pinDeviceCount(5), Snackbar.LENGTH_LONG).show();
                 } else if (pinDeviceCount(6) > 1) {
                     if (mGroveI2cListView.getVisibility() == View.VISIBLE)
                         mGroveI2cListView.setVisibility(View.INVISIBLE);
@@ -539,7 +540,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     }
                     break;
                     case DragEvent.ACTION_DRAG_ENTERED:
-                        Log.e(TAG, "entered");
+//                        Log.e(TAG, "entered");
                         v.setActivated(false);
                         ((ImageView) v).setImageAlpha(64);
                         break;
@@ -554,7 +555,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     case DragEvent.ACTION_DROP: {
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
 
-                        Log.e(TAG, "Drop " + groverDriver.GroveName);
+                        Log.i(TAG, "Drop " + groverDriver);
                         UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL, R.drawable.grove_no,
                                 UrlImageViewHelper.CACHE_DURATION_INFINITE);
                         PinConfig pinConfig = new PinConfig();
@@ -617,7 +618,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         pinConfig.groveInstanceName = groveInstanceName;
 
                         pinConfigs.add(pinConfig);
-                        Log.e(TAG, "drag pinConfigs " + pinConfigs);
+                        Log.i(TAG, "drag pinConfigs " + pinConfigs);
 
                         if (v.getId() == R.id.grove_6) {
                             Message message = Message.obtain();
@@ -642,7 +643,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     case DragEvent.ACTION_DROP: {
                         if (event.getClipDescription().hasMimeType(GROVE_REMOVE)) {
                             ImageView view = (ImageView) event.getLocalState();
-                            Log.e(TAG, ((GrovePinsView.Tag) view.getTag()).position + "");
                             view.setImageDrawable(null);
                             int position = ((GrovePinsView.Tag) view.getTag()).position;
 
@@ -714,7 +714,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     startDragRemove(v);
                 break;
             case R.id.grove_6:
-                Snackbar.make(v, "Grove name:" + pinDeviceCount(6), Snackbar.LENGTH_LONG).show();
+//                Snackbar.make(v, "Grove name:" + pinDeviceCount(6), Snackbar.LENGTH_LONG).show();
                 if (pinDeviceCount(6) == 0) {
                     ;
                 } else if (pinDeviceCount(6) == 1) {

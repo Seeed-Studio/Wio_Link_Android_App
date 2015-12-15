@@ -117,11 +117,11 @@ public class SelServerActivity extends AppCompatActivity {
         }
         _saveButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SelServerActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Saving server ip...");
-        progressDialog.show();
+//        final ProgressDialog progressDialog = new ProgressDialog(SelServerActivity.this,
+//                R.style.AppTheme_Dark_Dialog);
+//        progressDialog.setIndeterminate(true);
+//        progressDialog.setMessage("Saving server ip...");
+//        progressDialog.show();
 
         // TODO: Implement your own saveServerIP logic here.
         String ota_server_ip;
@@ -145,9 +145,9 @@ public class SelServerActivity extends AppCompatActivity {
                 new Runnable() {
                     public void run() {
                         onSaveSuccess();
-                        progressDialog.dismiss();
+//                        progressDialog.dismiss();
                     }
-                }, 1000);
+                }, 0);
     }
 
     public boolean validate() {

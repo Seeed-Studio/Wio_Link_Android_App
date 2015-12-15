@@ -52,7 +52,7 @@ public class IotApi {
     private IotService init(Executor httpExecutor, Executor callbackExecutor) {
         OkHttpClient client = getUnsafeOkHttpClient();
         final RestAdapter restAdapter = new RestAdapter.Builder()
-                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .setExecutors(httpExecutor, callbackExecutor)
                 .setEndpoint(iot_url)
                 .setRequestInterceptor(new WebApiAuthenticator())
