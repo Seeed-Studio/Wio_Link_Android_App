@@ -1,9 +1,16 @@
 package cc.seeed.iot.ui_setnode;
 
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipDescription;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,13 +20,15 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.ContextMenu;
+import android.util.SparseIntArray;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +37,11 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
-import cc.seeed.iot.ui_setnode.model.GroveFliter;
+import cc.seeed.iot.ui_main.NodeApiActivity;
+import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
+import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -42,15 +54,28 @@ import retrofit.client.Response;
 
 public class SetupIotNodeActivity extends AppCompatActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
-        View.OnClickListener, View.OnLongClickListener {
+        View.OnClickListener, View.OnDragListener, View.OnLongClickListener {
+
+    private static final String TAG = "SetupIotNodeActivity";
+    public static final String GROVE_REMOVE = "grove/remove";
+    public static final String GROVE_REMOVE_PIN6 = "grove/remove/6";
+    public static final String GROVE_ADD = "grove/add";
+    private static final int ADD_I2C_GROVE = 0x00;
+    private static final int RMV_I2C_GROVE = 0x01;
+
+    private static final int MESSAGE_UPDATE_DONE = 0x10;
+
     public Toolbar mToolbar;
-    public Toolbar mToolbarAction;
-    List<Node> nodes;
     Node node;
     User user;
+    List<PinConfig> pinConfigs = new ArrayList<>();
 
     static View.OnClickListener mainOnClickListener; //Todo, no static
     static View.OnLongClickListener mainOnLongClickListener; //Todo, no static
+    static View.OnLongClickListener pin6OnLongClickListener; //Todo, no static
+
+    RecyclerView mGroveI2cListView;
+    GroveI2cListRecyclerAdapter mGroveI2cListAdapter;
 
     RecyclerView mGroveListView;
     GroveListRecyclerAdapter mGroveListAdapter;
@@ -59,27 +84,23 @@ public class SetupIotNodeActivity extends AppCompatActivity
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
     private List<GroverDriver> mGroveDrivers;
 
-    ImageButton mCorrectView;
-    ImageButton mCancelView;
-    TextView mGroveNameView;
-
     SparseBooleanArray nodePinSelector;
-    //    Map<Integer, NodePinConfig> nodePinConfigs;
     NodeConfigHelper nodeConfigModel;
 
     View mSetNodeLayout;
-    ImageButton pin1View, pin2View, pin3View, pin4View, pin5View, pin6View;
-
-    UiStateControl uiStateControl;
-
+    GrovePinsView mGrovePinsView;
     ProgressDialog mProgressDialog;
+    private ImageView mDragRemoveView;
+    private TextView i2cDeviceNumView;
+
+
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_iot_node);
         View view = (View) findViewById(R.id.setup_iot_node);
-        uiStateControl = new UiStateControl(view);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,
@@ -92,9 +113,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         mainOnClickListener = new MainOnClickListener(this);
         mainOnLongClickListener = new MainOnClickListener(this);
+        pin6OnLongClickListener = new Pin6OnClickListener(this);
 
         nodePinSelector = new SparseBooleanArray();
-//        nodePinConfigsInit();
 
         mGroveDrivers = DBHelper.getGrovesAll();
 
@@ -103,46 +124,29 @@ public class SetupIotNodeActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        mToolbarAction = (Toolbar) findViewById(R.id.toolbar_bottom);
-        mToolbarAction.setVisibility(View.GONE);
-        mCorrectView = (ImageButton) findViewById(R.id.ib_correct);
-        mCancelView = (ImageButton) findViewById(R.id.ib_cancel);
-        mGroveNameView = (TextView) findViewById(R.id.ib_name);
-        mCorrectView.setOnClickListener(this);
-        mCancelView.setOnClickListener(this);
+        mDragRemoveView = (ImageView) findViewById(R.id.grove_remove);
+        mDragRemoveView.setOnDragListener(this);
 
         mSetNodeLayout = (View) findViewById(R.id.set_node);
         mSetNodeLayout.setOnClickListener(this);
-        pin1View = (ImageButton) findViewById(R.id.grove_1);
-        pin2View = (ImageButton) findViewById(R.id.grove_2);
-        pin3View = (ImageButton) findViewById(R.id.grove_3);
-        pin4View = (ImageButton) findViewById(R.id.grove_4);
-        pin5View = (ImageButton) findViewById(R.id.grove_5);
-        pin6View = (ImageButton) findViewById(R.id.grove_6);
 
-        pin1View.setOnClickListener(this);
-        pin2View.setOnClickListener(this);
-        pin3View.setOnClickListener(this);
-        pin4View.setOnClickListener(this);
-        pin5View.setOnClickListener(this);
-        pin6View.setOnClickListener(this);
 
-        pin1View.setOnLongClickListener(this);
-        pin2View.setOnLongClickListener(this);
-        pin3View.setOnLongClickListener(this);
-        pin4View.setOnLongClickListener(this);
-        pin5View.setOnLongClickListener(this);
-        pin6View.setOnLongClickListener(this);
-
-//        nodes = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getNodes();
-        nodes = DBHelper.getNodesAll();
-        int position = getIntent().getIntExtra("position", 1);
-        node = new Node();
-        node = nodes.get(position);
+        String node_sn = getIntent().getStringExtra("node_sn");
+        node = DBHelper.getNodes(node_sn).get(0);
 
         nodeConfigModel = new NodeConfigHelper(node.node_sn);
 
-//        Snackbar.make(mToolbar, "Here's a " + node.name, Snackbar.LENGTH_LONG).show();
+        mGrovePinsView = new GrovePinsView(view, node);
+        for (ImageView pinView : mGrovePinsView.pinViews) {
+            pinView.setOnDragListener(this);
+            pinView.setOnClickListener(this);
+            pinView.setOnLongClickListener(this);
+        }
+
+
+        pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
+//        Log.e(TAG, "ori_pinconfig" + pinConfigs.toString());
+
         getSupportActionBar().setTitle(node.name);
 
         user = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getUser();
@@ -152,12 +156,19 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mGroveListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
             mGroveListView.setLayoutManager(layoutManager);
             mGroveListAdapter = new GroveListRecyclerAdapter(mGroveDrivers);
             mGroveListView.setAdapter(mGroveListAdapter);
+        }
 
-//            setupAdapter();
+        mGroveI2cListView = (RecyclerView) findViewById(R.id.grove_i2c_list);
+        if (mGroveI2cListView != null) {
+            mGroveI2cListView.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            mGroveI2cListView.setLayoutManager(layoutManager);
+            mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
+            mGroveI2cListView.setAdapter(mGroveI2cListAdapter);
         }
 
         mGroveTypeListView = (RecyclerView) findViewById(R.id.grove_selector);
@@ -165,51 +176,94 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mGroveTypeListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-
             mGroveTypeListView.setLayoutManager(layoutManager);
+            setupGroveSelectorAdapter();
+        }
 
-            setupGroveSetectorAdapter();
+        i2cDeviceNumView = (TextView) view.findViewById(R.id.i2c_device_num);
+        i2cDeviceNumViewDisplay();
 
+        initData();
+    }
+
+    private void i2cDeviceNumViewDisplay() {
+        if (pinDeviceCount(6) > 1) {
+            i2cDeviceNumView.setVisibility(View.VISIBLE);
+            i2cDeviceNumView.setText("+" + String.valueOf(pinDeviceCount(6) - 1));
+        } else {
+            i2cDeviceNumView.setVisibility(View.GONE);
         }
     }
 
-//    private void nodePinConfigsInit() {
-//        NodePinConfig n = new NodePinConfig();
-    //Todo need init?
-//    }
+    private void initData() {
+        mHandler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case ADD_I2C_GROVE:
+                        //if i2c list visible, dynamic add, move to end position
+                        updateI2cGroveList();
+                        scrollI2cGroveListToEnd();
+                        //refresh number display
+                        i2cDeviceNumViewDisplay();
+                        break;
+                    case RMV_I2C_GROVE:
+                        //if i2c list visible, dynamic remove
 
-    private void setupGroveSetectorAdapter() {
+                        if (pinDeviceCount(6) < 2)
+                            mGroveI2cListView.setVisibility(View.INVISIBLE);
+                        else
+                            updateI2cGroveList();
+
+                        //refresh number display
+                        i2cDeviceNumViewDisplay();
+
+                        //refresh pin6 image
+                        mGrovePinsView.updatePin6(pinConfigs);
+                        break;
+
+                    case MESSAGE_UPDATE_DONE: {
+                        String message = (String) msg.obj;
+                        new AlertDialog.Builder(SetupIotNodeActivity.this)
+                                .setTitle(R.string.update)
+                                .setMessage(message)
+                                .setPositiveButton(R.string.ok, null)
+                                .show();
+                    }
+                    break;
+                }
+            }
+        };
+    }
+
+    private void scrollI2cGroveListToEnd() {
+        mGroveI2cListView.smoothScrollToPosition(mGroveI2cListAdapter.getItemCount() - 1);
+    }
+
+    private void updateI2cGroveList() {
+        List<PinConfig> pin6Configs = new ArrayList<>();
+        for (PinConfig p : pinConfigs) {
+            if (p.position == 6)
+                pin6Configs.add(p);
+        }
+        mGroveI2cListAdapter.updateAll(pin6Configs);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getGrovesData();
+    }
+
+    private void setupGroveSelectorAdapter() {
         mGroveTypeListAdapter = new GroveFilterRecyclerAdapter(Constant.groveTypes);
         mGroveTypeListAdapter.setOnItemClickListener(this);
         mGroveTypeListView.setAdapter(mGroveTypeListAdapter);
+        mGroveTypeListAdapter.updateSelection(0);
     }
 
     private void updateGroveListAdapter(List<GroverDriver> groverDrivers) {
         mGroveListAdapter.updateAll(groverDrivers);
-    }
-
-    private void setupAdapter() {
-        IotApi api = new IotApi();
-        User user = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getUser();
-        api.setAccessToken(user.user_key);
-        final IotService iot = api.getService();
-        iot.scanDrivers(new Callback<List<GroverDriver>>() {
-            @Override
-            public void success(List<GroverDriver> groverDrivers, Response response) {
-                mGroveDrivers = groverDrivers;
-                mGroveListAdapter = new GroveListRecyclerAdapter(groverDrivers);
-                mGroveListView.setAdapter(mGroveListAdapter);
-
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(SetupIotNodeActivity.this, "Connect sever fail...", Toast.LENGTH_LONG).show();
-            }
-        });
-
-
-
     }
 
     @Override
@@ -225,24 +279,25 @@ public class SetupIotNodeActivity extends AppCompatActivity
         if (id == android.R.id.home) {
             finish();
             return true;
+        } else if (id == R.id.api) {
+            Intent intent = new Intent(this, NodeApiActivity.class);
+            intent.putExtra("node_sn", node.node_sn);
+            startActivity(intent);
         } else if (id == R.id.update) {
             //TODO update firmware
             if (node.name == null)
                 return true;
 //            String yaml = "" +
-//                    "Grove_Example1:\r\n" +
-//                    "  name: Grove_Example\r\n" +
+//                    "GroveMultiChannelGas:\r\n" +
+//                    "  sku: 101020088\r\n" +
+//                    "  name: Grove-Multichannel Gas Sensor\r\n" +
 //                    "  construct_arg_list:\r\n" +
 //                    "    pinsda: 4\r\n" +
 //                    "    pinscl: 5\r\n";
 
-
-//            nodeConfigModel.addPinNode(1, mGroveDrivers.get(0));
-//            nodeConfigModel.addPinNode(2, mGroveDrivers.get(0));
-//            nodeConfigModel.addPinNode(3, mGroveDrivers.get(2));
-
-            String yaml = nodeConfigModel.getConfigYaml();
-            Log.e("iot", "yaml:" + yaml);
+            String yaml = NodeConfigHelper.getConfigYaml(pinConfigs);
+//            Log.i(TAG, pinConfigs.toString());
+            Log.i(TAG, "yaml:\n" + yaml);
             if (yaml.isEmpty()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Forger add grove?");
@@ -271,27 +326,27 @@ public class SetupIotNodeActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case 1:
 //                nodeConfigModel.removePinNode(1);
-                uiStateControl.removeSelectedPin(1);
+//                uiStateControl.removeSelectedPin(1);
                 break;
             case 2:
 //                nodeConfigModel.removePinNode(2);
-                uiStateControl.removeSelectedPin(2);
+//                uiStateControl.removeSelectedPin(2);
                 break;
             case 3:
 //                nodeConfigModel.removePinNode(3);
-                uiStateControl.removeSelectedPin(3);
+//                uiStateControl.removeSelectedPin(3);
                 break;
             case 4:
 //                nodeConfigModel.removePinNode(4);
-                uiStateControl.removeSelectedPin(4);
+//                uiStateControl.removeSelectedPin(4);
                 break;
             case 5:
 //                nodeConfigModel.removePinNode(5);
-                uiStateControl.removeSelectedPin(5);
+//                uiStateControl.removeSelectedPin(5);
                 break;
             case 6:
 //                nodeConfigModel.removePinNode(6);
-                uiStateControl.removeSelectedPin(6);
+//                uiStateControl.removeSelectedPin(6);
                 break;
         }
 
@@ -319,7 +374,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             @Override
             public void failure(RetrofitError error) {
                 mProgressDialog.dismiss();
-                Log.e("iot", "error:" + error);
+                Log.e(TAG, "error:" + error);
             }
         });
     }
@@ -335,14 +390,13 @@ public class SetupIotNodeActivity extends AppCompatActivity
                                 displayStatus(node_key);
                                 mProgressDialog.setMessage(otaStatusResponse.ota_msg);
                             } else if (otaStatusResponse.ota_status.equals("done")) {
-                                mProgressDialog.setMessage(otaStatusResponse.ota_msg);
-                                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                                mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                mProgressDialog.dismiss();
 
-                                    }
-                                });
+                                Message message = Message.obtain();
+                                message.what = MESSAGE_UPDATE_DONE;
+                                message.obj = otaStatusResponse.ota_msg;
+                                mHandler.sendMessage(message);
+
                             } else if (otaStatusResponse.ota_status.equals("error")) {
                                 mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
                                 mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
@@ -367,7 +421,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.e("iot", "error:" + error);
+                        Log.e(TAG, "error:" + error);
                         mProgressDialog.dismiss();
                     }
                 }
@@ -375,13 +429,13 @@ public class SetupIotNodeActivity extends AppCompatActivity
         );
     }
 
-
     @Override
-    public void onItemClick(View view, int postion) {
-        String groveType = Constant.groveTypes[postion];
+    public void onItemClick(View view, int position) {
+        String groveType = Constant.groveTypes[position];
 
-        ArrayList<GroverDriver> inputGroves = new ArrayList<GroverDriver>();
-        ArrayList<GroverDriver> outputGroves = new ArrayList<GroverDriver>();
+        List<GroverDriver> inputGroves = new ArrayList<GroverDriver>();
+        List<GroverDriver> outputGroves = new ArrayList<GroverDriver>();
+
 
         if (mGroveDrivers == null)
             return;
@@ -394,253 +448,297 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 inputGroves.add(g);
         }
 
-        mGroveTypeListAdapter.updateSelection(postion);
+        mGroveTypeListAdapter.updateSelection(position);
 
-        if (uiStateControl.getSetPin() == 1 || uiStateControl.getSetPin() == 2 || uiStateControl.getSetPin() == 3) {
-            ArrayList<GroverDriver> inputGrovesGpio = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesGpio = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) { //grove's output is node's input
-                    inputGrovesGpio.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesGpio.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesGpio);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesGpio);
-            }
-        } else if (uiStateControl.getSetPin() == 4) {
-            ArrayList<GroverDriver> inputGrovesAnalog = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesAnalog = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) {
-                    inputGrovesAnalog.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesAnalog.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesAnalog);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesAnalog);
-            }
-        } else if (uiStateControl.getSetPin() == 5) {
-            ArrayList<GroverDriver> inputGrovesUart = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesUart = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) {
-                    inputGrovesUart.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesUart.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesUart);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesUart);
-            }
-        } else if (uiStateControl.getSetPin() == 6) {
-            ArrayList<GroverDriver> inputGrovesI2c = new ArrayList<GroverDriver>();
-            ArrayList<GroverDriver> outputGrovesI2c = new ArrayList<GroverDriver>();
-
-            ArrayList<GroverDriver> groverGPIO =
-                    new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C);
-
-            for (GroverDriver g : groverGPIO) {
-                if (!g.Outputs.isEmpty()) {
-                    inputGrovesI2c.add(g);
-                }
-                if (!g.Inputs.isEmpty())
-                    outputGrovesI2c.add(g);
-            }
-
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(groverGPIO);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGrovesI2c);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGrovesI2c);
-            }
-
-        } else {
-            if (groveType.equals("All")) {
-                updateGroveListAdapter(mGroveDrivers);
-            } else if (groveType.equals("Input")) {
-                updateGroveListAdapter(inputGroves);
-            } else if (groveType.equals("Output")) {
-                updateGroveListAdapter(outputGroves);
-            }
+        if (groveType.equals("All")) {
+            updateGroveListAdapter(mGroveDrivers);
+        } else if (groveType.equals("Input")) {
+            updateGroveListAdapter(inputGroves);
+        } else if (groveType.equals("Output")) {
+            updateGroveListAdapter(outputGroves);
         }
+
     }
 
     @Override
     public void onClick(View v) {
-        if (mGroveDrivers == null) //todo fixed, find method do it.use database?
-            return;
         switch (v.getId()) {
-            case R.id.ib_correct:
-                int position = uiStateControl.getSetPin();
-                nodeConfigModel.addPinNode(position, mGroveListAdapter.getSelectedItem());
-                mToolbarAction.setVisibility(View.GONE);
-                mGroveListAdapter.clearSelectItem();
-                uiStateControl.activatedClear();
-                uiStateControl.selectedPin();
-                break;
-            case R.id.ib_cancel:
-                mToolbarAction.setVisibility(View.GONE);
-                uiStateControl.activatedClear();
-                mGroveListAdapter.clearSelectItem();
-                break;
             case R.id.grove_1:
-                uiStateControl.activatedPin(1);
-//                if (nodeConfigModel.getPinNode(1).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(1).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
+//                Snackbar.make(v, "Grove name:" + pinDeviceCount(1), Snackbar.LENGTH_LONG).show();
                 break;
             case R.id.grove_2:
-                uiStateControl.activatedPin(2);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
-//                if (nodeConfigModel.getPinNode(2).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(2).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
+//                Snackbar.make(v, "Grove name:" + pinDeviceCount(2), Snackbar.LENGTH_LONG).show();
                 break;
             case R.id.grove_3:
-                uiStateControl.activatedPin(3);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.GPIO));
-//                if (nodeConfigModel.getPinNode(3).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(3).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
+//                Snackbar.make(v, "Grove name:" + pinDeviceCount(3), Snackbar.LENGTH_LONG).show();
                 break;
             case R.id.grove_4:
-                uiStateControl.activatedPin(4);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.ANALOG));
-//                if (nodeConfigModel.getPinNode(4).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(4).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
+//                Snackbar.make(v, "Grove name:" + pinDeviceCount(4), Snackbar.LENGTH_LONG).show();
                 break;
             case R.id.grove_5:
-                uiStateControl.activatedPin(5);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.UART));
-//                if (nodeConfigModel.getPinNode(5).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(5).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
+//                Snackbar.make(v, "Grove name:" + pinDeviceCount(5), Snackbar.LENGTH_LONG).show();
                 break;
             case R.id.grove_6:
-                uiStateControl.activatedPin(6);
-                mGroveListAdapter.updateAll(
-                        new GroveFliter(mGroveDrivers).getGroveFilterInterface(GroveFliter.I2C));
-//                if (nodeConfigModel.getPinNode(6).selected) {
-//                    Snackbar.make(v, "Grove name:" + nodeConfigModel.getPinNode(6).groverDriver.GroveName,
-//                            Snackbar.LENGTH_LONG).show();
-//                }
-                break;
-            case R.id.set_node:
-                if (mToolbarAction.getVisibility() == View.GONE)
-                    uiStateControl.activatedClear();
+                if (pinDeviceCount(6) == 0) {
+                    ;
+                } else if (pinDeviceCount(6) == 1) {
+//                    Snackbar.make(v, "Grove name:" + pinDeviceCount(5), Snackbar.LENGTH_LONG).show();
+                } else if (pinDeviceCount(6) > 1) {
+                    if (mGroveI2cListView.getVisibility() == View.VISIBLE)
+                        mGroveI2cListView.setVisibility(View.INVISIBLE);
+                    else {
+                        mGroveI2cListView.setVisibility(View.VISIBLE);
+                        updateI2cGroveList();
+                    }
+                }
+
                 break;
         }
 
     }
+
+    private int pinDeviceCount(int position) {
+
+        SparseIntArray sparseIntArray = new SparseIntArray();
+
+        for (PinConfig pinConfig : pinConfigs) {
+            int count = sparseIntArray.get(pinConfig.position, 0);
+            count = count + 1;
+            sparseIntArray.append(pinConfig.position, count);
+        }
+        return sparseIntArray.get(position, 0);
+    }
+
+
+    @Override
+    public boolean onDrag(View v, DragEvent event) {
+//        Log.e(TAG, v.toString());
+//        Log.e(TAG, event.toString());
+        int action = event.getAction();
+
+        switch (v.getId()) {
+            case R.id.grove_1:
+            case R.id.grove_2:
+            case R.id.grove_3:
+            case R.id.grove_4:
+            case R.id.grove_5:
+            case R.id.grove_6:
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED: {
+                        if (!event.getClipDescription().hasMimeType(GROVE_ADD))
+                            return false;
+                        GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
+                        String interfaceType = tag.interfaceType;
+                        GroverDriver groverDriver = (GroverDriver) event.getLocalState();
+
+                        if (!interfaceType.equals(groverDriver.InterfaceType)) {
+//                            Log.e(TAG, groverDriver.InterfaceType);
+                            return false;
+                        }
+                        v.setActivated(true);
+                        ((ImageView) v).setImageAlpha(64);
+                    }
+                    break;
+                    case DragEvent.ACTION_DRAG_ENTERED:
+//                        Log.e(TAG, "entered");
+                        v.setActivated(false);
+                        ((ImageView) v).setImageAlpha(64);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        v.setActivated(true);
+                        ((ImageView) v).setImageAlpha(64);
+                        break;
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        v.setActivated(false);
+                        ((ImageView) v).setImageAlpha(255);
+                        break;
+                    case DragEvent.ACTION_DROP: {
+                        GroverDriver groverDriver = (GroverDriver) event.getLocalState();
+
+                        Log.i(TAG, "Drop " + groverDriver);
+                        UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL, R.drawable.grove_no,
+                                UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                        PinConfig pinConfig = new PinConfig();
+                        pinConfig.position = ((GrovePinsView.Tag) v.getTag()).position;
+                        pinConfig.selected = true;
+                        pinConfig.grove_id = groverDriver.ID;
+                        pinConfig.node_sn = node.node_sn;
+
+                        if (pinConfig.position != 6) {
+                            //One pin connect one grove
+                            Boolean status = false;
+                            PinConfig dup_pinConfig = new PinConfig();
+                            for (PinConfig p : pinConfigs)
+                                if (p.position == pinConfig.position) {
+                                    status = true;
+                                    dup_pinConfig = p;
+                                }
+                            if (status)
+                                pinConfigs.remove(dup_pinConfig);
+                        } else {
+                            //duplicate i2c grove is not allowed
+                            Boolean status = false;
+                            PinConfig dup_pinConfig = new PinConfig();
+                            for (PinConfig p : pinConfigs)
+                                if (p.grove_id == pinConfig.grove_id) {
+                                    status = true;
+                                    dup_pinConfig = p;
+                                }
+                            if (status)
+                                pinConfigs.remove(dup_pinConfig);
+                        }
+
+                        String groveInstanceName;
+//                        List<String> groveInstanceNames = new ArrayList<>();
+//                        for (PinConfig p : pinConfigs) {
+//                            groveInstanceNames.add(p.groveInstanceName);
+//                        }
+//                        groveInstanceName = groverDriver.ClassName;
+//                        int i = 1;
+//                        while (true) {
+//                            if (groveInstanceNames.contains(groveInstanceName)) {
+//                                groveInstanceName = groveInstanceName.split("_0")[0] + "_0" + Integer.toString(i);
+//                            } else {
+//                                groveInstanceNames.add(groveInstanceName);
+//                                break;
+//                            }
+//                            i++;
+//                        }
+                        if (pinConfig.position >= 1 && pinConfig.position <= 3)
+                            groveInstanceName = groverDriver.ClassName + "_Digital" + (pinConfig.position - 1);
+                        else if (pinConfig.position == 4)
+                            groveInstanceName = groverDriver.ClassName + "_Analog";
+                        else if (pinConfig.position == 5)
+                            groveInstanceName = groverDriver.ClassName + "_UART";
+                        else if (pinConfig.position == 6)
+                            groveInstanceName = groverDriver.ClassName + "_I2C";
+                        else
+                            groveInstanceName = groverDriver.ClassName;
+
+                        pinConfig.groveInstanceName = groveInstanceName;
+
+                        pinConfigs.add(pinConfig);
+                        Log.i(TAG, "drag pinConfigs " + pinConfigs);
+
+                        if (v.getId() == R.id.grove_6) {
+                            Message message = Message.obtain();
+                            message.what = ADD_I2C_GROVE;
+                            mHandler.sendMessage(message);
+                        }
+                    }
+                    break;
+                }
+                break;
+            case R.id.grove_remove:
+                switch (action) {
+                    case DragEvent.ACTION_DRAG_STARTED: {
+                        return event.getClipDescription().hasMimeType(GROVE_REMOVE) ||
+                                event.getClipDescription().hasMimeType(GROVE_REMOVE_PIN6);
+                    }
+                    case DragEvent.ACTION_DRAG_ENTERED:
+                        ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                        break;
+                    case DragEvent.ACTION_DRAG_EXITED:
+                        ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
+                        break;
+                    case DragEvent.ACTION_DROP: {
+                        if (event.getClipDescription().hasMimeType(GROVE_REMOVE)) {
+                            ImageView view = (ImageView) event.getLocalState();
+                            view.setImageDrawable(null);
+                            int position = ((GrovePinsView.Tag) view.getTag()).position;
+
+                            removePinConfig(position);
+                        } else if (event.getClipDescription().hasMimeType(GROVE_REMOVE_PIN6)) {
+                            PinConfig pinConfig = (PinConfig) event.getLocalState();
+                            Log.e(TAG, pinConfig.groveInstanceName);
+                            removePinConfig(pinConfig.groveInstanceName);
+
+                            Message message = Message.obtain();
+                            message.what = RMV_I2C_GROVE;
+                            mHandler.sendMessage(message);
+                        }
+                        break;
+                    }
+                    case DragEvent.ACTION_DRAG_ENDED:
+                        ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
+                        mDragRemoveView.setVisibility(View.INVISIBLE);
+                }
+                break;
+            default:
+                Log.e(TAG, v.toString());
+                break;
+        }
+        return true;
+    }
+
+    private void removePinConfig(int position) {
+        if (position < 1 || position > 6)
+            return;
+        PinConfig rp = new PinConfig();
+        for (PinConfig p : pinConfigs) {
+            if (p.position == position)
+                rp = p;
+        }
+        pinConfigs.remove(rp);
+    }
+
+    private void removePinConfig(String groveInstanceName) {
+        PinConfig rp = new PinConfig();
+        for (PinConfig p : pinConfigs) {
+            if (p.groveInstanceName.equals(groveInstanceName))
+                rp = p;
+        }
+        pinConfigs.remove(rp);
+    }
+
 
     @Override
     public boolean onLongClick(View v) {
         switch (v.getId()) {
             case R.id.grove_1:
-                if (uiStateControl.getSelectedPinStatus(1)) {
-                    pin1View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 1, 0, "Remove");
-                        }
-                    });
-                }
+                if (pinDeviceCount(1) > 0)
+                    startDragRemove(v);
                 break;
             case R.id.grove_2:
-                if (uiStateControl.getSelectedPinStatus(2)) {
-                    pin2View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 2, 0, "Remove");
-                        }
-                    });
-                }
+                if (pinDeviceCount(2) > 0)
+                    startDragRemove(v);
                 break;
             case R.id.grove_3:
-                if (uiStateControl.getSelectedPinStatus(3)) {
-                    pin3View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 3, 0, "Remove");
-                        }
-                    });
-                }
+                if (pinDeviceCount(3) > 0)
+                    startDragRemove(v);
                 break;
             case R.id.grove_4:
-                if (uiStateControl.getSelectedPinStatus(4)) {
-                    pin4View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 4, 0, "Remove");
-                        }
-                    });
-                }
-                break;
+                if (pinDeviceCount(4) > 0)
+                    startDragRemove(v);
             case R.id.grove_5:
-                if (uiStateControl.getSelectedPinStatus(5)) {
-                    pin5View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 5, 0, "Remove");
-                        }
-                    });
-                }
+                if (pinDeviceCount(5) > 0)
+                    startDragRemove(v);
                 break;
             case R.id.grove_6:
-                if (uiStateControl.getSelectedPinStatus(6)) {
-                    pin6View.setOnCreateContextMenuListener(new View.OnCreateContextMenuListener() {
-                        @Override
-                        public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-                            menu.add(0, 6, 0, "Remove");
-                        }
-                    });
+//                Snackbar.make(v, "Grove name:" + pinDeviceCount(6), Snackbar.LENGTH_LONG).show();
+                if (pinDeviceCount(6) == 0) {
+                    ;
+                } else if (pinDeviceCount(6) == 1) {
+                    startDragRemove(v);
+                } else if (pinDeviceCount(6) > 1) {
+//                    openI2cDeviceFolder();
                 }
                 break;
         }
-        return false;
+        return true;
+    }
+
+    private void startDragRemove(View v) {
+        mDragRemoveView.setVisibility(View.VISIBLE);
+
+        String label = "grove_remove";
+        String[] mimeTypes = {GROVE_REMOVE};
+        ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
+        ClipData.Item item = new ClipData.Item("drag grove");
+        ClipData clipData = new ClipData(clipDescription, item);
+        View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
+
+        v.startDrag(clipData, shadowBuiler, v, 0);
     }
 
     private class MainOnClickListener implements View.OnClickListener, View.OnLongClickListener {
@@ -652,165 +750,72 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         @Override
         public void onClick(View v) {
-            if (uiStateControl.pinSetIsTrue()) {
-                mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
-                mToolbarAction.setVisibility(View.VISIBLE);
-                mGroveNameView.setText(mGroveListAdapter.getSelectedItem().GroveName);
-            } else {
-                Snackbar.make(v, "Todo:grove detail page", Snackbar.LENGTH_SHORT).show();
-            }
-//            uiStateControl.selectGrove(mGroveListAdapter);
+            ;
         }
 
         @Override
         public boolean onLongClick(View v) {
-            Snackbar.make(v, "Todo:grove detail page", Snackbar.LENGTH_SHORT).show();
+//            Snackbar.make(v, "Todo:grove detail page", Snackbar.LENGTH_SHORT).show();
 
-            return false;
+            String label = "grove_add";
+            String[] mimeTypes = {GROVE_ADD};
+            ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
+            ClipData.Item item = new ClipData.Item("drag grove");
+            ClipData clipData = new ClipData(clipDescription, item);
+            View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
+
+            mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
+            GroverDriver grove = mGroveListAdapter.getSelectedItem();
+
+            v.startDrag(clipData, shadowBuiler, grove, 0);
+            return true;
         }
     }
 
-    public interface UiSet {
-        public void activatedPin(int pin);
+    private void getGrovesData() {
+        IotApi api = new IotApi();
+        String token = user.user_key;
+        api.setAccessToken(token);
+        IotService iot = api.getService();
+        iot.scanDrivers(new Callback<List<GroverDriver>>() {
+            @Override
+            public void success(List<GroverDriver> groverDrivers, retrofit.client.Response response) {
+                for (GroverDriver groveDriver : groverDrivers) {
+                    groveDriver.save();
+                }
 
-        public void activatedClear();
+                updateGroveListAdapter(groverDrivers);
+            }
 
-        public void selectedPin();
-
-        public void removeSelectedPin(int pin);
-
-        public void selectGrove(GroveListRecyclerAdapter adapter);
-
-        public Boolean pinSetIsTrue();
-
-        public int getSetPin();
-
-        public boolean getSelectedPinStatus(int pin);
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(TAG, error.toString());
+            }
+        });
     }
 
-    public static class UiStateControl implements UiSet {
-        private Boolean pin_set_statu;
-        private SparseBooleanArray nodePinActivated;
-        private SparseBooleanArray nodePinSelected;
-
-        View v;
-        ImageButton pin1View, pin2View, pin3View, pin4View, pin5View, pin6View;
-        RecyclerView mGroveListView;
-        Toolbar mToolbarAction;
-
-
-        public UiStateControl(View view) {
-            pin_set_statu = false;
-            nodePinActivated = new SparseBooleanArray();
-            nodePinSelected = new SparseBooleanArray();
-
-            this.v = view;
-            pin1View = (ImageButton) view.findViewById(R.id.grove_1);
-            pin2View = (ImageButton) view.findViewById(R.id.grove_2);
-            pin3View = (ImageButton) view.findViewById(R.id.grove_3);
-            pin4View = (ImageButton) view.findViewById(R.id.grove_4);
-            pin5View = (ImageButton) view.findViewById(R.id.grove_5);
-            pin6View = (ImageButton) view.findViewById(R.id.grove_6);
-
-            mGroveListView = (RecyclerView) view.findViewById(R.id.grove_list);
-            mToolbarAction = (Toolbar) view.findViewById(R.id.toolbar_bottom);
+    private class Pin6OnClickListener implements View.OnLongClickListener {
+        public Pin6OnClickListener(SetupIotNodeActivity setupIotNodeActivity) {
         }
 
         @Override
-        public void activatedPin(int pin) {
-            if (nodePinSelected.get(pin, false)) {
-                pin_set_statu = true;
-                nodePinActivated.clear();
-                nodePinActivated.put(pin, true);
-                pin1View.setActivated(nodePinActivated.get(1, false));
-                pin2View.setActivated(nodePinActivated.get(2, false));
-                pin3View.setActivated(nodePinActivated.get(3, false));
-                pin4View.setActivated(nodePinActivated.get(4, false));
-                pin5View.setActivated(nodePinActivated.get(5, false));
-                pin6View.setActivated(nodePinActivated.get(6, false));
+        public boolean onLongClick(View v) {
+            mDragRemoveView.setVisibility(View.VISIBLE);
 
-            } else {
-                pin_set_statu = true;
-                nodePinActivated.clear();
-                nodePinActivated.put(pin, true);
-                pin1View.setActivated(nodePinActivated.get(1, false));
-                pin2View.setActivated(nodePinActivated.get(2, false));
-                pin3View.setActivated(nodePinActivated.get(3, false));
-                pin4View.setActivated(nodePinActivated.get(4, false));
-                pin5View.setActivated(nodePinActivated.get(5, false));
-                pin6View.setActivated(nodePinActivated.get(6, false));
+            String label = "grove_remove_6";
+            String[] mimeTypes = {GROVE_REMOVE_PIN6};
+            ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
+            ClipData.Item item = new ClipData.Item("drag grove");
+            ClipData clipData = new ClipData(clipDescription, item);
+            View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
 
-                //todo, select recyclcerview status
-            }
-        }
+//            mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
+//            GroverDriver grove = mGroveListAdapter.getSelectedItem();
 
-        @Override
-        public void activatedClear() {
-            pin_set_statu = false;
-            nodePinActivated.clear();
-            Log.e("iot", "pin:" + nodePinActivated.keyAt(0));
-            pin1View.setActivated(nodePinActivated.get(1, false));
-            pin2View.setActivated(nodePinActivated.get(2, false));
-            pin3View.setActivated(nodePinActivated.get(3, false));
-            pin4View.setActivated(nodePinActivated.get(4, false));
-            pin5View.setActivated(nodePinActivated.get(5, false));
-            pin6View.setActivated(nodePinActivated.get(6, false));
+            PinConfig pinConfig = mGroveI2cListAdapter.getItem(mGroveI2cListView.getChildAdapterPosition(v));
 
-            //Todo, clear grove recycleview selected state
-        }
-
-
-        @Override
-        public void selectedPin() {
-            pin_set_statu = false;
-            int pin = nodePinActivated.keyAt(0);
-            nodePinSelected.put(pin, true);
-            pin1View.setSelected(nodePinSelected.get(1, false));
-            pin2View.setSelected(nodePinSelected.get(2, false));
-            pin3View.setSelected(nodePinSelected.get(3, false));
-            pin4View.setSelected(nodePinSelected.get(4, false));
-            pin5View.setSelected(nodePinSelected.get(5, false));
-            pin6View.setSelected(nodePinSelected.get(6, false));
-
-
-        }
-
-        @Override
-        public void removeSelectedPin(int pin) {
-            nodePinSelected.put(pin, false);
-            pin1View.setSelected(nodePinSelected.get(1, false));
-            pin2View.setSelected(nodePinSelected.get(2, false));
-            pin3View.setSelected(nodePinSelected.get(3, false));
-            pin4View.setSelected(nodePinSelected.get(4, false));
-            pin5View.setSelected(nodePinSelected.get(5, false));
-            pin6View.setSelected(nodePinSelected.get(6, false));
-        }
-
-        @Override
-        public void selectGrove(GroveListRecyclerAdapter adapter) {
-            adapter.selectItem(mGroveListView.getChildAdapterPosition(v));
-            mToolbarAction.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public Boolean pinSetIsTrue() {
-            return pin_set_statu;
-        }
-
-        @Override
-        public int getSetPin() {
-            if (pin_set_statu) {
-                int pin = nodePinActivated.keyAt(0);
-                return pin;
-            } else {
-                return -1;
-            }
-        }
-
-        @Override
-        public boolean getSelectedPinStatus(int pin) {
-            boolean status = nodePinSelected.get(pin, false);
-            return status;
+            v.startDrag(clipData, shadowBuiler, pinConfig, 0);
+            return true;
         }
     }
 }

@@ -26,9 +26,10 @@ import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.Response;
+import cc.seeed.iot.webapi.model.CommonResponse;
 import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -47,6 +48,7 @@ public class SignInDialogFragment extends DialogFragment {
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private TextView mForgotPwdView;
+    private TextView mSwitchAreaView;
 
     private View mProgressView;
     private View mLoginFormView;
@@ -68,18 +70,37 @@ public class SignInDialogFragment extends DialogFragment {
         mEmailView = (AutoCompleteTextView) view.findViewById(R.id.email);
         mPasswordView = (EditText) view.findViewById(R.id.password);
         mForgotPwdView = (TextView) view.findViewById(R.id.forgot_password);
+        mSwitchAreaView = (TextView) view.findViewById(R.id.switch_area);
         mProgressView = view.findViewById(R.id.login_progress);
         mLoginFormView = view.findViewById(R.id.email_login_form);
+
+//        boolean result = Util.checkIsChina(getActivity());
+//        if (result) {
+        mSwitchAreaView.setVisibility(View.VISIBLE);
+//        } else {
+//            mSwitchAreaView.setVisibility(View.GONE);
+//        }
+
+        if (((MyApplication) getActivity().getApplication()).getOtaServerUrl().equals(Common.OTA_CHINA_URL)) {
+            mSwitchAreaView.setText(R.string.setup_switch_international);
+            ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_CHINA_URL);
+        } else if (((MyApplication) getActivity().getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
+            mSwitchAreaView.setText(R.string.setup_switch_china);
+            ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_INTERNATIONAL_URL);
+        } else
+            mSwitchAreaView.setText(((MyApplication) getActivity().getApplication()).getOtaServerUrl());
+
 
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
-        builder.setTitle("Sign In");
-        builder.setPositiveButton("Sign In", null);
+        builder.setTitle(R.string.setup_signin);
+        builder.setPositiveButton(R.string.setup_signin, null);
         builder.setNegativeButton(R.string.cancel, null);
 
         return builder.create();
     }
+
 
     @Override
     public void onStart() {
@@ -95,6 +116,22 @@ public class SignInDialogFragment extends DialogFragment {
                 }
             });
         }
+
+
+        mSwitchAreaView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSwitchAreaView.getText().toString().equals(getString(R.string.setup_switch_international))) {
+                    mSwitchAreaView.setText(R.string.setup_switch_china);
+                    ((MyApplication) getActivity().getApplication()).setOtaServerUrl(Common.OTA_INTERNATIONAL_URL);
+                    ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_INTERNATIONAL_URL);
+                } else {
+                    mSwitchAreaView.setText(R.string.setup_switch_international);
+                    ((MyApplication) getActivity().getApplication()).setOtaServerUrl(Common.OTA_CHINA_URL);
+                    ((MyApplication) getActivity().getApplication()).setExchangeServerUrl(Common.EXCHANGE_CHINA_URL);
+                }
+            }
+        });
 
         mForgotPwdView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,9 +237,9 @@ public class SignInDialogFragment extends DialogFragment {
         progressDialog.show();
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userRetrievePassword(email, new Callback<Response>() {
+        iot.userRetrievePassword(email, new Callback<CommonResponse>() {
             @Override
-            public void success(Response response, retrofit.client.Response response1) {
+            public void success(CommonResponse response, retrofit.client.Response response1) {
                 String status = response.status;
                 if (status.equals("200")) {
                     resetPasswordDialog.dismiss();

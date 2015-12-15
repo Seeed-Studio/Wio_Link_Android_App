@@ -1,15 +1,14 @@
 package cc.seeed.iot.ui_main;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
@@ -19,6 +18,7 @@ import java.util.List;
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -30,10 +30,6 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     private static final String TAG = "NodeListRecyclerAdapter";
     private List<Node> nodes = new ArrayList<>();
     private Context context;
-
-    private final TypedValue mTypedValue = new TypedValue();
-    private int mBackground;
-    private List<String> mValues;
 
     private OnClickListener mOnClickListener;
 
@@ -53,7 +49,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.main_list_item, parent, false);
+                .inflate(R.layout.item_node, parent, false);
         return new MainViewHolder(v, mOnClickListener);
     }
 
@@ -61,11 +57,29 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         Node node = nodes.get(position);
         holder.mNameView.setText(node.name);
+        holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
+
+
+        if (node.dataxserver == null || node.dataxserver.equals(Common.OTA_INTERNATIONAL_IP)
+                || node.dataxserver.equals(Common.OTA_CHINA_IP))
+            holder.mXserverView.setText("");
+        else
+            holder.mXserverView.setText(node.dataxserver);
 
         if (node.online) {
-            holder.mStatusView.setBackgroundColor(Color.GREEN);
+            holder.mStatusView.setBackgroundResource(R.color.online);
+            holder.mOnlineLedView.setImageResource(R.drawable.online_led);
+            holder.mOnlineView.setText(R.string.online);
+            holder.mRenameView.setBackgroundResource(R.color.online);
+            holder.mDetailView.setBackgroundResource(R.color.online);
+            holder.mRemoveView.setBackgroundResource(R.color.online);
         } else {
-            holder.mStatusView.setBackgroundColor(Color.RED);
+            holder.mStatusView.setBackgroundResource(R.color.offline);
+            holder.mOnlineLedView.setImageResource(R.drawable.offline_led);
+            holder.mOnlineView.setText(R.string.offline);
+            holder.mRenameView.setBackgroundResource(R.color.offline);
+            holder.mDetailView.setBackgroundResource(R.color.offline);
+            holder.mRemoveView.setBackgroundResource(R.color.offline);
         }
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
@@ -74,7 +88,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
                 holder.mGroveViews.get(i).setVisibility(View.VISIBLE);
                 PinConfig pinConfig = pinConfigs.get(i);
                 String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
-                UrlImageViewHelper.setUrlDrawable(holder.mGroveViews.get(i), url, R.drawable.grove_cold,
+                UrlImageViewHelper.setUrlDrawable(holder.mGroveViews.get(i), url, R.drawable.grove_no,
                         UrlImageViewHelper.CACHE_DURATION_INFINITE);
             } catch (IndexOutOfBoundsException e) {
                 holder.mGroveViews.get(i).setVisibility(View.GONE);
@@ -102,16 +116,14 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return nodes.get(position);
     }
 
-    public Node removeItem(int position) {
-        Node node = nodes.remove(position);
+    public void removeItem(int position) {
         notifyItemRemoved(position);
-        return node;
     }
 
-    public Node updateItem(int position, Node newNode) {
-        nodes.set(position, newNode);
+    public Node updateItem(int position) {
+        Node node = nodes.get(position);
         notifyItemChanged(position);
-        return newNode;
+        return node;
     }
 
     public boolean updateAll(List<Node> nodes) {
@@ -130,7 +142,9 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         private OnClickListener mOnClickListener;
 
         TextView mNameView;
-        TextView mLocationView;
+        TextView mOnlineView;
+        ImageView mOnlineLedView;
+        TextView mXserverView;
         ImageView mFavoriteView;
         ImageView mPopMenuView;
         View mStatusView;
@@ -143,19 +157,24 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         List<ImageView> mGroveViews;
         TextView mGroveOverView;
 
+        SwipeLayout mSwipeLayout;
+
         public MainViewHolder(View itemView, OnClickListener mOnClickListener) {
             super(itemView);
             this.mOnClickListener = mOnClickListener;
 
+            mSwipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe_layout);
             mItemView = itemView;
             mNameView = (TextView) itemView.findViewById(R.id.name);
-            mLocationView = (TextView) itemView.findViewById(R.id.location);
-            mFavoriteView = (ImageView) itemView.findViewById(R.id.favorite);
-            mPopMenuView = (ImageView) itemView.findViewById(R.id.dot);
+            mOnlineView = (TextView) itemView.findViewById(R.id.online);
+            mOnlineLedView = (ImageView) itemView.findViewById(R.id.online_led);
+            mXserverView = (TextView) itemView.findViewById(R.id.xserver_ip);
+//            mFavoriteView = (ImageView) itemView.findViewById(R.id.favorite);
+//            mPopMenuView = (ImageView) itemView.findViewById(R.id.dot);
             mStatusView = itemView.findViewById(R.id.status);
 
-            mRenameView = (TextView) itemView.findViewById(R.id.rename);
-            mDetailView = (TextView) itemView.findViewById(R.id.detail);
+            mRenameView = (TextView) itemView.findViewById(R.id.setting);
+            mDetailView = (TextView) itemView.findViewById(R.id.api);
             mRemoveView = (TextView) itemView.findViewById(R.id.remove);
 
             mGroveViews = new ArrayList<>();
@@ -166,9 +185,9 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             mGroveOverView = (TextView) itemView.findViewById(R.id.grove_over);
 
             mItemView.setOnClickListener(this);
-            mLocationView.setOnClickListener(this);
-            mFavoriteView.setOnClickListener(this);
-            mPopMenuView.setOnClickListener(this);
+//            mLocationView.setOnClickListener(this);
+//            mFavoriteView.setOnClickListener(this);
+//            mPopMenuView.setOnClickListener(this);
             mRenameView.setOnClickListener(this);
             mDetailView.setOnClickListener(this);
             mRemoveView.setOnClickListener(this);

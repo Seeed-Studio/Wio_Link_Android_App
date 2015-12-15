@@ -30,7 +30,7 @@ public class SetupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_setup);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         mPagerIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
@@ -46,9 +46,11 @@ public class SetupActivity extends AppCompatActivity {
         mButtonSignIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SignInDialogFragment signInDialogFragment = new SignInDialogFragment();
-                signInDialogFragment.setCancelable(false);
-                signInDialogFragment.show(getFragmentManager(), "signIn");
+//                SignInDialogFragment signInDialogFragment = new SignInDialogFragment();
+//                signInDialogFragment.setCancelable(false);
+//                signInDialogFragment.show(getFragmentManager(), "signIn");
+                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -56,9 +58,11 @@ public class SetupActivity extends AppCompatActivity {
         mButtonSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SignUpDialogFragment signUpDialogFragment = new SignUpDialogFragment();
-                signUpDialogFragment.setCancelable(false);
-                signUpDialogFragment.show(getFragmentManager(), "signUn");
+//                SignUpDialogFragment signUpDialogFragment = new SignUpDialogFragment();
+//                signUpDialogFragment.setCancelable(false);
+//                signUpDialogFragment.show(getFragmentManager(), "signUn");
+                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
+                startActivity(intent);
             }
         });
 

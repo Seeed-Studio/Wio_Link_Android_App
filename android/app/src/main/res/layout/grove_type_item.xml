@@ -8,8 +8,6 @@
     android:paddingLeft="5dp"
     android:paddingRight="5dp"
     android:text="All"
-    android:textColor="@android:color/white"
     android:textSize="20sp">
-
 
 </TextView>

@@ -1,15 +1,18 @@
 package cc.seeed.iot.ui_ap_config;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.net.NetworkInfo;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -28,11 +31,14 @@ import cc.seeed.iot.R;
 public class WifiPionListActivity extends AppCompatActivity
         implements WifiRecyclerViewHolder.IMyViewHolderClicks {
     private final static String TAG = "WifiPionListActivity";
+    private final static int PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION = 0x00;
     private final static String PION_WIFI_PREFIX = "PionOne_";
+    private final static String WIO_WIFI_PREFIX = "WioLink_";
     private Toolbar mToolbar;
     private RecyclerView mWifiListView;
     private WifiPionListRecyclerAdapter mWifiListAdapter;
     private ProgressDialog mWaitDialog;
+    private List<ScanResult> scanPionResult = new ArrayList<>();
 
     private String node_sn;
     private String node_key;
@@ -104,18 +110,35 @@ public class WifiPionListActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    private ArrayList<ScanResult> getPionWifiList() {
-        ArrayList<ScanResult> scanPionResult = new ArrayList<>();
+    private List<ScanResult> getPionWifiList() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION);
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+            Log.e(TAG, "checking...");
+        } else {
+            Log.e(TAG, "scaning...");
+            getScanningResults();
+            //do something, permission was previously granted; or legacy device
+        }
+
+        return scanPionResult;
+    }
+
+    private void getScanningResults() {
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        ArrayList<ScanResult> scanResult = (ArrayList) wifiManager.getScanResults();
+        List<ScanResult> scanResult = wifiManager.getScanResults();
+        scanPionResult.clear();
         for (ScanResult wifi : scanResult) {
-            if (wifi.SSID.contains(PION_WIFI_PREFIX)) {
-                Log.d(TAG, "PionOne ssid:" + wifi.SSID);
+            if (wifi.SSID.contains(PION_WIFI_PREFIX) || wifi.SSID.contains(WIO_WIFI_PREFIX)) {
+                Log.i(TAG, "WioLink ssid:" + wifi.SSID);
                 scanPionResult.add(wifi);
             }
         }
-        return scanPionResult;
     }
+
 
     @Override
     public void onItem(View caller) {
@@ -182,6 +205,7 @@ public class WifiPionListActivity extends AppCompatActivity
         }
     }
 
+
     private void refreshPionList() {
         mWifiListAdapter.updateAll(getPionWifiList());
     }
@@ -200,12 +224,23 @@ public class WifiPionListActivity extends AppCompatActivity
     }
 
     private static void reEnableAllAps(final Context ctx) {
-        final WifiManager wifiMgr = (WifiManager)ctx.getSystemService(Context.WIFI_SERVICE);
+        final WifiManager wifiMgr = (WifiManager) ctx.getSystemService(Context.WIFI_SERVICE);
         final List<WifiConfiguration> configurations = wifiMgr.getConfiguredNetworks();
-        if(configurations != null) {
-            for(final WifiConfiguration config:configurations) {
+        if (configurations != null) {
+            for (final WifiConfiguration config : configurations) {
                 wifiMgr.enableNetwork(config.networkId, false);
             }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        Log.e(TAG, "onRequestPermissionsResult");
+        if (requestCode == PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            // Do something with granted permission
+            getScanningResults();
+
         }
     }
 }

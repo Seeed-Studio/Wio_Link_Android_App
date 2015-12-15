@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="cc.seeed.iot.ui_setnode.SetupIotNodeActivity">
     <item
-        android:id="@+id/update"
+        android:id="@+id/api"
         android:orderInCategory="100"
-        android:title="Update Firmware"
+        android:title="@string/api"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/update"
+        android:orderInCategory="200"
+        android:title="@string/update"
         app:showAsAction="always" />
 </menu>

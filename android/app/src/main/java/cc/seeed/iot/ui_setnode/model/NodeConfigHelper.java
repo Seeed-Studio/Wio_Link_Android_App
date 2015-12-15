@@ -74,16 +74,16 @@ public class NodeConfigHelper {
         return pinConfigs;
     }
 
-    public String getConfigYaml() {
-        List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node_sn);
+    public static String getConfigYaml(List<PinConfig> pinConfigs) {
         String y = "";
         for (PinConfig p : pinConfigs) {
             if (p.selected) {
                 int position = p.position;
                 String groveInstanceName = p.groveInstanceName;
                 GroverDriver groverDriver = DBHelper.getGroves(p.grove_id).get(0);
+                String sku = groverDriver.SKU;
                 String groveName = groverDriver.GroveName;
-                y = y + IotYaml.genYamlItem(position, groveInstanceName, groveName);
+                y = y + IotYaml.genYamlItem(position, groveInstanceName, sku, groveName);
             }
         }
         return y;

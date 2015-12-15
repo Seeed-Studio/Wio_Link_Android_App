@@ -11,11 +11,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import cc.seeed.iot.R;
 
@@ -24,6 +25,7 @@ public class WifiListActivity extends AppCompatActivity
         implements WifiRecyclerViewHolder.IMyViewHolderClicks {
     private final static String TAG = "WifiListActivity";
     private final static String PION_WIFI_PREFIX = "PionOne";
+    private final static String WIO_WIFI_PREFIX = "WioLink";
     private Toolbar mToolbar;
     private RecyclerView mWifiListView;
     private WifiListRecyclerAdapter mWifiListAdapter;
@@ -92,17 +94,33 @@ public class WifiListActivity extends AppCompatActivity
         super.onDestroy();
     }
 
-    private ArrayList<ScanResult> getWifiExceptPionList() {
-        ArrayList<ScanResult> scanPionResult = new ArrayList<>();
+    private List<ScanResult> getWifiExceptPionList() {
+        List<ScanResult> scanNoPionResult = new ArrayList<>();
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        ArrayList<ScanResult> scanResult = (ArrayList) wifiManager.getScanResults();
-        for (ScanResult wifi : scanResult) {
-            if (wifi.SSID.contains(PION_WIFI_PREFIX)) {
+        List<ScanResult> scanResult = wifiManager.getScanResults();
+
+        Iterator<ScanResult> iterator = scanResult.iterator();
+
+        //delete duplicate wifi
+        List<String> ssidList = new ArrayList<>();
+        while (iterator.hasNext()) {
+            ScanResult s = iterator.next();
+            if (ssidList.contains(s.SSID)) {
+                iterator.remove();
+            } else {
+                ssidList.add(s.SSID);
+            }
+        }
+
+        //delete pion wifi
+        for (ScanResult s : scanResult) {
+            if (s.SSID.contains(PION_WIFI_PREFIX) || s.SSID.contains(WIO_WIFI_PREFIX)) {
                 continue;
             }
-            scanPionResult.add(wifi);
+            scanNoPionResult.add(s);
         }
-        return scanPionResult;
+
+        return scanNoPionResult;
     }
 
 

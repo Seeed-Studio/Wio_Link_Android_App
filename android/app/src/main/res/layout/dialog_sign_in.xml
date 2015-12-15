@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sign_in"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -47,15 +46,26 @@
             android:singleLine="true" />
 
         <TextView
+            android:id="@+id/switch_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/setup_switch_international"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/apptheme_dialog_edittext" />
+
+        <TextView
             android:id="@+id/forgot_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:text="@string/signin_forgot_password"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/background_dark" />
+            android:textColor="@color/apptheme_dialog_edittext" />
         <!--android:textSize="?" />-->
 
     </LinearLayout>

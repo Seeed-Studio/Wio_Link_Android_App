@@ -15,8 +15,6 @@ public class PinConfig extends Model {
 
     @Column()
     public int position;
-//    @Column()
-//    public int sub_position;
 
     @Column()
     public Boolean selected;
@@ -24,13 +22,12 @@ public class PinConfig extends Model {
     @Column()
     public int grove_id;
 
-    @Column(name = "grove_instance_name", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "grove_instance_name")
     public String groveInstanceName;
 
     @Override
     public String toString() {
-        String s = "node_sn=" + node_sn + " position=" + position + " selected=" + selected +
+        return "node_sn=" + node_sn + " position=" + position + " selected=" + selected +
                 " grove_id=" + grove_id + " groveInstanceName=" + groveInstanceName;
-        return s;
     }
 }

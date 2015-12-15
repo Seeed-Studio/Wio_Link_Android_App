@@ -21,9 +21,10 @@ import cc.seeed.iot.webapi.model.GroverDriver;
 public class IotYaml {
     private static final String TAG = "IotYaml";
 
-    static public String genYamlItem(int position, String groveInstanceName, String groveName) {
+    static public String genYamlItem(int position, String groveInstanceName, String sku, String groveName) {
         String d = groveInstanceName + ":" + "\r\n";
         d = d + "  name: " + groveName + "\r\n";
+        d = d + "  sku: " + sku + "\r\n";
         d = d + "  construct_arg_list:" + "\r\n";
         switch (position) {
             case 1: {
@@ -43,8 +44,8 @@ public class IotYaml {
             }
             break;
             case 5: {
-                d = d + "    pintx: 3" + "\r\n";
-                d = d + "    pinrx: 1" + "\r\n";
+                d = d + "    pintx: 1" + "\r\n";
+                d = d + "    pinrx: 3" + "\r\n";
             }
             break;
             case 6: {
@@ -97,6 +98,8 @@ public class IotYaml {
                 pinConfigs.add(pinConfig);
             }
         } catch (IOException e) {
+            Log.e("iot", "error:" + e);
+        } catch (IndexOutOfBoundsException e) {
             Log.e("iot", "error:" + e);
         }
 
