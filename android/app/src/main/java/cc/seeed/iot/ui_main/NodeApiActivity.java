@@ -126,10 +126,13 @@ public class NodeApiActivity extends AppCompatActivity {
     private String getApiUrl() {
         String url;
         String ota_server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerUrl();
+        String ota_server_ip = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerIP();
         String server_endpoint = ota_server_url + RESOURCE;
         String node_key = node.node_key;
         String dataxserver = node.dataxserver;
-        if(dataxserver.equals(Common.OTA_CHINA_IP) || dataxserver.equals(Common.OTA_INTERNATIONAL_IP))
+        if (dataxserver == null)
+            dataxserver = ota_server_ip;
+        if (dataxserver.equals(Common.OTA_CHINA_IP) || dataxserver.equals(Common.OTA_INTERNATIONAL_IP))
             url = server_endpoint + "access_token=" + node_key;
         else
             url = server_endpoint + "access_token=" + node_key + "&dataxserver=" + dataxserver;
