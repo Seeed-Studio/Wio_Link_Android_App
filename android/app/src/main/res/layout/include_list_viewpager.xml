@@ -30,6 +30,14 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
+    <ImageView
+        android:id="@+id/add_node_tip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/main_bg"
+        android:scaleType="centerCrop"
+        android:visibility="gone"/>
+
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
     <android.support.design.widget.FloatingActionButton

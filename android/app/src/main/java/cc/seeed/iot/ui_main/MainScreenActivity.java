@@ -19,6 +19,7 @@ package cc.seeed.iot.ui_main;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -38,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -84,7 +86,7 @@ public class MainScreenActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private NodeListRecyclerAdapter mAdapter;
     private TextView mEmail;
-
+    private ImageView mAddTip;
     private List<Node> nodes;
     private User user;
     private boolean firstUseState;
@@ -182,6 +184,8 @@ public class MainScreenActivity extends AppCompatActivity
         });
 
         mProgressDialog = new ProgressDialog(this);
+
+        mAddTip = (ImageView) findViewById(R.id.add_node_tip);
     }
 
     private void initData() {
@@ -213,6 +217,12 @@ public class MainScreenActivity extends AppCompatActivity
                         mProgressDialog.dismiss();
                         if (msg.arg2 == 1) {
                             mAdapter.updateAll(nodes);
+                            if(nodes.isEmpty()) {
+                                mAddTip.setVisibility(View.VISIBLE);
+                            } else {
+                                mAddTip.setVisibility(View.GONE);
+                            }
+
                             for (Node n : nodes) {
                                 getNodesConfig(n, nodes.indexOf(n));
                             }
