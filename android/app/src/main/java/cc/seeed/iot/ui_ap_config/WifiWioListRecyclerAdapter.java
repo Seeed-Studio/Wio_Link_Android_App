@@ -15,13 +15,13 @@ import cc.seeed.iot.R;
 /**
  * Created by tenwong on 15/6/25.
  */
-public class WifiPionListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerViewHolder> {
+public class WifiWioListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerViewHolder> {
     private final static String TAG = "WifiListRecyclerAdapter";
     private List<ScanResult> wifiList;
     private Context context;
     WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks;
 
-    public WifiPionListRecyclerAdapter
+    public WifiWioListRecyclerAdapter
             (List<ScanResult> wifiList,
              WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks) {
         this.wifiList = wifiList;

@@ -28,7 +28,7 @@ import java.util.List;
 import cc.seeed.iot.R;
 
 
-public class WifiPionListActivity extends AppCompatActivity
+public class WifiWioListActivity extends AppCompatActivity
         implements WifiRecyclerViewHolder.IMyViewHolderClicks {
     private final static String TAG = "WifiPionListActivity";
     private final static int PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION = 0x00;
@@ -36,7 +36,7 @@ public class WifiPionListActivity extends AppCompatActivity
     private final static String WIO_WIFI_PREFIX = "WioLink_";
     private Toolbar mToolbar;
     private RecyclerView mWifiListView;
-    private WifiPionListRecyclerAdapter mWifiListAdapter;
+    private WifiWioListRecyclerAdapter mWifiListAdapter;
     private ProgressDialog mWaitDialog;
     private List<ScanResult> scanPionResult = new ArrayList<>();
 
@@ -61,7 +61,7 @@ public class WifiPionListActivity extends AppCompatActivity
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mWifiListView.setLayoutManager(layoutManager);
-            mWifiListAdapter = new WifiPionListRecyclerAdapter(getPionWifiList(), this);
+            mWifiListAdapter = new WifiWioListRecyclerAdapter(getPionWifiList(), this);
             mWifiListView.setAdapter(mWifiListAdapter);
         }
 

@@ -86,7 +86,7 @@ public class GoReadyActivity extends AppCompatActivity {
 
                     node_key = nodeResponse.node_key;
                     node_sn = nodeResponse.node_sn;
-                    Intent intent = new Intent(GoReadyActivity.this, WifiPionListActivity.class);
+                    Intent intent = new Intent(GoReadyActivity.this, WifiWioListActivity.class);
                     intent.putExtra("node_key", node_key);
                     intent.putExtra("node_sn", node_sn);
                     startActivity(intent);

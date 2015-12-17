@@ -53,7 +53,7 @@
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name="cc.seeed.iot.ui_ap_config.GoReadyActivity" />
-        <activity android:name="cc.seeed.iot.ui_ap_config.WifiPionListActivity" />
+        <activity android:name=".ui_ap_config.WifiWioListActivity" />
         <activity android:name="cc.seeed.iot.ui_ap_config.WifiListActivity" />
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
         <activity android:name="cc.seeed.iot.ui_main.GrovesActivity" />
