@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.model.Node;
 
-public class NodeSettingActivity extends AppCompatActivity {
+public class MainSettingActivity extends AppCompatActivity {
     public Toolbar mToolbar;
     public Node node;
 
@@ -39,14 +39,7 @@ public class NodeSettingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Node Setting");
 
-        String node_sn = getIntent().getStringExtra("node_sn");
-
-        Bundle bundle = new Bundle();
-        bundle.putString("node_sn", node_sn);
-        NodePreferenceFragment fragment = new NodePreferenceFragment();
-        fragment.setArguments(bundle);
-
-        String tag = node_sn;
+        MainPreferenceFragment fragment = new MainPreferenceFragment();
         getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 

@@ -287,12 +287,12 @@ public class MainScreenActivity extends AppCompatActivity
 //                                startActivity(intent);
 //                            }
 //                            break;
-//                            case R.id.nav_setting: {
-//                                Intent intent = new Intent(MainScreenActivity.this,
-//                                        SettingActivity.class);
-//                                startActivity(intent);
-//                            }
-//                            break;
+                            case R.id.nav_setting: {
+                                Intent intent = new Intent(MainScreenActivity.this,
+                                        MainSettingActivity.class);
+                                startActivity(intent);
+                            }
+                            break;
                             case R.id.nav_about: {
                                 Intent intent = new Intent(MainScreenActivity.this,
                                         AboutActivity.class);

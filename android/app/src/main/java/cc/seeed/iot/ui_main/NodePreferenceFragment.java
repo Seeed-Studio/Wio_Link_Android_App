@@ -46,7 +46,7 @@ public class NodePreferenceFragment extends PreferenceFragment {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preference);
+        addPreferencesFromResource(R.xml.node_preference);
         context = getActivity().getApplication();
         String node_sn = getArguments().getString("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);

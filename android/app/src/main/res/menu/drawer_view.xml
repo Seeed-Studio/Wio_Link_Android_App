@@ -32,10 +32,10 @@
             <!--android:id="@+id/nav_smartconfig"-->
             <!--android:icon="@drawable/ic_wifi_black"-->
             <!--android:title="@string/smartconfig_view" />-->
-        <!--<item-->
-            <!--android:id="@+id/nav_setting"-->
-            <!--android:icon="@drawable/ic_settings_black"-->
-            <!--android:title="@string/setting_view" />-->
+        <item
+            android:id="@+id/nav_setting"
+            android:icon="@drawable/ic_settings_black"
+            android:title="@string/setting_view" />
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info_black_36dp"
