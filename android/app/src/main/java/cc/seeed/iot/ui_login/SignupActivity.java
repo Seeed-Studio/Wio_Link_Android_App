@@ -1,11 +1,13 @@
 package cc.seeed.iot.ui_login;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -51,6 +53,7 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard();
                 signup();
             }
         });
@@ -141,7 +144,7 @@ public class SignupActivity extends AppCompatActivity {
         }
 
         if (password.isEmpty() || password.length() < 6) {
-            _passwordText.setError("enter more than six characters");
+            _passwordText.setError("Password is too short (minimum is 6 characters)");
             valid = false;
         } else {
             _passwordText.setError(null);
@@ -190,6 +193,14 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }
 
