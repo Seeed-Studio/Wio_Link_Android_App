@@ -199,7 +199,7 @@ public class SignupActivity extends AppCompatActivity {
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+        inputManager.hideSoftInputFromWindow(_signupButton.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

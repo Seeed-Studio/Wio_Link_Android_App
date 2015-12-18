@@ -137,7 +137,7 @@ public class ResetActivity extends AppCompatActivity {
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+        inputManager.hideSoftInputFromWindow(_resetButton.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }
