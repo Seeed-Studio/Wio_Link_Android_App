@@ -20,7 +20,7 @@ public class PinConfig extends Model {
     public Boolean selected;
 
     @Column()
-    public int grove_id;
+    public String sku;
 
     @Column(name = "grove_instance_name")
     public String groveInstanceName;
@@ -28,6 +28,6 @@ public class PinConfig extends Model {
     @Override
     public String toString() {
         return "node_sn=" + node_sn + " position=" + position + " selected=" + selected +
-                " grove_id=" + grove_id + " groveInstanceName=" + groveInstanceName;
+                " sku=" + sku + " groveInstanceName=" + groveInstanceName;
     }
 }

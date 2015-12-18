@@ -59,20 +59,14 @@ public class DBHelper {
 
 
     public static List<GroverDriver> getGrovesAll() {
-        return new Select().from(GroverDriver.class).orderBy("grove_id ASC").execute();
+        return new Select().from(GroverDriver.class).orderBy("grove_name ASC").execute();
     }
 
-    public static List<GroverDriver> getGroves(int id) {
-        return new Select()
-                .from(GroverDriver.class)
-                .where("grove_id = ?", id)
-                .execute();
-    }
 
-    public static List<GroverDriver> getGroves(String grove_name) {
+    public static List<GroverDriver> getGroves(String sku) {
         return new Select()
                 .from(GroverDriver.class)
-                .where("grove_name = ?", grove_name)
+                .where("sku = ?", sku)
                 .execute();
     }
 

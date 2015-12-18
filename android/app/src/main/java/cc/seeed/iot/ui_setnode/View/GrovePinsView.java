@@ -1,5 +1,6 @@
 package cc.seeed.iot.ui_setnode.View;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
@@ -18,6 +19,7 @@ import cc.seeed.iot.webapi.model.Node;
  * Created by tenwong on 15/9/25.
  */
 public class GrovePinsView {
+    private static final String TAG = "GrovePinsView";
     private View view;
     private Node node;
     public ImageButton[] pinViews = new ImageButton[6];
@@ -47,9 +49,13 @@ public class GrovePinsView {
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         for (PinConfig pinConfig : pinConfigs) {
-            String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
-            UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
-                    UrlImageViewHelper.CACHE_DURATION_INFINITE);
+            try {
+                String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
+                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
+                        UrlImageViewHelper.CACHE_DURATION_INFINITE);
+            } catch (Exception e) {
+                Log.e(TAG, "getGroves:" + e);
+            }
         }
 
     }
@@ -57,9 +63,13 @@ public class GrovePinsView {
     public void updatePin6(List<PinConfig> pinConfigs) {
         for (PinConfig pinConfig : pinConfigs) {
             if (pinConfig.position == 6) {
-                String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
-                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
-                        UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                try {
+                    String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
+                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
+                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                } catch (Exception e) {
+                    Log.e(TAG, "getGroves:" + e);
+                }
             }
         }
     }

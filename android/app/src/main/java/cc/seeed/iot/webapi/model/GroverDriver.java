@@ -15,7 +15,7 @@ public class GroverDriver extends Model {
     @Column(name = "files")
     public List<String> Files;
 
-    @Column(name = "sku")
+    @Column(name = "sku", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String SKU;
 
     @Column(name = "inputs")
@@ -51,7 +51,7 @@ public class GroverDriver extends Model {
     @Column(name = "include_path")
     public String IncludePath;
 
-    @Column(name = "grove_id", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
+    @Column(name = "grove_id")
     public int ID;
 
     @Column(name = "construct_arg_list")

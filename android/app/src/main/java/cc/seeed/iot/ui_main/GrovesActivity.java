@@ -43,10 +43,6 @@ public class GrovesActivity extends AppCompatActivity {
         mRecyclerView = (RecyclerView) findViewById(R.id.groves);
 
         groverDrivers = DBHelper.getGrovesAll();
-        for(GroverDriver g:groverDrivers){
-            Log.e(TAG, g.GroveName);
-            Log.e(TAG, g.ID +"");
-        }
         initView();
     }
 

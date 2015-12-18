@@ -2,6 +2,7 @@ package cc.seeed.iot.ui_main;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,11 +87,12 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         for (int i = 0; i < 4; i++) {
             try {
                 holder.mGroveViews.get(i).setVisibility(View.VISIBLE);
-                PinConfig pinConfig = pinConfigs.get(i);
-                String url = DBHelper.getGroves(pinConfig.grove_id).get(0).ImageURL;
+                PinConfig pinConfig = pinConfigs.get(i); //IndexOutOfBoundsException
+                String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL; //maybe null
                 UrlImageViewHelper.setUrlDrawable(holder.mGroveViews.get(i), url, R.drawable.grove_no,
                         UrlImageViewHelper.CACHE_DURATION_INFINITE);
-            } catch (IndexOutOfBoundsException e) {
+            } catch (Exception e) {
+                Log.e(TAG, "getGroves:" + e);
                 holder.mGroveViews.get(i).setVisibility(View.GONE);
             }
         }

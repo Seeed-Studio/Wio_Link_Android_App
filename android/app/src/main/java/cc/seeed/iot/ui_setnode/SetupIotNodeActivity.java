@@ -561,7 +561,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = ((GrovePinsView.Tag) v.getTag()).position;
                         pinConfig.selected = true;
-                        pinConfig.grove_id = groverDriver.ID;
+                        pinConfig.sku = groverDriver.SKU;
                         pinConfig.node_sn = node.node_sn;
 
                         if (pinConfig.position != 6) {
@@ -580,7 +580,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                             Boolean status = false;
                             PinConfig dup_pinConfig = new PinConfig();
                             for (PinConfig p : pinConfigs)
-                                if (p.grove_id == pinConfig.grove_id) {
+                                if (p.sku.equals(pinConfig.sku)) {
                                     status = true;
                                     dup_pinConfig = p;
                                 }
@@ -783,8 +783,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 for (GroverDriver groveDriver : groverDrivers) {
                     groveDriver.save();
                 }
-
-                updateGroveListAdapter(groverDrivers);
+                List<GroverDriver> g = DBHelper.getGrovesAll();
+                updateGroveListAdapter(g);
             }
 
             @Override

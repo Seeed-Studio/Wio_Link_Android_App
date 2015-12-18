@@ -1,5 +1,7 @@
 package cc.seeed.iot.ui_setnode.model;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import cc.seeed.iot.yaml.IotYaml;
  * Created by tenwong on 15/8/10.
  */
 public class NodeConfigHelper {
+    private static final String TAG = "NodeConfigHelper";
     private String node_sn;
 
     public NodeConfigHelper(String node_sn) {
@@ -50,7 +53,7 @@ public class NodeConfigHelper {
             i++;
         }
         pinConfig.groveInstanceName = groveInstanceName;
-        pinConfig.grove_id = groverDriver.ID;
+        pinConfig.sku = groverDriver.SKU;
         pinConfig.node_sn = node_sn;
 
         pinConfig.save();
@@ -80,8 +83,14 @@ public class NodeConfigHelper {
             if (p.selected) {
                 int position = p.position;
                 String groveInstanceName = p.groveInstanceName;
-                GroverDriver groverDriver = DBHelper.getGroves(p.grove_id).get(0);
-                String sku = groverDriver.SKU;
+                String sku = p.sku;
+                GroverDriver groverDriver = new GroverDriver();
+                try {
+                    groverDriver = DBHelper.getGroves(p.sku).get(0);
+                } catch (Exception e) {
+                    Log.e(TAG, "getConfigYaml:" + e);
+                    groverDriver = DBHelper.getGrovesAll().get(0);
+                }
                 String groveName = groverDriver.GroveName;
                 y = y + IotYaml.genYamlItem(position, groveInstanceName, sku, groveName);
             }
