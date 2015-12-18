@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/detail"
+        android:id="@+id/api"
         android:orderInCategory="200"
-        android:title="Detail"
+        android:title="Api"
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/rename"
+        android:id="@+id/setting"
         android:orderInCategory="100"
-        android:title="Rename"
+        android:title="Setting"
         app:showAsAction="always" />
 
     <item

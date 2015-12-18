@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.esotericsoftware.yamlbeans.YamlReader;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,8 +11,6 @@ import java.util.Map;
 import java.util.Set;
 
 import cc.seeed.iot.ui_setnode.model.PinConfig;
-import cc.seeed.iot.util.DBHelper;
-import cc.seeed.iot.webapi.model.GroverDriver;
 
 /**
  * Created by tenwong on 15/8/7.
@@ -21,9 +18,10 @@ import cc.seeed.iot.webapi.model.GroverDriver;
 public class IotYaml {
     private static final String TAG = "IotYaml";
 
-    static public String genYamlItem(int position, String groveInstanceName, String groveName) {
+    static public String genYamlItem(int position, String groveInstanceName, String sku, String groveName) {
         String d = groveInstanceName + ":" + "\r\n";
         d = d + "  name: " + groveName + "\r\n";
+        d = d + "  sku: " + sku + "\r\n";
         d = d + "  construct_arg_list:" + "\r\n";
         switch (position) {
             case 1: {
@@ -43,8 +41,8 @@ public class IotYaml {
             }
             break;
             case 5: {
-                d = d + "    pintx: 3" + "\r\n";
-                d = d + "    pinrx: 1" + "\r\n";
+                d = d + "    pintx: 1" + "\r\n";
+                d = d + "    pinrx: 3" + "\r\n";
             }
             break;
             case 6: {
@@ -69,9 +67,7 @@ public class IotYaml {
                 PinConfig pinConfig = new PinConfig();
                 Map.Entry me = (Map.Entry) iterator.next();
                 pinConfig.groveInstanceName = (String) me.getKey();
-                String grove_name = (String) ((Map) me.getValue()).get("name");
-                List<GroverDriver> grove = DBHelper.getGroves(grove_name);
-                pinConfig.grove_id = grove.get(0).ID;
+                pinConfig.sku = (String) ((Map) me.getValue()).get("sku");
 
                 Map construct_arg_list = (Map) ((Map) me.getValue()).get("construct_arg_list");
 
@@ -96,10 +92,8 @@ public class IotYaml {
 
                 pinConfigs.add(pinConfig);
             }
-        } catch (IOException e) {
-            Log.e("iot", "error:" + e);
-        } catch (IndexOutOfBoundsException e) {
-            Log.e("iot", "error:" + e);
+        } catch (Exception e) {
+            Log.e(TAG, "getNodeConfig:" + e);
         }
 
         return pinConfigs;

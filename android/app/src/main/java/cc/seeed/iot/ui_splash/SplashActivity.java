@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 choice();
             }
-        }, 1000);
+        }, 500);
 
     }
 

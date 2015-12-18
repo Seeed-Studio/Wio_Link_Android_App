@@ -46,7 +46,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         GroverDriver grove = groves.get(position);
         ImageView grove_image = holder.grove_image;
-        UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_cold,
+        UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_no,
                 UrlImageViewHelper.CACHE_DURATION_INFINITE);
         holder.mView.setPressed(selector.get(position, false));
         String name = grove.GroveName.replaceFirst("Grove[\\s_-]+", "");

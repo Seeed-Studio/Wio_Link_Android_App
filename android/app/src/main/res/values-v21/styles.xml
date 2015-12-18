@@ -1,32 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--<style name="AppTheme" parent="android:Theme.Material.Light"/>-->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar" />
-
-    <style name="AppTheme" parent="AppBaseTheme">
-        <item name="android:colorPrimary">#25aadf</item>
-        <item name="android:colorPrimaryDark">#1c9adf</item>
-        <!--<item name="android:colorAccent">#f7ce39</item>-->
-    </style>
-
-    <style name="Theme.DesignDemo" parent="Base.Theme.DesignDemo">
+    <style name="DrawTheme" parent="AppTheme">
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.NodeSet" parent="Base.Theme.DesignDemoV21"></style>
 
-    <style name="Base.Theme.DesignDemoV21" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#25aadf</item>
-        <item name="colorPrimaryDark">#1c9adf</item>
-        <item name="colorAccent">#f7ce39</item>
-        <item name="android:windowBackground">@color/window_background</item>
-    </style>
+    <style name="AppTheme.Dark" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/primary_darker</item>
 
-    <style name="SplashTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementEnterTransition">@android:transition/move</item>
+        <item name="android:windowSharedElementExitTransition">@android:transition/move</item>
+
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="android:windowBackground">@color/primary</item>
+
+        <item name="colorControlNormal">@color/iron</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/iron</item>
+
+        <item name="colorButtonNormal">@color/primary_darker</item>
+        <item name="android:colorButtonNormal">@color/primary_darker</item>
     </style>
 </resources>

@@ -11,7 +11,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@android:color/holo_blue_light"
-        android:contentDescription="setupup" />
+        android:background="@color/third_color"
+        android:contentDescription="setupup"
+        android:scaleType="centerCrop" />
 
 </RelativeLayout>

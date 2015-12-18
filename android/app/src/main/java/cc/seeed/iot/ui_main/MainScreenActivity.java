@@ -19,6 +19,7 @@ package cc.seeed.iot.ui_main;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -26,13 +27,10 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.ListPopupWindow;
-import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -41,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -56,9 +55,11 @@ import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.CommonResponse;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
@@ -81,11 +82,11 @@ public class MainScreenActivity extends AppCompatActivity
     private static final int MESSAGE_NODE_CONFIG_COMPLETE = 0x04;
 
     private DrawerLayout mDrawerLayout;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
+    //    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private NodeListRecyclerAdapter mAdapter;
     private TextView mEmail;
-
+    private ImageView mAddTip;
     private List<Node> nodes;
     private User user;
     private boolean firstUseState;
@@ -117,7 +118,7 @@ public class MainScreenActivity extends AppCompatActivity
         if (ab != null) {
             ab.setHomeAsUpIndicator(R.drawable.ic_menu);
             ab.setDisplayHomeAsUpEnabled(true);
-            ab.setTitle("PION ONE");
+            ab.setTitle(R.string.app_name);
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -125,12 +126,20 @@ public class MainScreenActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
             setupDrawerContent(navigationView);
+
         }
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
-        if(headerLayout != null) {
+        if (headerLayout != null) {
             mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
-            mEmail.setText(user.email);
+            if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_CHINA_URL)) {
+                mEmail.setText(user.email + " (China)");
+            } else if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
+                mEmail.setText(user.email + " (International)");
+            } else
+            mEmail.setText(user.email + " (Customer)\n" +
+                    ((MyApplication) getApplication()).getOtaServerIP());
         }
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.listview);
         if (mRecyclerView != null) {
@@ -143,8 +152,10 @@ public class MainScreenActivity extends AppCompatActivity
             mRecyclerView.setAdapter(mAdapter);
         }
 
+        // Do not need refresh
+        /*
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -160,6 +171,7 @@ public class MainScreenActivity extends AppCompatActivity
                 }, 0);
             }
         });
+        */
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -172,12 +184,13 @@ public class MainScreenActivity extends AppCompatActivity
         });
 
         mProgressDialog = new ProgressDialog(this);
+
+        mAddTip = (ImageView) findViewById(R.id.add_node_tip);
     }
 
     private void initData() {
 
         user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-        Log.e(TAG, "email " + user.email);
         nodes = DBHelper.getNodesAll();
         firstUseState = ((MyApplication) MainScreenActivity.this.getApplication()).getFirstUseState();
 
@@ -195,7 +208,7 @@ public class MainScreenActivity extends AppCompatActivity
                         ((MyApplication) MainScreenActivity.this.getApplication()).setFirstUseState(false);
                         break;
                     case MESSAGE_NODE_LIST_START:
-                        mProgressDialog.setMessage("update pion one...");
+                        mProgressDialog.setMessage("update wio link...");
                         mProgressDialog.setCanceledOnTouchOutside(false);
                         mProgressDialog.show();
                         break;
@@ -204,6 +217,12 @@ public class MainScreenActivity extends AppCompatActivity
                         mProgressDialog.dismiss();
                         if (msg.arg2 == 1) {
                             mAdapter.updateAll(nodes);
+                            if(nodes.isEmpty()) {
+                                mAddTip.setVisibility(View.VISIBLE);
+                            } else {
+                                mAddTip.setVisibility(View.GONE);
+                            }
+
                             for (Node n : nodes) {
                                 getNodesConfig(n, nodes.indexOf(n));
                             }
@@ -260,21 +279,27 @@ public class MainScreenActivity extends AppCompatActivity
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        menuItem.setChecked(true);
                         mDrawerLayout.closeDrawers();
                         switch (menuItem.getItemId()) {
-                            case R.id.nav_nodes_list:
+                            case R.id.nav_node_list:
+                                menuItem.setChecked(true);
                                 break;
-                            case R.id.nav_smartconfig: {
-                                ((MyApplication) getApplication()).setConfigState(false);
+                            case R.id.nav_grove_list: {
                                 Intent intent = new Intent(MainScreenActivity.this,
-                                        GoReadyActivity.class);
+                                        GrovesActivity.class);
                                 startActivity(intent);
                             }
                             break;
+//                            case R.id.nav_smartconfig: {
+//                                ((MyApplication) getApplication()).setConfigState(false);
+//                                Intent intent = new Intent(MainScreenActivity.this,
+//                                        GoReadyActivity.class);
+//                                startActivity(intent);
+//                            }
+//                            break;
                             case R.id.nav_setting: {
                                 Intent intent = new Intent(MainScreenActivity.this,
-                                        SettingActivity.class);
+                                        MainSettingActivity.class);
                                 startActivity(intent);
                             }
                             break;
@@ -286,7 +311,9 @@ public class MainScreenActivity extends AppCompatActivity
                             break;
                             case R.id.nav_logout: {
                                 ((MyApplication) getApplication()).setLoginState(false);
+                                ((MyApplication) getApplication()).setFirstUseState(true);
                                 DBHelper.delNodesAll();
+                                DBHelper.delGrovesAll();
                                 PinConfigDBHelper.delPinConfigAll();
                                 Intent intent = new Intent(MainScreenActivity.this,
                                         SetupActivity.class);
@@ -309,62 +336,68 @@ public class MainScreenActivity extends AppCompatActivity
             case R.id.node_item:
                 nodeSet(node);
                 break;
-            case R.id.location:
+//            case R.id.location:
+//                break;
+//            case R.id.favorite:
+//                break;
+            case R.id.setting:
+                nodeSetting(node);
                 break;
-            case R.id.favorite:
-                break;
-            case R.id.rename:
-                nodeRename(node, position);
-                break;
-            case R.id.detail:
-                nodeDetail(node);
+            case R.id.api:
+                nodeApi(node);
                 break;
             case R.id.remove:
                 nodeRemove(node, position);
                 break;
-            case R.id.dot:
-                PopupMenu popupMenu = new PopupMenu(this, v);
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.remove:
-                                nodeRemove(node, position);
-                                return true;
-                            case R.id.detail:
-                                nodeDetail(node);
-                                return true;
-                            case R.id.rename:
-                                nodeRename(node, position);
-                                return true;
-                        }
-                        return false;
-                    }
-                });
-                popupMenu.inflate(R.menu.ui_node_action);
-                popupMenu.show();
-                if (popupMenu.getDragToOpenListener() instanceof ListPopupWindow.ForwardingListener) {
-                    ListPopupWindow.ForwardingListener listener =
-                            (ListPopupWindow.ForwardingListener) popupMenu.getDragToOpenListener();
-                    listener.getPopup().setVerticalOffset(-v.getHeight());
-                    listener.getPopup().show();
-                }
-                break;
+//            case R.id.dot:
+//                PopupMenu popupMenu = new PopupMenu(this, v);
+//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    @Override
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        switch (item.getItemId()) {
+//                            case R.id.remove:
+//                                nodeRemove(node, position);
+//                                return true;
+//                            case R.id.detail:
+//                                nodeApi(node);
+//                                return true;
+//                            case R.id.rename:
+//                                nodeRename(node, position);
+//                                return true;
+//                        }
+//                        return false;
+//                    }
+//                });
+//                popupMenu.inflate(R.menu.ui_node_action);
+//                popupMenu.show();
+//                if (popupMenu.getDragToOpenListener() instanceof ListPopupWindow.ForwardingListener) {
+//                    ListPopupWindow.ForwardingListener listener =
+//                            (ListPopupWindow.ForwardingListener) popupMenu.getDragToOpenListener();
+//                    listener.getPopup().setVerticalOffset(-v.getHeight());
+//                    listener.getPopup().show();
+//                }
+//                break;
         }
+    }
+
+    private void nodeSetting(Node node) {
+        Intent intent = new Intent(this, NodeSettingActivity.class);
+        intent.putExtra("node_sn", node.node_sn);
+        startActivity(intent);
     }
 
     public boolean nodeRemove(final Node node, final int position) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Remove Pion One");
+        builder.setTitle("Remove Wio Link");
         builder.setMessage("Confirm remove?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
-                progressDialog.setMessage("Node delete...");
+                progressDialog.setMessage("Wio link remove...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
@@ -378,13 +411,11 @@ public class MainScreenActivity extends AppCompatActivity
                         nodes.remove(node);
                         DBHelper.delNode(node.node_sn);
                         mAdapter.removeItem(position);
-                        Log.i(TAG, "Remove Node success!");
                     }
 
                     @Override
                     public void failure(RetrofitError error) {
                         progressDialog.dismiss();
-                        Log.e(TAG, "Remove Node fail!");
                     }
                 });
             }
@@ -395,8 +426,8 @@ public class MainScreenActivity extends AppCompatActivity
         return true;
     }
 
-    public boolean nodeDetail(Node node) {
-        Intent intent = new Intent(this, NodeDetailActivity.class);
+    public boolean nodeApi(Node node) {
+        Intent intent = new Intent(this, NodeApiActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;
@@ -406,50 +437,6 @@ public class MainScreenActivity extends AppCompatActivity
         Intent intent = new Intent(this, SetupIotNodeActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
-        return true;
-    }
-
-    public boolean nodeRename(final Node node, final int position) {
-        final LayoutInflater inflater = this.getLayoutInflater();
-        final View view = inflater.inflate(R.layout.dialog_name_input, null);
-        final EditText nameView = (EditText) view.findViewById(R.id.new_name);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setCancelable(false);
-        builder.setTitle("Rename Pion One");
-        builder.setView(view);
-        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final String newName = nameView.getText().toString();
-                final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
-                progressDialog.setMessage("Node rename...");
-                progressDialog.setCanceledOnTouchOutside(false);
-                progressDialog.show();
-                IotApi api = new IotApi();
-                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-                api.setAccessToken(user.user_key);
-                final IotService iot = api.getService();
-                iot.nodesRename(newName, node.node_sn, new Callback<NodeResponse>() {
-                    @Override
-                    public void success(NodeResponse nodeResponse, Response response) {
-                        progressDialog.dismiss();
-                        nodes.get(position).name = newName;
-                        node.save();
-                        mAdapter.updateItem(position);
-                    }
-
-                    @Override
-                    public void failure(RetrofitError error) {
-                        progressDialog.dismiss();
-                        Log.e("iot", "Delete Node fail!");
-                    }
-                });
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, null);
-        builder.show();
-
         return true;
     }
 
@@ -482,10 +469,7 @@ public class MainScreenActivity extends AppCompatActivity
                     get_nodes.removeAll(delNodes);
                     nodes = get_nodes;
 
-                    DBHelper.delNodesAll();
-                    for (Node node : nodes) {
-                        node.save();
-                    }
+                    DBHelper.saveNodes(nodes);
 
                     Message message = Message.obtain();
                     message.arg2 = 1;
@@ -518,9 +502,9 @@ public class MainScreenActivity extends AppCompatActivity
         IotApi api = new IotApi();
         api.setAccessToken(node.node_key);
         final IotService iot = api.getService();
-        iot.nodeConfig(new Callback<cc.seeed.iot.webapi.model.Response>() {
+        iot.nodeConfig(new Callback<CommonResponse>() {
             @Override
-            public void success(cc.seeed.iot.webapi.model.Response response, Response response2) {
+            public void success(CommonResponse response, Response response2) {
                 if (response.status.equals("200")) {
                     String yaml = response.msg;
                     saveToDB(yaml);

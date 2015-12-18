@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.ExchangeApi;
 import cc.seeed.iot.webapi.IotApi;
 
@@ -15,6 +16,8 @@ public class MyApplication extends com.activeandroid.app.Application {
     private User user = new User();
     private String ota_server_url;
     private String exchange_server_url;
+    private String ota_server_ip;
+    private String exchange_server_ip;
 
     /**
      * into smartconfig state
@@ -35,8 +38,10 @@ public class MyApplication extends com.activeandroid.app.Application {
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
         user.email = sp.getString("userName", "awong1900@163.com");
         user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
-        ota_server_url = sp.getString("ota_server_url", "https://iot.seeed.cc/v1"); //https://iot.seeed.cc/v1 //https://120.25.216.117/v1
-        exchange_server_url = sp.getString("exchange_server_url", "https://120.25.216.117/v1");
+        ota_server_url = sp.getString("ota_server_url", Common.OTA_INTERNATIONAL_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
+        exchange_server_url = sp.getString("exchange_server_url", Common.EXCHANGE_INTERNATIONAL_URL); //https://cn.iot.seeed.cc/v1  //"https://iot.seeed.cc/v1";
+        ota_server_ip = sp.getString("ota_server_ip", Common.OTA_INTERNATIONAL_IP);
+        exchange_server_ip = sp.getString("exchange_server_ip", Common.EXCHANGE_INTERNATIONAL_IP);
         configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);
         firstUseState = sp.getBoolean("firstUseState", true);
@@ -84,15 +89,15 @@ public class MyApplication extends com.activeandroid.app.Application {
         editor.apply();
     }
 
-    public String getServerUrl() {
+    public String getOtaServerUrl() {
         return ota_server_url;
     }
 
-    public void setServerUrl(String server_url) {
-        this.ota_server_url = server_url;
-        IotApi.SetServerUrl(server_url);
+    public void setOtaServerUrl(String ota_server_url) {
+        this.ota_server_url = ota_server_url;
+        IotApi.SetServerUrl(ota_server_url);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("ota_server_url", server_url);
+        editor.putString("ota_server_url", ota_server_url);
         editor.apply();
     }
 
@@ -100,10 +105,32 @@ public class MyApplication extends com.activeandroid.app.Application {
         return exchange_server_url;
     }
 
-    public void setExchangeServerUrl(String server_url) {
-        this.exchange_server_url = server_url;
+    public void setExchangeServerUrl(String exchange_server_url) {
+        this.exchange_server_url = exchange_server_url;
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("exchange_server_url", server_url);
+        editor.putString("exchange_server_url", exchange_server_url);
+        editor.apply();
+    }
+
+    public String getOtaServerIP() {
+        return ota_server_ip;
+    }
+
+    public void setOtaServerIP(String ota_server_ip) {
+        this.ota_server_ip = ota_server_ip;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("ota_server_ip", ota_server_ip);
+        editor.apply();
+    }
+
+    public String getExchangeServerIP() {
+        return exchange_server_ip;
+    }
+
+    public void setExchangeServerIP(String exchange_server_ip) {
+        this.exchange_server_ip = exchange_server_ip;
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("exchange_server_ip", exchange_server_ip);
         editor.apply();
     }
 

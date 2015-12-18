@@ -10,4 +10,8 @@
     <dimen name="item_image_button">36dp</dimen>
     <dimen name="item_image_button_top_margin">12dp</dimen>
     <dimen name="item_image_button_end_margin">12dp</dimen>
+    <dimen name="civ_border_width">1dp</dimen>
+
+    <dimen name="grove_width">40dp</dimen>
+
 </resources>

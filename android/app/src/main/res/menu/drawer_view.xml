@@ -16,19 +16,22 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group
-        android:id="@+id/main"
-        android:checkableBehavior="single">
+        android:id="@+id/main">
         <item
-            android:id="@+id/nav_nodes_list"
+            android:id="@+id/nav_node_list"
             android:icon="@drawable/ic_view_list_black"
-            android:title="@string/nodes_list_view" />
+            android:title="@string/node_list_view" />
+        <item
+            android:id="@+id/nav_grove_list"
+            android:icon="@drawable/ic_view_list_black"
+            android:title="@string/grove_list_view" />
     </group>
 
     <group android:id="@+id/action">
-        <item
-            android:id="@+id/nav_smartconfig"
-            android:icon="@drawable/ic_wifi_black"
-            android:title="@string/smartconfig_view" />
+        <!--<item-->
+            <!--android:id="@+id/nav_smartconfig"-->
+            <!--android:icon="@drawable/ic_wifi_black"-->
+            <!--android:title="@string/smartconfig_view" />-->
         <item
             android:id="@+id/nav_setting"
             android:icon="@drawable/ic_settings_black"

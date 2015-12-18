@@ -72,12 +72,12 @@ public class SignUpDialogFragment extends DialogFragment {
 //            mSwitchAreaView.setVisibility(View.GONE);
 //        }
 
-        if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_CHINA_URL))
+        if (((MyApplication) getActivity().getApplication()).getOtaServerUrl().equals(Common.OTA_CHINA_URL))
             mSwitchAreaView.setText(R.string.setup_switch_international);
-        else if (((MyApplication) getActivity().getApplication()).getServerUrl().equals(Common.OTA_INTERNATIONAL_URL))
+        else if (((MyApplication) getActivity().getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL))
             mSwitchAreaView.setText(R.string.setup_switch_china);
         else
-            mSwitchAreaView.setText(((MyApplication) getActivity().getApplication()).getServerUrl());
+            mSwitchAreaView.setText(((MyApplication) getActivity().getApplication()).getOtaServerUrl());
 
         builder.setView(view);
         builder.setTitle("Sign Up");
@@ -106,10 +106,10 @@ public class SignUpDialogFragment extends DialogFragment {
             public void onClick(View v) {
                 if (mSwitchAreaView.getText().toString().equals(getString(R.string.setup_switch_international))) {
                     mSwitchAreaView.setText(R.string.setup_switch_china);
-                    ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_INTERNATIONAL_URL);
+                    ((MyApplication) getActivity().getApplication()).setOtaServerUrl(Common.OTA_INTERNATIONAL_URL);
                 } else {
                     mSwitchAreaView.setText(R.string.setup_switch_international);
-                    ((MyApplication) getActivity().getApplication()).setServerUrl(Common.OTA_CHINA_URL);
+                    ((MyApplication) getActivity().getApplication()).setOtaServerUrl(Common.OTA_CHINA_URL);
                 }
             }
         });

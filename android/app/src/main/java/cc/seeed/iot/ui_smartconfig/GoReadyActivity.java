@@ -17,7 +17,7 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.R;
-import cc.seeed.iot.ui_ap_config.WifiPionListActivity;
+import cc.seeed.iot.ui_ap_config.WifiWioListActivity;
 import cc.seeed.iot.webapi.model.NodeResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -87,7 +87,7 @@ public class GoReadyActivity extends AppCompatActivity {
 
                     node_key = nodeResponse.node_key;
                     node_sn = nodeResponse.node_sn;
-                    Intent intent = new Intent(GoReadyActivity.this, WifiPionListActivity.class);
+                    Intent intent = new Intent(GoReadyActivity.this, WifiWioListActivity.class);
                     intent.putExtra("node_key", node_key);
                     intent.putExtra("node_sn", node_sn);
                     startActivity(intent);
