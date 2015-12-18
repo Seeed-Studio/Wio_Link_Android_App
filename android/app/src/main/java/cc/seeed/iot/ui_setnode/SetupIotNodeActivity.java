@@ -11,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -362,13 +361,19 @@ public class SetupIotNodeActivity extends AppCompatActivity
         iot.userDownload(node_key, base64Yaml, new Callback<OtaStatusResponse>() {
             @Override
             public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                if (otaStatusResponse.status.equals("200")) {
-                    mProgressDialog.setMessage(otaStatusResponse.ota_msg);
-                    displayStatus(node_key);
-                } else {
-                    mProgressDialog.setMessage("Error:" + otaStatusResponse.msg);
-                    mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                try {
+                    if (otaStatusResponse.status.equals("200")) {
+                        mProgressDialog.setMessage(otaStatusResponse.ota_msg);
+                        displayStatus(node_key);
+                    } else {
+                        mProgressDialog.setMessage("Error:" + otaStatusResponse.msg);
+                        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+                    mProgressDialog.dismiss();
+                    Log.e(TAG, "userDownload:" + e);
                 }
+
             }
 
             @Override
