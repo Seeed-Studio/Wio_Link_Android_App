@@ -33,8 +33,8 @@ public class GroverDriver extends Model {
     @Column(name = "image_url")
     public String ImageURL;
 
-    @Column(name = "events")
-    public List<String> Events;
+//    @Column(name = "events")
+//    public Map<String, String> Events;
 
     @Column(name = "class_name")
     public String ClassName;
@@ -47,6 +47,12 @@ public class GroverDriver extends Model {
 
     @Column(name = "has_event")
     public Boolean HasEvent;
+
+    @Column(name = "has_power_off_func")
+    public Boolean HasPowerOffFunc;
+
+    @Column(name = "has_power_on_func")
+    public Boolean HasPowerOnFunc;
 
     @Column(name = "include_path")
     public String IncludePath;
