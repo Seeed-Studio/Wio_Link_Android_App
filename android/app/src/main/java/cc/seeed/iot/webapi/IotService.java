@@ -1,17 +1,20 @@
 package cc.seeed.iot.webapi;
 
-import java.util.List;
 import java.util.Map;
 
-import cc.seeed.iot.webapi.model.GroverDriver;
+import cc.seeed.iot.webapi.model.CommonResponse;
+import cc.seeed.iot.webapi.model.GroveDriverListResponse;
+import cc.seeed.iot.webapi.model.NodeConfigResponse;
+import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.NodeResponse;
 import cc.seeed.iot.webapi.model.OtaStatusResponse;
 import cc.seeed.iot.webapi.model.PropertyResponse;
-import cc.seeed.iot.webapi.model.CommonResponse;
 import cc.seeed.iot.webapi.model.UserResponse;
 import cc.seeed.iot.webapi.model.WellKnownResponse;
+import cc.seeed.iot.yaml.NodeConfig;
 import retrofit.Callback;
+import retrofit.http.Body;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
@@ -65,12 +68,10 @@ public interface IotService {
     public void nodesDelete(@Query("node_sn") String node_sn, Callback<NodeResponse> callback);
 
     @GET("/v1/node/config")
-    public void nodeConfig(Callback<CommonResponse> callback);
+    public void nodeConfig(Callback<NodeConfigResponse> callback);
 
     @POST("/v1/user/download")
-    public void userDownload(@Query("access_token") String node_key,
-                             @Query("yaml") String yaml,
-                             Callback<OtaStatusResponse> callback);
+    public void userDownload(@Body NodeJson nodeJson,Callback<OtaStatusResponse> callback);
 
     @POST("/v1/ota/status")
     public void otaStatus(@Query("access_token") String node_key,
@@ -81,7 +82,7 @@ public interface IotService {
      */
 
     @GET("/v1/scan/drivers")
-    public void scanDrivers(Callback<List<GroverDriver>> callback);
+    public void scanDrivers(Callback<GroveDriverListResponse> callback);
 
     @GET("/v1/scan/status")
     public void scanStatus(Callback<CommonResponse> callback);
