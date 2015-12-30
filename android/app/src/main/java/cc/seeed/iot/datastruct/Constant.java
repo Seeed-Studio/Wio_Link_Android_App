@@ -9,6 +9,11 @@ public class Constant {
             "All",
             "Input",
             "Output",
+            "GPIO",
+            "ANALOG",
+            "UART",
+            "I2C",
+            "EVENT",
     };
 
 

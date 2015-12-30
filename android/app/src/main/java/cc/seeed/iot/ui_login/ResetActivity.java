@@ -18,9 +18,10 @@ import butterknife.InjectView;
 import cc.seeed.iot.R;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.CommonResponse;
+import cc.seeed.iot.webapi.model.SuccessResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ResetActivity extends AppCompatActivity {
     private static final String TAG = "ResetActivity";
@@ -105,34 +106,31 @@ public class ResetActivity extends AppCompatActivity {
     private boolean resetPassword(String email, final ProgressDialog progressDialog) {
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userRetrievePassword(email, new Callback<CommonResponse>() {
+        iot.userRetrievePassword(email, new Callback<SuccessResponse>() {
             @Override
-            public void success(CommonResponse response, retrofit.client.Response response1) {
-                String status = response.status;
+            public void success(SuccessResponse successResponse, Response response1) {
                 progressDialog.dismiss();
-                if (status.equals("200")) {
-                    onResetSuccess();
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ResetActivity.this);
-                    builder.setPositiveButton(R.string.ok, null).create();
-                    builder.setTitle("Success");
-                    builder.setMessage(response.msg);
-                    builder.show();
-                } else {
-                    progressDialog.dismiss();
-                    onResetFailed();
-                    _emailText.setError(response.msg);
-                    _emailText.requestFocus();
-                }
+                onResetSuccess();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ResetActivity.this);
+                builder.setPositiveButton(R.string.ok, null).create();
+                builder.setTitle("Success");
+                builder.setMessage(successResponse.result);
+                builder.show();
             }
 
             @Override
             public void failure(RetrofitError error) {
+                progressDialog.dismiss();
+                onResetFailed();
+                _emailText.setError(error.getLocalizedMessage());
+                _emailText.requestFocus();
                 Toast.makeText(ResetActivity.this, R.string.ConnectServerFail, Toast.LENGTH_LONG).show();
             }
         });
 
         return true;
     }
+
     private void hideKeyboard() {
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);

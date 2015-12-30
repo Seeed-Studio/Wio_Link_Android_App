@@ -22,9 +22,10 @@ import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.UserResponse;
+import cc.seeed.iot.webapi.model.LoginResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -127,12 +128,12 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void onLoginSuccess(String email, UserResponse userResponse) {
+    public void onLoginSuccess(String email, LoginResponse loginResponse) {
         _loginButton.setEnabled(true);
 
         user.email = email;
-        user.user_key = userResponse.token;
-        user.user_id = userResponse.user_id;
+        user.user_key = loginResponse.token;
+        user.user_id = loginResponse.user_id;
         ((MyApplication) getApplication()).setUser(user);
         ((MyApplication) getApplication()).setLoginState(true);
         Intent intent = new Intent(this, MainScreenActivity.class);
@@ -175,25 +176,19 @@ public class LoginActivity extends AppCompatActivity {
 
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userLogin(email, password, new Callback<UserResponse>() {
+        iot.userLogin(email, password, new Callback<LoginResponse>() {
             @Override
-            public void success(UserResponse userResponse, retrofit.client.Response response) {
-                String status = userResponse.status;
-                if (status.equals("200")) {
-                    onLoginSuccess(email, userResponse);
-                } else {
-                    onLoginFailed();
-                    _emailText.setError(userResponse.msg);
-                    _emailText.requestFocus();
-                }
+            public void success(LoginResponse loginResponse, Response response) {
+                onLoginSuccess(email, loginResponse);
                 progressDialog.dismiss();
             }
 
             @Override
             public void failure(RetrofitError error) {
+                _emailText.setError(error.getLocalizedMessage());
+                _emailText.requestFocus();
                 progressDialog.dismiss();
                 onLoginFailed();
-//                Toast.makeText(LoginActivity.this, R.string.ConnectServerFail, Toast.LENGTH_LONG).show();
             }
         });
     }

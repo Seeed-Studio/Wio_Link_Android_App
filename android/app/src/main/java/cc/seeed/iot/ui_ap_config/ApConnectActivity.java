@@ -34,7 +34,7 @@ import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
-import cc.seeed.iot.webapi.model.NodeResponse;
+import cc.seeed.iot.webapi.model.SuccessResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -210,12 +210,10 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 iot.nodesList(new Callback<NodeListResponse>() {
                     @Override
                     public void success(NodeListResponse nodeListResponse, Response response) {
-                        if (nodeListResponse.status.equals("200")) {
-                            for (Node n : nodeListResponse.nodes) {
-                                if (n.node_sn.equals(node_sn) && n.online) {
-                                    state_online = true;
-                                    break;
-                                }
+                        for (Node n : nodeListResponse.nodes) {
+                            if (n.node_sn.equals(node_sn) && n.online) {
+                                state_online = true;
+                                break;
                             }
                         }
                     }
@@ -271,27 +269,19 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             User user = ((MyApplication) getApplication()).getUser();
             api.setAccessToken(user.user_key);
             IotService iot = api.getService();
-            iot.nodesRename(node_name, node_sn, new Callback<NodeResponse>() {
+            iot.nodesRename(node_name, node_sn, new Callback<SuccessResponse>() {
                 @Override
-                public void success(NodeResponse nodeResponse, Response response) {
-                    String status = nodeResponse.status;
-                    if (status.equals("200")) {
-                        mProgressBar.dismiss();
-
-                        Intent intent = new Intent(ApConnectActivity.this, MainScreenActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-
-                    } else {
-                        mProgressBar.dismiss();
-                        Toast.makeText(ApConnectActivity.this, "Rename Node fail!", Toast.LENGTH_LONG).show();
-                    }
+                public void success(SuccessResponse successResponse, Response response) {
+                    mProgressBar.dismiss();
+                    Intent intent = new Intent(ApConnectActivity.this, MainScreenActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
                 }
 
                 @Override
                 public void failure(RetrofitError error) {
                     mProgressBar.dismiss();
-                    Toast.makeText(ApConnectActivity.this, "Connect server error!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ApConnectActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 }
             });
         }

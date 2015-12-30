@@ -4,11 +4,12 @@ import android.util.Log;
 
 import com.activeandroid.serializer.TypeSerializer;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-import java.lang.reflect.Type;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -30,25 +31,30 @@ final public class UtilMapSerializer extends TypeSerializer {
         if (o == null) {
             return null;
         }
-
         Gson gson = new Gson();
-        Map<String, List<String>> map = (Map<String, List<String>>) o;
+        Map<String, Object> map = (Map<String, Object>) o;
         String json = gson.toJson(map);
+//        Log.e("Map", json);
         return json;
     }
 
     @Override
-    public Map<String, List<String>> deserialize(Object o) {
+    public Map<String, Object> deserialize(Object o) {
         if (o == null) {
             return null;
         }
-        Gson gson = new Gson();
-        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        Map<String, Object> map = new HashMap<>();
 
-        Type type = new TypeToken<Map<String, List<String>>>() {
-        }.getType();
+        try {
+            JSONObject json = new JSONObject((String) o);
+            for (Iterator it = json.keys(); it.hasNext(); ) {
+                String key = (String) it.next();
+                map.put(key, json.get(key));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-        map = gson.fromJson((String) o, type);
         return map;
     }
 }

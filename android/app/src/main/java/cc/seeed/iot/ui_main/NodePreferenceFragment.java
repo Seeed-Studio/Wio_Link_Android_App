@@ -17,9 +17,8 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.CommonResponse;
 import cc.seeed.iot.webapi.model.Node;
-import cc.seeed.iot.webapi.model.NodeResponse;
+import cc.seeed.iot.webapi.model.SuccessResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -117,15 +116,10 @@ public class NodePreferenceFragment extends PreferenceFragment {
         IotApi api = new IotApi();
         api.setAccessToken(node.node_key);
         final IotService iot = api.getService();
-        iot.nodeSettingDataxserver(newValue, new Callback<CommonResponse>() {
+        iot.nodeSettingDataxserver(newValue, new Callback<SuccessResponse>() {
             @Override
-            public void success(CommonResponse commonResponse, Response response) {
+            public void success(SuccessResponse successResponse, Response response) {
                 ep_ip.setEnabled(true);
-                if (!commonResponse.status.equals("200")) {
-                    ep_ip.setSummary(node.dataxserver);
-                    ep_ip.setText(node.dataxserver);
-                    notifyFail(commonResponse.msg);
-                }
             }
 
             @Override
@@ -144,14 +138,10 @@ public class NodePreferenceFragment extends PreferenceFragment {
         IotApi api = new IotApi();
         api.setAccessToken(node.node_key);
         final IotService iot = api.getService();
-        iot.nodeSettingDataxserver(newValue, new Callback<CommonResponse>() {
+        iot.nodeSettingDataxserver(newValue, new Callback<SuccessResponse>() {
             @Override
-            public void success(CommonResponse commonResponse, Response response) {
+            public void success(SuccessResponse successResponse, Response response) {
                 sp_server.setEnabled(true);
-                if (!commonResponse.status.equals("200")) {
-                    sp_server.setChecked(true);
-                    notifyFail(commonResponse.msg);
-                }
             }
 
             @Override
@@ -170,20 +160,22 @@ public class NodePreferenceFragment extends PreferenceFragment {
         User user = ((MyApplication) getActivity().getApplication()).getUser();
         api.setAccessToken(user.user_key);
         final IotService iot = api.getService();
-        iot.nodesRename(newName, node.node_sn, new Callback<NodeResponse>() {
+        iot.nodesRename(newName, node.node_sn, new Callback<SuccessResponse>() {
             @Override
-            public void success(NodeResponse nodeResponse, Response response) {
+            public void success(SuccessResponse successResponse, Response response) {
                 ep_name.setEnabled(true);
-                if (!nodeResponse.status.equals("200")) {
-                    ep_ip.setSummary(node.dataxserver);
-                    ep_ip.setText(node.dataxserver);
-                    notifyFail(nodeResponse.msg);
-                }
+//                if (!nodeResponse.status.equals("200")) {
+//                    ep_ip.setSummary(node.dataxserver);
+//                    ep_ip.setText(node.dataxserver);
+//                    notifyFail(nodeResponse.msg);
+//                }
             }
 
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, "Rename wio link failure!");
+                ep_ip.setSummary(node.dataxserver);
+                ep_ip.setText(node.dataxserver);
                 ep_name.setEnabled(true);
                 ep_name.setSummary(node.name);
                 ep_name.setText(node.name);
