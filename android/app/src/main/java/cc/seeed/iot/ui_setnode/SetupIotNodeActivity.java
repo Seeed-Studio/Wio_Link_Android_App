@@ -351,74 +351,60 @@ public class SetupIotNodeActivity extends AppCompatActivity
         iot.userDownload(node_json, new Callback<OtaStatusResponse>() {
             @Override
             public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                try {
-                    if (otaStatusResponse.status.equals("200")) {
-                        mProgressDialog.setMessage(otaStatusResponse.ota_msg);
-                        displayStatus(node_key);
-                    } else {
-                        mProgressDialog.setMessage("Error:" + otaStatusResponse.msg);
-                        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                    }
-                } catch (Exception e) {
-                    mProgressDialog.dismiss();
-                    Log.e(TAG, "userDownload:" + e);
-                }
+                mProgressDialog.setMessage(otaStatusResponse.ota_msg);
+                displayStatus(node_key);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                mProgressDialog.dismiss();
-                Log.e(TAG, "error:" + error);
+                mProgressDialog.setMessage("Error:" + error.getLocalizedMessage());
+                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
             }
         });
     }
 
     private void displayStatus(final String node_key) {
         IotApi api = new IotApi();
+        api.setAccessToken(node_key);
         final IotService iot = api.getService();
-        iot.otaStatus(node_key, new Callback<OtaStatusResponse>() {
-                    @Override
-                    public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                        if (otaStatusResponse.status.equals("200")) {
-                            if (otaStatusResponse.ota_status.equals("going")) {
-                                displayStatus(node_key);
-                                mProgressDialog.setMessage(otaStatusResponse.ota_msg);
-                            } else if (otaStatusResponse.ota_status.equals("done")) {
-                                mProgressDialog.dismiss();
+        iot.otaStatus(new Callback<OtaStatusResponse>() {
+                          @Override
+                          public void success(OtaStatusResponse otaStatusResponse, Response response) {
+                              if (otaStatusResponse.ota_status.equals("going")) {
+                                  displayStatus(node_key);
+                                  mProgressDialog.setMessage(otaStatusResponse.ota_msg);
+                              } else if (otaStatusResponse.ota_status.equals("done")) {
+                                  mProgressDialog.dismiss();
 
-                                Message message = Message.obtain();
-                                message.what = MESSAGE_UPDATE_DONE;
-                                message.obj = otaStatusResponse.ota_msg;
-                                mHandler.sendMessage(message);
+                                  Message message = Message.obtain();
+                                  message.what = MESSAGE_UPDATE_DONE;
+                                  message.obj = otaStatusResponse.ota_msg;
+                                  mHandler.sendMessage(message);
 
-                            } else if (otaStatusResponse.ota_status.equals("error")) {
-                                mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
-                                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                                mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                              } else if (otaStatusResponse.ota_status.equals("error")) {
+                                  mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
+                                  mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                                  mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                      @Override
+                                      public void onClick(DialogInterface dialog, int which) {
 
-                                    }
-                                });
-                            }
-                        } else {
-                            mProgressDialog.setMessage(otaStatusResponse.status + ":" + otaStatusResponse.msg);
-                            mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                            mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                                      }
+                                  });
+                              }
+                          }
 
-                                }
-                            });
-                        }
-                    }
+                          @Override
+                          public void failure(RetrofitError error) {
+                              mProgressDialog.setMessage(error.getLocalizedMessage());
+                              mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                              mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                  @Override
+                                  public void onClick(DialogInterface dialog, int which) {
 
-                    @Override
-                    public void failure(RetrofitError error) {
-                        Log.e(TAG, "error:" + error);
-                        mProgressDialog.dismiss();
-                    }
-                }
+                                  }
+                              });
+                          }
+                      }
 
         );
     }
@@ -429,17 +415,40 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         List<GroverDriver> inputGroves = new ArrayList<GroverDriver>();
         List<GroverDriver> outputGroves = new ArrayList<GroverDriver>();
+        List<GroverDriver> gpioGroves = new ArrayList<GroverDriver>();
+        List<GroverDriver> analogGroves = new ArrayList<GroverDriver>();
+        List<GroverDriver> uartGroves = new ArrayList<GroverDriver>();
+        List<GroverDriver> i2cGroves = new ArrayList<GroverDriver>();
+        List<GroverDriver> eventGroves = new ArrayList<GroverDriver>();
 
 
         if (mGroveDrivers == null)
             return;
 
         for (GroverDriver g : mGroveDrivers) {
-            if (!g.Inputs.isEmpty()) {
+            if (!g.Writes.isEmpty()) {
                 outputGroves.add(g);
             }
-            if (!g.Outputs.isEmpty())
+            if (!g.Reads.isEmpty()) {
                 inputGroves.add(g);
+            }
+            if (g.HasEvent) {
+                eventGroves.add(g);
+            }
+            switch (g.InterfaceType) {
+                case "GPIO":
+                    gpioGroves.add(g);
+                    break;
+                case "ANALOG":
+                    analogGroves.add(g);
+                    break;
+                case "UART":
+                    uartGroves.add(g);
+                    break;
+                case "I2C":
+                    i2cGroves.add(g);
+                    break;
+            }
         }
 
         mGroveTypeListAdapter.updateSelection(position);
@@ -450,6 +459,16 @@ public class SetupIotNodeActivity extends AppCompatActivity
             updateGroveListAdapter(inputGroves);
         } else if (groveType.equals("Output")) {
             updateGroveListAdapter(outputGroves);
+        }else if (groveType.equals("GPIO")) {
+            updateGroveListAdapter(gpioGroves);
+        }else if (groveType.equals("ANALOG")) {
+            updateGroveListAdapter(analogGroves);
+        }else if (groveType.equals("UART")) {
+            updateGroveListAdapter(uartGroves);
+        }else if (groveType.equals("I2C")) {
+            updateGroveListAdapter(i2cGroves);
+        }else if (groveType.equals("EVENT")) {
+            updateGroveListAdapter(eventGroves);
         }
 
     }
@@ -774,20 +793,19 @@ public class SetupIotNodeActivity extends AppCompatActivity
         iot.scanDrivers(new Callback<GroveDriverListResponse>() {
             @Override
             public void success(GroveDriverListResponse groveDriverListResponse, Response response) {
-                if (groveDriverListResponse.status.equals("200")) {
-                    for (GroverDriver groveDriver : groveDriverListResponse.drivers) {
-                        groveDriver.save();
-                    }
-                    List<GroverDriver> g = DBHelper.getGrovesAll();
-                    updateGroveListAdapter(g);
-                } else {
-                    Log.e(TAG, groveDriverListResponse.status + groveDriverListResponse.msg);
+                for (GroverDriver groveDriver : groveDriverListResponse.drivers) {
+                    groveDriver.save();
                 }
+                List<GroverDriver> g = DBHelper.getGrovesAll();
+                for (GroverDriver s : g) {
+                    Log.e(TAG, s.Reads.toString());
+                }
+                updateGroveListAdapter(g);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG, error.toString());
+                Log.e(TAG, error.getLocalizedMessage());
             }
         });
     }

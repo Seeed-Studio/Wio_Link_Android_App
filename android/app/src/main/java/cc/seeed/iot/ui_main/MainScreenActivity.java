@@ -40,8 +40,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -65,7 +63,7 @@ import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeConfigResponse;
 import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.NodeListResponse;
-import cc.seeed.iot.webapi.model.NodeResponse;
+import cc.seeed.iot.webapi.model.SuccessResponse;
 import cc.seeed.iot.yaml.IotYaml;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -406,9 +404,9 @@ public class MainScreenActivity extends AppCompatActivity
                 User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
                 api.setAccessToken(user.user_key);
                 final IotService iot = api.getService();
-                iot.nodesDelete(node.node_sn, new Callback<NodeResponse>() {
+                iot.nodesDelete(node.node_sn, new Callback<SuccessResponse>() {
                     @Override
-                    public void success(NodeResponse nodeResponse, Response response) {
+                    public void success(SuccessResponse successResponse, Response response) {
                         progressDialog.dismiss();
                         nodes.remove(node);
                         DBHelper.delNode(node.node_sn);
@@ -449,52 +447,43 @@ public class MainScreenActivity extends AppCompatActivity
         iot.nodesList(new Callback<NodeListResponse>() {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
-                if (nodeListResponse.status.equals("200")) {
-                    List<Node> get_nodes = nodeListResponse.nodes;
-                    ArrayList<Node> delNodes = new ArrayList<Node>();
-                    for (Node n : get_nodes) {
-                        if (n.name.equals("node000")) {
-                            iot.nodesDelete(n.node_sn, new Callback<NodeResponse>() {
-                                @Override
-                                public void success(NodeResponse nodeResponse, Response response) {
+                List<Node> get_nodes = nodeListResponse.nodes;
+                ArrayList<Node> delNodes = new ArrayList<Node>();
+                for (Node n : get_nodes) {
+                    if (n.name.equals("node000")) {
+                        iot.nodesDelete(n.node_sn, new Callback<SuccessResponse>() {
+                            @Override
+                            public void success(SuccessResponse successResponse, Response response) {
 
-                                }
+                            }
 
-                                @Override
-                                public void failure(RetrofitError error) {
+                            @Override
+                            public void failure(RetrofitError error) {
 
-                                }
-                            });
-                            delNodes.add(n);
-                        }
+                            }
+                        });
+                        delNodes.add(n);
                     }
-                    get_nodes.removeAll(delNodes);
-                    nodes = get_nodes;
-
-                    DBHelper.saveNodes(nodes);
-
-                    Message message = Message.obtain();
-                    message.arg2 = 1;
-                    message.what = MESSAGE_NODE_LIST_COMPLETE;
-                    mHandler.sendMessage(message);
-
-                } else {
-                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
-                    Message message = Message.obtain();
-                    message.arg2 = 0;
-                    message.what = MESSAGE_NODE_LIST_COMPLETE;
-                    mHandler.sendMessage(message);
                 }
+                get_nodes.removeAll(delNodes);
+                nodes = get_nodes;
+
+                DBHelper.saveNodes(nodes);
+
+                Message message = Message.obtain();
+                message.arg2 = 1;
+                message.what = MESSAGE_NODE_LIST_COMPLETE;
+                mHandler.sendMessage(message);
             }
 
             @Override
             public void failure(RetrofitError error) {
+                Toast.makeText(MainScreenActivity.this, error.getLocalizedMessage(),
+                        Toast.LENGTH_LONG).show();
                 Message message = Message.obtain();
                 message.arg2 = 0;
                 message.what = MESSAGE_NODE_LIST_COMPLETE;
                 mHandler.sendMessage(message);
-
-                Toast.makeText(MainScreenActivity.this, "Connect server fail!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -507,18 +496,11 @@ public class MainScreenActivity extends AppCompatActivity
         iot.nodeConfig(new Callback<NodeConfigResponse>() {
             @Override
             public void success(NodeConfigResponse nodeConfigResponse, Response response) {
-                if (nodeConfigResponse.status.equals("200")) {
-                    if (nodeConfigResponse.type.equals("yaml")) {
-                        String yaml = nodeConfigResponse.msg;
-                        saveToDB(yaml);
-                    } else {
-                        String json = nodeConfigResponse.msg;
-                        NodeJson nodeJson = new Gson().fromJson(json, NodeJson.class);
-                        saveToDB(nodeJson);
-                    }
-
-                } else {
-                    Log.i(TAG, nodeConfigResponse.msg);
+                if (nodeConfigResponse.type.equals("yaml")) {
+                    Log.e(TAG, "do not support!");
+                } else if (nodeConfigResponse.type.equals("json")) {
+                    NodeJson nodeJson = nodeConfigResponse.config;
+                    saveToDB(nodeJson);
                 }
 
                 Message message = Message.obtain();
@@ -529,17 +511,17 @@ public class MainScreenActivity extends AppCompatActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(getClass().getName(), error.toString());
+                Log.e(TAG, error.getLocalizedMessage());
             }
 
-            private void saveToDB(String yaml) {
-                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
-                PinConfigDBHelper.delPinConfig(node.node_sn);
-                for (PinConfig pinConfig : pinConfigs) {
-                    pinConfig.node_sn = node.node_sn;
-                    pinConfig.save();
-                }
-            }
+//            private void saveToDB(String yaml) {
+//                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
+//                PinConfigDBHelper.delPinConfig(node.node_sn);
+//                for (PinConfig pinConfig : pinConfigs) {
+//                    pinConfig.node_sn = node.node_sn;
+//                    pinConfig.save();
+//                }
+//            }
 
             private void saveToDB(NodeJson nodeJson) {
                 List<PinConfig> pinConfigs = new ArrayList<>();
@@ -592,26 +574,18 @@ public class MainScreenActivity extends AppCompatActivity
         iot.scanDrivers(new Callback<GroveDriverListResponse>() {
             @Override
             public void success(GroveDriverListResponse groveDriverListResponse, Response response) {
-                if (groveDriverListResponse.status.equals("200")) {
-                    for (GroverDriver groveDriver : groveDriverListResponse.drivers) {
-                        groveDriver.save();
-                    }
-
-                    Message message = Message.obtain();
-                    message.what = MESSAGE_GROVE_LIST_COMPLETE;
-                    mHandler.sendMessage(message);
-                } else {
-                    Log.e(TAG, groveDriverListResponse.status + groveDriverListResponse.msg);
-                    Message message = Message.obtain();
-                    message.what = MESSAGE_GROVE_LIST_COMPLETE;
-                    mHandler.sendMessage(message);
+                for (GroverDriver groveDriver : groveDriverListResponse.drivers) {
+                    groveDriver.save();
                 }
 
+                Message message = Message.obtain();
+                message.what = MESSAGE_GROVE_LIST_COMPLETE;
+                mHandler.sendMessage(message);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG, error.toString());
+                Log.e(TAG, error.getLocalizedMessage());
                 Message message = Message.obtain();
                 message.what = MESSAGE_GROVE_LIST_COMPLETE;
                 mHandler.sendMessage(message);

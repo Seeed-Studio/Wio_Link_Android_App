@@ -78,30 +78,24 @@ public class GoReadyActivity extends AppCompatActivity {
         api.setAccessToken(user.user_key);
         IotService iot = api.getService();
         iot.nodesCreate(node_name, new Callback<NodeResponse>() {
-            @Override
-            public void success(NodeResponse nodeResponse, Response response) {
-                String status = nodeResponse.status;
-                if (status.equals("200")) {
-                    mProgressBar.dismiss();
+                    @Override
+                    public void success(NodeResponse nodeResponse, Response response) {
+                        mProgressBar.dismiss();
+                        node_key = nodeResponse.node_key;
+                        node_sn = nodeResponse.node_sn;
+                        Intent intent = new Intent(GoReadyActivity.this, WifiWioListActivity.class);
+                        intent.putExtra("node_key", node_key);
+                        intent.putExtra("node_sn", node_sn);
+                        startActivity(intent);
+                    }
 
-                    node_key = nodeResponse.node_key;
-                    node_sn = nodeResponse.node_sn;
-                    Intent intent = new Intent(GoReadyActivity.this, WifiWioListActivity.class);
-                    intent.putExtra("node_key", node_key);
-                    intent.putExtra("node_sn", node_sn);
-                    startActivity(intent);
-                } else {
-                    mProgressBar.dismiss();
-                    Toast.makeText(GoReadyActivity.this, "Create Node fail!", Toast.LENGTH_LONG).show();
+                    @Override
+                    public void failure(RetrofitError error) {
+                        mProgressBar.dismiss();
+                        Toast.makeText(GoReadyActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                mProgressBar.dismiss();
-                Toast.makeText(GoReadyActivity.this, "Connect server error!", Toast.LENGTH_LONG).show();
-            }
-        });
+        );
     }
 }
 

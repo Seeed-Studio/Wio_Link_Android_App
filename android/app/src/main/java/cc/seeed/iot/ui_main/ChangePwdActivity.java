@@ -20,9 +20,11 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.LoginResponse;
 import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class ChangePwdActivity extends AppCompatActivity {
     private static final String TAG = "ChangePwdActivity";
@@ -104,22 +106,17 @@ public class ChangePwdActivity extends AppCompatActivity {
 
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userLogin(email, password, new Callback<UserResponse>() {
+        iot.userLogin(email, password, new Callback<LoginResponse>() {
             @Override
-            public void success(UserResponse userResponse, retrofit.client.Response response) {
-                String status = userResponse.status;
-                if (status.equals("200")) {
-                    changePwd(progressDialog);
-                } else {
-                    _oldPwdText.setError("Old password isn't valid");
-                    _oldPwdText.requestFocus();
-                    onChanePwdFailed();
-                }
+            public void success(LoginResponse loginResponse, Response response) {
+                changePwd(progressDialog);
                 progressDialog.dismiss();
             }
 
             @Override
             public void failure(RetrofitError error) {
+                _oldPwdText.setError("Old password isn't valid");
+                _oldPwdText.requestFocus();
                 progressDialog.dismiss();
                 onChanePwdFailed();
 
@@ -133,22 +130,18 @@ public class ChangePwdActivity extends AppCompatActivity {
         String access_token = user.user_key;
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userChangePassword(password, access_token, new Callback<UserResponse>() {
+        api.setAccessToken(access_token);
+        iot.userChangePassword(password, new Callback<UserResponse>() {
             @Override
             public void success(UserResponse userResponse, retrofit.client.Response response) {
-                String status = userResponse.status;
-                if (status.equals("200")) {
-                    onSavePwdSuccess(userResponse);
-                } else {
-                    _newPwdText.setError(userResponse.msg);
-                    _newPwdText.requestFocus();
-                    onChanePwdFailed();
-                }
+                onSavePwdSuccess(userResponse);
                 progressDialog.dismiss();
             }
 
             @Override
             public void failure(RetrofitError error) {
+                _newPwdText.setError(error.getLocalizedMessage());
+                _newPwdText.requestFocus();
                 progressDialog.dismiss();
                 onChanePwdFailed();
             }
@@ -158,7 +151,7 @@ public class ChangePwdActivity extends AppCompatActivity {
     public void onSavePwdSuccess(UserResponse userResponse) {
         _savePwdButton.setEnabled(true);
         user.user_key = userResponse.token;
-        user.user_id = userResponse.user_id;
+//        user.user_id = userResponse.user_id;
         ((MyApplication) getApplication()).setUser(user);
         Toast.makeText(getBaseContext(), "Password changed successfully.", Toast.LENGTH_LONG).show();
         _oldPwdText.setText("");

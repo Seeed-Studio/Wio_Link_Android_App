@@ -116,7 +116,7 @@ public class SignupActivity extends AppCompatActivity {
         _signupButton.setEnabled(true);
         user.email = email;
         user.user_key = userResponse.token;
-        user.user_id = userResponse.user_id;
+//        user.user_id = userResponse.user_id;
         ((MyApplication) getApplication()).setUser(user);
         ((MyApplication) getApplication()).setLoginState(true);
         Intent intent = new Intent(this, MainScreenActivity.class);
@@ -174,23 +174,16 @@ public class SignupActivity extends AppCompatActivity {
         iot.userCreate(email, password, new Callback<UserResponse>() {
             @Override
             public void success(UserResponse userResponse, retrofit.client.Response response) {
-                String status = userResponse.status;
-                if (status.equals("200")) {
-                    onSignupSuccess(email, userResponse);
-                } else {
-                    _emailText.setError(userResponse.msg);
-                    _emailText.requestFocus();
-                    onSignupFailed();
-                }
+                onSignupSuccess(email, userResponse);
                 progressDialog.dismiss();
             }
 
             @Override
             public void failure(RetrofitError error) {
-//                Toast.makeText(SignupActivity.this, R.string.ConnectServerFail, Toast.LENGTH_LONG).show();
-                progressDialog.dismiss();
+                _emailText.setError(error.getLocalizedMessage());
+                _emailText.requestFocus();
                 onSignupFailed();
-
+                progressDialog.dismiss();
             }
         });
     }
