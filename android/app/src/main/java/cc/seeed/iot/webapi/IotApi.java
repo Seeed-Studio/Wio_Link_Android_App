@@ -15,7 +15,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
-import cc.seeed.iot.MyApplication;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
@@ -57,6 +56,7 @@ public class IotApi {
                 .setEndpoint(iot_url)
                 .setRequestInterceptor(new WebApiAuthenticator())
                 .setClient(new OkClient(client))
+                .setErrorHandler(new CustomErrorHandler())
                 .setConverter(new GsonConverter(new GsonBuilder()
                         .excludeFieldsWithModifiers(Modifier.FINAL, Modifier.TRANSIENT, Modifier.STATIC)
                         .serializeNulls()

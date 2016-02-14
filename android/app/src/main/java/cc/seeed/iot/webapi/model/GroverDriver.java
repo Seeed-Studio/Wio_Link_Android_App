@@ -12,14 +12,11 @@ import java.util.Map;
  */
 @Table(name = "groves")
 public class GroverDriver extends Model {
-    @Column(name = "files")
-    public List<String> Files;
-
     @Column(name = "sku", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String SKU;
 
-    @Column(name = "inputs")
-    public Map<String, List<String>> Inputs;
+    @Column(name = "files")
+    public List<String> Files;
 
     @Column(name = "class_file")
     public String ClassFile;
@@ -27,35 +24,38 @@ public class GroverDriver extends Model {
     @Column(name = "grove_name")
     public String GroveName;
 
-    @Column(name = "outputs")
-    public Map<String, List<String>> Outputs;
-
     @Column(name = "image_url")
     public String ImageURL;
 
-//    @Column(name = "events")
-//    public Map<String, String> Events;
-
-    @Column(name = "class_name")
-    public String ClassName;
-
-    @Column(name = "can_get_last_error")
-    public Boolean CanGetLastError;
-
-    @Column(name = "interface_type")
-    public String InterfaceType;
-
-    @Column(name = "has_event")
-    public Boolean HasEvent;
+    @Column(name = "writes")
+    public Map<String, WriteConfig> Writes;
 
     @Column(name = "has_power_off_func")
     public Boolean HasPowerOffFunc;
 
-    @Column(name = "has_power_on_func")
-    public Boolean HasPowerOnFunc;
+    @Column(name = "class_name")
+    public String ClassName;
+
+    @Column(name = "reads")
+    public Map<String, ReadConfig> Reads;
+
+    @Column(name = "can_get_last_error")
+    public Boolean CanGetLastError;
+
+    @Column(name = "events")
+    public Map<String, String> Events;
+
+    @Column(name = "has_event")
+    public Boolean HasEvent;
+
+    @Column(name = "interface_type")
+    public String InterfaceType;
 
     @Column(name = "include_path")
     public String IncludePath;
+
+    @Column(name = "has_power_on_func")
+    public Boolean HasPowerOnFunc;
 
     @Column(name = "grove_id")
     public int ID;

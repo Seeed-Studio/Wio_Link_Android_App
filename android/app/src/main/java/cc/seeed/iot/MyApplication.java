@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.util.Common;
-import cc.seeed.iot.webapi.ExchangeApi;
 import cc.seeed.iot.webapi.IotApi;
 
 /**
@@ -52,7 +51,6 @@ public class MyApplication extends com.activeandroid.app.Application {
 
     private void init() {
         IotApi.SetServerUrl(ota_server_url);
-        ExchangeApi.SetServerUrl(exchange_server_url);
     }
 
     public Boolean getLoginState() {

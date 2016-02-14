@@ -2,11 +2,16 @@ package cc.seeed.iot.ui_setnode.model;
 
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.GroverDriver;
+import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.yaml.IotYaml;
 
 /**
@@ -96,5 +101,40 @@ public class NodeConfigHelper {
             }
         }
         return y;
+    }
+
+    public static NodeJson getConfigJson(List<PinConfig> pinConfigs) {
+        NodeJson nodeJson = new NodeJson();
+        nodeJson.board_name = "Wio Link v1.0";
+        List<Map<String, String>> connections = new ArrayList<>();
+        for (PinConfig p : pinConfigs) {
+            if (p.selected) {
+                Map<String,String> map = new HashMap<>();
+                switch (p.position) {
+                    case 1:
+                        map.put("port", "D0");
+                        break;
+                    case 2:
+                        map.put("port", "D1");
+                        break;
+                    case 3:
+                        map.put("port", "D2");
+                        break;
+                    case 4:
+                        map.put("port", "A0");
+                        break;
+                    case 5:
+                        map.put("port", "UART0");
+                        break;
+                    case 6:
+                        map.put("port","I2C0");
+                        break;
+                }
+                map.put("sku", p.sku);
+                connections.add(map);
+            }
+        }
+        nodeJson.connections = connections;
+        return nodeJson;
     }
 }

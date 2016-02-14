@@ -19,7 +19,6 @@ package cc.seeed.iot.ui_main;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -34,17 +33,16 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
@@ -59,11 +57,13 @@ import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.CommonResponse;
+import cc.seeed.iot.webapi.model.GroveDriverListResponse;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
+import cc.seeed.iot.webapi.model.NodeConfigResponse;
+import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.NodeListResponse;
-import cc.seeed.iot.webapi.model.NodeResponse;
+import cc.seeed.iot.webapi.model.SuccessResponse;
 import cc.seeed.iot.yaml.IotYaml;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -136,8 +136,8 @@ public class MainScreenActivity extends AppCompatActivity
             } else if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
                 mEmail.setText(user.email + " (International)");
             } else
-            mEmail.setText(user.email + " (Customer)\n" +
-                    ((MyApplication) getApplication()).getOtaServerIP());
+                mEmail.setText(user.email + " (Customer)\n" +
+                        ((MyApplication) getApplication()).getOtaServerIP());
         }
 
 
@@ -217,7 +217,7 @@ public class MainScreenActivity extends AppCompatActivity
                         mProgressDialog.dismiss();
                         if (msg.arg2 == 1) {
                             mAdapter.updateAll(nodes);
-                            if(nodes.isEmpty()) {
+                            if (nodes.isEmpty()) {
                                 mAddTip.setVisibility(View.VISIBLE);
                             } else {
                                 mAddTip.setVisibility(View.GONE);
@@ -404,9 +404,9 @@ public class MainScreenActivity extends AppCompatActivity
                 User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
                 api.setAccessToken(user.user_key);
                 final IotService iot = api.getService();
-                iot.nodesDelete(node.node_sn, new Callback<NodeResponse>() {
+                iot.nodesDelete(node.node_sn, new Callback<SuccessResponse>() {
                     @Override
-                    public void success(NodeResponse nodeResponse, Response response) {
+                    public void success(SuccessResponse successResponse, Response response) {
                         progressDialog.dismiss();
                         nodes.remove(node);
                         DBHelper.delNode(node.node_sn);
@@ -447,52 +447,43 @@ public class MainScreenActivity extends AppCompatActivity
         iot.nodesList(new Callback<NodeListResponse>() {
             @Override
             public void success(NodeListResponse nodeListResponse, Response response) {
-                if (nodeListResponse.status.equals("200")) {
-                    List<Node> get_nodes = nodeListResponse.nodes;
-                    ArrayList<Node> delNodes = new ArrayList<Node>();
-                    for (Node n : get_nodes) {
-                        if (n.name.equals("node000")) {
-                            iot.nodesDelete(n.node_sn, new Callback<NodeResponse>() {
-                                @Override
-                                public void success(NodeResponse nodeResponse, Response response) {
+                List<Node> get_nodes = nodeListResponse.nodes;
+                ArrayList<Node> delNodes = new ArrayList<Node>();
+                for (Node n : get_nodes) {
+                    if (n.name.equals("node000")) {
+                        iot.nodesDelete(n.node_sn, new Callback<SuccessResponse>() {
+                            @Override
+                            public void success(SuccessResponse successResponse, Response response) {
 
-                                }
+                            }
 
-                                @Override
-                                public void failure(RetrofitError error) {
+                            @Override
+                            public void failure(RetrofitError error) {
 
-                                }
-                            });
-                            delNodes.add(n);
-                        }
+                            }
+                        });
+                        delNodes.add(n);
                     }
-                    get_nodes.removeAll(delNodes);
-                    nodes = get_nodes;
-
-                    DBHelper.saveNodes(nodes);
-
-                    Message message = Message.obtain();
-                    message.arg2 = 1;
-                    message.what = MESSAGE_NODE_LIST_COMPLETE;
-                    mHandler.sendMessage(message);
-
-                } else {
-                    Toast.makeText(MainScreenActivity.this, nodeListResponse.msg, Toast.LENGTH_LONG).show();
-                    Message message = Message.obtain();
-                    message.arg2 = 0;
-                    message.what = MESSAGE_NODE_LIST_COMPLETE;
-                    mHandler.sendMessage(message);
                 }
+                get_nodes.removeAll(delNodes);
+                nodes = get_nodes;
+
+                DBHelper.saveNodes(nodes);
+
+                Message message = Message.obtain();
+                message.arg2 = 1;
+                message.what = MESSAGE_NODE_LIST_COMPLETE;
+                mHandler.sendMessage(message);
             }
 
             @Override
             public void failure(RetrofitError error) {
+                Toast.makeText(MainScreenActivity.this, error.getLocalizedMessage(),
+                        Toast.LENGTH_LONG).show();
                 Message message = Message.obtain();
                 message.arg2 = 0;
                 message.what = MESSAGE_NODE_LIST_COMPLETE;
                 mHandler.sendMessage(message);
-
-                Toast.makeText(MainScreenActivity.this, "Connect server fail!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -502,14 +493,14 @@ public class MainScreenActivity extends AppCompatActivity
         IotApi api = new IotApi();
         api.setAccessToken(node.node_key);
         final IotService iot = api.getService();
-        iot.nodeConfig(new Callback<CommonResponse>() {
+        iot.nodeConfig(new Callback<NodeConfigResponse>() {
             @Override
-            public void success(CommonResponse response, Response response2) {
-                if (response.status.equals("200")) {
-                    String yaml = response.msg;
-                    saveToDB(yaml);
-                } else {
-                    Log.i(TAG, response.msg);
+            public void success(NodeConfigResponse nodeConfigResponse, Response response) {
+                if (nodeConfigResponse.type.equals("yaml")) {
+                    Log.e(TAG, "do not support!");
+                } else if (nodeConfigResponse.type.equals("json")) {
+                    NodeJson nodeJson = nodeConfigResponse.config;
+                    saveToDB(nodeJson);
                 }
 
                 Message message = Message.obtain();
@@ -520,12 +511,52 @@ public class MainScreenActivity extends AppCompatActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(getClass().getName(), error.toString());
-
+                Log.e(TAG, error.getLocalizedMessage());
             }
 
-            private void saveToDB(String yaml) {
-                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
+//            private void saveToDB(String yaml) {
+//                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
+//                PinConfigDBHelper.delPinConfig(node.node_sn);
+//                for (PinConfig pinConfig : pinConfigs) {
+//                    pinConfig.node_sn = node.node_sn;
+//                    pinConfig.save();
+//                }
+//            }
+
+            private void saveToDB(NodeJson nodeJson) {
+                List<PinConfig> pinConfigs = new ArrayList<>();
+                List<Map<String, String>> connections = nodeJson.connections;
+                try {
+                    for (Map<String, String> l : connections) {
+                        PinConfig pinConfig = new PinConfig();
+                        pinConfig.sku = l.get("sku");
+                        pinConfig.selected = true;
+                        switch (l.get("port")) {
+                            case "D0":
+                                pinConfig.position = 1;
+                                break;
+                            case "D1":
+                                pinConfig.position = 2;
+                                break;
+                            case "D2":
+                                pinConfig.position = 3;
+                                break;
+                            case "A0":
+                                pinConfig.position = 4;
+                                break;
+                            case "UART0":
+                                pinConfig.position = 5;
+                                break;
+                            case "I2C0":
+                                pinConfig.position = 6;
+                                break;
+                        }
+                        pinConfigs.add(pinConfig);
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "getNodeConfig:" + e);
+                }
+
                 PinConfigDBHelper.delPinConfig(node.node_sn);
                 for (PinConfig pinConfig : pinConfigs) {
                     pinConfig.node_sn = node.node_sn;
@@ -540,10 +571,10 @@ public class MainScreenActivity extends AppCompatActivity
         String token = user.user_key;
         api.setAccessToken(token);
         IotService iot = api.getService();
-        iot.scanDrivers(new Callback<List<GroverDriver>>() {
+        iot.scanDrivers(new Callback<GroveDriverListResponse>() {
             @Override
-            public void success(List<GroverDriver> groverDrivers, retrofit.client.Response response) {
-                for (GroverDriver groveDriver : groverDrivers) {
+            public void success(GroveDriverListResponse groveDriverListResponse, Response response) {
+                for (GroverDriver groveDriver : groveDriverListResponse.drivers) {
                     groveDriver.save();
                 }
 
@@ -554,7 +585,7 @@ public class MainScreenActivity extends AppCompatActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e(TAG, error.toString());
+                Log.e(TAG, error.getLocalizedMessage());
                 Message message = Message.obtain();
                 message.what = MESSAGE_GROVE_LIST_COMPLETE;
                 mHandler.sendMessage(message);
