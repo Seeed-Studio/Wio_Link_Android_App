@@ -43,7 +43,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
     private static final String TAG = "ApConnectActivity";
     private static final String AP_IP = "192.168.4.1";
     private final static String PION_WIFI_PREFIX = "PionOne_";
-    private final static String WIO_WIFI_PREFIX = "WioLink_";
+    private final static String WIO_WIFI_PREFIX = "Wio";
     private TextView mSsidView;
     private EditText mPasswordView;
     private EditText mNodeNameView;
@@ -65,6 +65,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
+        // TODO: 16/2/17 Divide
 
         mSsidView = (TextView) findViewById(R.id.ssid);
         mPasswordView = (EditText) findViewById(R.id.wifi_password);
@@ -139,7 +140,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Sending wifi password to Wio Link...");
+            mProgressDialog.setMessage("Sending wifi password to Wio...");
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
         }
@@ -174,7 +175,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         protected void onPostExecute(Boolean b) {
             mProgressDialog.dismiss();
 
-            //remove Wio Link wifi config
+            //remove Wio wifi config
             WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
             List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
             for (WifiConfiguration c : wifiConfigurations) {
@@ -195,7 +196,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Waiting Wio Link get ip address...");
+            mProgressDialog.setMessage("Waiting Wio get ip address...");
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
         }
@@ -244,9 +245,9 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ApConnectActivity.this);
                 builder.setTitle("Error");
-                builder.setMessage("Wio Link can not connect to the router.\n" +
+                builder.setMessage("Wio can not connect to the router.\n" +
                         "Maybe AP password is wrong or AP connect timeout\n" +
-                        "Please reset Wio Link to config mode and try again.");
+                        "Please reset Wio to config mode and try again.");
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -263,7 +264,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         private void attemptRename(final String node_name) {
             final ProgressDialog mProgressBar = new ProgressDialog(ApConnectActivity.this);
 
-            mProgressBar.setMessage("Setting Wio Link name...");
+            mProgressBar.setMessage("Setting Wio name...");
             mProgressBar.show();
             IotApi api = new IotApi();
             User user = ((MyApplication) getApplication()).getUser();

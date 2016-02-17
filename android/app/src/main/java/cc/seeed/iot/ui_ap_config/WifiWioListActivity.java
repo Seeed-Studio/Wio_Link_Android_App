@@ -33,7 +33,7 @@ public class WifiWioListActivity extends AppCompatActivity
     private final static String TAG = "WifiPionListActivity";
     private final static int PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION = 0x00;
     private final static String PION_WIFI_PREFIX = "PionOne_";
-    private final static String WIO_WIFI_PREFIX = "WioLink_";
+    private final static String WIO_WIFI_PREFIX = "Wio";
     private Toolbar mToolbar;
     private RecyclerView mWifiListView;
     private WifiWioListRecyclerAdapter mWifiListAdapter;
@@ -53,7 +53,7 @@ public class WifiWioListActivity extends AppCompatActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_pion_list_activity);
+        getSupportActionBar().setTitle(R.string.title_wio_activity);
 
         mWifiListView = (RecyclerView) findViewById(R.id.wifi_list);
         if (mWifiListView != null) {
@@ -133,7 +133,7 @@ public class WifiWioListActivity extends AppCompatActivity
         scanPionResult.clear();
         for (ScanResult wifi : scanResult) {
             if (wifi.SSID.contains(PION_WIFI_PREFIX) || wifi.SSID.contains(WIO_WIFI_PREFIX)) {
-                Log.i(TAG, "WioLink ssid:" + wifi.SSID);
+                Log.i(TAG, "Wio ssid:" + wifi.SSID);
                 scanPionResult.add(wifi);
             }
         }

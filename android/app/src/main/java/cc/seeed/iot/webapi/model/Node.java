@@ -25,6 +25,7 @@ public class Node extends Model {
     @Column()
     public String dataxserver;
 
+    // TODO: 16/2/17 add nodeboard type
     @Override
     public boolean equals(Object o) {
         if (this == o) {

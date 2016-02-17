@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Wio Link</string>
+    <string name="app_name">Wio</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -43,7 +43,7 @@
         SSID input above.
     </string>
     <string name="ap_config_tips_connect">This help you to connect your\n
-        wio link to WiFi AP which\n
+        wio to WiFi AP which\n
         SSID input above.
     </string>
     <string name="smartconfig_tips_failed">If you have any issuse, please visit:\n
@@ -56,7 +56,7 @@
     <string name="online">Online</string>
     <string name="offline">Offline</string>
     <string name="menu_settings">Settings</string>
-    <string name="menu_name">New Wio Link name</string>
+    <string name="menu_name">New Wio name</string>
 
 
     <!--NavigationView-->
@@ -90,10 +90,10 @@
     </string>
 
     <string name="title_about"><![CDATA[
-        <b>Wio Link</b>&nbsp;<font color="#888888">v%1$s</font>
+        <b>Wio </b>&nbsp;<font color="#888888">v%1$s</font>
     ]]></string>
 
-    <string name="ap_config_hint_node_name">set your wio link name</string>
+    <string name="ap_config_hint_node_name">set your wio name</string>
 
     <!--login-->
     <string-array name="server">
@@ -103,10 +103,10 @@
     </string-array>
 
     <!-- ui_ap_config -->
-    <string name="title_pion_list_activity">Select Wio link</string>
+    <string name="title_wio_activity">Select Wio</string>
     <string name="title_wifi_list_activity">Select AP</string>
-    <string name="title_ap_connect_activity">Set Wio link</string>
-    <string name="ap_config_progress_msg">Setting Wio link name...</string>
+    <string name="title_ap_connect_activity">Set Wio</string>
+    <string name="ap_config_progress_msg">Setting Wio name...</string>
 
     <!-- main list-->
     <string name="setting">"  Setting  "</string>

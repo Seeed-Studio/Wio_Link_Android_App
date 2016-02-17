@@ -84,6 +84,7 @@ public class GoReadyActivity extends AppCompatActivity {
                         node_key = nodeResponse.node_key;
                         node_sn = nodeResponse.node_sn;
                         Intent intent = new Intent(GoReadyActivity.this, WifiWioListActivity.class);
+                        // TODO: 16/2/17 add node or link info
                         intent.putExtra("node_key", node_key);
                         intent.putExtra("node_sn", node_sn);
                         startActivity(intent);
