@@ -52,7 +52,6 @@
      -->
 
     <com.getbase.floatingactionbutton.FloatingActionsMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
@@ -63,7 +62,7 @@
         fab:fab_labelStyle="@style/menu_labels_style">
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/action_b"
+            android:id="@+id/setup_node"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"
@@ -73,7 +72,7 @@
             fab:fab_title="Setup Wio Node" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/action_a"
+            android:id="@+id/setup_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/white"

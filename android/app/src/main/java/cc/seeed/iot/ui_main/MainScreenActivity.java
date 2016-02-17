@@ -22,7 +22,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
+//import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +39,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +67,6 @@ import cc.seeed.iot.webapi.model.NodeConfigResponse;
 import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.SuccessResponse;
-import cc.seeed.iot.yaml.IotYaml;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -173,10 +175,30 @@ public class MainScreenActivity extends AppCompatActivity
         });
         */
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+ /*       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ((MyApplication) getApplication()).setConfigState(true);
+                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+                startActivity(intent);
+            }
+        });*/
+
+        final FloatingActionButton setupNodeAction = (FloatingActionButton) findViewById(R.id.setup_node);
+        setupNodeAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MyApplication) getApplication()).setConfigState(true);
+                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        final FloatingActionButton setupLinkAction = (FloatingActionButton) findViewById(R.id.setup_link);
+        setupLinkAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 ((MyApplication) getApplication()).setConfigState(true);
                 Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
                 startActivity(intent);
