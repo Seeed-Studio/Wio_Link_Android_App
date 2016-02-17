@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/third_color"
     android:orientation="vertical"
-    tools:context="cc.seeed.iot.ui_setnode.SetupIotNodeActivity">
+    tools:context=".ui_setnode.SetupIotLinkActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"

@@ -34,7 +34,7 @@
         <activity
             android:name="cc.seeed.iot.ui_main.MainScreenActivity"
             android:theme="@style/DrawTheme" />
-        <activity android:name="cc.seeed.iot.ui_setnode.SetupIotNodeActivity" />
+        <activity android:name=".ui_setnode.SetupIotLinkActivity" />
         <activity android:name="cc.seeed.iot.ui_login.SetupActivity" />
         <activity
             android:name="cc.seeed.iot.ui_login.LoginActivity"

@@ -41,7 +41,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
-import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +52,7 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
-import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
+import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
@@ -456,7 +455,7 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     public boolean nodeSet(Node node) {
-        Intent intent = new Intent(this, SetupIotNodeActivity.class);
+        Intent intent = new Intent(this, SetupIotLinkActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;

@@ -12,8 +12,6 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.security.auth.login.LoginException;
-
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.util.DBHelper;
@@ -79,7 +77,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
             grove_image = (ImageView) itemView.findViewById(R.id.grove_image);
 
 //            mView.setOnClickListener(SetupIotNodeActivity.pin6OnClickListener);
-            mView.setOnLongClickListener(SetupIotNodeActivity.pin6OnLongClickListener);
+            mView.setOnLongClickListener(SetupIotLinkActivity.pin6OnLongClickListener);
         }
 
     }

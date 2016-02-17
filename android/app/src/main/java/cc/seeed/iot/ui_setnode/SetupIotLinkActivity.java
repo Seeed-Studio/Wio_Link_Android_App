@@ -53,7 +53,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SetupIotNodeActivity extends AppCompatActivity
+public class SetupIotLinkActivity extends AppCompatActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
         View.OnClickListener, View.OnDragListener, View.OnLongClickListener {
 
@@ -150,7 +150,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         getSupportActionBar().setTitle(node.name);
 
-        user = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getUser();
+        user = ((MyApplication) SetupIotLinkActivity.this.getApplication()).getUser();
 
         mGroveListView = (RecyclerView) findViewById(R.id.grove_list);
         if (mGroveListView != null) {
@@ -225,7 +225,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
                     case MESSAGE_UPDATE_DONE: {
                         String message = (String) msg.obj;
-                        new AlertDialog.Builder(SetupIotNodeActivity.this)
+                        new AlertDialog.Builder(SetupIotLinkActivity.this)
                                 .setTitle(R.string.update)
                                 .setMessage(message)
                                 .setPositiveButton(R.string.ok, null)
@@ -811,7 +811,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
     }
 
     private class Pin6OnClickListener implements View.OnLongClickListener {
-        public Pin6OnClickListener(SetupIotNodeActivity setupIotNodeActivity) {
+        public Pin6OnClickListener(SetupIotLinkActivity setupIotLinkActivity) {
         }
 
         @Override
