@@ -18,11 +18,13 @@
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     </android.support.design.widget.AppBarLayout>
 
-    <!--<android.support.v4.widget.SwipeRefreshLayout-->
-    <!--android:id="@+id/activity_main_swipe_refresh_layout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+    <!--
+        <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/activity_main_swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    -->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listview"
@@ -34,18 +36,51 @@
         android:id="@+id/add_node_tip"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/main_bg"
         android:scaleType="centerCrop"
-        android:visibility="gone"/>
+        android:src="@drawable/main_bg"
+        android:visibility="gone" />
 
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
-    <android.support.design.widget.FloatingActionButton
+    <!--  <android.support.design.widget.FloatingActionButton
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="end|bottom"
+      android:layout_margin="@dimen/fab_margin"
+      android:src="@drawable/ic_add_white_36dp" />
+     -->
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_white_36dp" />
+        fab:fab_addButtonColorNormal="@color/primary"
+        fab:fab_addButtonColorPressed="@color/primary_dark"
+        fab:fab_addButtonPlusIconColor="@color/white"
+        fab:fab_labelStyle="@style/menu_labels_style">
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/action_b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_plusIconColor="@color/half_black"
+            fab:fab_size="mini"
+            fab:fab_title="Setup Wio Node" />
+
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/action_a"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/white"
+            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_plusIconColor="@color/half_black"
+            fab:fab_size="mini"
+            fab:fab_title="Setup Wio Link" />
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
 
 </android.support.design.widget.CoordinatorLayout>
