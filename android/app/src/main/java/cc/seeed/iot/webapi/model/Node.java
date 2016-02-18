@@ -26,6 +26,7 @@ public class Node extends Model {
     public String dataxserver;
 
     // TODO: 16/2/17 add nodeboard type
+    public String board;
     @Override
     public boolean equals(Object o) {
         if (this == o) {

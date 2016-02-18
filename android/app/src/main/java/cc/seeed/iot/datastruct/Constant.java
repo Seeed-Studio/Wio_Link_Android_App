@@ -16,5 +16,7 @@ public class Constant {
             "EVENT",
     };
 
+    public final static String WIOLINK_V10= "Wio Link v1.0";
+    public final static String WIONODE_V10= "Wio Node v1.0";
 
 }
