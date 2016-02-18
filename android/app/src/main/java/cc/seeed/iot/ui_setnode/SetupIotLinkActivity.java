@@ -26,7 +26,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
-import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.DBHelper;
@@ -86,7 +84,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
     private List<GroverDriver> mGroveDrivers;
 
     SparseBooleanArray nodePinSelector;
-    NodeConfigHelper nodeConfigModel;
+//    NodeConfigHelper nodeConfigModel;
 
     View mSetNodeLayout;
     GrovePinsView mGrovePinsView;
@@ -135,7 +133,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
 
-        nodeConfigModel = new NodeConfigHelper(node.node_sn);
+//        nodeConfigModel = new NodeConfigHelper(node.node_sn);
 
         mGrovePinsView = new GrovePinsView(view, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
@@ -220,7 +218,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
                         i2cDeviceNumViewDisplay();
 
                         //refresh pin6 image
-                        mGrovePinsView.updatePin6(pinConfigs);
+//                        mGrovePinsView.updatePin(pinConfigs, position);
                         break;
 
                     case MESSAGE_UPDATE_DONE: {
@@ -288,22 +286,22 @@ public class SetupIotLinkActivity extends AppCompatActivity
             if (node.name == null)
                 return true;
 
-            NodeJson node_josn = NodeConfigHelper.getConfigJson(pinConfigs);
-            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
-            if (node_josn.connections.isEmpty()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Forger add grove?");
-                builder.setTitle("Tip");
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                builder.create().show();
-                return true;
-            }
-            updateNode(node.node_key, node_josn);
+//            NodeJson node_josn = NodeConfigHelper.getConfigJson(pinConfigs);
+//            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
+//            if (node_josn.connections.isEmpty()) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                builder.setMessage("Forger add grove?");
+//                builder.setTitle("Tip");
+//                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//                builder.create().show();
+//                return true;
+//            }
+//            updateNode(node.node_key, node_josn);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -573,7 +571,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
                                 UrlImageViewHelper.CACHE_DURATION_INFINITE);
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = ((GrovePinsView.Tag) v.getTag()).position;
-                        pinConfig.selected = true;
                         pinConfig.sku = groverDriver.SKU;
                         pinConfig.node_sn = node.node_sn;
 
@@ -600,35 +597,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
                             if (status)
                                 pinConfigs.remove(dup_pinConfig);
                         }
-
-                        String groveInstanceName;
-//                        List<String> groveInstanceNames = new ArrayList<>();
-//                        for (PinConfig p : pinConfigs) {
-//                            groveInstanceNames.add(p.groveInstanceName);
-//                        }
-//                        groveInstanceName = groverDriver.ClassName;
-//                        int i = 1;
-//                        while (true) {
-//                            if (groveInstanceNames.contains(groveInstanceName)) {
-//                                groveInstanceName = groveInstanceName.split("_0")[0] + "_0" + Integer.toString(i);
-//                            } else {
-//                                groveInstanceNames.add(groveInstanceName);
-//                                break;
-//                            }
-//                            i++;
-//                        }
-                        if (pinConfig.position >= 1 && pinConfig.position <= 3)
-                            groveInstanceName = groverDriver.ClassName + "_Digital" + (pinConfig.position - 1);
-                        else if (pinConfig.position == 4)
-                            groveInstanceName = groverDriver.ClassName + "_Analog";
-                        else if (pinConfig.position == 5)
-                            groveInstanceName = groverDriver.ClassName + "_UART";
-                        else if (pinConfig.position == 6)
-                            groveInstanceName = groverDriver.ClassName + "_I2C";
-                        else
-                            groveInstanceName = groverDriver.ClassName;
-
-                        pinConfig.groveInstanceName = groveInstanceName;
 
                         pinConfigs.add(pinConfig);
                         Log.i(TAG, "drag pinConfigs " + pinConfigs);

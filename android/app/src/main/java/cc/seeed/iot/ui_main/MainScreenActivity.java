@@ -53,6 +53,7 @@ import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
+import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
@@ -455,7 +456,7 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     public boolean nodeSet(Node node) {
-        Intent intent = new Intent(this, SetupIotLinkActivity.class);
+        Intent intent = new Intent(this, SetupIotNodeActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;
@@ -551,7 +552,6 @@ public class MainScreenActivity extends AppCompatActivity
                     for (Map<String, String> l : connections) {
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.sku = l.get("sku");
-                        pinConfig.selected = true;
                         switch (l.get("port")) {
                             case "D0":
                                 pinConfig.position = 1;

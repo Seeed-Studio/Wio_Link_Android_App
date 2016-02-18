@@ -66,7 +66,6 @@ public class IotYaml {
             while (iterator.hasNext()) {
                 PinConfig pinConfig = new PinConfig();
                 Map.Entry me = (Map.Entry) iterator.next();
-                pinConfig.groveInstanceName = (String) me.getKey();
                 pinConfig.sku = (String) ((Map) me.getValue()).get("sku");
 
                 Map construct_arg_list = (Map) ((Map) me.getValue()).get("construct_arg_list");
@@ -88,7 +87,6 @@ public class IotYaml {
                 } else if (set_arg.contains("pinsda")) {
                     pinConfig.position = 6;
                 }
-                pinConfig.selected = true;
 
                 pinConfigs.add(pinConfig);
             }

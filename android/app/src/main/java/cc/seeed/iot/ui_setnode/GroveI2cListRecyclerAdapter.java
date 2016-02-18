@@ -77,7 +77,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
             grove_image = (ImageView) itemView.findViewById(R.id.grove_image);
 
 //            mView.setOnClickListener(SetupIotNodeActivity.pin6OnClickListener);
-            mView.setOnLongClickListener(SetupIotLinkActivity.pin6OnLongClickListener);
+            mView.setOnLongClickListener(SetupIotNodeActivity.pin6OnLongClickListener);
         }
 
     }

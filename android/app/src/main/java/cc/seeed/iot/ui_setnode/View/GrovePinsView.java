@@ -34,8 +34,6 @@ public class GrovePinsView {
         } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
             this.pinViews = new ImageButton[2];
             initNodeView();
-        } else {
-
         }
 
     }
@@ -44,8 +42,8 @@ public class GrovePinsView {
         pinViews[0] = (ImageButton) view.findViewById(R.id.grove_0);
         pinViews[1] = (ImageButton) view.findViewById(R.id.grove_1);
 
-        pinViews[0].setTag(new Tag(1, new String[]{InterfaceType.GPIO, InterfaceType.UART, InterfaceType.I2C}));
-        pinViews[1].setTag(new Tag(2, new String[]{InterfaceType.GPIO, InterfaceType.ANALOG, InterfaceType.I2C}));
+        pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO, InterfaceType.UART, InterfaceType.I2C}));
+        pinViews[1].setTag(new Tag(1, new String[]{InterfaceType.GPIO, InterfaceType.ANALOG, InterfaceType.I2C}));
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         for (PinConfig pinConfig : pinConfigs) {
@@ -68,19 +66,19 @@ public class GrovePinsView {
         pinViews[5] = (ImageButton) view.findViewById(R.id.grove_6);
 
 
-        pinViews[0].setTag(new Tag(1, new String[]{InterfaceType.GPIO}));
-        pinViews[1].setTag(new Tag(2, new String[]{InterfaceType.GPIO}));
-        pinViews[2].setTag(new Tag(3, new String[]{InterfaceType.GPIO}));
-        pinViews[3].setTag(new Tag(4, new String[]{InterfaceType.ANALOG}));
-        pinViews[4].setTag(new Tag(5, new String[]{InterfaceType.UART}));
-        pinViews[5].setTag(new Tag(6, new String[]{InterfaceType.I2C}));
+        pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO}));
+        pinViews[1].setTag(new Tag(1, new String[]{InterfaceType.GPIO}));
+        pinViews[2].setTag(new Tag(2, new String[]{InterfaceType.GPIO}));
+        pinViews[3].setTag(new Tag(3, new String[]{InterfaceType.ANALOG}));
+        pinViews[4].setTag(new Tag(4, new String[]{InterfaceType.UART}));
+        pinViews[5].setTag(new Tag(5, new String[]{InterfaceType.I2C}));
 
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         for (PinConfig pinConfig : pinConfigs) {
             try {
                 String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
-                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
+                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.drawable.grove_no,
                         UrlImageViewHelper.CACHE_DURATION_INFINITE);
             } catch (Exception e) {
                 Log.e(TAG, "getGroves:" + e);
@@ -89,12 +87,12 @@ public class GrovePinsView {
 
     }
 
-    public void updatePin6(List<PinConfig> pinConfigs) {
+    public void updatePin(List<PinConfig> pinConfigs, int position) {
         for (PinConfig pinConfig : pinConfigs) {
-            if (pinConfig.position == 6) {
+            if (pinConfig.position == position) {
                 try {
                     String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
-                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
+                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.drawable.grove_no,
                             UrlImageViewHelper.CACHE_DURATION_INFINITE);
                 } catch (Exception e) {
                     Log.e(TAG, "getGroves:" + e);

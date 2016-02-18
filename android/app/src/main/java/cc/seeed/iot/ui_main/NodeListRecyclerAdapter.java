@@ -61,9 +61,9 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         holder.mNameView.setText(node.name);
         holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
 
-        if (node.board.equals(Constant.WIO_LINK_V10)) {
+        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             holder.mBoardView.setImageResource(R.drawable.link_small);
-        } else if (node.board.equals(Constant.WIO_NODE_V10)) {
+        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
             holder.mBoardView.setImageResource(R.drawable.node_small);
         }
 
