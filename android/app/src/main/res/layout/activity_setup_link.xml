@@ -41,7 +41,7 @@
             android:layout_width="204dp"
             android:layout_height="153dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/node_large"
+            android:src="@drawable/link_large"
             android:scaleType="centerCrop" />
 
         <ImageButton

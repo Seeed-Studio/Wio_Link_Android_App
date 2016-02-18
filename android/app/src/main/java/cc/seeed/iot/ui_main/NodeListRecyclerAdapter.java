@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
@@ -60,6 +61,11 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         holder.mNameView.setText(node.name);
         holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
 
+        if (node.board.equals(Constant.WIO_LINK_V10)) {
+            holder.mBoardView.setImageResource(R.drawable.link_small);
+        } else if (node.board.equals(Constant.WIO_NODE_V10)) {
+            holder.mBoardView.setImageResource(R.drawable.node_small);
+        }
 
         if (node.dataxserver == null || node.dataxserver.equals(Common.OTA_INTERNATIONAL_IP)
                 || node.dataxserver.equals(Common.OTA_CHINA_IP))
@@ -143,6 +149,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             implements View.OnClickListener {
         private OnClickListener mOnClickListener;
 
+        ImageView mBoardView;
         TextView mNameView;
         TextView mOnlineView;
         ImageView mOnlineLedView;
@@ -167,6 +174,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
 
             mSwipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe_layout);
             mItemView = itemView;
+            mBoardView = (ImageView) itemView.findViewById(R.id.board_img);
             mNameView = (TextView) itemView.findViewById(R.id.name);
             mOnlineView = (TextView) itemView.findViewById(R.id.online);
             mOnlineLedView = (ImageView) itemView.findViewById(R.id.online_led);

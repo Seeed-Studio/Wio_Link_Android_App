@@ -28,10 +28,10 @@ public class GrovePinsView {
     public GrovePinsView(View v, Node node) {
         this.view = v;
         this.node = node;
-        if (node.board.equals(Constant.WIOLINK_V10)) {
+        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             this.pinViews = new ImageButton[6];
             initLinkView();
-        } else if (node.board.equals(Constant.WIONODE_V10)) {
+        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
             this.pinViews = new ImageButton[2];
             initNodeView();
         } else {

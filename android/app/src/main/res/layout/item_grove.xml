@@ -18,7 +18,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/node_small" />
+            android:src="@drawable/link_small" />
 
         <LinearLayout
             android:layout_width="match_parent"
