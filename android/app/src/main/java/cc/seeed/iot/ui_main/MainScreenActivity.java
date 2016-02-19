@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-//import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -44,7 +43,6 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
@@ -52,9 +50,8 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
-import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
-import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
@@ -70,6 +67,8 @@ import cc.seeed.iot.webapi.model.SuccessResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+//import android.support.design.widget.FloatingActionButton;
 
 /**
  * TODO
@@ -522,7 +521,7 @@ public class MainScreenActivity extends AppCompatActivity
                     Log.e(TAG, "do not support!");
                 } else if (nodeConfigResponse.type.equals("json")) {
                     NodeJson nodeJson = nodeConfigResponse.config;
-                    saveToDB(nodeJson);
+                    NodeConfigHelper.saveToDB(nodeJson, node);
                 }
 
                 Message message = Message.obtain();
@@ -534,55 +533,6 @@ public class MainScreenActivity extends AppCompatActivity
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, error.getLocalizedMessage());
-            }
-
-//            private void saveToDB(String yaml) {
-//                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
-//                PinConfigDBHelper.delPinConfig(node.node_sn);
-//                for (PinConfig pinConfig : pinConfigs) {
-//                    pinConfig.node_sn = node.node_sn;
-//                    pinConfig.save();
-//                }
-//            }
-
-            private void saveToDB(NodeJson nodeJson) {
-                List<PinConfig> pinConfigs = new ArrayList<>();
-                List<Map<String, String>> connections = nodeJson.connections;
-                try {
-                    for (Map<String, String> l : connections) {
-                        PinConfig pinConfig = new PinConfig();
-                        pinConfig.sku = l.get("sku");
-                        switch (l.get("port")) {
-                            case "D0":
-                                pinConfig.position = 1;
-                                break;
-                            case "D1":
-                                pinConfig.position = 2;
-                                break;
-                            case "D2":
-                                pinConfig.position = 3;
-                                break;
-                            case "A0":
-                                pinConfig.position = 4;
-                                break;
-                            case "UART0":
-                                pinConfig.position = 5;
-                                break;
-                            case "I2C0":
-                                pinConfig.position = 6;
-                                break;
-                        }
-                        pinConfigs.add(pinConfig);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "getNodeConfig:" + e);
-                }
-
-                PinConfigDBHelper.delPinConfig(node.node_sn);
-                for (PinConfig pinConfig : pinConfigs) {
-                    pinConfig.node_sn = node.node_sn;
-                    pinConfig.save();
-                }
             }
         });
     }

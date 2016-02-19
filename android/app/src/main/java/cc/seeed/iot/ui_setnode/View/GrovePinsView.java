@@ -49,7 +49,7 @@ public class GrovePinsView {
         for (PinConfig pinConfig : pinConfigs) {
             try {
                 String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
-                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position - 1], url, R.drawable.grove_no,
+                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.drawable.grove_no,
                         UrlImageViewHelper.CACHE_DURATION_INFINITE);
             } catch (Exception e) {
                 Log.e(TAG, "getGroves:" + e);

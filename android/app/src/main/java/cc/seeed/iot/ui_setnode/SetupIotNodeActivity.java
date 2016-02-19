@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
@@ -37,7 +38,9 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
+import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -128,6 +131,15 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
+        /**
+         * fake node for test
+         */
+//        node = new Node();
+//        node.board = Constant.WIO_NODE_V1_0;
+//        node.node_sn = "112233";
+//        node.name = "aa";
+//        node.online = true;
+//        node.node_key = "key1213";
 
         mGrovePinsView = new GrovePinsView(view, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
@@ -136,11 +148,11 @@ public class SetupIotNodeActivity extends AppCompatActivity
             pinView.setOnLongClickListener(this);
         }
 
-//        pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
+        pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         /**
          * make fake pinConfig data
          */
-        PinConfig fake_pinConfig = new PinConfig();
+//        PinConfig fake_pinConfig = new PinConfig();
 //        fake_pinConfig.interfaceType = InterfaceType.GPIO;
 //        fake_pinConfig.node_sn = "112233";
 //        fake_pinConfig.position = 0;
@@ -217,7 +229,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     case ADD_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
-                        if (isI2cInterface(position)){
+                        if (isI2cInterface(position)) {
                             mGroveI2cListView.setVisibility(View.INVISIBLE);
                         }
                     }
@@ -315,22 +327,22 @@ public class SetupIotNodeActivity extends AppCompatActivity
             if (node.name == null)
                 return true;
 
-//            NodeJson node_josn = NodeConfigHelper.getConfigJson(pinConfigs);
-//            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
-//            if (node_josn.connections.isEmpty()) {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//                builder.setMessage("Forger add grove?");
-//                builder.setTitle("Tip");
-//                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//
-//                    }
-//                });
-//                builder.create().show();
-//                return true;
-//            }
-//            updateNode(node.node_key, node_josn);
+            NodeJson node_josn = NodeConfigHelper.getConfigJson(pinConfigs, node);
+            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
+            if (node_josn.connections.isEmpty()) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Forger add grove?");
+                builder.setTitle("Tip");
+                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                builder.create().show();
+                return true;
+            }
+            updateNode(node.node_key, node_josn);
             return true;
         }
         return super.onOptionsItemSelected(item);
