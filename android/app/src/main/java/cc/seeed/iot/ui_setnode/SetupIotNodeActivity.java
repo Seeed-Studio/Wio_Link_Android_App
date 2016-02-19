@@ -158,7 +158,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //        fake_pinConfig.position = 0;
 //        fake_pinConfig.sku = "104990089";
 //        pinConfigs.add(fake_pinConfig);
-        Log.e(TAG, "ori_pinconfig" + pinConfigs.toString());
+        Log.e(TAG, "pinConfig" + pinConfigs.toString());
 
         getSupportActionBar().setTitle(node.name);
 
@@ -327,7 +327,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             if (node.name == null)
                 return true;
 
-            NodeJson node_josn = NodeConfigHelper.getConfigJson(pinConfigs, node);
+            NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
             Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
             if (node_josn.connections.isEmpty()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -484,12 +484,11 @@ public class SetupIotNodeActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.grove_0:
-                if (pinDeviceCount(0) > 1)
-                    displayI2cListView(0);
-                break;
             case R.id.grove_1:
-                if (pinDeviceCount(1) > 1)
-                    displayI2cListView(1);
+                GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
+                int position = tag.position;
+                if (pinDeviceCount(position) > 1)
+                    displayI2cListView(position);
                 break;
         }
     }
@@ -498,17 +497,14 @@ public class SetupIotNodeActivity extends AppCompatActivity
     public boolean onLongClick(View v) {
         switch (v.getId()) {
             case R.id.grove_0:
-                if (pinDeviceCount(0) == 1) {
-                    startDragRemove(v);
-                } else if (pinDeviceCount(0) > 1) {
-                    displayI2cListView(0);
-                }
-                break;
             case R.id.grove_1:
-                if (pinDeviceCount(1) == 1)
+                GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
+                int position = tag.position;
+                if (pinDeviceCount(position) == 1) {
                     startDragRemove(v);
-                else if (pinDeviceCount(1) > 1)
-                    displayI2cListView(1);
+                } else if (pinDeviceCount(position) > 1) {
+                    displayI2cListView(position);
+                }
                 break;
         }
         return true;

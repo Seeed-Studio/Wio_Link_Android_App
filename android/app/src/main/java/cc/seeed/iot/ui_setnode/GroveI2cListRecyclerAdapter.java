@@ -78,6 +78,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
 
 //            mView.setOnClickListener(SetupIotNodeActivity.pin6OnClickListener);
             mView.setOnLongClickListener(SetupIotNodeActivity.pin6OnLongClickListener);
+//            mView.setOnLongClickListener(SetupIotLinkActivity.pin6OnLongClickListener);
         }
 
     }

@@ -58,12 +58,12 @@ public class GrovePinsView {
     }
 
     private void initLinkView() {
-        pinViews[0] = (ImageButton) view.findViewById(R.id.grove_1);
-        pinViews[1] = (ImageButton) view.findViewById(R.id.grove_2);
-        pinViews[2] = (ImageButton) view.findViewById(R.id.grove_3);
-        pinViews[3] = (ImageButton) view.findViewById(R.id.grove_4);
-        pinViews[4] = (ImageButton) view.findViewById(R.id.grove_5);
-        pinViews[5] = (ImageButton) view.findViewById(R.id.grove_6);
+        pinViews[0] = (ImageButton) view.findViewById(R.id.grove_0);
+        pinViews[1] = (ImageButton) view.findViewById(R.id.grove_1);
+        pinViews[2] = (ImageButton) view.findViewById(R.id.grove_2);
+        pinViews[3] = (ImageButton) view.findViewById(R.id.grove_3);
+        pinViews[4] = (ImageButton) view.findViewById(R.id.grove_4);
+        pinViews[5] = (ImageButton) view.findViewById(R.id.grove_5);
 
 
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO}));

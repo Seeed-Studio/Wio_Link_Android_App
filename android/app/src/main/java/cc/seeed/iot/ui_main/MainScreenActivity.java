@@ -51,6 +51,7 @@ import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
+import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
@@ -460,7 +461,12 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     public boolean nodeSet(Node node) {
-        Intent intent = new Intent(this, SetupIotNodeActivity.class);
+        Intent intent = new Intent();
+        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+            intent.setClass(this, SetupIotLinkActivity.class);
+        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
+            intent.setClass(this, SetupIotNodeActivity.class);
+        }
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;
@@ -526,7 +532,7 @@ public class MainScreenActivity extends AppCompatActivity
                     Log.e(TAG, "do not support!");
                 } else if (nodeConfigResponse.type.equals("json")) {
                     NodeJson nodeJson = nodeConfigResponse.config;
-                    NodeConfigHelper.saveToDB(nodeJson, node);
+                    new NodeConfigHelper().saveToDB(nodeJson, node);
                 }
 
                 Message message = Message.obtain();

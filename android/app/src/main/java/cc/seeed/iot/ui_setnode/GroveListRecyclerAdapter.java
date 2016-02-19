@@ -98,7 +98,9 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
             grove_image = (ImageView) itemView.findViewById(R.id.grove_image);
             mGrvoeNameView = (TextView) itemView.findViewById(R.id.grove_text);
 
-            mView.setOnClickListener(SetupIotLinkActivity.mainOnClickListener);
+//            mView.setOnClickListener(SetupIotLinkActivity.mainOnClickListener);
+//            mView.setOnClickListener(SetupIotNodeActivity.mainOnClickListener);
+//            mView.setOnLongClickListener(SetupIotLinkActivity.mainOnLongClickListener);
             mView.setOnLongClickListener(SetupIotNodeActivity.mainOnLongClickListener);
         }
 
