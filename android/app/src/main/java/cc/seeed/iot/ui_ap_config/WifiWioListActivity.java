@@ -40,6 +40,7 @@ public class WifiWioListActivity extends AppCompatActivity
     private ProgressDialog mWaitDialog;
     private List<ScanResult> scanPionResult = new ArrayList<>();
 
+    private String board;
     private String node_sn;
     private String node_key;
     private String selected_ssid;
@@ -75,6 +76,7 @@ public class WifiWioListActivity extends AppCompatActivity
         selected_ssid = "";
 
         Intent intent = getIntent();
+        board = intent.getStringExtra("board");
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
         IntentFilter actionFilter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -212,6 +214,7 @@ public class WifiWioListActivity extends AppCompatActivity
 
     private void goWifiListActivity() {
         Intent intentActivity = new Intent(this, WifiListActivity.class);
+        intentActivity.putExtra("board", board);
         intentActivity.putExtra("node_key", node_key);
         intentActivity.putExtra("node_sn", node_sn);
         startActivity(intentActivity);

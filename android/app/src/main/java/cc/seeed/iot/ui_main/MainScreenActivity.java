@@ -46,6 +46,7 @@ import java.util.List;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
@@ -74,7 +75,7 @@ import retrofit.client.Response;
  * TODO
  */
 public class MainScreenActivity extends AppCompatActivity
-        implements NodeListRecyclerAdapter.OnClickListener {
+        implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener {
     private static final String TAG = "MainScreenActivity";
     private static final int MESSAGE_GROVE_LIST_START = 0x00;
     private static final int MESSAGE_GROVE_LIST_COMPLETE = 0x01;
@@ -184,25 +185,10 @@ public class MainScreenActivity extends AppCompatActivity
             }
         });*/
 
-        final FloatingActionButton setupNodeAction = (FloatingActionButton) findViewById(R.id.setup_node);
-        setupNodeAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MyApplication) getApplication()).setConfigState(true);
-                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        final FloatingActionButton setupLinkAction = (FloatingActionButton) findViewById(R.id.setup_link);
-        setupLinkAction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MyApplication) getApplication()).setConfigState(true);
-                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
-                startActivity(intent);
-            }
-        });
+        FloatingActionButton setupLinkAction = (FloatingActionButton) findViewById(R.id.setup_link);
+        FloatingActionButton setupNodeAction = (FloatingActionButton) findViewById(R.id.setup_node);
+        setupLinkAction.setOnClickListener(this);
+        setupNodeAction.setOnClickListener(this);
 
         mProgressDialog = new ProgressDialog(this);
 
@@ -347,6 +333,25 @@ public class MainScreenActivity extends AppCompatActivity
                         return true;
                     }
                 });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.setup_link:
+                setupActivity(Constant.WIO_LINK_V1_0);
+                break;
+            case R.id.setup_node:
+                setupActivity(Constant.WIO_NODE_V1_0);
+                break;
+        }
+    }
+
+    private void setupActivity(String board) {
+        ((MyApplication) getApplication()).setConfigState(true);
+        Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+        intent.putExtra("board", board);
+        startActivity(intent);
     }
 
     @Override
@@ -563,5 +568,6 @@ public class MainScreenActivity extends AppCompatActivity
             }
         });
     }
+
 
 }

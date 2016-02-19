@@ -51,6 +51,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
 
     private String ssid;
     private String node_name;
+    private String board;
     private String node_sn;
     private String node_key;
     private ConfigUdpSocket udpClient;
@@ -65,7 +66,6 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
-        // TODO: 16/2/17 Divide
 
         mSsidView = (TextView) findViewById(R.id.ssid);
         mPasswordView = (EditText) findViewById(R.id.wifi_password);
