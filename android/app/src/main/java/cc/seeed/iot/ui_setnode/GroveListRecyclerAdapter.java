@@ -1,7 +1,9 @@
 package cc.seeed.iot.ui_setnode;
 
 import android.content.Context;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +24,21 @@ import cc.seeed.iot.webapi.model.GroverDriver;
  */
 public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecyclerAdapter.MainViewHolder> {
     private List<GroverDriver> groves;
+    private OnLongClickListener mOnLongClickListener;
     private Context context;
 
     SparseBooleanArray selector;
     private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
+
+
+    public interface OnLongClickListener {
+        void onLongClick(View v, int position);
+    }
+
+    public void setOnLongClickListener(OnLongClickListener l) {
+        mOnLongClickListener = l;
+    }
+
 
     public GroveListRecyclerAdapter(List<GroverDriver> groves) {
         this.groves = new ArrayList<>();
@@ -39,7 +52,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.grove_list_item, parent, false);
 
-        return new MainViewHolder(v);
+        return new MainViewHolder(v, mOnLongClickListener);
     }
 
     @Override
@@ -50,7 +63,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
                 UrlImageViewHelper.CACHE_DURATION_INFINITE);
         holder.mView.setPressed(selector.get(position, false));
         String name = grove.GroveName.replaceFirst("Grove[\\s_-]+", "");
-        holder.mGrvoeNameView.setText(name);
+        holder.mGroveNameView.setText(name);
 
     }
 
@@ -87,23 +100,31 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
     }
 
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder {
+    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
+        private OnLongClickListener mOnLongClickListener;
         ImageView grove_image;
-        TextView mGrvoeNameView;
+        TextView mGroveNameView;
         View mView;
 
-        public MainViewHolder(View itemView) {
+        public MainViewHolder(View itemView, OnLongClickListener mOnLongClickListener) {
             super(itemView);
+            this.mOnLongClickListener = mOnLongClickListener;
+
             mView = itemView;
             grove_image = (ImageView) itemView.findViewById(R.id.grove_image);
-            mGrvoeNameView = (TextView) itemView.findViewById(R.id.grove_text);
+            mGroveNameView = (TextView) itemView.findViewById(R.id.grove_text);
 
-//            mView.setOnClickListener(SetupIotLinkActivity.mainOnClickListener);
-//            mView.setOnClickListener(SetupIotNodeActivity.mainOnClickListener);
-//            mView.setOnLongClickListener(SetupIotLinkActivity.mainOnLongClickListener);
-            mView.setOnLongClickListener(SetupIotNodeActivity.mainOnLongClickListener);
+            mView.setTag("GroveList");
+            mView.setOnLongClickListener(this);
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            if (mOnLongClickListener != null) {
+                mOnLongClickListener.onLongClick(v, getLayoutPosition());
+            }
+            return truewww;
+        }
     }
 
 }

@@ -3,7 +3,6 @@ package cc.seeed.iot.ui_setnode;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -55,7 +54,8 @@ import retrofit.client.Response;
 
 public class SetupIotNodeActivity extends AppCompatActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
-        View.OnClickListener, View.OnDragListener, View.OnLongClickListener {
+        View.OnClickListener, View.OnDragListener, View.OnLongClickListener,
+        GroveI2cListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnLongClickListener {
 
     private static final String TAG = "SetupIotNodeActivity";
     public static final String GROVE_REMOVE = "grove/remove";
@@ -71,10 +71,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
     Node node;
     User user;
     List<PinConfig> pinConfigs = new ArrayList<>();
-
-    static View.OnClickListener mainOnClickListener; //Todo, no static
-    static View.OnLongClickListener mainOnLongClickListener; //Todo, no static
-    static View.OnLongClickListener pin6OnLongClickListener; //Todo, no static
 
     RecyclerView mGroveI2cListView;
     GroveI2cListRecyclerAdapter mGroveI2cListAdapter;
@@ -109,10 +105,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     }
                 });
 //        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
-
-        mainOnClickListener = new MainOnClickListener(this);
-        mainOnLongClickListener = new MainOnClickListener(this);
-        pin6OnLongClickListener = new Pin6OnClickListener(this);
 
         mGroveDrivers = DBHelper.getGrovesAll();
 
@@ -171,6 +163,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             mGroveListView.setLayoutManager(layoutManager);
             mGroveListAdapter = new GroveListRecyclerAdapter(mGroveDrivers);
+            mGroveListAdapter.setOnLongClickListener(this);
             mGroveListView.setAdapter(mGroveListAdapter);
         }
 
@@ -181,6 +174,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             mGroveI2cListView.setLayoutManager(layoutManager);
             mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
+            mGroveI2cListAdapter.setOnLongClickListen(this);
             mGroveI2cListView.setAdapter(mGroveI2cListAdapter);
         }
 
@@ -733,35 +727,43 @@ public class SetupIotNodeActivity extends AppCompatActivity
         return null;
     }
 
-    /**
-     * Grove List View Listener
-     */
-    private class MainOnClickListener implements View.OnClickListener, View.OnLongClickListener {
-        private final Context context;
+    @Override
+    public void onLongClick(View v, int position) {
+        if (v.getTag() == null)
+            return;
 
-        private MainOnClickListener(Context c) {
-            this.context = c;
+        switch ((String) v.getTag()) {
+            case "GroveList": {
+                String label = "grove_add";
+                String[] mimeTypes = {GROVE_ADD};
+                ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
+                ClipData.Item item = new ClipData.Item("drag grove");
+                ClipData clipData = new ClipData(clipDescription, item);
+                View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
+
+                mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
+                GroverDriver grove = mGroveListAdapter.getSelectedItem();
+
+                v.startDrag(clipData, shadowBuiler, grove, 0);
+            }
+            break;
+            case "I2cList": {
+                mDragRemoveView.setVisibility(View.VISIBLE);
+
+                String label = "grove_remove";
+                String[] mimeTypes = {GROVE_REMOVE};
+                ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
+                ClipData.Item item = new ClipData.Item("drag grove");
+                ClipData clipData = new ClipData(clipDescription, item);
+                View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
+
+                PinConfig pinConfig = mGroveI2cListAdapter.getItem(mGroveI2cListView.getChildAdapterPosition(v));
+
+                v.startDrag(clipData, shadowBuiler, pinConfig, 0);
+            }
+            break;
         }
 
-        @Override
-        public void onClick(View v) {
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            String label = "grove_add";
-            String[] mimeTypes = {GROVE_ADD};
-            ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
-            ClipData.Item item = new ClipData.Item("drag grove");
-            ClipData clipData = new ClipData(clipDescription, item);
-            View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
-
-            mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
-            GroverDriver grove = mGroveListAdapter.getSelectedItem();
-
-            v.startDrag(clipData, shadowBuiler, grove, 0);
-            return true;
-        }
     }
 
     private void getGrovesData() {
@@ -787,31 +789,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 Log.e(TAG, error.getLocalizedMessage());
             }
         });
-    }
-
-    private class Pin6OnClickListener implements View.OnLongClickListener {
-        public Pin6OnClickListener(SetupIotNodeActivity setupIotLinkActivity) {
-        }
-
-        @Override
-        public boolean onLongClick(View v) {
-            mDragRemoveView.setVisibility(View.VISIBLE);
-
-            String label = "grove_remove";
-            String[] mimeTypes = {GROVE_REMOVE};
-            ClipDescription clipDescription = new ClipDescription(label, mimeTypes);
-            ClipData.Item item = new ClipData.Item("drag grove");
-            ClipData clipData = new ClipData(clipDescription, item);
-            View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
-
-//            mGroveListAdapter.selectItem(mGroveListView.getChildAdapterPosition(v));
-//            GroverDriver grove = mGroveListAdapter.getSelectedItem();
-
-            PinConfig pinConfig = mGroveI2cListAdapter.getItem(mGroveI2cListView.getChildAdapterPosition(v));
-
-            v.startDrag(clipData, shadowBuiler, pinConfig, 0);
-            return true;
-        }
     }
 }
 

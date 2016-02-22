@@ -23,8 +23,16 @@ import cc.seeed.iot.webapi.model.GroverDriver;
 public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cListRecyclerAdapter.MainViewHolder> {
     private static final String TAG = "...ListRecyclerAdapter";
     private List<PinConfig> pinConfigs;
-
+    private OnLongClickListener mOnLongClickListener;
     private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
+
+    public interface OnLongClickListener {
+        void onLongClick(View v, int position);
+    }
+
+    public void setOnLongClickListen(OnLongClickListener l) {
+        mOnLongClickListener = l;
+    }
 
     public GroveI2cListRecyclerAdapter(List<PinConfig> pinConfigs) {
         this.pinConfigs = new ArrayList<>();
@@ -35,7 +43,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.grove_i2c_list_item, parent, false);
-        return new MainViewHolder(v);
+        return new MainViewHolder(v, mOnLongClickListener);
     }
 
     @Override
@@ -67,20 +75,29 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
     }
 
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder {
+    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+        private OnLongClickListener mOnLongClickListener;
+
         ImageView grove_image;
         View mView;
 
-        public MainViewHolder(View itemView) {
+        public MainViewHolder(View itemView, OnLongClickListener mOnLongClickListener) {
             super(itemView);
+            this.mOnLongClickListener = mOnLongClickListener;
+
             mView = itemView;
             grove_image = (ImageView) itemView.findViewById(R.id.grove_image);
 
-//            mView.setOnClickListener(SetupIotNodeActivity.pin6OnClickListener);
-            mView.setOnLongClickListener(SetupIotNodeActivity.pin6OnLongClickListener);
-//            mView.setOnLongClickListener(SetupIotLinkActivity.pin6OnLongClickListener);
+            mView.setTag("I2cList");
+            mView.setOnLongClickListener(this);
         }
 
+        @Override
+        public boolean onLongClick(View v) {
+            if (mOnLongClickListener != null) {
+                mOnLongClickListener.onLongClick(v, getLayoutPosition());
+            }
+            return true;
+        }
     }
-
 }
