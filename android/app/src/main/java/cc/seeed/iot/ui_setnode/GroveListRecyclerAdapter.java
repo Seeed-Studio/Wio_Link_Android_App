@@ -123,7 +123,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
             if (mOnLongClickListener != null) {
                 mOnLongClickListener.onLongClick(v, getLayoutPosition());
             }
-            return truewww;
+            return true;
         }
     }
 

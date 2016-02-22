@@ -67,9 +67,6 @@ public class IotApi {
     }
 
 
-    /**
-     * Do not check certificate,Todo use keyStore
-     */
     private static OkHttpClient getUnsafeOkHttpClient() {
         try {
             // Create a trust manager that does not validate certificate chains

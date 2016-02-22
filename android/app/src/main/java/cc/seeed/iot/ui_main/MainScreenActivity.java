@@ -72,9 +72,6 @@ import retrofit.client.Response;
 
 //import android.support.design.widget.FloatingActionButton;
 
-/**
- * TODO
- */
 public class MainScreenActivity extends AppCompatActivity
         implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener {
     private static final String TAG = "MainScreenActivity";
