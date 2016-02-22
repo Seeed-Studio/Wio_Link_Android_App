@@ -21,9 +21,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.jauker.widget.BadgeView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
@@ -58,8 +58,8 @@ public class SetupIotNodeActivity extends AppCompatActivity
         GroveI2cListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnLongClickListener {
 
     private static final String TAG = "SetupIotNodeActivity";
-    public static final String GROVE_REMOVE = "grove/remove";
-    public static final String GROVE_ADD = "grove/add";
+    private static final String GROVE_REMOVE = "grove/remove";
+    private static final String GROVE_ADD = "grove/add";
     private static final int ADD_I2C_GROVE = 0x00;
     private static final int ADD_GROVE = 0x01;
     private static final int RMV_I2C_GROVE = 0x02;
@@ -86,8 +86,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
     GrovePinsView mGrovePinsView;
     ProgressDialog mProgressDialog;
     private ImageView mDragRemoveView;
-    private TextView i2cDeviceNumView;
-
 
     private Handler mHandler;
 
@@ -133,7 +131,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //        node.online = true;
 //        node.node_key = "key1213";
 
-        mGrovePinsView = new GrovePinsView(view, node);
+        mGrovePinsView = new GrovePinsView(this, view, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
             pinView.setOnDragListener(this);
             pinView.setOnClickListener(this);
@@ -187,22 +185,25 @@ public class SetupIotNodeActivity extends AppCompatActivity
             setupGroveSelectorAdapter();
         }
 
-//        i2cDeviceNumView = (TextView) view.findViewById(R.id.i2c_device_num);
-//        i2cDeviceNumViewDisplay();
+        pinBadgeUpdateAll();
 
         initData();
     }
 
-    /**
-     * empty it
-     */
-    private void i2cDeviceNumViewDisplay() {
-/*        if (pinDeviceCount(6) > 1) {
-            i2cDeviceNumView.setVisibility(View.VISIBLE);
-            i2cDeviceNumView.setText("+" + String.valueOf(pinDeviceCount(6) - 1));
+    private void pinBadgeUpdateAll() {
+        for (int i = 0; i < mGrovePinsView.pinViews.length; i++) {
+            pinBadgeUpdate(i);
+        }
+    }
+
+    private void pinBadgeUpdate(int position) {
+        if (pinDeviceCount(position) > 1) {
+            mGrovePinsView.badgeViews[position].setBadgeCount(pinDeviceCount(position));
+            mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
+
         } else {
-            i2cDeviceNumView.setVisibility(View.GONE);
-        }*/
+            mGrovePinsView.badgeViews[position].setVisibility(View.GONE);
+        }
     }
 
     private void initData() {
@@ -215,9 +216,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         int position = pinConfig.position;
                         updateI2cGroveList(position);
                         scrollI2cGroveListToEnd();
-                        //refresh number display
-//                        i2cDeviceNumViewDisplay();
-                        // TODO: 16/2/18 add grove number
+                        pinBadgeUpdateAll();
                     }
                     break;
                     case ADD_GROVE: {
@@ -235,8 +234,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         else
                             updateI2cGroveList(position);
 
-                        //refresh number display
-//                        i2cDeviceNumViewDisplay();
+                        pinBadgeUpdateAll();
 
                         if (pinDeviceCount(position) == 0)
                             mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);

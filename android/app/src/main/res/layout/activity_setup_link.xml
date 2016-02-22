@@ -41,8 +41,8 @@
             android:layout_width="204dp"
             android:layout_height="153dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/link_large"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/link_large" />
 
         <ImageButton
             android:id="@+id/grove_0"
@@ -116,17 +116,6 @@
             android:clickable="true"
             android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/i2c_device_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/node_view"
-            android:layout_marginTop="99dp"
-            android:layout_toEndOf="@+id/grove_6"
-            android:layout_toRightOf="@+id/grove_6"
-            android:text="+2"
-            android:textColor="@color/second_color" />
-
         <android.support.v7.widget.RecyclerView
             android:id="@+id/grove_i2c_list"
             android:layout_width="match_parent"
@@ -140,7 +129,6 @@
         </android.support.v7.widget.RecyclerView>
 
     </RelativeLayout>
-
 
 
     <android.support.v7.widget.RecyclerView

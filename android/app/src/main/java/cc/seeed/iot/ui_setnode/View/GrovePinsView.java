@@ -1,9 +1,11 @@
 package cc.seeed.iot.ui_setnode.View;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 
+import com.jauker.widget.BadgeView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.List;
@@ -21,18 +23,23 @@ import cc.seeed.iot.webapi.model.Node;
  */
 public class GrovePinsView {
     private static final String TAG = "GrovePinsView";
+    private Context context;
     private View view;
     private Node node;
     public ImageButton[] pinViews;
+    public BadgeView[] badgeViews;
 
-    public GrovePinsView(View v, Node node) {
+    public GrovePinsView(Context context, View v, Node node) {
+        this.context = context;
         this.view = v;
         this.node = node;
         if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             this.pinViews = new ImageButton[6];
+            this.badgeViews = new BadgeView[6];
             initLinkView();
         } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
             this.pinViews = new ImageButton[2];
+            this.badgeViews = new BadgeView[2];
             initNodeView();
         }
 
@@ -44,6 +51,15 @@ public class GrovePinsView {
 
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO, InterfaceType.UART, InterfaceType.I2C}));
         pinViews[1].setTag(new Tag(1, new String[]{InterfaceType.GPIO, InterfaceType.ANALOG, InterfaceType.I2C}));
+
+        badgeViews[0] = new BadgeView(context);
+        badgeViews[1] = new BadgeView(context);
+
+        badgeViews[0].setTargetView(pinViews[0]);
+        badgeViews[1].setTargetView(pinViews[1]);
+
+        badgeViews[0].setVisibility(View.GONE);
+        badgeViews[1].setVisibility(View.GONE);
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         for (PinConfig pinConfig : pinConfigs) {
@@ -73,6 +89,11 @@ public class GrovePinsView {
         pinViews[4].setTag(new Tag(4, new String[]{InterfaceType.UART}));
         pinViews[5].setTag(new Tag(5, new String[]{InterfaceType.I2C}));
 
+        for (int i = 0; i < 6; i++) {
+            badgeViews[i] = new BadgeView(context);
+            badgeViews[i].setTargetView(pinViews[i]);
+            badgeViews[i].setVisibility(View.GONE);
+        }
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         for (PinConfig pinConfig : pinConfigs) {
