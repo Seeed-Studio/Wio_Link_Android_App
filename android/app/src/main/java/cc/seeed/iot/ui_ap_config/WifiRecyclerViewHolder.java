@@ -28,6 +28,6 @@ public class WifiRecyclerViewHolder extends RecyclerView.ViewHolder implements V
     }
 
     public interface IMyViewHolderClicks {
-        public void onItem(View caller);
+        void onItem(View caller);
     }
 }
