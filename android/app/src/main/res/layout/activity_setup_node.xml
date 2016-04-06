@@ -37,10 +37,10 @@
 
         <ImageView
             android:id="@+id/node_view"
-            android:layout_width="204dp"
+            android:layout_width="194dp"
             android:layout_height="153dp"
             android:layout_centerInParent="true"
-            android:src="@drawable/link_large"
+            android:src="@drawable/node_large"
             android:scaleType="centerCrop" />
 
         <ImageButton
@@ -51,7 +51,7 @@
             android:layout_marginTop="59dp"
             android:layout_toLeftOf="@+id/node_view"
             android:layout_toStartOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_digital1"
+            android:background="@drawable/state_grove_indicator_node_01"
             android:clickable="true"
             android:scaleType="centerCrop" />
 
@@ -63,7 +63,7 @@
             android:layout_marginTop="59dp"
             android:layout_toEndOf="@+id/node_view"
             android:layout_toRightOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_uart"
+            android:background="@drawable/state_grove_indicator_node_02"
             android:clickable="true"
             android:scaleType="centerCrop" />
         <!--todo change interface tip-->

@@ -10,10 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -44,6 +46,17 @@ public class GoReadyActivity extends AppCompatActivity {
             getSupportActionBar().setTitle("Wio " + board.split(" ")[1]);
         }
 
+        ImageView imageView = (ImageView) findViewById(R.id.bg);
+
+        switch (board) {
+            default:
+            case Constant.WIO_LINK_V1_0:
+                imageView.setImageResource(R.drawable.link_config);
+                break;
+            case Constant.WIO_NODE_V1_0:
+                imageView.setImageResource(R.drawable.node_config);
+                break;
+        }
 
         mGoReadyButtonView = (Button) findViewById(R.id.ap_ready_btn);
         mGoReadyButtonView.setOnClickListener(new View.OnClickListener() {

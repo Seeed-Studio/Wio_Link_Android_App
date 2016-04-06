@@ -69,7 +69,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/link_small" />
+                android:src="@drawable/node_small" />
 
             <TextView
                 android:id="@+id/name"

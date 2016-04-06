@@ -93,7 +93,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_link);
-        View view = findViewById(R.id.setup_iot_node);
+        View view = findViewById(R.id.setup_iot_link);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,
