@@ -1,17 +1,4 @@
-android/.idea/*
-
-android/.idea/gradle.xml
-
-android/.idea/gradle.xml
-
-android/.idea/misc.xml
-
-android/app/app.iml
-
-android/app/build.gradle
-
-android/.idea/gradle.xml
-
-android/.idea/misc.xml
+*.idea
+*.iml
 
 android/app/app.iml
