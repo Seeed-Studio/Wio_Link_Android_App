@@ -111,7 +111,7 @@ public class GoReadyActivity extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         mProgressBar.dismiss();
-                        Toast.makeText(GoReadyActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(GoReadyActivity.this, "Connect wio server failure. Please check the network.", Toast.LENGTH_LONG).show();
                     }
                 }
         );

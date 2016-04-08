@@ -83,6 +83,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         ssid = intent.getStringExtra("ssid");
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
+        board = intent.getStringExtra("board");
         mSsidView.setText(ssid);
     }
 
@@ -245,14 +246,15 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ApConnectActivity.this);
                 builder.setTitle("Error");
-                builder.setMessage("Wio can not connect to the router.\n" +
-                        "Maybe AP password is wrong or AP connect timeout\n" +
-                        "Please reset Wio to config mode and try again.");
+                builder.setMessage("Wio can not connect to your AP.\n" +
+                        "Please check AP password or closer with AP.\n" +
+                        "Please reset Wio to configure mode and try again.");
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(ApConnectActivity.this, GoReadyActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("board", board);
                         startActivity(intent);
                     }
                 });

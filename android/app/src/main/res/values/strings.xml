@@ -121,5 +121,6 @@
     <string name="ConnectServerFail">Can\'t conncet server...</string>
     <string name="serverOn">Server on</string>
     <string name="change">. Change?</string>
+    <string name="location_tip">Make sure that location services turned on</string>
 
 </resources>
