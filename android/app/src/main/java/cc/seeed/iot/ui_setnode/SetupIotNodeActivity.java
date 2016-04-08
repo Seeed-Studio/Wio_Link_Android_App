@@ -568,7 +568,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     case DragEvent.ACTION_DROP: {
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
 
-                        Log.i(TAG, "Drop " + groverDriver);
+//                        Log.i(TAG, "Drop " + groverDriver);
                         UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL, R.drawable.grove_no,
                                 UrlImageViewHelper.CACHE_DURATION_INFINITE);
                         PinConfig pinConfig = new PinConfig();
@@ -631,7 +631,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         pinConfig.groveInstanceName = groveInstanceName;
 
                         pinConfigs.add(pinConfig);
-                        Log.i(TAG, "drag pinConfigs " + pinConfigs);
+//                        Log.i(TAG, "drag pinConfigs " + pinConfigs);
 
                         if (v.getId() == R.id.grove_6) {
                             Message message = Message.obtain();
@@ -797,9 +797,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     groveDriver.save();
                 }
                 List<GroverDriver> g = DBHelper.getGrovesAll();
-                for (GroverDriver s : g) {
-                    Log.e(TAG, s.Reads.toString());
-                }
+//                for (GroverDriver s : g) {
+//                    Log.e(TAG, s.Reads.toString());
+//                }
                 updateGroveListAdapter(g);
             }
 

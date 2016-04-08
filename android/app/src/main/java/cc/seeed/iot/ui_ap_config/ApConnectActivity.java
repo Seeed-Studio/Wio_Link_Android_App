@@ -43,7 +43,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
     private static final String TAG = "ApConnectActivity";
     private static final String AP_IP = "192.168.4.1";
     private final static String PION_WIFI_PREFIX = "PionOne_";
-    private final static String WIO_WIFI_PREFIX = "WioLink_";
+    private final static String WIO_WIFI_PREFIX = "Wio";
     private TextView mSsidView;
     private EditText mPasswordView;
     private EditText mNodeNameView;
@@ -245,8 +245,8 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 AlertDialog.Builder builder = new AlertDialog.Builder(ApConnectActivity.this);
                 builder.setTitle("Error");
                 builder.setMessage("Wio Link can not connect to the router.\n" +
-                        "Maybe AP password is wrong or AP connect timeout\n" +
-                        "Please reset Wio Link to config mode and try again.");
+                        "Please check AP password or closer with AP.\n" +
+                        "Please reset Wio to configure mode and try again.");
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

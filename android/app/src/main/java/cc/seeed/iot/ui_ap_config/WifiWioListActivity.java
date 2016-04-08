@@ -14,14 +14,17 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +67,13 @@ public class WifiWioListActivity extends AppCompatActivity
             mWifiListView.setLayoutManager(layoutManager);
             mWifiListAdapter = new WifiWioListRecyclerAdapter(getPionWifiList(), this);
             mWifiListView.setAdapter(mWifiListAdapter);
+        }
+
+        TextView textView = (TextView) findViewById(R.id.tip);
+        if (!isLocationEnabled(this)) {
+            textView.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
         }
 
         mWaitDialog = new ProgressDialog(this);
@@ -169,6 +179,10 @@ public class WifiWioListActivity extends AppCompatActivity
         conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         wifiManager.addNetwork(conf);
         List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+        if (list == null) {
+            Log.e(TAG, "List<WifiConfiguration> is null!");
+            return;
+        }
         for( WifiConfiguration i : list ) {
             if(i.SSID != null && i.SSID.equals("\"" + SSID + "\"")) {
                 wifiManager.disconnect();
@@ -254,5 +268,26 @@ public class WifiWioListActivity extends AppCompatActivity
 
         }
     }
+
+    private boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        String locationProviders;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            try {
+                locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+            } catch (Settings.SettingNotFoundException e) {
+                e.printStackTrace();
+            }
+
+            return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+        } else {
+            locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+            return !TextUtils.isEmpty(locationProviders);
+        }
+    }
+
 }
 
