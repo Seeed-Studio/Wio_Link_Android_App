@@ -180,6 +180,11 @@ public class WifiWioListActivity extends AppCompatActivity
         wifiManager.addNetwork(conf);
 
         List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+        if (list == null) {
+            Log.e(TAG, "List<WifiConfiguration> is null!");
+            return;
+        }
+
         for (WifiConfiguration i : list) {
             if (i.SSID != null && i.SSID.equals("\"" + SSID + "\"")) {
                 wifiManager.disconnect();

@@ -148,7 +148,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //        fake_pinConfig.position = 0;
 //        fake_pinConfig.sku = "104990089";
 //        pinConfigs.add(fake_pinConfig);
-        Log.e(TAG, "pinConfig" + pinConfigs.toString());
+//        Log.e(TAG, "pinConfig" + pinConfigs.toString());
 
         getSupportActionBar().setTitle(node.name);
 
@@ -320,7 +320,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 return true;
 
             NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
+//            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
             if (node_josn.connections.isEmpty()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Forger add grove?");
@@ -577,7 +577,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                         }
                         addGrove(pinConfig);
 
-                        Log.e(TAG, "pinConfigs " + pinConfigs);
+//                        Log.e(TAG, "pinConfigs " + pinConfigs);
 
                         if (isHasI2cGrove(pin_position)) {
                             Message message = Message.obtain();
@@ -624,7 +624,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                             }
                         }
 
-                        Log.e(TAG, "pinConfigs " + pinConfigs);
+//                        Log.e(TAG, "pinConfigs " + pinConfigs);
                         break;
                     }
                     case DragEvent.ACTION_DRAG_ENDED:

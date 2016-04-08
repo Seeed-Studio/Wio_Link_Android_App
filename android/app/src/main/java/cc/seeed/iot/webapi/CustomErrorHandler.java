@@ -17,10 +17,10 @@ public class CustomErrorHandler implements ErrorHandler {
         String errorDescription;
 
         if (cause.isNetworkError()) {
-            errorDescription = "connect server failure!";
+            errorDescription = "Connect wio server failure. Please check the network.";
         } else {
             if (cause.getResponse() == null) {
-                errorDescription = "no response!";
+                errorDescription = "No response!";
             } else {
 
                 // Error message handling - return a simple error to Retrofit handlers..
