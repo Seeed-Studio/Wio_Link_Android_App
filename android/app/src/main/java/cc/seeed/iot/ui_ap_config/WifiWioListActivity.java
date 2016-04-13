@@ -44,6 +44,7 @@ public class WifiWioListActivity extends AppCompatActivity
     private ProgressDialog mWaitDialog;
     private List<ScanResult> scanPionResult = new ArrayList<>();
 
+    private String board;
     private String node_sn;
     private String node_key;
     private String selected_ssid;
@@ -57,7 +58,7 @@ public class WifiWioListActivity extends AppCompatActivity
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_pion_list_activity);
+        getSupportActionBar().setTitle(R.string.title_wio_activity);
 
         mWifiListView = (RecyclerView) findViewById(R.id.wifi_list);
         if (mWifiListView != null) {
@@ -75,7 +76,6 @@ public class WifiWioListActivity extends AppCompatActivity
         } else {
             textView.setVisibility(View.GONE);
         }
-
         mWaitDialog = new ProgressDialog(this);
     }
 
@@ -86,6 +86,7 @@ public class WifiWioListActivity extends AppCompatActivity
         selected_ssid = "";
 
         Intent intent = getIntent();
+        board = intent.getStringExtra("board");
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
         IntentFilter actionFilter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
@@ -144,7 +145,7 @@ public class WifiWioListActivity extends AppCompatActivity
         scanPionResult.clear();
         for (ScanResult wifi : scanResult) {
             if (wifi.SSID.contains(PION_WIFI_PREFIX) || wifi.SSID.contains(WIO_WIFI_PREFIX)) {
-                Log.i(TAG, "WioLink ssid:" + wifi.SSID);
+                Log.i(TAG, "Wio ssid:" + wifi.SSID);
                 scanPionResult.add(wifi);
             }
         }
@@ -161,12 +162,11 @@ public class WifiWioListActivity extends AppCompatActivity
         if (selected_ssid.equals(getCurrentSsid()))
             goWifiListActivity();
         else {
+            wifiConnect(selected_ssid);
+
             mWaitDialog.setMessage("Connecting to " + scanResult.SSID + "...");
             mWaitDialog.setCanceledOnTouchOutside(false);
             mWaitDialog.show();
-
-            wifiConnect(selected_ssid);
-
         }
 
 
@@ -178,13 +178,15 @@ public class WifiWioListActivity extends AppCompatActivity
         conf.SSID = "\"" + SSID + "\"";
         conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         wifiManager.addNetwork(conf);
+
         List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
         if (list == null) {
             Log.e(TAG, "List<WifiConfiguration> is null!");
             return;
         }
-        for( WifiConfiguration i : list ) {
-            if(i.SSID != null && i.SSID.equals("\"" + SSID + "\"")) {
+
+        for (WifiConfiguration i : list) {
+            if (i.SSID != null && i.SSID.equals("\"" + SSID + "\"")) {
                 wifiManager.disconnect();
                 wifiManager.enableNetwork(i.networkId, true);
                 wifiManager.reconnect();
@@ -237,6 +239,7 @@ public class WifiWioListActivity extends AppCompatActivity
 
     private void goWifiListActivity() {
         Intent intentActivity = new Intent(this, WifiListActivity.class);
+        intentActivity.putExtra("board", board);
         intentActivity.putExtra("node_key", node_key);
         intentActivity.putExtra("node_sn", node_sn);
         startActivity(intentActivity);
@@ -288,6 +291,5 @@ public class WifiWioListActivity extends AppCompatActivity
             return !TextUtils.isEmpty(locationProviders);
         }
     }
-
 }
 

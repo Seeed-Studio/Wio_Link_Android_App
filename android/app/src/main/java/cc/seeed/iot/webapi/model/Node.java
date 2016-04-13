@@ -25,6 +25,9 @@ public class Node extends Model {
     @Column()
     public String dataxserver;
 
+    @Column()
+    public String board;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

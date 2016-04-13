@@ -22,7 +22,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -40,18 +39,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.getbase.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
+import cc.seeed.iot.datastruct.Constant;
 import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
+import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
-import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
@@ -64,16 +66,14 @@ import cc.seeed.iot.webapi.model.NodeConfigResponse;
 import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.SuccessResponse;
-import cc.seeed.iot.yaml.IotYaml;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-/**
- * TODO
- */
+//import android.support.design.widget.FloatingActionButton;
+
 public class MainScreenActivity extends AppCompatActivity
-        implements NodeListRecyclerAdapter.OnClickListener {
+        implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener {
     private static final String TAG = "MainScreenActivity";
     private static final int MESSAGE_GROVE_LIST_START = 0x00;
     private static final int MESSAGE_GROVE_LIST_COMPLETE = 0x01;
@@ -173,7 +173,7 @@ public class MainScreenActivity extends AppCompatActivity
         });
         */
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+ /*       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,7 +181,12 @@ public class MainScreenActivity extends AppCompatActivity
                 Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
+
+        FloatingActionButton setupLinkAction = (FloatingActionButton) findViewById(R.id.setup_link);
+        FloatingActionButton setupNodeAction = (FloatingActionButton) findViewById(R.id.setup_node);
+        setupLinkAction.setOnClickListener(this);
+        setupNodeAction.setOnClickListener(this);
 
         mProgressDialog = new ProgressDialog(this);
 
@@ -329,6 +334,25 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.setup_link:
+                setupActivity(Constant.WIO_LINK_V1_0);
+                break;
+            case R.id.setup_node:
+                setupActivity(Constant.WIO_NODE_V1_0);
+                break;
+        }
+    }
+
+    private void setupActivity(String board) {
+        ((MyApplication) getApplication()).setConfigState(true);
+        Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+        intent.putExtra("board", board);
+        startActivity(intent);
+    }
+
+    @Override
     public void onClick(View v, final int position) {
         final Node node = mAdapter.getItem(position);
         int id = v.getId();
@@ -434,7 +458,12 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     public boolean nodeSet(Node node) {
-        Intent intent = new Intent(this, SetupIotNodeActivity.class);
+        Intent intent = new Intent();
+        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+            intent.setClass(this, SetupIotLinkActivity.class);
+        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
+            intent.setClass(this, SetupIotNodeActivity.class);
+        }
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;
@@ -500,7 +529,7 @@ public class MainScreenActivity extends AppCompatActivity
                     Log.e(TAG, "do not support!");
                 } else if (nodeConfigResponse.type.equals("json")) {
                     NodeJson nodeJson = nodeConfigResponse.config;
-                    saveToDB(nodeJson);
+                    new NodeConfigHelper().saveToDB(nodeJson, node);
                 }
 
                 Message message = Message.obtain();
@@ -512,56 +541,6 @@ public class MainScreenActivity extends AppCompatActivity
             @Override
             public void failure(RetrofitError error) {
                 Log.e(TAG, error.getLocalizedMessage());
-            }
-
-//            private void saveToDB(String yaml) {
-//                List<PinConfig> pinConfigs = IotYaml.getNodeConfig(yaml);
-//                PinConfigDBHelper.delPinConfig(node.node_sn);
-//                for (PinConfig pinConfig : pinConfigs) {
-//                    pinConfig.node_sn = node.node_sn;
-//                    pinConfig.save();
-//                }
-//            }
-
-            private void saveToDB(NodeJson nodeJson) {
-                List<PinConfig> pinConfigs = new ArrayList<>();
-                List<Map<String, String>> connections = nodeJson.connections;
-                try {
-                    for (Map<String, String> l : connections) {
-                        PinConfig pinConfig = new PinConfig();
-                        pinConfig.sku = l.get("sku");
-                        pinConfig.selected = true;
-                        switch (l.get("port")) {
-                            case "D0":
-                                pinConfig.position = 1;
-                                break;
-                            case "D1":
-                                pinConfig.position = 2;
-                                break;
-                            case "D2":
-                                pinConfig.position = 3;
-                                break;
-                            case "A0":
-                                pinConfig.position = 4;
-                                break;
-                            case "UART0":
-                                pinConfig.position = 5;
-                                break;
-                            case "I2C0":
-                                pinConfig.position = 6;
-                                break;
-                        }
-                        pinConfigs.add(pinConfig);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, "getNodeConfig:" + e);
-                }
-
-                PinConfigDBHelper.delPinConfig(node.node_sn);
-                for (PinConfig pinConfig : pinConfigs) {
-                    pinConfig.node_sn = node.node_sn;
-                    pinConfig.save();
-                }
             }
         });
     }
@@ -592,5 +571,6 @@ public class MainScreenActivity extends AppCompatActivity
             }
         });
     }
+
 
 }

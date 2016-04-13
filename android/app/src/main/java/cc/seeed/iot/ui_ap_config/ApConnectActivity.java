@@ -51,6 +51,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
 
     private String ssid;
     private String node_name;
+    private String board;
     private String node_sn;
     private String node_key;
     private ConfigUdpSocket udpClient;
@@ -82,6 +83,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         ssid = intent.getStringExtra("ssid");
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
+        board = intent.getStringExtra("board");
         mSsidView.setText(ssid);
     }
 
@@ -139,7 +141,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Sending wifi password to Wio Link...");
+            mProgressDialog.setMessage("Sending wifi password to Wio...");
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
         }
@@ -174,7 +176,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         protected void onPostExecute(Boolean b) {
             mProgressDialog.dismiss();
 
-            //remove Wio Link wifi config
+            //remove Wio wifi config
             WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
             List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
             for (WifiConfiguration c : wifiConfigurations) {
@@ -195,7 +197,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         @Override
         protected void onPreExecute() {
             mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Waiting Wio Link get ip address...");
+            mProgressDialog.setMessage("Waiting Wio get ip address...");
             mProgressDialog.setCanceledOnTouchOutside(false);
             mProgressDialog.show();
         }
@@ -244,7 +246,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ApConnectActivity.this);
                 builder.setTitle("Error");
-                builder.setMessage("Wio Link can not connect to the router.\n" +
+                builder.setMessage("Wio can not connect to your AP.\n" +
                         "Please check AP password or closer with AP.\n" +
                         "Please reset Wio to configure mode and try again.");
                 builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
@@ -252,6 +254,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(ApConnectActivity.this, GoReadyActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.putExtra("board", board);
                         startActivity(intent);
                     }
                 });
@@ -263,7 +266,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         private void attemptRename(final String node_name) {
             final ProgressDialog mProgressBar = new ProgressDialog(ApConnectActivity.this);
 
-            mProgressBar.setMessage("Setting Wio Link name...");
+            mProgressBar.setMessage("Setting Wio name...");
             mProgressBar.show();
             IotApi api = new IotApi();
             User user = ((MyApplication) getApplication()).getUser();

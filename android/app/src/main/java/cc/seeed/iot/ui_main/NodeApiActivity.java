@@ -66,6 +66,7 @@ public class NodeApiActivity extends AppCompatActivity {
                 }
             }
         });
+
         mWebView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(NodeApiActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
