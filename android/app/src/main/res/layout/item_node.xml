@@ -63,6 +63,7 @@
             android:background="?android:attr/selectableItemBackground">
 
             <ImageView
+                android:id="@+id/board_img"
                 android:layout_width="52dp"
                 android:layout_height="52dp"
                 android:layout_centerVertical="true"
@@ -156,7 +157,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
-                    android:src="@drawable/node_small"
+                    android:src="@drawable/link_small"
                     app:civ_border_color="@color/primary"
                     app:civ_border_width="@dimen/civ_border_width" />
 
@@ -168,7 +169,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginStart="5dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/node_small"
+                    android:src="@drawable/link_small"
                     app:civ_border_color="@color/primary"
                     app:civ_border_width="@dimen/civ_border_width" />
 

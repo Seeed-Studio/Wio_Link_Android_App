@@ -16,6 +16,18 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <TextView
+        android:id="@+id/tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location_tip"
+        android:layout_gravity="top|center"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:padding="4dp"
+        android:singleLine="false"
+        android:visibility="gone"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/wifi_list"
         android:layout_width="wrap_content"

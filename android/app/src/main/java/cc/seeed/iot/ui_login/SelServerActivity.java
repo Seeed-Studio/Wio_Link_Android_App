@@ -136,7 +136,7 @@ public class SelServerActivity extends AppCompatActivity {
             ota_server_url = Common.OTA_CHINA_URL;
         } else {
             ota_server_ip = _serverIpText.getText().toString();
-            ota_server_url = "http://" + ota_server_ip + ":8080";
+            ota_server_url = "https://" + ota_server_ip;
         }
 
 //        Log.e(TAG, ota_server_ip);

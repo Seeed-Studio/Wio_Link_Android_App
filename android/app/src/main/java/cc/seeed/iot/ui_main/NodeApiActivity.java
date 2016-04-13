@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -52,6 +54,7 @@ public class NodeApiActivity extends AppCompatActivity {
     }
 
     private void initView() {
+
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -63,9 +66,22 @@ public class NodeApiActivity extends AppCompatActivity {
                 }
             }
         });
+
         mWebView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(NodeApiActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mWebView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+
+                // *** NEVER DO THIS!!! ***
+                // super.onReceivedSslError(view, handler, error);
+
+                // let's ignore ssl error
+                handler.proceed();
             }
         });
 

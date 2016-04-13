@@ -30,6 +30,7 @@ public class WifiListActivity extends AppCompatActivity
     private RecyclerView mWifiListView;
     private WifiListRecyclerAdapter mWifiListAdapter;
 
+    private String board;
     private String node_sn;
     private String node_key;
 
@@ -59,6 +60,7 @@ public class WifiListActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         Intent intent = getIntent();
+        board = intent.getStringExtra("board");
         node_sn = intent.getStringExtra("node_sn");
         node_key = intent.getStringExtra("node_key");
 
@@ -131,6 +133,7 @@ public class WifiListActivity extends AppCompatActivity
 
         Intent intent = new Intent(this, ApConnectActivity.class);
         intent.putExtra("ssid", scanResult.SSID);
+        intent.putExtra("board", board);
         intent.putExtra("node_key", node_key);
         intent.putExtra("node_sn", node_sn);
         startActivity(intent);

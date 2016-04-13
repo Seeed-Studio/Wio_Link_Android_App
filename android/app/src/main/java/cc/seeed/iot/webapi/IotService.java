@@ -45,7 +45,8 @@ public interface IotService {
      */
 
     @POST("/v1/nodes/create")
-    public void nodesCreate(@Query("name") String node_name, Callback<NodeResponse> callback);
+    public void nodesCreate(@Query("name") String node_name, @Query("board") String board,
+                            Callback<NodeResponse> callback);
 
     @GET("/v1/nodes/list")
     public void nodesList(Callback<NodeListResponse> callback);
