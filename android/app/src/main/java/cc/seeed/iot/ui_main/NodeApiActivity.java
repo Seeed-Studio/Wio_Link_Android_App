@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 
@@ -110,7 +109,7 @@ public class NodeApiActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.copy) {
             copyTextUrl(getApiUrl());
-            Toast.makeText(this, "API coped!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "API url coped!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.share) {
             shareTextUrl(getApiUrl());
         }
@@ -142,16 +141,15 @@ public class NodeApiActivity extends AppCompatActivity {
     private String getApiUrl() {
         String url;
         String ota_server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerUrl();
-        String ota_server_ip = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerIP();
         String server_endpoint = ota_server_url + RESOURCE;
         String node_key = node.node_key;
         String dataxserver = node.dataxserver;
         if (dataxserver == null)
-            dataxserver = ota_server_ip;
-        if (dataxserver.equals(Common.OTA_CHINA_IP) || dataxserver.equals(Common.OTA_INTERNATIONAL_IP))
-            url = server_endpoint + "access_token=" + node_key;
-        else
-            url = server_endpoint + "access_token=" + node_key + "&dataxserver=" + dataxserver;
+            dataxserver = ota_server_url;
+//        if (dataxserver.equals(Common.OTA_CHINA_URL) || dataxserver.equals(Common.OTA_INTERNATIONAL_URL))
+//            url = server_endpoint + "access_token=" + node_key;
+//        else
+        url = server_endpoint + "access_token=" + node_key + "&data_server=" + dataxserver;
         Log.i("iot", "Url:" + url);
 
         return url;

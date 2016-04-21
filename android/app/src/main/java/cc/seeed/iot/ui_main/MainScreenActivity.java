@@ -137,7 +137,7 @@ public class MainScreenActivity extends AppCompatActivity
                 mEmail.setText(user.email + " (International)");
             } else
                 mEmail.setText(user.email + " (Customer)\n" +
-                        ((MyApplication) getApplication()).getOtaServerIP());
+                        ((MyApplication) getApplication()).getOtaServerUrl());
         }
 
 
@@ -414,7 +414,7 @@ public class MainScreenActivity extends AppCompatActivity
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setCancelable(false);
-        builder.setTitle("Remove Wio Link");
+        builder.setTitle("Remove Wio");
         builder.setMessage("Confirm remove?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override

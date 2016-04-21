@@ -3,7 +3,7 @@
     <PreferenceCategory android:title="Common">
         <EditTextPreference
             android:key="pref_node_name"
-            android:title="Rename Wio Link" />
+            android:title="Rename Wio" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Exchange server setting">
         <SwitchPreference
@@ -14,9 +14,9 @@
             android:title="Exchange server" />
         <EditTextPreference
             android:dependency="pref_xserver_defult"
-            android:inputType="phone"
-            android:key="pref_xserver_ip"
-            android:title="Exchange Server IP" />
+            android:inputType="textUri"
+            android:key="pref_xserver_url"
+            android:title="Exchange Server Url" />
     </PreferenceCategory>
 
 </PreferenceScreen>
