@@ -55,6 +55,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
     private String node_sn;
     private String node_key;
     private ConfigUdpSocket udpClient;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,10 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         mConnectBtnView.setOnClickListener(this);
 
         udpClient = new ConfigUdpSocket();
+
+        mProgressDialog = new ProgressDialog(ApConnectActivity.this);
+        mProgressDialog.setCanceledOnTouchOutside(false);
+        mProgressDialog.setCancelable(false);
     }
 
     @Override
@@ -85,6 +90,12 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         node_key = intent.getStringExtra("node_key");
         board = intent.getStringExtra("board");
         mSsidView.setText(ssid);
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
     }
 
     @Override
@@ -112,19 +123,9 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 mNodeNameView.setError("Node name is empty");
                 return;
             }
-            //APCFG: ssid\tpassword\tkey\tsn\t
-//            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
-//                    node_key + "\t" + node_sn + "\t";
             String ota_server_ip = ((MyApplication) getApplication()).getOtaServerIP();
             String exchange_server_ip = ota_server_ip;
 
-//            if (ota_server.equals(Common.OTA_CHINA_URL)) {
-//                ota_server = Common.OTA_CHINA_IP;
-//                exchange_server = Common.EXCHANGE_CHINA_IP;
-//            } else if (ota_server.equals(Common.OTA_INTERNATIONAL_URL)) {
-//                ota_server = Common.OTA_INTERNATIONAL_IP;
-//                exchange_server = Common.EXCHANGE_INTERNATIONAL_IP;
-//            }
             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
                     node_key + "\t" + node_sn + "\t" + exchange_server_ip + "\t"
                     + ota_server_ip + "\t";
@@ -140,10 +141,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Sending wifi password to Wio...");
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
+            showProgressDialog("Sending wifi password to Wio...");
         }
 
         @Override
@@ -162,7 +160,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 } catch (SocketTimeoutException e) {
                     udpClient.setSoTimeout(3000);
                     udpClient.sendData(cmd, ipAddr);
-                    continue;
+
                 } catch (IOException e) {
                     Log.e(TAG, "Error[SetNodeSn]:" + e);
                     return false;
@@ -174,8 +172,6 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
 
         @Override
         protected void onPostExecute(Boolean b) {
-            mProgressDialog.dismiss();
-
             //remove Wio wifi config
             WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
             List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
@@ -185,21 +181,16 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                     wifiManager.saveConfiguration();
                 }
             }
-
             new checkNodeIsOnline().execute();
         }
     }
 
-    private class checkNodeIsOnline extends AsyncTask<Void, Void, Boolean> {
-        private ProgressDialog mProgressDialog;
+    private class checkNodeIsOnline extends AsyncTask<Void, Integer, Boolean> {
         private Boolean state_online = false;
 
         @Override
         protected void onPreExecute() {
-            mProgressDialog = new ProgressDialog(ApConnectActivity.this);
-            mProgressDialog.setMessage("Waiting Wio get ip address...");
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
+            showProgressDialog("Waiting Wio get ip address...");
         }
 
         @Override
@@ -233,13 +224,23 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                publishProgress(30-i);
             }
             return state_online;
         }
 
         @Override
+        protected void onProgressUpdate(Integer... values) {
+            int i = values[0];
+            showProgressDialog("Waiting Wio get ip address...[" + i + "]");
+        }
+
+        @Override
         protected void onPostExecute(Boolean state_online) {
-            mProgressDialog.dismiss();
+            if (ApConnectActivity.this.isFinishing()) { // or call isFinishing() if min sdk version < 17
+                return;
+            }
+            dismissProgressDialog();
 
             if (state_online) {
                 attemptRename(node_name);
@@ -287,6 +288,20 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                     Toast.makeText(ApConnectActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 }
             });
+        }
+    }
+
+    private void showProgressDialog(String message) {
+        mProgressDialog.setMessage(message);
+//            mProgressDialog.setIndeterminate(false);
+        if (!mProgressDialog.isShowing()) {
+            mProgressDialog.show();
+        }
+    }
+
+    private void dismissProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
     }
 }

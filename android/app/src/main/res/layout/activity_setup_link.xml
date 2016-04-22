@@ -19,7 +19,7 @@
     </android.support.v7.widget.Toolbar>
 
     <RelativeLayout xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/set_node"
+        android:id="@+id/set_link"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/grove_list"

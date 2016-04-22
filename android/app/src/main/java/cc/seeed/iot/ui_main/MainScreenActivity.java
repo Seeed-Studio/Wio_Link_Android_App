@@ -421,7 +421,7 @@ public class MainScreenActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
 
                 final ProgressDialog progressDialog = new ProgressDialog(MainScreenActivity.this);
-                progressDialog.setMessage("Wio link remove...");
+                progressDialog.setMessage("Wio remove...");
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
