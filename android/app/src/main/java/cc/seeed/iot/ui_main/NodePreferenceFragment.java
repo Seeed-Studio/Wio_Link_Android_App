@@ -19,8 +19,8 @@ import java.net.UnknownHostException;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.User;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
