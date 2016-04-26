@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
@@ -97,13 +97,13 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void refresh_layout() {
-        String ota_server_ip = ((MyApplication) getApplication()).getOtaServerIP();
-        if (ota_server_ip.equals(Common.OTA_INTERNATIONAL_IP)) {
+        String ota_server_url = ((MyApplication) getApplication()).getOtaServerUrl();
+        if (ota_server_url.equals(Common.OTA_INTERNATIONAL_URL)) {
             _serverLink.setText(getString(R.string.serverOn) + " International" + getString(R.string.change));
-        } else if (ota_server_ip.equals(Common.OTA_CHINA_IP)) {
+        } else if (ota_server_url.equals(Common.OTA_CHINA_URL)) {
             _serverLink.setText(getString(R.string.serverOn) + " China" + getString(R.string.change));
         } else {
-            _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_ip + getString(R.string.change));
+            _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_url + getString(R.string.change));
         }
     }
 
@@ -124,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
 
         //Implement your own authentication logic here.
-        attemptLogin(progressDialog);
+         attemptLogin(progressDialog);
 
     }
 

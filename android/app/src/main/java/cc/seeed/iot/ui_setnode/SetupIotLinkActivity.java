@@ -22,8 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
-import com.jauker.widget.BadgeView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
@@ -32,15 +30,15 @@ import java.util.List;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.Constant;
-import cc.seeed.iot.datastruct.User;
 import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -96,6 +94,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
         View view = findViewById(R.id.setup_iot_link);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCanceledOnTouchOutside(false);
+//        mProgressDialog.setCancelable(false);
         mProgressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,
                 "OK", new DialogInterface.OnClickListener() {
                     @Override
@@ -115,12 +114,13 @@ public class SetupIotLinkActivity extends AppCompatActivity
         mDragRemoveView = (ImageView) findViewById(R.id.grove_remove);
         mDragRemoveView.setOnDragListener(this);
 
-        mSetNodeLayout = findViewById(R.id.set_node);
+        mSetNodeLayout = findViewById(R.id.set_link);
         mSetNodeLayout.setOnClickListener(this);
 
-
+        user = ((MyApplication) SetupIotLinkActivity.this.getApplication()).getUser();
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
+
         /**
          * fake node for test
          */
@@ -148,11 +148,10 @@ public class SetupIotLinkActivity extends AppCompatActivity
 //        fake_pinConfig.position = 0;
 //        fake_pinConfig.sku = "104990089";
 //        pinConfigs.add(fake_pinConfig);
-        Log.e(TAG, "pinConfig" + pinConfigs.toString());
+//        Log.e(TAG, "pinConfig" + pinConfigs.toString());
 
         getSupportActionBar().setTitle(node.name);
 
-        user = ((MyApplication) SetupIotLinkActivity.this.getApplication()).getUser();
 
         mGroveListView = (RecyclerView) findViewById(R.id.grove_list);
         if (mGroveListView != null) {
@@ -254,6 +253,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
                         new AlertDialog.Builder(SetupIotLinkActivity.this)
                                 .setTitle(R.string.update)
                                 .setMessage(message)
+                                .setCancelable(false)
                                 .setPositiveButton(R.string.ok, null)
                                 .show();
                     }
@@ -285,6 +285,12 @@ public class SetupIotLinkActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         getGrovesData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        dismissProgressDialog();
+        super.onDestroy();
     }
 
     private void setupGroveSelectorAdapter() {
@@ -320,7 +326,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
                 return true;
 
             NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
+//            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
             if (node_josn.connections.isEmpty()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setMessage("Forger add grove?");
@@ -369,26 +375,33 @@ public class SetupIotLinkActivity extends AppCompatActivity
         iot.otaStatus(new Callback<OtaStatusResponse>() {
                           @Override
                           public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                              if (otaStatusResponse.ota_status.equals("going")) {
-                                  displayStatus(node_key);
-                                  mProgressDialog.setMessage(otaStatusResponse.ota_msg);
-                              } else if (otaStatusResponse.ota_status.equals("done")) {
-                                  mProgressDialog.dismiss();
-
-                                  Message message = Message.obtain();
-                                  message.what = MESSAGE_UPDATE_DONE;
-                                  message.obj = otaStatusResponse.ota_msg;
-                                  mHandler.sendMessage(message);
-
-                              } else if (otaStatusResponse.ota_status.equals("error")) {
-                                  mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
-                                  mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                                  mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                      @Override
-                                      public void onClick(DialogInterface dialog, int which) {
-
+                              switch (otaStatusResponse.ota_status) {
+                                  case "going":
+                                      displayStatus(node_key);
+                                      mProgressDialog.setMessage(otaStatusResponse.ota_msg);
+                                      break;
+                                  case "done":
+                                      if (SetupIotLinkActivity.this.isFinishing()) {
+                                          return;
                                       }
-                                  });
+                                      dismissProgressDialog();
+
+                                      Message message = Message.obtain();
+                                      message.what = MESSAGE_UPDATE_DONE;
+                                      message.obj = otaStatusResponse.ota_msg;
+                                      mHandler.sendMessage(message);
+
+                                      break;
+                                  case "error":
+                                      mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
+                                      mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                                      mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                          @Override
+                                          public void onClick(DialogInterface dialog, int which) {
+
+                                          }
+                                      });
+                                      break;
                               }
                           }
 
@@ -589,7 +602,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
                         }
                         addGrove(pinConfig);
 
-                        Log.e(TAG, "pinConfigs " + pinConfigs);
+//                        Log.e(TAG, "pinConfigs " + pinConfigs);
 
                         if (isHasI2cGrove(pin_position)) {
                             Message message = Message.obtain();
@@ -636,7 +649,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
                             }
                         }
 
-                        Log.e(TAG, "pinConfigs " + pinConfigs);
+//                        Log.e(TAG, "pinConfigs " + pinConfigs);
                         break;
                     }
                     case DragEvent.ACTION_DRAG_ENDED:
@@ -799,6 +812,12 @@ public class SetupIotLinkActivity extends AppCompatActivity
                 Log.e(TAG, error.getLocalizedMessage());
             }
         });
+    }
+
+    private void dismissProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }
 

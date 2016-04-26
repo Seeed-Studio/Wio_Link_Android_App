@@ -3,7 +3,7 @@ package cc.seeed.iot;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 

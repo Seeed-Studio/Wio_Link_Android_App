@@ -46,7 +46,6 @@ public class NodeSettingActivity extends AppCompatActivity {
         NodePreferenceFragment fragment = new NodePreferenceFragment();
         fragment.setArguments(bundle);
 
-        String tag = node_sn;
         getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 

@@ -45,8 +45,9 @@
                 android:id="@+id/input_ip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Server IP"
-                android:inputType="phone" />
+                android:hint="Server Url"
+                android:singleLine="true"
+                android:text="https://" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.AppCompatButton

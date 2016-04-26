@@ -1,4 +1,4 @@
-package cc.seeed.iot.datastruct;
+package cc.seeed.iot.util;
 
 /**
  * Created by tenwong on 15/7/9.

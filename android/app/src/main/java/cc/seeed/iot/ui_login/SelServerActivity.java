@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -17,11 +16,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.URL;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
 import cc.seeed.iot.util.Common;
+import cc.seeed.iot.webapi.IotApi;
 
 public class SelServerActivity extends AppCompatActivity {
     private static final String TAG = "SelServerActivity";
@@ -47,9 +55,10 @@ public class SelServerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 hideKeyboard();
-                saveServerIP();
+                saveServer();
             }
         });
+
 
         _cancelLink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,15 +73,15 @@ public class SelServerActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         _serverSpinner.setAdapter(adapter);
 
-        String ota_server_ip = ((MyApplication) getApplication()).getOtaServerIP();
-        if (ota_server_ip.equals(Common.OTA_INTERNATIONAL_IP)) {
+        String ota_server_url = ((MyApplication) getApplication()).getOtaServerUrl();
+        if (ota_server_url.equals(Common.OTA_INTERNATIONAL_URL)) {
             _serverSpinner.setSelection(0, true);
-        } else if (ota_server_ip.equals(Common.OTA_CHINA_IP)) {
+        } else if (ota_server_url.equals(Common.OTA_CHINA_URL)) {
             _serverSpinner.setSelection(1, true);
         } else {
             _serverSpinner.setSelection(2, true);
             _inputLayout.setVisibility(View.VISIBLE);
-            _serverIpText.setText(ota_server_ip);
+            _serverIpText.setText(ota_server_url);
         }
 
         _serverSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -87,6 +96,8 @@ public class SelServerActivity extends AppCompatActivity {
                         break;
                     case 2:
                         _inputLayout.setVisibility(View.VISIBLE);
+                        _serverIpText.setSelection(_serverIpText.getText().length());
+                        _serverIpText.setError("e.g. https://192.168.31.2 or https://iot.seeed.cc");
                         break;
                 }
             }
@@ -103,54 +114,105 @@ public class SelServerActivity extends AppCompatActivity {
     }
 
     public void onSaveFailed() {
-        Toast.makeText(getBaseContext(), "Save failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(SelServerActivity.this, "Save failed", Toast.LENGTH_LONG).show();
 
-        _serverIpText.setEnabled(true);
+        _saveButton.setEnabled(true);
     }
 
-    public void saveServerIP() {
-        Log.d(TAG, "SaveServeIP");
+    public void saveServer() {
 
-        if (_serverSpinner.getSelectedItemPosition() == 2) {
-            if (!validate()) {
-                onSaveFailed();
-                return;
-            }
-        }
         _saveButton.setEnabled(false);
 
-//        final ProgressDialog progressDialog = new ProgressDialog(SelServerActivity.this,
-//                R.style.AppTheme_Dark_Dialog);
-//        progressDialog.setIndeterminate(true);
-//        progressDialog.setMessage("Saving server ip...");
-//        progressDialog.show();
-
-        // TODO: Implement your own saveServerIP logic here.
         String ota_server_ip;
         String ota_server_url;
-        if (_serverSpinner.getSelectedItemPosition() == 0) {
-            ota_server_ip = Common.OTA_INTERNATIONAL_IP;
-            ota_server_url = Common.OTA_INTERNATIONAL_URL;
-        } else if (_serverSpinner.getSelectedItemPosition() == 1) {
-            ota_server_ip = Common.OTA_CHINA_IP;
-            ota_server_url = Common.OTA_CHINA_URL;
-        } else {
-            ota_server_ip = _serverIpText.getText().toString();
-            ota_server_url = "https://" + ota_server_ip;
+        switch (_serverSpinner.getSelectedItemPosition()) {
+            default:
+            case 0:
+                ota_server_ip = Common.OTA_INTERNATIONAL_IP;
+                ota_server_url = Common.OTA_INTERNATIONAL_URL;
+                saveUrlAndIp(ota_server_url, ota_server_ip);
+                onSaveSuccess();
+                break;
+            case 1:
+                ota_server_ip = Common.OTA_CHINA_IP;
+                ota_server_url = Common.OTA_CHINA_URL;
+                saveUrlAndIp(ota_server_url, ota_server_ip);
+                onSaveSuccess();
+                break;
+            case 2:
+
+                ota_server_url = _serverIpText.getText().toString();
+
+                final ProgressDialog progressDialog = new ProgressDialog(SelServerActivity.this,
+                        R.style.AppTheme_Dark_Dialog);
+                progressDialog.setIndeterminate(true);
+                progressDialog.setMessage("Get your server's host address...");
+                progressDialog.show();
+
+                getHostAddress(ota_server_url, progressDialog);
+                break;
+
         }
 
-//        Log.e(TAG, ota_server_ip);
-//        Log.e(TAG, ota_server_url);
+    }
+
+    private void getHostAddress(final String ota_server_url, final ProgressDialog progressDialog) {
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    InetAddress address = InetAddress.getByName(new URL(ota_server_url).getHost());
+                    final String ota_server_ip = address.getHostAddress();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressDialog.setMessage("Attempt to connect your server...");
+                        }
+                    });
+
+                    GetStausCode getStausCode = new GetStausCode();
+                    int response = getStausCode.run(ota_server_url + "/v1/test");
+                    if (response == 200) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                saveUrlAndIp(ota_server_url, ota_server_ip);
+                                onSaveSuccess();
+                            }
+                        });
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                _serverIpText.setError("Can't connect to your server.");
+                                onSaveFailed();
+                            }
+                        });
+                    }
+                    progressDialog.dismiss();
+
+                } catch (final IOException e) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            _serverIpText.setError(e.getMessage());
+                            onSaveFailed();
+                        }
+                    });
+                    progressDialog.dismiss();
+                }
+            }
+        }.start();
+
+
+    }
+
+    private void saveUrlAndIp(String ota_server_url, String ota_server_ip) {
         ((MyApplication) getApplication()).setOtaServerIP(ota_server_ip);
         ((MyApplication) getApplication()).setOtaServerUrl(ota_server_url);
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        onSaveSuccess();
-//                        progressDialog.dismiss();
-                    }
-                }, 0);
     }
+
 
     public boolean validate() {
         boolean valid = true;
@@ -167,6 +229,7 @@ public class SelServerActivity extends AppCompatActivity {
 
         return valid;
     }
+
     private void hideKeyboard() {
         InputMethodManager inputManager = (InputMethodManager)
                 getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -174,4 +237,19 @@ public class SelServerActivity extends AppCompatActivity {
         inputManager.hideSoftInputFromWindow(_saveButton.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
+
+    public class GetStausCode {
+//        OkHttpClient client = new OkHttpClient();
+        OkHttpClient client = IotApi.getUnsafeOkHttpClient();
+
+        int run(String url) throws IOException {
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            return response.code();
+        }
+    }
+
 }

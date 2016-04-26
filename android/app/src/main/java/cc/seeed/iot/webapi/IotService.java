@@ -56,7 +56,9 @@ public interface IotService {
                             Callback<SuccessResponse> callback);
 
     @POST("/v1/node/setting/dataxserver/{address}")
-    public void nodeSettingDataxserver(@Path("address") String property, Callback<SuccessResponse> callback);
+    public void nodeSettingDataxserver(@Path("address") String property,
+                                       @Query("dataxurl") String dataxurl,
+                                       Callback<SuccessResponse> callback);
 
     @POST("/v1/nodes/delete")
     public void nodesDelete(@Query("node_sn") String node_sn, Callback<SuccessResponse> callback);
@@ -79,7 +81,6 @@ public interface IotService {
 
     @GET("/v1/scan/status")
     public void scanStatus(Callback<StatusResponse> callback);
-
 
 //    /**
 //     * Node property call APIs

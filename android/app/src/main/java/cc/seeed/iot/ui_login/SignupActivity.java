@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;

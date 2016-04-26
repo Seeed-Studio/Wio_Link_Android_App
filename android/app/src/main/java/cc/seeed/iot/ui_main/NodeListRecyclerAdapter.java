@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.Constant;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
@@ -61,10 +61,17 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         holder.mNameView.setText(node.name);
         holder.mSwipeLayout.setDragEdge(SwipeLayout.DragEdge.Right);
 
-        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
-            holder.mBoardView.setImageResource(R.drawable.link_small);
-        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
-            holder.mBoardView.setImageResource(R.drawable.node_small);
+        if (node.board == null) {
+            node.board = Constant.WIO_LINK_V1_0;
+        }
+        switch (node.board) {
+            default:
+            case Constant.WIO_LINK_V1_0:
+                holder.mBoardView.setImageResource(R.drawable.link_small);
+                break;
+            case Constant.WIO_NODE_V1_0:
+                holder.mBoardView.setImageResource(R.drawable.node_small);
+                break;
         }
 
         if (node.dataxserver == null || node.dataxserver.equals(Common.OTA_INTERNATIONAL_IP)
