@@ -46,8 +46,8 @@ import java.util.List;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.Constant;
-import cc.seeed.iot.datastruct.User;
+import cc.seeed.iot.util.Constant;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;

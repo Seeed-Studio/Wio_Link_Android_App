@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import cc.seeed.iot.datastruct.Constant;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeJson;
 

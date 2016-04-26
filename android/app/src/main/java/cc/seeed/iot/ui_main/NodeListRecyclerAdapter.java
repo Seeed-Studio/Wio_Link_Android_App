@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
-import cc.seeed.iot.datastruct.Constant;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
