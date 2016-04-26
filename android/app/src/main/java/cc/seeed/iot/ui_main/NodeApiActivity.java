@@ -146,6 +146,7 @@ public class NodeApiActivity extends AppCompatActivity {
         String url;
         String ota_server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerUrl();
         String server_endpoint = ota_server_url + RESOURCE;
+        server_endpoint = server_endpoint.replace("https", "http");
         String node_key = node.node_key;
         String dataxserver = node.dataxserver;
         if (dataxserver == null)
