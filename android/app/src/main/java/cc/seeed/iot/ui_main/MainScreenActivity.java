@@ -46,8 +46,6 @@ import java.util.List;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.Constant;
-import cc.seeed.iot.util.User;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
@@ -56,7 +54,9 @@ import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Common;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -458,6 +458,23 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     public boolean nodeSet(Node node) {
+        // check database is correct?
+        try {
+            DBHelper.getNodes(node.node_sn).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            Log.e(TAG, "DBHelper.getNodes(node.node_sn).get(0) is null!");
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(MainScreenActivity.this);
+            builder.setTitle("Error");
+            builder.setMessage("The wio data is destroyed. Please CLEAR DATA on App Setting.");
+            builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+            android.app.AlertDialog dialog = builder.create();
+            dialog.show();
+            return true;
+        }
         Intent intent = new Intent();
         if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             intent.setClass(this, SetupIotLinkActivity.class);

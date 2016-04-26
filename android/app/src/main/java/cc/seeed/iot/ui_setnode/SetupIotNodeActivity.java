@@ -30,15 +30,15 @@ import java.util.List;
 
 import cc.seeed.iot.MyApplication;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.Constant;
-import cc.seeed.iot.util.User;
 import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -119,11 +119,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
 
         String node_sn = getIntent().getStringExtra("node_sn");
-        try {
-            node = DBHelper.getNodes(node_sn).get(0);
-        } catch (IndexOutOfBoundsException e) {
-            finish();
-        }
+        node = DBHelper.getNodes(node_sn).get(0);
         /**
          * fake node for test
          */

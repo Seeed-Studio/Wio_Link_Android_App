@@ -91,11 +91,7 @@ public class NodeApiActivity extends AppCompatActivity {
 
     private void init() {
         String node_sn = getIntent().getStringExtra("node_sn");
-        try {
-            node = DBHelper.getNodes(node_sn).get(0);
-        } catch (IndexOutOfBoundsException e) {
-            finish();
-        }
+        node = DBHelper.getNodes(node_sn).get(0);
     }
 
     @Override
