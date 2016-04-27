@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/api"
+        android:orderInCategory="200"
+        android:title="Api"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/setting"
+        android:orderInCategory="100"
+        android:title="Setting"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/remove"
+        android:orderInCategory="300"
+        android:title="Remove"
+        app:showAsAction="always" />
+
+</menu>

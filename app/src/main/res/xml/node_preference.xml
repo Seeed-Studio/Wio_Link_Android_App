@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Common">
+        <EditTextPreference
+            android:key="pref_node_name"
+            android:title="Rename Wio" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Exchange server setting">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_xserver_defult"
+            android:summaryOff="Use main server"
+            android:summaryOn="Use custom exchange server"
+            android:title="Exchange server" />
+        <EditTextPreference
+            android:dependency="pref_xserver_defult"
+            android:inputType="textUri"
+            android:key="pref_xserver_url"
+            android:title="Exchange Server Url" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
