@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="ldrawer-0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.ikimuhendis/ldrawer/0.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.ikimuhendis/ldrawer/0.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.ikimuhendis/ldrawer/0.1/8a8497506dc48432716861154e2f4f36d8b1db7/ldrawer-0.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

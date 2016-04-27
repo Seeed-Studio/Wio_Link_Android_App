@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="library-2.4.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/fr.avianey.com.viewpagerindicator/library/2.4.1/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/fr.avianey.com.viewpagerindicator/library/2.4.1/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/fr.avianey.com.viewpagerindicator/library/2.4.1/360ca484407fb13337f1e3a264a4ce09f48b635a/library-2.4.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
