@@ -1,4 +1,4 @@
-#built application files
+# Built application files
 *.apk
 *.ap_
 
@@ -37,6 +37,3 @@ captures/
 
 # Keystore files
 *.jks
-android/app/app.iml
-
-.idea
