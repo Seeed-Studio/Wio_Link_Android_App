@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="setup_blue">@color/third_color</color>
+    <color name="apptheme_dialog_button">@color/primary</color>
+    <color name="apptheme_dialog_edittext">@color/primary</color>
+    <color name="apptheme_blue">@color/third_color</color>
+
+    <!-- App Theme Colors -->
+    <color name="apptheme_main">#bbbbc1</color>
+    <color name="apptheme_main_light">#f8bbd0</color>
+    <color name="apptheme_main_dark">#c2185b</color>
+    <color name="apptheme_actionbar">@color/apptheme_main</color>
+    <color name="apptheme_accent">#eeff41</color>
+    <color name="apptheme_accent_fallback_light">#f4ff81</color>
+    <color name="apptheme_accent_fallback_dark">#c6ff00</color>
+    <color name="apptheme_accent_translucent">#70eeff41</color>
+
+    <!-- Background Colors -->
+    <color name="window_background_light">#dddddd</color>
+    <color name="window_background_dark">#353535</color>
+    <color name="nav_drawer_background_light">#eeeeee</color>
+    <color name="nav_drawer_background_dark">#353535</color>
+    <color name="background_gray">#7a7a7a</color>
+    <color name="background_disabled">#7a7a7a</color>
+    <color name="background_nav_draw_lesson_review">#ffffffff</color>
+    <color name="simple_item_background">@android:color/transparent</color>
+    <color name="simple_item_background_pressed">#15000000</color>
+
+    <color name="window_background">#FFF5F5F5</color>
+
+    <color name="red">#990000</color>
+    <color name="green">#009900</color>
+    <color name="blue">#000099</color>
+    <color name="orange">#FF9900</color>
+
+    <color name="background">#ECEFF1</color>
+
+    <!-- Common -->
+    <color name="primary">#96141E</color>
+    <color name="primary_dark">#8c141e</color>
+    <color name="primary_darker">#82141e</color>
+    <color name="second_color">#25467d</color>
+    <color name="third_color">#5a5a5a</color>
+    <color name="accent">#FFFFFF</color>
+
+    <color name="black">#000000</color>
+    <color name="jet">#222222</color>
+    <color name="oil">#333333</color>
+    <color name="monsoon">#777777</color>
+    <color name="jumbo">#888888</color>
+    <color name="aluminum">#999999</color>
+    <color name="base">#AAAAAA</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Main List-->
+    <color name="online">@color/second_color</color>
+    <color name="offline">@color/primary</color>
+    <color name="bottom_1_background">#bbbbc1</color>
+    <color name="bottom_2_background">#f88b07</color>
+    <color name="bottom_3_background">#f52025</color>
+    <color name="bottom_text">#ffffff</color>
+
+    <!-- Float button-->
+    <color name="black_semi_transparent">#B2000000</color>
+    <!--<color name="background">#e5e5e5</color>-->
+    <color name="half_black">#808080</color>
+    <!--<color name="white">#fafafa</color>-->
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+
+</resources>
