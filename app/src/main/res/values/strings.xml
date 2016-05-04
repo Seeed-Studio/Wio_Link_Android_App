@@ -8,6 +8,7 @@
     <!-- common-->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
+    <string name="notification_error_ssl_cert_invalid">"You're accessing a page with an untrusted or invalid certificate. Do you want to continue?"</string>
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
