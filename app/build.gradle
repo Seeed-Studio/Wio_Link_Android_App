@@ -24,23 +24,24 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v13:23.1.1'
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     compile 'com.android.support:recyclerview-v7:23.1.1'
     compile 'com.ikimuhendis:ldrawer:0.1'
     compile 'com.esotericsoftware.yamlbeans:yamlbeans:1.09'
-    compile "com.google.zxing:android-integration:3.2.0"
+    compile 'com.google.zxing:android-integration:3.2.0'
     compile 'com.google.zxing:core:3.2.0'
-    compile "com.daimajia.swipelayout:library:1.1.8@aar"
+    compile 'com.daimajia.swipelayout:library:1.1.8@aar'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.getbase:floatingactionbutton:1.10.1'
-
+    compile files('libs/sun.misc.BASE64Decoder.jar')
 }

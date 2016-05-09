@@ -98,8 +98,7 @@
 
     <!--login-->
     <string-array name="server">
-        <item>International</item>
-        <item>China</item>
+        <item>Server</item>
         <item>Custom</item>
     </string-array>
 

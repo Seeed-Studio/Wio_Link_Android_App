@@ -28,8 +28,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
@@ -38,7 +40,6 @@ import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
-import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -151,7 +152,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         getSupportActionBar().setTitle(node.name);
 
-        user = ((MyApplication) SetupIotNodeActivity.this.getApplication()).getUser();
+        user = UserLogic.getInstance().getUser();
 
         mGroveListView = (RecyclerView) findViewById(R.id.grove_list);
         if (mGroveListView != null) {
@@ -778,7 +779,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
     private void getGrovesData() {
         IotApi api = new IotApi();
-        String token = user.user_key;
+        String token = user.token;
         api.setAccessToken(token);
         IotService iot = api.getService();
         iot.scanDrivers(new Callback<GroveDriverListResponse>() {

@@ -1,36 +1,29 @@
 package cc.seeed.iot.ui_login;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.User;
+import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.util.Common;
-import cc.seeed.iot.webapi.IotApi;
-import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.LoginResponse;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import cc.seeed.iot.util.CommonUrl;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     User user;
+    ProgressDialog dialog;
 
     @InjectView(R.id.input_email)
     EditText _emailText;
@@ -50,15 +43,15 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
+        _emailText.setText(App.getSp().getString("user_email", ""));
 
-        user = ((MyApplication) getApplication()).getUser();
-
+        user =  UserLogic.getInstance().getUser();
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                hideKeyboard();
+                hideKeyboard(_emailText);
                 login();
             }
         });
@@ -97,10 +90,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void refresh_layout() {
-        String ota_server_url = ((MyApplication) getApplication()).getOtaServerUrl();
-        if (ota_server_url.equals(Common.OTA_INTERNATIONAL_URL)) {
+        String ota_server_url = ((App) getApplication()).getOtaServerUrl();
+        if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
             _serverLink.setText(getString(R.string.serverOn) + " International" + getString(R.string.change));
-        } else if (ota_server_url.equals(Common.OTA_CHINA_URL)) {
+        } else if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
             _serverLink.setText(getString(R.string.serverOn) + " China" + getString(R.string.change));
         } else {
             _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_url + getString(R.string.change));
@@ -111,40 +104,22 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "Login");
 
         if (!validate()) {
-            onLoginFailed();
+        //    onLoginFailed();
             return;
         }
 
-        _loginButton.setEnabled(false);
+  //      _loginButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this,
+        dialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+        dialog.setIndeterminate(true);
+        dialog.setMessage("Authenticating...");
+        dialog.show();
 
-        //Implement your own authentication logic here.
-         attemptLogin(progressDialog);
-
-    }
-
-    public void onLoginSuccess(String email, LoginResponse loginResponse) {
-        _loginButton.setEnabled(true);
-
-        user.email = email;
-        user.user_key = loginResponse.token;
-        user.user_id = loginResponse.user_id;
-        ((MyApplication) getApplication()).setUser(user);
-        ((MyApplication) getApplication()).setLoginState(true);
-        Intent intent = new Intent(this, MainScreenActivity.class);
-        startActivity(intent);
-
-    }
-
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
-        _loginButton.setEnabled(true);
+        String email = _emailText.getText().toString();
+        String password = _passwordText.getText().toString();
+        App.getSp().edit().putString("user_email",email).commit();
+        UserLogic.getInstance().login(email, password);
     }
 
     public boolean validate() {
@@ -170,34 +145,25 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 
-    private void attemptLogin(final ProgressDialog progressDialog) {
-        final String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        IotApi api = new IotApi();
-        IotService iot = api.getService();
-        iot.userLogin(email, password, new Callback<LoginResponse>() {
-            @Override
-            public void success(LoginResponse loginResponse, Response response) {
-                onLoginSuccess(email, loginResponse);
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                _emailText.setError(error.getLocalizedMessage());
-                _emailText.requestFocus();
-                progressDialog.dismiss();
-                onLoginFailed();
-            }
-        });
+    @Override
+    public String[] monitorEvents() {
+        return new String[]{Cmd_UserLogin};
     }
 
-    private void hideKeyboard() {
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
+    @Override
+    public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
+        if (Cmd_UserLogin.equals(event)) {
+            if (dialog != null){
+                dialog.dismiss();
+            }
+            if (ret) {
+                Intent intent = new Intent(this, MainScreenActivity.class);
+                startActivity(intent);
+                finish();
+            }else {
+                App.showToastShrot(errInfo);
+            }
+        }
 
-        inputManager.hideSoftInputFromWindow(_loginButton.getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }

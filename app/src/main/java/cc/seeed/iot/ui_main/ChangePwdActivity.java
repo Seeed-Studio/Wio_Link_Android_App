@@ -15,16 +15,15 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.User;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.LoginResponse;
 import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public class ChangePwdActivity extends AppCompatActivity {
     private static final String TAG = "ChangePwdActivity";
@@ -51,7 +50,7 @@ public class ChangePwdActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Change password");
 
-        user = ((MyApplication) getApplication()).getUser();
+        user =  UserLogic.getInstance().getUser();
 
 //        _savePwdButton = (Button) findViewById(R.id.btn_save);
 
@@ -106,7 +105,7 @@ public class ChangePwdActivity extends AppCompatActivity {
 
         IotApi api = new IotApi();
         IotService iot = api.getService();
-        iot.userLogin(email, password, new Callback<LoginResponse>() {
+      /*  iot.userLogin(email, password, new Callback<LoginResponse>() {
             @Override
             public void success(LoginResponse loginResponse, Response response) {
                 changePwd(progressDialog);
@@ -121,13 +120,13 @@ public class ChangePwdActivity extends AppCompatActivity {
                 onChanePwdFailed();
 
             }
-        });
+        });*/
     }
 
     private void changePwd(final ProgressDialog progressDialog) {
 
         String password = _newPwdText.getText().toString();
-        String access_token = user.user_key;
+        String access_token = user.token;
         IotApi api = new IotApi();
         IotService iot = api.getService();
         api.setAccessToken(access_token);
@@ -150,9 +149,8 @@ public class ChangePwdActivity extends AppCompatActivity {
 
     public void onSavePwdSuccess(UserResponse userResponse) {
         _savePwdButton.setEnabled(true);
-        user.user_key = userResponse.token;
+        user.token = userResponse.token;
 //        user.user_id = userResponse.user_id;
-        ((MyApplication) getApplication()).setUser(user);
         Toast.makeText(getBaseContext(), "Password changed successfully.", Toast.LENGTH_LONG).show();
         _oldPwdText.setText("");
         _newPwdText.setText("");

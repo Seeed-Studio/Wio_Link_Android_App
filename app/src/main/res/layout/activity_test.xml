@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:gravity="center_vertical"
+       android:layout_marginTop="20dp"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
+
+       <EditText
+           android:id="@+id/mEtOrder"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textColor="#000000"/>
+
+       <Button
+           android:id="@+id/mBtnSend"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="发送指令"/>
+   </LinearLayout>
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:gravity="center_vertical"
+       android:layout_marginTop="10dp"
+       android:layout_height="wrap_content"
+       android:orientation="vertical">
+
+       <EditText
+           android:id="@+id/mEtRegular"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:textColor="#000000"/>
+
+       <Button
+           android:id="@+id/mBtnCheckOut"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="校验"/>
+   </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/mEtIpAdress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"/>
+
+        <Button
+            android:id="@+id/mBtngetIp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="获取IP"/>
+    </LinearLayout>
+</LinearLayout>

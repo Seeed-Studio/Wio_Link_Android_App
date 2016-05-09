@@ -35,7 +35,7 @@
 
     <color name="background">#ECEFF1</color>
 
-    <!-- Common -->
+    <!-- CommonUrl -->
     <color name="primary">#96141E</color>
     <color name="primary_dark">#8c141e</color>
     <color name="primary_darker">#82141e</color>

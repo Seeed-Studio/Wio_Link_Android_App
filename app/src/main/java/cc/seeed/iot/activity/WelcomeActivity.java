@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_splash;
+package cc.seeed.iot.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,15 +8,17 @@ import android.util.Log;
 
 import java.util.List;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 
-public class SplashActivity extends AppCompatActivity {
+public class WelcomeActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +49,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void choice() {
-        Boolean loginState = ((MyApplication) getApplication()).getLoginState();
-        if (loginState) {
+      //  Boolean loginState = ((App) getApplication()).getLoginState();
+
+        if (UserLogic.getInstance().isLogin()) {
             Intent intent = new Intent(this, MainScreenActivity.class);
             startActivity(intent);
         } else {

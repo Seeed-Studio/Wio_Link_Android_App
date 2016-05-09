@@ -2,21 +2,25 @@ package cc.seeed.iot;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.Gravity;
+import android.widget.Toast;
 
-import cc.seeed.iot.util.User;
-import cc.seeed.iot.util.Common;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.webapi.IotApi;
 
 /**
  * Created by tenwong on 15/7/9.
  */
-public class MyApplication extends com.activeandroid.app.Application {
-    private SharedPreferences sp;
-    private User user = new User();
+public class App extends com.activeandroid.app.Application {
+    public static App sApp;
+    private static SharedPreferences sp;
     private String ota_server_url;
-    private String exchange_server_url;
+//    private String exchange_server_url;
     private String ota_server_ip;
-    private String exchange_server_ip;
+//    private String exchange_server_ip;
 
     /**
      * into smartconfig state
@@ -34,23 +38,53 @@ public class MyApplication extends com.activeandroid.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        sApp = this;
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
-        user.email = sp.getString("userName", "awong1900@163.com");
-        user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
-        ota_server_url = sp.getString("ota_server_url", Common.OTA_INTERNATIONAL_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
-        exchange_server_url = sp.getString("exchange_server_url", Common.EXCHANGE_INTERNATIONAL_URL); //https://cn.iot.seeed.cc/v1  //"https://iot.seeed.cc/v1";
-        ota_server_ip = sp.getString("ota_server_ip", Common.OTA_INTERNATIONAL_IP);
-        exchange_server_ip = sp.getString("exchange_server_ip", Common.EXCHANGE_INTERNATIONAL_IP);
+     //   user.email = sp.getString("userName", "awong1900@163.com");
+     //   user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
+        ota_server_url = sp.getString("ota_server_url", CommonUrl.OTA_SERVER_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
+        ota_server_ip = sp.getString("ota_server_ip", CommonUrl.OTA_SERVER_IP);
         configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);
         firstUseState = sp.getBoolean("firstUseState", true);
 
         init();
+        getIpAddress();
+    }
+
+    /**
+     * 根据域名解析ip
+     */
+    public void getIpAddress() {
+      if (ota_server_url.equals( CommonUrl.OTA_SERVER_URL)){
+          new Thread(new Runnable() {
+              @Override
+              public void run() {
+                  InetAddress address = null;
+                  try {
+                      address = InetAddress.getByName(CommonUrl.OTA_SERVER_URL);
+                  } catch (UnknownHostException e) {
+                      e.printStackTrace();
+                  }
+                  if (address != null ) {
+                      getSp().edit().putString("ota_server_ip", address.getHostAddress()).commit();
+                  }
+              }
+          }).start();
+      }
 
     }
 
     private void init() {
         IotApi.SetServerUrl(ota_server_url);
+    }
+
+    public static App getApp() {
+        return sApp;
+    }
+
+    public static SharedPreferences getSp() {
+        return sp;
     }
 
     public Boolean getLoginState() {
@@ -64,6 +98,18 @@ public class MyApplication extends com.activeandroid.app.Application {
         editor.apply();
     }
 
+    public static void showToastShrot(String str) {
+        Toast toast = Toast.makeText(sApp, str, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+    public static void showToastLong(String str) {
+        Toast toast = Toast.makeText(sApp, str, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
     public Boolean getFirstUseState() {
         return firstUseState;
     }
@@ -75,17 +121,17 @@ public class MyApplication extends com.activeandroid.app.Application {
         editor.apply();
     }
 
-    public User getUser() {
+  /*  public User getUser() {
         return user;
-    }
+    }*/
 
-    public void setUser(User user) {
+  /*  public void setUser(User user) {
         this.user = user;
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("userName", user.email);
         editor.putString("userToken", user.user_key);
         editor.apply();
-    }
+    }*/
 
     public String getOtaServerUrl() {
         return ota_server_url;
@@ -98,6 +144,7 @@ public class MyApplication extends com.activeandroid.app.Application {
         editor.putString("ota_server_url", ota_server_url);
         editor.apply();
     }
+/*
 
     public String getExchangeServerUrl() {
         return exchange_server_url;
@@ -109,6 +156,7 @@ public class MyApplication extends com.activeandroid.app.Application {
         editor.putString("exchange_server_url", exchange_server_url);
         editor.apply();
     }
+*/
 
     public String getOtaServerIP() {
         return ota_server_ip;
@@ -119,21 +167,6 @@ public class MyApplication extends com.activeandroid.app.Application {
         SharedPreferences.Editor editor = sp.edit();
         editor.putString("ota_server_ip", ota_server_ip);
         editor.apply();
-    }
-
-    public String getExchangeServerIP() {
-        return exchange_server_ip;
-    }
-
-    public void setExchangeServerIP(String exchange_server_ip) {
-        this.exchange_server_ip = exchange_server_ip;
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("exchange_server_ip", exchange_server_ip);
-        editor.apply();
-    }
-
-    public Boolean getConfigState() {
-        return configState;
     }
 
     public void setConfigState(Boolean configState) {

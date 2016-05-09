@@ -13,10 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.Constant;
-import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.NodeResponse;
@@ -92,8 +93,8 @@ public class GoReadyActivity extends AppCompatActivity {
         mProgressBar.setMessage("connect server...");
         mProgressBar.show();
         IotApi api = new IotApi();
-        User user = ((MyApplication) getApplication()).getUser();
-        api.setAccessToken(user.user_key);
+        User user = UserLogic.getInstance().getUser();
+        api.setAccessToken(user.token);
         IotService iot = api.getService();
         iot.nodesCreate(node_name, board, new Callback<NodeResponse>() {
                     @Override

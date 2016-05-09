@@ -17,10 +17,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.DBHelper;
-import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
@@ -61,8 +62,8 @@ public class NodePreferenceFragment extends PreferenceFragment {
         context = getActivity().getApplication();
         String node_sn = getArguments().getString("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
-        ota_url = ((MyApplication) getActivity().getApplication()).getOtaServerUrl();
-        ota_ip = ((MyApplication) getActivity().getApplication()).getOtaServerIP();
+        ota_url = ((App) getActivity().getApplication()).getOtaServerUrl();
+        ota_ip = ((App) getActivity().getApplication()).getOtaServerIP();
         if (node.dataxserver == null)
             node.dataxserver = ota_url;
 
@@ -182,8 +183,8 @@ public class NodePreferenceFragment extends PreferenceFragment {
     private void nodeRename(final Node node, String newName, final EditTextPreference ep_name) {
         ep_name.setEnabled(false);
         IotApi api = new IotApi();
-        User user = ((MyApplication) getActivity().getApplication()).getUser();
-        api.setAccessToken(user.user_key);
+        User user =  UserLogic.getInstance().getUser();
+        api.setAccessToken(user.token);
         final IotService iot = api.getService();
         iot.nodesRename(newName, node.node_sn, new Callback<SuccessResponse>() {
             @Override

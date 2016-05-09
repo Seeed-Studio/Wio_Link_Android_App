@@ -44,8 +44,11 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.TestActivity;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
@@ -53,10 +56,9 @@ import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
-import cc.seeed.iot.util.Common;
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
-import cc.seeed.iot.util.User;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -131,13 +133,13 @@ public class MainScreenActivity extends AppCompatActivity
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
         if (headerLayout != null) {
             mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
-            if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_CHINA_URL)) {
+            if (((App) getApplication()).getOtaServerUrl().equals(CommonUrl.OTA_SERVER_URL)) {
                 mEmail.setText(user.email + " (China)");
-            } else if (((MyApplication) getApplication()).getOtaServerUrl().equals(Common.OTA_INTERNATIONAL_URL)) {
+            } else if (((App) getApplication()).getOtaServerUrl().equals(CommonUrl.OTA_SERVER_URL)) {
                 mEmail.setText(user.email + " (International)");
             } else
                 mEmail.setText(user.email + " (Customer)\n" +
-                        ((MyApplication) getApplication()).getOtaServerUrl());
+                        ((App) getApplication()).getOtaServerUrl());
         }
 
 
@@ -177,7 +179,7 @@ public class MainScreenActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MyApplication) getApplication()).setConfigState(true);
+                ((App) getApplication()).setConfigState(true);
                 Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
                 startActivity(intent);
             }
@@ -195,9 +197,9 @@ public class MainScreenActivity extends AppCompatActivity
 
     private void initData() {
 
-        user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
+        user = UserLogic.getInstance().getUser();
         nodes = DBHelper.getNodesAll();
-        firstUseState = ((MyApplication) MainScreenActivity.this.getApplication()).getFirstUseState();
+        firstUseState = ((App) MainScreenActivity.this.getApplication()).getFirstUseState();
 
         mHandler = new Handler() {
             @Override
@@ -210,7 +212,7 @@ public class MainScreenActivity extends AppCompatActivity
                         break;
                     case MESSAGE_GROVE_LIST_COMPLETE:
                         mProgressDialog.dismiss();
-                        ((MyApplication) MainScreenActivity.this.getApplication()).setFirstUseState(false);
+                        ((App) MainScreenActivity.this.getApplication()).setFirstUseState(false);
                         break;
                     case MESSAGE_NODE_LIST_START:
                         mProgressDialog.setMessage("update wio link...");
@@ -296,7 +298,7 @@ public class MainScreenActivity extends AppCompatActivity
                             }
                             break;
 //                            case R.id.nav_smartconfig: {
-//                                ((MyApplication) getApplication()).setConfigState(false);
+//                                ((App) getApplication()).setConfigState(false);
 //                                Intent intent = new Intent(MainScreenActivity.this,
 //                                        GoReadyActivity.class);
 //                                startActivity(intent);
@@ -315,14 +317,19 @@ public class MainScreenActivity extends AppCompatActivity
                             }
                             break;
                             case R.id.nav_logout: {
-                                ((MyApplication) getApplication()).setLoginState(false);
-                                ((MyApplication) getApplication()).setFirstUseState(true);
+                                //   ((App) getApplication()).setLoginState(false);
+                                UserLogic.getInstance().logOut();
+                                ((App) getApplication()).setFirstUseState(true);
                                 DBHelper.delNodesAll();
                                 DBHelper.delGrovesAll();
                                 PinConfigDBHelper.delPinConfigAll();
-                                Intent intent = new Intent(MainScreenActivity.this,
-                                        SetupActivity.class);
+                                Intent intent = new Intent(MainScreenActivity.this, SetupActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                            break;
+                            case R.id.nav_test: {
+                                Intent intent = new Intent(MainScreenActivity.this, TestActivity.class);
                                 startActivity(intent);
                             }
                             break;
@@ -346,7 +353,7 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     private void setupActivity(String board) {
-        ((MyApplication) getApplication()).setConfigState(true);
+        ((App) getApplication()).setConfigState(true);
         Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
         intent.putExtra("board", board);
         startActivity(intent);
@@ -425,8 +432,8 @@ public class MainScreenActivity extends AppCompatActivity
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
-                User user = ((MyApplication) MainScreenActivity.this.getApplication()).getUser();
-                api.setAccessToken(user.user_key);
+                User user =  user = UserLogic.getInstance().getUser();
+                api.setAccessToken(user.token);
                 final IotService iot = api.getService();
                 iot.nodesDelete(node.node_sn, new Callback<SuccessResponse>() {
                     @Override
@@ -488,7 +495,7 @@ public class MainScreenActivity extends AppCompatActivity
 
     private void getNodeList() {
         IotApi api = new IotApi();
-        api.setAccessToken(user.user_key);
+        api.setAccessToken(user.token);
         final IotService iot = api.getService();
         iot.nodesList(new Callback<NodeListResponse>() {
             @Override
@@ -564,7 +571,7 @@ public class MainScreenActivity extends AppCompatActivity
 
     private void getGrovesData() {
         IotApi api = new IotApi();
-        String token = user.user_key;
+        String token = user.token;
         api.setAccessToken(token);
         IotService iot = api.getService();
         iot.scanDrivers(new Callback<GroveDriverListResponse>() {

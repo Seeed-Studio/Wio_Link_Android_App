@@ -15,11 +15,12 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.User;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.util.Common;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.UserResponse;
@@ -48,7 +49,7 @@ public class SignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ButterKnife.inject(this);
 
-        user = ((MyApplication) getApplication()).getUser();
+        user = UserLogic.getInstance().getUser();
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,10 +82,10 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void refresh_layout() {
-        String ota_server_ip = ((MyApplication) getApplication()).getOtaServerIP();
-        if (ota_server_ip.equals(Common.OTA_INTERNATIONAL_IP)) {
+        String ota_server_ip = ((App) getApplication()).getOtaServerIP();
+        if (ota_server_ip.equals(CommonUrl.OTA_SERVER_IP)) {
             _serverLink.setText(getString(R.string.serverOn) + " International" + getString(R.string.change));
-        } else if (ota_server_ip.equals(Common.OTA_CHINA_IP)) {
+        } else if (ota_server_ip.equals(CommonUrl.OTA_SERVER_IP)) {
             _serverLink.setText(getString(R.string.serverOn) + " China" + getString(R.string.change));
         } else {
             _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_ip + getString(R.string.change));
@@ -115,10 +116,10 @@ public class SignupActivity extends AppCompatActivity {
     public void onSignupSuccess(String email, UserResponse userResponse) {
         _signupButton.setEnabled(true);
         user.email = email;
-        user.user_key = userResponse.token;
+        user.token = userResponse.token;
 //        user.user_id = userResponse.user_id;
-        ((MyApplication) getApplication()).setUser(user);
-        ((MyApplication) getApplication()).setLoginState(true);
+       // ((App) getApplication()).setUser(user);
+        ((App) getApplication()).setLoginState(true);
         Intent intent = new Intent(this, MainScreenActivity.class);
         startActivity(intent);
     }

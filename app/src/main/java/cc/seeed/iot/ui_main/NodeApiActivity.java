@@ -21,7 +21,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
@@ -152,14 +152,14 @@ public class NodeApiActivity extends AppCompatActivity {
 
     private String getApiUrl() {
         String url;
-        String ota_server_url = ((MyApplication) NodeApiActivity.this.getApplication()).getOtaServerUrl();
+        String ota_server_url = ((App) NodeApiActivity.this.getApplication()).getOtaServerUrl();
         String server_endpoint = ota_server_url + RESOURCE;
         server_endpoint = server_endpoint.replace("https", "http");
         String node_key = node.node_key;
         String dataxserver = node.dataxserver;
         if (dataxserver == null)
             dataxserver = ota_server_url;
-//        if (dataxserver.equals(Common.OTA_CHINA_URL) || dataxserver.equals(Common.OTA_INTERNATIONAL_URL))
+//        if (dataxserver.equals(CommonUrl.OTA_SERVER_URL) || dataxserver.equals(CommonUrl.OTA_INTERNATIONAL_URL))
 //            url = server_endpoint + "access_token=" + node_key;
 //        else
         url = server_endpoint + "access_token=" + node_key + "&data_server=" + dataxserver;

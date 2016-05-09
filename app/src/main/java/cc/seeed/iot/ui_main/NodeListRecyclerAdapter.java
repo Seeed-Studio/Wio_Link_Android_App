@@ -17,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
-import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.Node;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -74,8 +74,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
                 break;
         }
 
-        if (node.dataxserver == null || node.dataxserver.equals(Common.OTA_INTERNATIONAL_IP)
-                || node.dataxserver.equals(Common.OTA_CHINA_IP))
+        if (node.dataxserver == null || node.dataxserver.equals(CommonUrl.OTA_SERVER_IP)|| node.dataxserver.equals(CommonUrl.OTA_SERVER_IP))
             holder.mXserverView.setText("");
         else
             holder.mXserverView.setText(node.dataxserver);

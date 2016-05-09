@@ -26,9 +26,9 @@ import java.net.URL;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.Common;
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.webapi.IotApi;
 
 public class SelServerActivity extends AppCompatActivity {
@@ -73,13 +73,11 @@ public class SelServerActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         _serverSpinner.setAdapter(adapter);
 
-        String ota_server_url = ((MyApplication) getApplication()).getOtaServerUrl();
-        if (ota_server_url.equals(Common.OTA_INTERNATIONAL_URL)) {
+        String ota_server_url = ((App) getApplication()).getOtaServerUrl();
+        if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
             _serverSpinner.setSelection(0, true);
-        } else if (ota_server_url.equals(Common.OTA_CHINA_URL)) {
+        }  else {
             _serverSpinner.setSelection(1, true);
-        } else {
-            _serverSpinner.setSelection(2, true);
             _inputLayout.setVisibility(View.VISIBLE);
             _serverIpText.setText(ota_server_url);
         }
@@ -92,9 +90,6 @@ public class SelServerActivity extends AppCompatActivity {
                         _inputLayout.setVisibility(View.GONE);
                         break;
                     case 1:
-                        _inputLayout.setVisibility(View.GONE);
-                        break;
-                    case 2:
                         _inputLayout.setVisibility(View.VISIBLE);
                         _serverIpText.setSelection(_serverIpText.getText().length());
                         _serverIpText.setError("e.g. https://192.168.31.2 or https://iot.seeed.cc");
@@ -128,18 +123,12 @@ public class SelServerActivity extends AppCompatActivity {
         switch (_serverSpinner.getSelectedItemPosition()) {
             default:
             case 0:
-                ota_server_ip = Common.OTA_INTERNATIONAL_IP;
-                ota_server_url = Common.OTA_INTERNATIONAL_URL;
+                ota_server_ip = CommonUrl.OTA_SERVER_IP;
+                ota_server_url = CommonUrl.OTA_SERVER_URL;
                 saveUrlAndIp(ota_server_url, ota_server_ip);
                 onSaveSuccess();
                 break;
             case 1:
-                ota_server_ip = Common.OTA_CHINA_IP;
-                ota_server_url = Common.OTA_CHINA_URL;
-                saveUrlAndIp(ota_server_url, ota_server_ip);
-                onSaveSuccess();
-                break;
-            case 2:
 
                 ota_server_url = _serverIpText.getText().toString();
 
@@ -209,8 +198,8 @@ public class SelServerActivity extends AppCompatActivity {
     }
 
     private void saveUrlAndIp(String ota_server_url, String ota_server_ip) {
-        ((MyApplication) getApplication()).setOtaServerIP(ota_server_ip);
-        ((MyApplication) getApplication()).setOtaServerUrl(ota_server_url);
+        ((App) getApplication()).setOtaServerIP(ota_server_ip);
+        ((App) getApplication()).setOtaServerUrl(ota_server_url);
     }
 
 

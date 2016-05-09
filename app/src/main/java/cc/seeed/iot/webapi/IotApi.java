@@ -40,20 +40,26 @@ public class IotApi {
         iot_url = url;
     }
 
+    public IotApi(String url) {
+
+        Executor httpExecutor = Executors.newSingleThreadExecutor();
+        MainThreadExecutor callbackExecutor = new MainThreadExecutor();
+        mIotService = init(httpExecutor, callbackExecutor,url);
+    }
     public IotApi() {
 
         Executor httpExecutor = Executors.newSingleThreadExecutor();
         MainThreadExecutor callbackExecutor = new MainThreadExecutor();
-        mIotService = init(httpExecutor, callbackExecutor);
+        mIotService = init(httpExecutor, callbackExecutor,iot_url);
     }
 
 
-    private IotService init(Executor httpExecutor, Executor callbackExecutor) {
+    private IotService init(Executor httpExecutor, Executor callbackExecutor, String url) {
         OkHttpClient client = getUnsafeOkHttpClient();
         final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .setExecutors(httpExecutor, callbackExecutor)
-                .setEndpoint(iot_url)
+                .setEndpoint(url)
                 .setRequestInterceptor(new WebApiAuthenticator())
                 .setClient(new OkClient(client))
                 .setErrorHandler(new CustomErrorHandler())

@@ -25,9 +25,11 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.User;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.UserLogic;
+import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.webapi.IotApi;
@@ -117,22 +119,64 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
     @Override
     public void onClick(View v) {
         if (v == mConnectBtnView) {
-            String password = mPasswordView.getText().toString();
+            final String password = mPasswordView.getText().toString();
             node_name = mNodeNameView.getText().toString();
             if (node_name.isEmpty()) {
                 mNodeNameView.setError("Node name is empty");
                 return;
             }
-            String ota_server_ip = ((MyApplication) getApplication()).getOtaServerIP();
-            String exchange_server_ip = ota_server_ip;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    udpClient = new ConfigUdpSocket();
+                    udpClient.setSoTimeout(10000); //1s timeout
+                    udpClient.sendData("VERSION", "192.168.4.1");
+                    for (int i = 0; i < 3; i++) {
+                        try {
+                            byte[] bytes = udpClient.receiveData();
+                            String resurt = new String(bytes);
+                            if (resurt != null && resurt.length() >= 3) {
+                                if (resurt.substring(0, 3).equals("1.1")) {
+                                    MLog.d(this, "get version success: " + new String(bytes));
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String ota_server_ip = ((App) getApplication()).getOtaServerIP();
+                                            String exchange_server_ip = ota_server_ip;
 
-            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
-                    node_key + "\t" + node_sn + "\t" + exchange_server_ip + "\t"
-                    + ota_server_ip + "\t";
-
-            Log.i(TAG, "cmd_connect: " + cmd_connect);
-            Log.i(TAG, "AP ip: " + AP_IP);
-            new SetNodeSn().execute(cmd_connect, AP_IP);
+                                            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
+                                                    node_key + "\t" + node_sn + "\t" + exchange_server_ip + "\t"
+                                                    + ota_server_ip + "\t";
+                                            Log.i(TAG, "cmd_connect: " + cmd_connect);
+                                            Log.i(TAG, "AP ip: " + AP_IP);
+                                            new SetNodeSn().execute(cmd_connect, AP_IP);
+                                        }
+                                    });
+                                    break;
+                                } else if (resurt.substring(0, 3).equals("1.2")) {
+                                    MLog.d(this, "get version success: " + new String(bytes));
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            String ota_server_url = ((App) getApplication()).getOtaServerUrl();
+                                            String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
+                                                    node_key + "\t" + node_sn + "\t" + ota_server_url + "\t"
+                                                    + ota_server_url + "\t";
+                                            Log.i(TAG, "cmd_connect: " + cmd_connect);
+                                            Log.i(TAG, "AP ip: " + AP_IP);
+                                            new SetNodeSn().execute(cmd_connect, AP_IP);
+                                        }
+                                    });
+                                }
+                            }
+                        } catch (SocketTimeoutException e) {
+                            MLog.d(this, "get version fail");
+                        } catch (IOException e) {
+                            MLog.d(this, "get version fail");
+                        }
+                    }
+                }
+            }).start();
         }
     }
 
@@ -197,8 +241,8 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
         protected Boolean doInBackground(Void... params) {
             for (int i = 0; i < 30; i++) {
                 IotApi api = new IotApi();
-                User user = ((MyApplication) getApplication()).getUser();
-                api.setAccessToken(user.user_key);
+                User user = UserLogic.getInstance().getUser();
+                api.setAccessToken(user.token);
                 IotService iot = api.getService();
                 iot.nodesList(new Callback<NodeListResponse>() {
                     @Override
@@ -224,7 +268,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                publishProgress(30-i);
+                publishProgress(30 - i);
             }
             return state_online;
         }
@@ -270,8 +314,8 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             mProgressBar.setMessage("Setting Wio name...");
             mProgressBar.show();
             IotApi api = new IotApi();
-            User user = ((MyApplication) getApplication()).getUser();
-            api.setAccessToken(user.user_key);
+            User user =  UserLogic.getInstance().getUser();
+            api.setAccessToken(user.token);
             IotService iot = api.getService();
             iot.nodesRename(node_name, node_sn, new Callback<SuccessResponse>() {
                 @Override

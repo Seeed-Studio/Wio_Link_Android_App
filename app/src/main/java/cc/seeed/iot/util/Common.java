@@ -4,16 +4,13 @@ package cc.seeed.iot.util;
  * Created by tenwong on 15/10/20.
  */
 public class Common {
-    public static String OTA_CHINA_URL = "https://cn.iot.seeed.cc";
-    public static String OTA_INTERNATIONAL_URL = "https://iot.seeed.cc";
 
-    public static String OTA_CHINA_IP = "120.25.216.117";
-    public static String OTA_INTERNATIONAL_IP = "45.79.4.239";
 
-    public static String EXCHANGE_CHINA_URL = "https://cn.iot.seeed.cc";
-    public static String EXCHANGE_INTERNATIONAL_URL = "https://iot.seeed.cc";
+        public static final String WioLink_Source = "4";
+        public static final String WioLink_AppId = "wiolink";
+        public static final String WioLink_AppKey = "MPP=tGjz</p5";
+        public static final String WioLink_Common = "seeed_wiolink";//加密，解密使用字段
 
-    public static String EXCHANGE_CHINA_IP = "120.25.216.117";
-    public static String EXCHANGE_INTERNATIONAL_IP = "45.79.4.239";
-
+        public static String API_GET_TOKEN_KEY = "seeed_wiolink_return_token_2016#0509";
+        public static String API_CHECK_TOKEN_KEY= "seeed_wiolink_check_token_2016#0509";
 }

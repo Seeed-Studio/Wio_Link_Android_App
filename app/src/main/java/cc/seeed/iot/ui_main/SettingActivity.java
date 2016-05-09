@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.R;
 
@@ -39,7 +39,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void initView() {
-        server_url = ((MyApplication) getApplication()).getOtaServerUrl();
+        server_url = ((App) getApplication()).getOtaServerUrl();
         mUrlView.setText(server_url);
         mUrlView.setEnabled(false);
         mChangeView.setText("Change");
@@ -81,7 +81,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void saveServerUrl(String s) {
-        ((MyApplication) getApplication()).setOtaServerUrl(s);
+        ((App) getApplication()).setOtaServerUrl(s);
         IotApi.SetServerUrl(s);
     }
 
