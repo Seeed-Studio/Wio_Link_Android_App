@@ -25,11 +25,10 @@ import cc.seeed.iot.webapi.model.GroverDriver;
 public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecyclerAdapter.MainViewHolder> {
     private List<GroverDriver> groves;
     private OnLongClickListener mOnLongClickListener;
+    private OnItemClickListener mItemClickListener;
     private Context context;
 
     SparseBooleanArray selector;
-    private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
-
 
     public interface OnLongClickListener {
         void onLongClick(View v, int position);
@@ -49,21 +48,28 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.grove_list_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.grove_list_item, parent, false);
 
         return new MainViewHolder(v, mOnLongClickListener);
     }
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
-        GroverDriver grove = groves.get(position);
+        final GroverDriver grove = groves.get(position);
         ImageView grove_image = holder.grove_image;
-        UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_no,
-                UrlImageViewHelper.CACHE_DURATION_INFINITE);
+        UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_no, UrlImageViewHelper.CACHE_DURATION_INFINITE);
         holder.mView.setPressed(selector.get(position, false));
         String name = grove.GroveName.replaceFirst("Grove[\\s_-]+", "");
         holder.mGroveNameView.setText(name);
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mItemClickListener != null){
+                    mItemClickListener.onItemClick(grove,position);
+                }
+            }
+        });
 
     }
 
@@ -100,7 +106,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
     }
 
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
+    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener, View.OnClickListener {
         private OnLongClickListener mOnLongClickListener;
         ImageView grove_image;
         TextView mGroveNameView;
@@ -125,6 +131,19 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
             }
             return true;
         }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.mItemClickListener = listener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(GroverDriver grove, int position);
     }
 
 }

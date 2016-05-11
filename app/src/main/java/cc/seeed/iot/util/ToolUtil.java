@@ -178,4 +178,8 @@ public class ToolUtil {
         }
         return false;
     }
+
+    public static final int dp2px(float dp, Resources res) {
+        return (int) (dp * res.getDisplayMetrics().density + 0.5f);
+    }
 }

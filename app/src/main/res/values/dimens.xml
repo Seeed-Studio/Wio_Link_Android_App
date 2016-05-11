@@ -12,6 +12,6 @@
     <dimen name="item_image_button_end_margin">12dp</dimen>
     <dimen name="civ_border_width">1dp</dimen>
 
-    <dimen name="grove_width">40dp</dimen>
+    <dimen name="grove_width">35dp</dimen>
 
 </resources>

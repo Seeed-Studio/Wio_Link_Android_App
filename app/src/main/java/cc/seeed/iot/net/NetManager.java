@@ -106,7 +106,13 @@ public class NetManager {
         });
     }
 
-
+    /**
+     * 走seeedstudiio 服务器
+     * @param uri
+     * @param cmd
+     * @param params
+     * @param callback
+     */
     public void postRequest(String uri, String cmd, RequestParams params, final INetCallback callback) {
 
         // LedShowNumberUrl = "https://cn.iot.seeed.cc/v1/node/Grove4Digit_UART/display_digits/0/" + angleStr + "?access_token=44b127d788c4069245ef591d0f6e0f9e";
@@ -249,7 +255,13 @@ public class NetManager {
         }
     }
 
-
+    /**
+     * 走wio link 服务器
+     * @param url
+     * @param cmd
+     * @param params
+     * @param callback
+     */
     public void post(String url, String cmd, RequestParams params, final INetCallback callback) {
 
         // LedShowNumberUrl = "https://cn.iot.seeed.cc/v1/node/Grove4Digit_UART/display_digits/0/" + angleStr + "?access_token=44b127d788c4069245ef591d0f6e0f9e";

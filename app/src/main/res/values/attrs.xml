@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsIndicatorColor" format="color" />
+        <attr name="pstsUnderlineColor" format="color" />
+        <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsUnderlineHeight" format="dimension" />
+        <attr name="pstsDividerPadding" format="dimension" />
+        <attr name="pstsTabPaddingLeftRight" format="dimension" />
+        <attr name="pstsScrollOffset" format="dimension" />
+        <attr name="pstsTabBackground" format="reference" />
+        <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsTextAllCaps" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="SlidingTabStrip">
+        <attr name="psIndicatorColor" format="color" />
+        <attr name="psUnderlineColor" format="color" />
+        <attr name="psDividerColor" format="color" />
+        <attr name="psIndicatorHeight" format="dimension" />
+        <attr name="psUnderlineHeight" format="dimension" />
+        <attr name="psDividerPadding" format="dimension" />
+        <attr name="psTabPaddingLeftRight" format="dimension" />
+        <attr name="psScrollOffset" format="dimension" />
+        <attr name="psTabBackground" format="reference" />
+        <attr name="psShouldExpand" format="boolean" />
+        <attr name="psTextAllCaps" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="CusFontView">
+        <attr name="cusFont" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomEditText">
+        <attr name="cusContentBgColor" format="color" />
+        <attr name="cusContentTextColor" format="color" />
+        <attr name="cusContentTextSize" format="dimension" />
+        <attr name="cusContentHintTextColor" format="color" />
+        <attr name="cusContentBgRes" format="reference" />
+        <attr name="cusWordsNumColor" format="color" />
+        <attr name="cusWordsNumMax" format="integer" />
+        <attr name="cusIsInputEmoji" format="boolean" />
+        <attr name="cusIsShowWordsNum" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="MixtureTextviewLayout">
+        <attr name="cusTextBgColor" format="color|reference" />
+        <attr name="cusTextColor" format="color" />
+        <attr name="cusTextSize" format="dimension" />
+    </declare-styleable>
+
+</resources>

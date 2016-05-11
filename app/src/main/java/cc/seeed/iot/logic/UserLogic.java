@@ -1,5 +1,7 @@
 package cc.seeed.iot.logic;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -85,33 +87,66 @@ public class UserLogic extends BaseLogic {
                         user = gson.fromJson(resp.data, User.class);
                         if (user != null) {
                             setToken();
-                          //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                            //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                             setUser(user);
                         } else {
-                          //  UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                            //  UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                  //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                    //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                 }
             }
         });
     }
 
-    public void setToken(){
+    public void regist(String email, String pwd) {
         RequestParams params = new RequestParams();
-     //   User user = UserLogic.getInstance().getUser();
-        if (user == null){
+
+        params.put("email", email);
+        params.put("password", pwd);
+        NetManager.getInstance().postRequest(CommonUrl.Hinge_User_Register, Cmd_UserRegiest, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+                    try {
+                        Gson gson = new Gson();
+                        user = gson.fromJson(resp.data, User.class);
+                        if (user != null) {
+                            setToken();
+                            //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                            setUser(user);
+                        } else {
+                            //  UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                }
+            }
+        });
+    }
+
+    public void setToken() {
+        RequestParams params = new RequestParams();
+        //   User user = UserLogic.getInstance().getUser();
+        if (user == null) {
             return;
+        }
+        if (!TextUtils.isEmpty(user.email) && !user.email.startsWith("testadmin")) {
+            params.put("token", user.email);
         }
 
         params.put("bind_id", user.userid);
         params.put("bind_region", "seeed");
         params.put("token", user.token);
         params.put("secret", "!@#$%^&*RG)))))))JM<==TTTT==>((((((&^HVFT767JJH");
-        NetManager.getInstance().post(CommonUrl.OTA_SERVER_URL+CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
+
+        NetManager.getInstance().post(CommonUrl.OTA_SERVER_URL + CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
             @Override
             public void onResp(Request req, Packet resp) {
                 if (resp.status) {

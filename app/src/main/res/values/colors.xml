@@ -35,6 +35,16 @@
 
     <color name="background">#ECEFF1</color>
 
+    <!-- SlidingTabStrip-->
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="activity_bg">#ffffff</color>
+
+    <!-- grove_filter_tag_bg-->
+    <color name="tag_check_normal">#ffffff</color>
+    <color name="tag_check_press">#f6f6f6</color>
+    <color name="tag_text_normal">#777777</color>
+    <color name="tag_text_press">#000000</color>
+
     <!-- CommonUrl -->
     <color name="primary">#96141E</color>
     <color name="primary_dark">#8c141e</color>

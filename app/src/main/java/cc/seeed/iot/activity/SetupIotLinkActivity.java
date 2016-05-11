@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_setnode;
+package cc.seeed.iot.activity;
 
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -28,11 +28,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.NodeApiActivity;
+import cc.seeed.iot.ui_setnode.GroveFilterRecyclerAdapter;
+import cc.seeed.iot.ui_setnode.GroveI2cListRecyclerAdapter;
+import cc.seeed.iot.ui_setnode.GroveListRecyclerAdapter;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;

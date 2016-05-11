@@ -5,6 +5,15 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_main2">Main2Activity</string>
 
+    <!-- 字体-->
+    <string name="Roboto_Thin">Roboto-Thin</string>
+    <string name="Roboto_Bold">Roboto-Bold</string>
+    <string name="Roboto_Italic">Roboto-Italic</string>
+    <string name="Roboto_Light">Roboto-Light</string>
+    <string name="Roboto_LightItalic">Roboto-LightItalic</string>
+    <string name="Roboto_Regular">Roboto-Regular</string>
+    <string name="Roboto_Medium">Roboto-Medium</string>
+
     <!-- common-->
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>

@@ -46,13 +46,14 @@ import java.util.List;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.SetupIotLinkActivity1;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
-import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
+import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;

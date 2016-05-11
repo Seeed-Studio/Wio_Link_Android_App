@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_setnode;
+package cc.seeed.iot.activity;
 
 import android.app.ProgressDialog;
 import android.content.ClipData;
@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,19 +19,31 @@ import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.NodeApiActivity;
+import cc.seeed.iot.ui_setnode.GroveFilterRecyclerAdapter;
+import cc.seeed.iot.ui_setnode.GroveI2cListRecyclerAdapter;
+import cc.seeed.iot.ui_setnode.GroveListRecyclerAdapter;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
@@ -40,6 +51,7 @@ import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -51,12 +63,12 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SetupIotNodeActivity extends AppCompatActivity
+public class SetupIotLinkActivity1 extends BaseActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
         View.OnClickListener, View.OnDragListener, View.OnLongClickListener,
         GroveI2cListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnLongClickListener {
 
-    private static final String TAG = "SetupIotNodeActivity";
+    private static final String TAG = "SetupIotLinkActivity";
     private static final String GROVE_REMOVE = "grove/remove";
     private static final String GROVE_ADD = "grove/add";
     private static final int ADD_I2C_GROVE = 0x00;
@@ -74,63 +86,200 @@ public class SetupIotNodeActivity extends AppCompatActivity
     RecyclerView mGroveI2cListView;
     GroveI2cListRecyclerAdapter mGroveI2cListAdapter;
 
-    RecyclerView mGroveListView;
     GroveListRecyclerAdapter mGroveListAdapter;
 
-    RecyclerView mGroveTypeListView;
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
+    @InjectView(R.id.grove_0)
+    ImageButton mIBGrove0;
+    @InjectView(R.id.grove_1)
+    ImageButton mIBGrove1;
+    @InjectView(R.id.grove_2)
+    ImageButton mIBGrove2;
+    @InjectView(R.id.grove_3)
+    ImageButton mIBGrove3;
+    @InjectView(R.id.grove_4)
+    ImageButton mIBGrove4;
+    @InjectView(R.id.grove_5)
+    ImageButton mIBGrove5;
+    @InjectView(R.id.grove_i2c_list)
+    RecyclerView groveI2cList;
+    @InjectView(R.id.set_link)
+    RelativeLayout setLink;
+    @InjectView(R.id.grove_selector)
+    RecyclerView mGroveTypeListView;
+    @InjectView(R.id.grove_list)
+    RecyclerView mGroveListView;
+    @InjectView(R.id.setup_iot_link)
+    LinearLayout setupIotLink;
+
+
     private List<GroverDriver> mGroveDrivers;
 
-    View mSetNodeLayout;
+    Map<String , List<GroverDriver>> GpioMap = new HashMap<>();
+    Map<String , List<GroverDriver>> AnalogMap = new HashMap<>();
+    Map<String , List<GroverDriver>> I2cMap = new HashMap<>();
+    Map<String , List<GroverDriver>> UartMap = new HashMap<>();
+
+    private List<Map<String,List<GroverDriver>>> mGroveGpioDrivers = new ArrayList<>();
+
     GrovePinsView mGrovePinsView;
     ProgressDialog mProgressDialog;
-    private ImageView mDragRemoveView;
+
+    int selectGrovePin = -1;
+    int Grove0 = 0;
+    int Grove1 = 1;
+    int Grove2 = 2;
+    int Grove3 = 3;
+    int Grove4 = 4;
+    int Grove5 = 5;
 
     private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setup_node);
-        View view = findViewById(R.id.setup_iot_node);
+        setContentView(R.layout.activity_setup_link_01);
+        ButterKnife.inject(this);
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCanceledOnTouchOutside(false);
-        mProgressDialog.setCancelable(false);
+//        mProgressDialog.setCancelable(false);
         mProgressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,
                 "OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 });
-//        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
+        initView();
+        initData();
+    }
 
-        mGroveDrivers = DBHelper.getGrovesAll();
-
+    private void initView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        mDragRemoveView = (ImageView) findViewById(R.id.grove_remove);
-        mDragRemoveView.setOnDragListener(this);
+        if (mGroveTypeListView != null) {
+            mGroveTypeListView.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            mGroveTypeListView.setLayoutManager(layoutManager);
+            setupGroveSelectorAdapter();
+        }
 
-        mSetNodeLayout = findViewById(R.id.set_node);
-        mSetNodeLayout.setOnClickListener(this);
+    }
 
-
+    private void initData() {
+        View view = findViewById(R.id.setup_iot_link);
+        mGroveDrivers = DBHelper.getGrovesAll();
+        user = UserLogic.getInstance().getUser();
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
+        getSupportActionBar().setTitle(node.name);
+
+        if (mGroveDrivers != null) {
+            for (GroverDriver driver : mGroveDrivers) {
+                if (driver.InterfaceType.equals(InterfaceType.GPIO)) {
+                    if (GpioMap.get(Constant.GroveType.All.getValue()) == null){
+                        GpioMap.put(Constant.GroveType.All.getValue(),new ArrayList<GroverDriver>());
+                    }
+                    GpioMap.get(Constant.GroveType.All.getValue()).add(driver);
+                    if (!driver.Writes.isEmpty()) {
+                        if (GpioMap.get(Constant.GroveType.OUTPUT.getValue()) == null){
+                            GpioMap.put(Constant.GroveType.OUTPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        GpioMap.get(Constant.GroveType.OUTPUT.getValue()).add(driver);
+                    }
+                    if (!driver.Reads.isEmpty()) {
+                        if (GpioMap.get(Constant.GroveType.INPUT.getValue()) == null){
+                            GpioMap.put(Constant.GroveType.INPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        GpioMap.get(Constant.GroveType.INPUT.getValue()).add(driver);
+                    }
+                    if (driver.HasEvent) {
+                        if (GpioMap.get(Constant.GroveType.EVENT.getValue()) == null){
+                            GpioMap.put(Constant.GroveType.EVENT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        GpioMap.get(Constant.GroveType.EVENT.getValue()).add(driver);
+                    }
+                } else if (driver.InterfaceType.equals(InterfaceType.ANALOG)) {
+                    if (AnalogMap.get(Constant.GroveType.All.getValue()) == null){
+                        AnalogMap.put(Constant.GroveType.All.getValue(),new ArrayList<GroverDriver>());
+                    }
+                    AnalogMap.get(Constant.GroveType.All.getValue()).add(driver);
+                    if (!driver.Writes.isEmpty()) {
+                        if (AnalogMap.get(Constant.GroveType.OUTPUT.getValue()) == null){
+                            AnalogMap.put(Constant.GroveType.OUTPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        AnalogMap.get(Constant.GroveType.OUTPUT.getValue()).add(driver);
+                    }
+                    if (!driver.Reads.isEmpty()) {
+                        if (AnalogMap.get(Constant.GroveType.INPUT.getValue()) == null){
+                            AnalogMap.put(Constant.GroveType.INPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        AnalogMap.get(Constant.GroveType.INPUT.getValue()).add(driver);
+                    }
+                    if (driver.HasEvent) {
+                        if (AnalogMap.get(Constant.GroveType.EVENT.getValue()) == null){
+                            AnalogMap.put(Constant.GroveType.EVENT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        AnalogMap.get(Constant.GroveType.EVENT.getValue()).add(driver);
+                    }
+                } else if (driver.InterfaceType.equals(InterfaceType.I2C)) {
+                    if (I2cMap.get(Constant.GroveType.All.getValue()) == null){
+                        I2cMap.put(Constant.GroveType.All.getValue(),new ArrayList<GroverDriver>());
+                    }
+                    I2cMap.get(Constant.GroveType.All.getValue()).add(driver);
+                    if (!driver.Writes.isEmpty()) {
+                        if (I2cMap.get(Constant.GroveType.OUTPUT.getValue()) == null){
+                            I2cMap.put(Constant.GroveType.OUTPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        I2cMap.get(Constant.GroveType.OUTPUT.getValue()).add(driver);
+                    }
+                    if (!driver.Reads.isEmpty()) {
+                        if (I2cMap.get(Constant.GroveType.INPUT.getValue()) == null){
+                            I2cMap.put(Constant.GroveType.INPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        I2cMap.get(Constant.GroveType.INPUT.getValue()).add(driver);
+                    }
+                    if (driver.HasEvent) {
+                        if (I2cMap.get(Constant.GroveType.EVENT.getValue()) == null){
+                            I2cMap.put(Constant.GroveType.EVENT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        I2cMap.get(Constant.GroveType.EVENT.getValue()).add(driver);
+                    }
+                } else if (driver.InterfaceType.equals(InterfaceType.UART)) {
+                    if (UartMap.get(Constant.GroveType.All.getValue()) == null){
+                        UartMap.put(Constant.GroveType.All.getValue(),new ArrayList<GroverDriver>());
+                    }
+                    UartMap.get(Constant.GroveType.All.getValue()).add(driver);
+                    if (!driver.Writes.isEmpty()) {
+                        if (UartMap.get(Constant.GroveType.OUTPUT.getValue()) == null){
+                            UartMap.put(Constant.GroveType.OUTPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        UartMap.get(Constant.GroveType.OUTPUT.getValue()).add(driver);
+                    }
+                    if (!driver.Reads.isEmpty()) {
+                        if (UartMap.get(Constant.GroveType.INPUT.getValue()) == null){
+                            UartMap.put(Constant.GroveType.INPUT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        UartMap.get(Constant.GroveType.INPUT.getValue()).add(driver);
+                    }
+                    if (driver.HasEvent) {
+                        if (UartMap.get(Constant.GroveType.EVENT.getValue()) == null){
+                            UartMap.put(Constant.GroveType.EVENT.getValue(),new ArrayList<GroverDriver>());
+                        }
+                        UartMap.get(Constant.GroveType.EVENT.getValue()).add(driver);
+                    }
+                }
+            }
+        }
+
+
         /**
          * fake node for test
          */
-//        node = new Node();
-//        node.board = Constant.WIO_NODE_V1_0;
-//        node.node_sn = "112233";
-//        node.name = "aa";
-//        node.online = true;
-//        node.node_key = "key1213";
-
         mGrovePinsView = new GrovePinsView(this, view, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
             pinView.setOnDragListener(this);
@@ -139,22 +288,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
         }
 
         pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
-        /**
-         * make fake pinConfig data
-         */
-//        PinConfig fake_pinConfig = new PinConfig();
-//        fake_pinConfig.interfaceType = InterfaceType.GPIO;
-//        fake_pinConfig.node_sn = "112233";
-//        fake_pinConfig.position = 0;
-//        fake_pinConfig.sku = "104990089";
-//        pinConfigs.add(fake_pinConfig);
-//        Log.e(TAG, "pinConfig" + pinConfigs.toString());
 
-        getSupportActionBar().setTitle(node.name);
-
-        user = UserLogic.getInstance().getUser();
-
-        mGroveListView = (RecyclerView) findViewById(R.id.grove_list);
         if (mGroveListView != null) {
             mGroveListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -163,6 +297,12 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mGroveListAdapter = new GroveListRecyclerAdapter(mGroveDrivers);
             mGroveListAdapter.setOnLongClickListener(this);
             mGroveListView.setAdapter(mGroveListAdapter);
+            mGroveListAdapter.setOnItemClickListener(new GroveListRecyclerAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(GroverDriver grove, int position) {
+                    App.showToastShrot("name: "+grove.GroveName+" id: "+grove.ID);
+                }
+            });
         }
 
         mGroveI2cListView = (RecyclerView) findViewById(R.id.grove_i2c_list);
@@ -176,18 +316,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
             mGroveI2cListView.setAdapter(mGroveI2cListAdapter);
         }
 
-        mGroveTypeListView = (RecyclerView) findViewById(R.id.grove_selector);
-        if (mGroveTypeListView != null) {
-            mGroveTypeListView.setHasFixedSize(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            mGroveTypeListView.setLayoutManager(layoutManager);
-            setupGroveSelectorAdapter();
-        }
-
         pinBadgeUpdateAll();
+    }
 
-        initData();
+    public void dataClassification(List<GroverDriver> driverList){
     }
 
     private void pinBadgeUpdateAll() {
@@ -206,7 +338,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
         }
     }
 
-    private void initData() {
+  /*  private void initData() {
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -251,9 +383,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
                     case MESSAGE_UPDATE_DONE: {
                         String message = (String) msg.obj;
-                        new AlertDialog.Builder(SetupIotNodeActivity.this)
+                        new AlertDialog.Builder(SetupIotLinkActivity1.this)
                                 .setTitle(R.string.update)
                                 .setMessage(message)
+                                .setCancelable(false)
                                 .setPositiveButton(R.string.ok, null)
                                 .show();
                     }
@@ -266,7 +399,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                 return Arrays.asList(tag.interfaceTypes).contains(InterfaceType.I2C);
             }
         };
-    }
+    }*/
 
     private void scrollI2cGroveListToEnd() {
         mGroveI2cListView.smoothScrollToPosition(mGroveI2cListAdapter.getItemCount() - 1);
@@ -294,7 +427,13 @@ public class SetupIotNodeActivity extends AppCompatActivity
     }
 
     private void setupGroveSelectorAdapter() {
-        mGroveTypeListAdapter = new GroveFilterRecyclerAdapter(new ArrayList<String>());
+        List<String> groveList = new ArrayList<>();
+        groveList.add("All");
+        groveList.add("INPUT");
+        groveList.add("OUTPUT");
+        groveList.add("GPIO");
+
+        mGroveTypeListAdapter = new GroveFilterRecyclerAdapter(groveList);
         mGroveTypeListAdapter.setOnItemClickListener(this);
         mGroveTypeListView.setAdapter(mGroveTypeListAdapter);
         mGroveTypeListAdapter.updateSelection(0);
@@ -337,7 +476,12 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
                     }
                 });
-                builder.create().show();
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+                params.width = ToolUtil.dp2px(200, getResources());
+                params.height = ToolUtil.dp2px(300, getResources());
+                dialog.getWindow().setAttributes(params);
                 return true;
             }
             updateNode(node.node_key, node_josn);
@@ -381,7 +525,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
                                       mProgressDialog.setMessage(otaStatusResponse.ota_msg);
                                       break;
                                   case "done":
-                                      if (SetupIotNodeActivity.this.isFinishing()) {
+                                      if (SetupIotLinkActivity1.this.isFinishing()) {
                                           return;
                                       }
                                       dismissProgressDialog();
@@ -467,9 +611,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         if (groveType.equals("All")) {
             updateGroveListAdapter(mGroveDrivers);
-        } else if (groveType.equals("Input")) {
+        } else if (groveType.equals("INPUT")) {
             updateGroveListAdapter(inputGroves);
-        } else if (groveType.equals("Output")) {
+        } else if (groveType.equals("OUTPUT")) {
             updateGroveListAdapter(outputGroves);
         } else if (groveType.equals("GPIO")) {
             updateGroveListAdapter(gpioGroves);
@@ -482,20 +626,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
         } else if (groveType.equals("EVENT")) {
             updateGroveListAdapter(eventGroves);
         }
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.grove_0:
-            case R.id.grove_1:
-                GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
-                int position = tag.position;
-                if (pinDeviceCount(position) > 1)
-                    displayI2cListView(position);
-                break;
-        }
     }
 
     @Override
@@ -503,6 +633,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.grove_0:
             case R.id.grove_1:
+            case R.id.grove_2:
+            case R.id.grove_3:
+            case R.id.grove_4:
+            case R.id.grove_5:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
                 if (pinDeviceCount(position) == 1) {
@@ -544,6 +678,10 @@ public class SetupIotNodeActivity extends AppCompatActivity
         switch (v.getId()) {
             case R.id.grove_0:
             case R.id.grove_1:
+            case R.id.grove_2:
+            case R.id.grove_3:
+            case R.id.grove_4:
+            case R.id.grove_5:
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED: {
                         if (!event.getClipDescription().hasMimeType(GROVE_ADD))
@@ -642,7 +780,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
                     }
                     case DragEvent.ACTION_DRAG_ENDED:
                         ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
-                        mDragRemoveView.setVisibility(View.INVISIBLE);
                 }
                 break;
             default:
@@ -714,7 +851,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
     }
 
     private void startDragRemove(View v) {
-        mDragRemoveView.setVisibility(View.VISIBLE);
 
         String label = "grove_remove";
         String[] mimeTypes = {GROVE_REMOVE};
@@ -759,7 +895,6 @@ public class SetupIotNodeActivity extends AppCompatActivity
             }
             break;
             case "I2cList": {
-                mDragRemoveView.setVisibility(View.VISIBLE);
 
                 String label = "grove_remove";
                 String[] mimeTypes = {GROVE_REMOVE};
@@ -806,6 +941,38 @@ public class SetupIotNodeActivity extends AppCompatActivity
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    @OnClick({R.id.grove_0, R.id.grove_1, R.id.grove_2, R.id.grove_3, R.id.grove_4, R.id.grove_5})
+    public void onClick(View view) {
+        GrovePinsView.Tag tag = (GrovePinsView.Tag) view.getTag();
+        int position = tag.position;
+        if (pinDeviceCount(position) > 1)
+            displayI2cListView(position);
+        switch (view.getId()) {
+            case R.id.grove_0:
+                App.showToastShrot("grove_0");
+                break;
+            case R.id.grove_1:
+                App.showToastShrot("grove_1");
+                break;
+            case R.id.grove_2:
+                App.showToastShrot("grove_2");
+                break;
+            case R.id.grove_3:
+                App.showToastShrot("grove_3");
+                break;
+            case R.id.grove_4:
+                App.showToastShrot("grove_4");
+                break;
+            case R.id.grove_5:
+                App.showToastShrot("grove_5");
+                break;
+        }
+    }
+
+    public void loadGrove(){
+       // mGroveTypeListAdapter.setData();
     }
 }
 

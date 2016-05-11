@@ -3,28 +3,32 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginRight="12dp"
     android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:foreground="?attr/selectableItemBackground"
     card_view:cardCornerRadius="4dp">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="120dp"
+        android:layout_height="164dp">
 
         <ImageView
             android:id="@+id/grove_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:layout_above="@+id/grove_text" />
 
         <TextView
             android:id="@+id/grove_text"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="44dp"
+            android:background="#215081"
+            android:maxLines="2"
             android:layout_alignParentBottom="true"
             android:gravity="center"
             tools:text="Grove-Temperature Humidity Pro" />
