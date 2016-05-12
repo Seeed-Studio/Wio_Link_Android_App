@@ -82,4 +82,7 @@
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
 
+    <!-- main menu-->
+    <color name="main_menu_item">#a5000000</color>
+
 </resources>

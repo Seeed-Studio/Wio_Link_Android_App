@@ -16,7 +16,7 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_login.ResetActivity;
+import cc.seeed.iot.ui_login.ResetPwd01Activity;
 import cc.seeed.iot.ui_login.SelServerActivity;
 import cc.seeed.iot.ui_login.SignupActivity;
 import cc.seeed.iot.ui_main.MainScreenActivity;
@@ -62,7 +62,7 @@ public class LoginAndRegistActivity extends BaseActivity {
         _forgotPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ResetActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ResetPwd01Activity.class);
                 startActivity(intent);
             }
         });

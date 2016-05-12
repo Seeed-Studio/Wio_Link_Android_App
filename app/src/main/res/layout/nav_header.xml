@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="172dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/second_color"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingLeft="35dp">
 
     <!--  app:placeholderImage="@mipmap/icon"-->
     <com.facebook.drawee.view.SimpleDraweeView
@@ -13,26 +13,32 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="54dp"
-        android:layout_marginLeft="47dp"
+        app:placeholderImage="@mipmap/icon"
         app:placeholderImageScaleType="fitXY"
         app:roundAsCircle="true"
         app:roundingBorderColor="#cacaca"
         app:roundingBorderWidth="1dp" />
-
 
     <cc.seeed.iot.view.FontTextView
         android:id="@+id/mTvEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:text="awong1900@163.com"/>
+        android:singleLine="true"
+        android:text="awong1900@163.com"
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:cusTextFont="@string/Roboto_Regular" />
 
     <cc.seeed.iot.view.FontTextView
         android:id="@+id/mTvDeviceNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:text="awong1900@163.com"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
+        android:layout_marginTop="1dp"
+        app:cusTextFont="@string/Roboto_Medium"
+        android:singleLine="true"
+        android:text="3 DEVICES"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#7dffffff"
+        android:textSize="14sp" />
 </LinearLayout>

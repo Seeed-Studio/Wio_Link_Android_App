@@ -92,8 +92,7 @@ public class ImgUtil {
             }else if (uuid.startsWith("http://")){
                 return Uri.parse(uuid);
             }
-//            return Uri.parse(ConstantUrl.Image_Prefix.getVal() + s);
-            return null;
+            return Uri.parse(CommonUrl.Image_Prefix.getVal() + s);
         } else {
             return null;
         }

@@ -1,5 +1,7 @@
 package cc.seeed.iot.logic;
 
+import android.text.TextUtils;
+
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -188,6 +190,10 @@ public class UserLogic extends BaseLogic {
      //   User user = UserLogic.getInstance().getUser();
         if (user == null){
             return;
+        }
+
+        if (!TextUtils.isEmpty(user.email) && !user.email.startsWith("testadmin")) {
+            params.put("email", user.email);
         }
 
         params.put("bind_id", user.userid);

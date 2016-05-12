@@ -36,29 +36,35 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
-import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
-import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.ImgUtil;
+import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -72,8 +78,6 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-//import android.support.design.widget.FloatingActionButton;
-
 public class MainScreenActivity extends AppCompatActivity
         implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener {
     private static final String TAG = "MainScreenActivity";
@@ -84,10 +88,21 @@ public class MainScreenActivity extends AppCompatActivity
     private static final int MESSAGE_NODE_CONFIG_COMPLETE = 0x04;
 
     private DrawerLayout mDrawerLayout;
+    private SimpleDraweeView mSDVAvatar;
+    private LinearLayout mLLUserInfo;
+    private FontTextView mTvEmail;
+    private FontTextView mTvDeviceNum;
+    private TextView mTvSupportDevices;
+    private TextView mTvFAQ;
+    private TextView mTvGetDevices;
+    private TextView mTvSetting;
+    private TextView mTVAbout;
+    private TextView mTvUpdateApp;
+    private NavigationView navigationView;
+
     //    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
     private NodeListRecyclerAdapter mAdapter;
-    private TextView mEmail;
     private ImageView mAddTip;
     private List<Node> nodes;
     private User user;
@@ -103,6 +118,7 @@ public class MainScreenActivity extends AppCompatActivity
 
         initData();
         initView();
+        initMenu();
 
         if (firstUseState) {
             Message message = Message.obtain();
@@ -122,20 +138,6 @@ public class MainScreenActivity extends AppCompatActivity
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setTitle(R.string.app_name);
         }
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-
-        }
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
-        if (headerLayout != null) {
-            mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
-            mEmail.setText(user.email);
-        }
-
 
         mRecyclerView = (RecyclerView) findViewById(R.id.listview);
         if (mRecyclerView != null) {
@@ -187,6 +189,41 @@ public class MainScreenActivity extends AppCompatActivity
         mProgressDialog = new ProgressDialog(this);
 
         mAddTip = (ImageView) findViewById(R.id.add_node_tip);
+    }
+
+    private void initMenu() {
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            View headerLayout = navigationView.inflateHeaderView(R.layout.menu_layout);
+            if (headerLayout != null) {
+                mLLUserInfo = (LinearLayout) headerLayout.findViewById(R.id.mLLUserInfo);
+                mTvEmail = (FontTextView) headerLayout.findViewById(R.id.mTvEmail);
+                mSDVAvatar = (SimpleDraweeView) headerLayout.findViewById(R.id.mSDVAvatar);
+                mTvDeviceNum = (FontTextView) headerLayout.findViewById(R.id.mTvDeviceNum);
+                mTvSupportDevices = (TextView) headerLayout.findViewById(R.id.mTvSupportDevices);
+                mTvFAQ = (TextView) headerLayout.findViewById(R.id.mTvFAQ);
+                mTvGetDevices = (TextView) headerLayout.findViewById(R.id.mTvGetDevices);
+                mTvSetting = (TextView) headerLayout.findViewById(R.id.mTvSetting);
+                mTVAbout = (TextView) headerLayout.findViewById(R.id.mTVAbout);
+                mTvUpdateApp = (TextView) headerLayout.findViewById(R.id.mTvUpdateApp);
+
+                mTvEmail.setText(user.email);
+                ImgUtil.displayImg(mSDVAvatar, user.avater, R.mipmap.icon);
+                mLLUserInfo.setOnClickListener(this);
+                mTvEmail.setOnClickListener(this);
+                mSDVAvatar.setOnClickListener(this);
+                mTvDeviceNum.setOnClickListener(this);
+                mTvSupportDevices.setOnClickListener(this);
+                mTvFAQ.setOnClickListener(this);
+                mTvGetDevices.setOnClickListener(this);
+                mTvSetting.setOnClickListener(this);
+                mTVAbout.setOnClickListener(this);
+                mTvUpdateApp.setOnClickListener(this);
+            }
+        }
+
     }
 
     private void initData() {
@@ -286,8 +323,7 @@ public class MainScreenActivity extends AppCompatActivity
                                 menuItem.setChecked(true);
                                 break;
                             case R.id.nav_grove_list: {
-                                Intent intent = new Intent(MainScreenActivity.this,
-                                        GrovesActivity.class);
+                                Intent intent = new Intent(MainScreenActivity.this,GrovesActivity.class);
                                 startActivity(intent);
                             }
                             break;
@@ -299,14 +335,12 @@ public class MainScreenActivity extends AppCompatActivity
 //                            }
 //                            break;
                             case R.id.nav_setting: {
-                                Intent intent = new Intent(MainScreenActivity.this,
-                                        MainSettingActivity.class);
+                                Intent intent = new Intent(MainScreenActivity.this,MainSettingActivity.class);
                                 startActivity(intent);
                             }
                             break;
                             case R.id.nav_about: {
-                                Intent intent = new Intent(MainScreenActivity.this,
-                                        AboutActivity.class);
+                                Intent intent = new Intent(MainScreenActivity.this,AboutActivity.class);
                                 startActivity(intent);
                             }
                             break;
@@ -336,12 +370,37 @@ public class MainScreenActivity extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.setup_link:
                 setupActivity(Constant.WIO_LINK_V1_0);
                 break;
             case R.id.setup_node:
                 setupActivity(Constant.WIO_NODE_V1_0);
+                break;
+            case R.id.mSDVAvatar:
+                break;
+            case R.id.mTvEmail:
+                break;
+            case R.id.mTvDeviceNum:
+                break;
+            case R.id.mTvSupportDevices:
+                intent = new Intent(MainScreenActivity.this,GrovesActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mTvFAQ:
+                break;
+            case R.id.mTvGetDevices:
+                break;
+            case R.id.mTvSetting:
+                intent = new Intent(MainScreenActivity.this,MainSettingActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mTVAbout:
+                intent = new Intent(MainScreenActivity.this,AboutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mTvUpdateApp:
                 break;
         }
     }
@@ -589,6 +648,5 @@ public class MainScreenActivity extends AppCompatActivity
             }
         });
     }
-
 
 }

@@ -270,35 +270,6 @@ public class NetManager {
         request.cmd = cmd;
 
         AsyncHttpClient client = new AsyncHttpClient();
-      /*  try {
-            SSLContext sslContext = SSLContext.getInstance("SSL");
-            final TrustManager[] trustAllCerts = new TrustManager[]{
-                    new X509TrustManager() {
-                        @Override
-                        public void checkClientTrusted(
-                                java.security.cert.X509Certificate[] chain, String authType)
-                                throws CertificateException {
-                        }
-
-                        @Override
-                        public void checkServerTrusted(
-                                java.security.cert.X509Certificate[] chain, String authType)
-                                throws CertificateException {
-                        }
-
-                        @Override
-                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                            return null;
-                        }
-                    }
-            };
-            sslContext.init(null, trustAllCerts, null);
-//            javax.net.ssl.SSLSocketFactory socketFactory = sslContext.getSocketFactory();
-            SSLSocketFactory sslSocketFactory = new SSLSocketFactory(sslContext);
-            client.setSSLSocketFactory(sslSocketFactory);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
         client.setSSLSocketFactory(createSSLSocketFactory());
         client.setTimeout(NetTimeout);
         client.post(url, params, new AsyncHttpResponseHandler() {

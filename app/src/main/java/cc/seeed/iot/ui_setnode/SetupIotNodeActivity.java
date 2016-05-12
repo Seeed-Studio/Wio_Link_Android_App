@@ -127,7 +127,7 @@ public class SetupIotNodeActivity extends AppCompatActivity
 //        node = new Node();
 //        node.board = Constant.WIO_NODE_V1_0;
 //        node.node_sn = "112233";
-//        node.name = "aa";
+//        node.name = "menu_item_bg";
 //        node.online = true;
 //        node.node_key = "key1213";
 

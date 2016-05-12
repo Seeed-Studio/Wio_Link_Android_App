@@ -20,6 +20,8 @@ public class CommonUrl {
 
 
     public static SmartValue<String> Server_Prefix = new SmartValue<>(Server_Out_Prefix, Server_In_Prefix);
+    public static SmartValue<String> Image_Prefix = new SmartValue<>("http://bazaar.seeed.cc/","http://192.168.1.40/seeedcc-develop/");
+
     public static String OTA_SERVER_URL = new SmartValue<String>(Server_Out_Ota_Url_Prefix, Server_In_Ota_Url_Prefix).getVal();
     public static String OTA_SERVER_IP = new SmartValue<String>(Server_Out_Ota_Ip_Prefix, Server_In_Ota_Ip_Prefix).getVal();
 

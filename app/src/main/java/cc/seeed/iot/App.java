@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
@@ -37,6 +39,7 @@ public class App extends com.activeandroid.app.Application {
 
     @Override
     public void onCreate() {
+        Fresco.initialize(this);
         super.onCreate();
         sApp = this;
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);

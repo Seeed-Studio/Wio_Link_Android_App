@@ -109,7 +109,7 @@ public class FileUtil {
             conn.setRequestProperty("Content-TYPE", "multipart/form-data;");
             conn.setRequestProperty("Content-Length", "" + file.length());
 
-            // fileparams.put("aa",file);
+            // fileparams.put("menu_item_bg",file);
             if (file != null) {
                 dos = new DataOutputStream(conn.getOutputStream());
 
@@ -174,7 +174,7 @@ public class FileUtil {
             conn.setRequestProperty("Content-TYPE", "multipart/form-data;");
             conn.setRequestProperty("Content-Length", "" + file.length());
 
-            // fileparams.put("aa",file);
+            // fileparams.put("menu_item_bg",file);
             if (file != null) {
                 dos = new DataOutputStream(conn.getOutputStream());
 

@@ -153,6 +153,9 @@ public class ToolUtil {
         }
         return fileName;
     }
+    public static final int dp2px(float dp, Resources res) {
+        return (int) (dp * res.getDisplayMetrics().density + 0.5f);
+    }
 
     /**
      * 检查当前网络是否可用

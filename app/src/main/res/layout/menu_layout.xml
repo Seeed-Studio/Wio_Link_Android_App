@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/mLLUserInfo"
+            android:layout_width="match_parent"
+            android:layout_height="172dp"
+            android:background="@color/second_color"
+            android:orientation="vertical"
+            android:paddingLeft="35dp">
+
+            <!--  app:placeholderImage="@mipmap/icon"-->
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/mSDVAvatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="54dp"
+                app:placeholderImageScaleType="fitXY"
+                app:roundAsCircle="true"
+                app:roundingBorderColor="#cacaca"
+                app:roundingBorderWidth="1dp" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:singleLine="true"
+                android:text="awong1900@163.com"
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                app:cusTextFont="@string/Roboto_Regular" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvDeviceNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:singleLine="true"
+                android:text="3 DEVICES"
+                android:textColor="#7dffffff"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Roboto_Medium" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/mTvSupportDevices"
+            style="@style/menuItemStyle"
+            android:layout_marginTop="20dp"
+            android:text="Support Devices" />
+
+        <TextView
+            android:id="@+id/mTvFAQ"
+            style="@style/menuItemStyle"
+            android:text="FAQ" />
+
+
+        <TextView
+            android:id="@+id/mTvGetDevices"
+            style="@style/menuItemStyle"
+            android:text="Get Devices" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#9b9b9b"/>
+
+        <TextView
+            android:id="@+id/mTvSetting"
+            android:layout_marginTop="10dp"
+            style="@style/menuItemStyle"
+            android:text="Setting" />
+
+
+        <TextView
+            android:id="@+id/mTVAbout"
+            style="@style/menuItemStyle"
+            android:text="About" />
+
+        <TextView
+            android:id="@+id/mTvUpdateApp"
+            style="@style/menuItemStyle"
+            android:text="Update App" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#9b9b9b"/>
+    </LinearLayout>
+</LinearLayout>

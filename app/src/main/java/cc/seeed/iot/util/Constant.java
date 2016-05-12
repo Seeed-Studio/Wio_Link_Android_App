@@ -26,6 +26,7 @@ public class Constant {
         private String value;
 
         GroveType(String value) {
+            this.value = value;
         }
 
         public String getValue() {
@@ -47,6 +48,7 @@ public class Constant {
         private int value;
 
         Server(int value) {
+            this.value = value;
         }
 
         public int getValue() {
