@@ -133,13 +133,7 @@ public class MainScreenActivity extends AppCompatActivity
         View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
         if (headerLayout != null) {
             mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
-            if (((App) getApplication()).getOtaServerUrl().equals(CommonUrl.OTA_SERVER_URL)) {
-                mEmail.setText(user.email + " (China)");
-            } else if (((App) getApplication()).getOtaServerUrl().equals(CommonUrl.OTA_SERVER_URL)) {
-                mEmail.setText(user.email + " (International)");
-            } else
-                mEmail.setText(user.email + " (Customer)\n" +
-                        ((App) getApplication()).getOtaServerUrl());
+            mEmail.setText(user.email);
         }
 
 
@@ -432,7 +426,7 @@ public class MainScreenActivity extends AppCompatActivity
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
-                User user =  user = UserLogic.getInstance().getUser();
+                User user = user = UserLogic.getInstance().getUser();
                 api.setAccessToken(user.token);
                 final IotService iot = api.getService();
                 iot.nodesDelete(node.node_sn, new Callback<SuccessResponse>() {
