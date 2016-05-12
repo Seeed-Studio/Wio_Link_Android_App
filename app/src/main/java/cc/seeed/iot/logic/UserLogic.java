@@ -1,7 +1,5 @@
 package cc.seeed.iot.logic;
 
-import android.text.TextUtils;
-
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
 
@@ -86,23 +84,23 @@ public class UserLogic extends BaseLogic {
                         Gson gson = new Gson();
                         user = gson.fromJson(resp.data, User.class);
                         if (user != null) {
-                            setToken();
-                            //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                             setUser(user);
+                            setToken(Cmd_UserLogin);
+                            //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                         } else {
-                            //  UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                            UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                    UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                 }
             }
         });
     }
 
-    public void regist(String email, String pwd) {
+    public void regiest(String email, String pwd){
         RequestParams params = new RequestParams();
 
         params.put("email", email);
@@ -115,45 +113,95 @@ public class UserLogic extends BaseLogic {
                         Gson gson = new Gson();
                         user = gson.fromJson(resp.data, User.class);
                         if (user != null) {
-                            setToken();
-                            //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                             setUser(user);
+                            setToken(Cmd_UserRegiest);
+                            //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                         } else {
-                            //  UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                              UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                    //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                      UiObserverManager.getInstance().dispatchEvent(Cmd_UserRegiest, resp.status, resp.errorMsg, null);
                 }
             }
         });
     }
 
-    public void setToken() {
+    /**
+     * 重置密码并且发送验证码到邮件
+     * @param email
+     */
+    public void forgetPwd(String email) {
         RequestParams params = new RequestParams();
-        //   User user = UserLogic.getInstance().getUser();
+        params.put("email", email);
+        NetManager.getInstance().postRequest(CommonUrl.Hinge_User_ForgetPwd, Cmd_UserForgetPwd, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+
+                }
+                UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
+            }
+        });
+    }
+
+
+    public void resetPwd(String email, String code, String pwd) {
+        RequestParams params = new RequestParams();
+        params.put("email", email);
+        params.put("password", pwd);
+        params.put("code", code);
+        NetManager.getInstance().postRequest(CommonUrl.Hinge_User_ResetPwd, Cmd_UserResetPwd, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+
+                }
+                UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
+            }
+        });
+    }
+
+    public void changePassword(String oldPwd, String newPwd) {
         if (user == null) {
             return;
         }
-        if (!TextUtils.isEmpty(user.email) && !user.email.startsWith("testadmin")) {
-            params.put("token", user.email);
+        RequestParams params = new RequestParams();
+        params.put("userid", user.getUserid());
+        params.put("messageId", getToken());
+        params.put("password", oldPwd);
+        params.put("newPassword", newPwd);
+        NetManager.getInstance().postRequest(CommonUrl.Hinge_User_ChangePwd, Cmd_UserChangePwd, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+                }
+                UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
+            }
+        });
+    }
+
+    public void setToken(final String cmd){
+        RequestParams params = new RequestParams();
+     //   User user = UserLogic.getInstance().getUser();
+        if (user == null){
+            return;
         }
 
         params.put("bind_id", user.userid);
         params.put("bind_region", "seeed");
         params.put("token", user.token);
         params.put("secret", "!@#$%^&*RG)))))))JM<==TTTT==>((((((&^HVFT767JJH");
-
-        NetManager.getInstance().post(CommonUrl.OTA_SERVER_URL + CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
+        NetManager.getInstance().post(CommonUrl.OTA_SERVER_URL+CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
             @Override
             public void onResp(Request req, Packet resp) {
                 if (resp.status) {
                     App.showToastShrot("ok");
-                    UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                    UiObserverManager.getInstance().dispatchEvent(cmd, resp.status, resp.errorMsg, null);
                 } else {
-                    UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
+                    UiObserverManager.getInstance().dispatchEvent(cmd, resp.status, resp.errorMsg, null);
                 }
             }
         });
@@ -197,13 +245,5 @@ public class UserLogic extends BaseLogic {
         }
     }
 
-    public static String getToken() {
-        User userBean = UserLogic.getInstance().getUser();
-        if (userBean != null) {
-            String decrypt = EncryptUtil.decrypt(userBean.getToken(), Common.API_GET_TOKEN_KEY);
-            String encrypt = EncryptUtil.encrypt(decrypt, Common.API_CHECK_TOKEN_KEY);
-            return encrypt;
-        }
-        return null;
-    }
+
 }

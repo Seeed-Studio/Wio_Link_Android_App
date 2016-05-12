@@ -17,7 +17,6 @@ import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.util.CommonUrl;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
@@ -45,7 +44,7 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.inject(this);
         _emailText.setText(App.getSp().getString("user_email", ""));
 
-        user =  UserLogic.getInstance().getUser();
+        user = UserLogic.getInstance().getUser();
 
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -59,7 +58,7 @@ public class LoginActivity extends BaseActivity {
         _forgotPwd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ResetActivity.class);
+                Intent intent = new Intent(getApplicationContext(), ResetPwd01Activity.class);
                 startActivity(intent);
             }
         });
@@ -91,24 +90,19 @@ public class LoginActivity extends BaseActivity {
 
     private void refresh_layout() {
         String ota_server_url = ((App) getApplication()).getOtaServerUrl();
-        if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
-            _serverLink.setText(getString(R.string.serverOn) + " International" + getString(R.string.change));
-        } else if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
-            _serverLink.setText(getString(R.string.serverOn) + " China" + getString(R.string.change));
-        } else {
-            _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_url + getString(R.string.change));
-        }
+       // String server = CommonUrl.OTA_SERVER_URL.replace("https://", "");
+        _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_url + getString(R.string.change));
     }
 
     public void login() {
         Log.d(TAG, "Login");
 
         if (!validate()) {
-        //    onLoginFailed();
+            //    onLoginFailed();
             return;
         }
 
-  //      _loginButton.setEnabled(false);
+        //      _loginButton.setEnabled(false);
 
         dialog = new ProgressDialog(LoginActivity.this,
                 R.style.AppTheme_Dark_Dialog);
@@ -118,7 +112,7 @@ public class LoginActivity extends BaseActivity {
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        App.getSp().edit().putString("user_email",email).commit();
+        App.getSp().edit().putString("user_email", email).commit();
         UserLogic.getInstance().login(email, password);
     }
 
@@ -153,14 +147,14 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
         if (Cmd_UserLogin.equals(event)) {
-            if (dialog != null){
+            if (dialog != null) {
                 dialog.dismiss();
             }
             if (ret) {
                 Intent intent = new Intent(this, MainScreenActivity.class);
                 startActivity(intent);
                 finish();
-            }else {
+            } else {
                 App.showToastShrot(errInfo);
             }
         }

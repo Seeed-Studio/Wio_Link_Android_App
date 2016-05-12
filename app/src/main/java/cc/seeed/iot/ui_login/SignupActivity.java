@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.CommonUrl;
@@ -27,9 +28,10 @@ import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 
-public class SignupActivity extends AppCompatActivity {
+public class SignupActivity extends BaseActivity {
     private static final String TAG = "SignupActivity";
     private User user;
+    ProgressDialog dialog;
 
     @InjectView(R.id.input_email)
     EditText _emailText;
@@ -50,6 +52,7 @@ public class SignupActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
         user = UserLogic.getInstance().getUser();
+        _emailText.setText(App.getSp().getString("user_email", ""));
 
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,13 +86,7 @@ public class SignupActivity extends AppCompatActivity {
 
     private void refresh_layout() {
         String ota_server_ip = ((App) getApplication()).getOtaServerIP();
-        if (ota_server_ip.equals(CommonUrl.OTA_SERVER_IP)) {
-            _serverLink.setText(getString(R.string.serverOn) + " International" + getString(R.string.change));
-        } else if (ota_server_ip.equals(CommonUrl.OTA_SERVER_IP)) {
-            _serverLink.setText(getString(R.string.serverOn) + " China" + getString(R.string.change));
-        } else {
-            _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_ip + getString(R.string.change));
-        }
+        _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_ip + getString(R.string.change));
     }
 
     public void signup() {
@@ -102,15 +99,18 @@ public class SignupActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignupActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
+        dialog = new ProgressDialog(SignupActivity.this, R.style.AppTheme_Dark_Dialog);
+        dialog.setIndeterminate(true);
+        dialog.setMessage("Creating Account...");
+        dialog.show();
 
+        String email = _emailText.getText().toString();
+        String password = _passwordText.getText().toString();
+        App.getSp().edit().putString("user_email", email).commit();
+        UserLogic.getInstance().regiest(email, password);
         // Implement your own resetEmail logic here.
 
-        attemptRegister(progressDialog);
+        // attemptRegister(progressDialog);
     }
 
     public void onSignupSuccess(String email, UserResponse userResponse) {
@@ -118,7 +118,7 @@ public class SignupActivity extends AppCompatActivity {
         user.email = email;
         user.token = userResponse.token;
 //        user.user_id = userResponse.user_id;
-       // ((App) getApplication()).setUser(user);
+        // ((App) getApplication()).setUser(user);
         ((App) getApplication()).setLoginState(true);
         Intent intent = new Intent(this, MainScreenActivity.class);
         startActivity(intent);
@@ -195,6 +195,27 @@ public class SignupActivity extends AppCompatActivity {
 
         inputManager.hideSoftInputFromWindow(_signupButton.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    @Override
+    public String[] monitorEvents() {
+        return new String[]{Cmd_UserRegiest};
+    }
+
+    @Override
+    public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
+        if (Cmd_UserRegiest.equals(event)) {
+            if (dialog != null){
+                dialog.dismiss();
+            }
+            _signupButton.setEnabled(true);
+            if (ret) {
+                Intent intent = new Intent(this, MainScreenActivity.class);
+                startActivity(intent);
+            }else {
+                App.showToastShrot("Create account failed: "+errInfo);
+            }
+        }
     }
 }
 

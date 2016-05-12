@@ -1,6 +1,7 @@
 package cc.seeed.iot.util;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -179,7 +180,17 @@ public class ToolUtil {
         return false;
     }
 
-    public static final int dp2px(float dp, Resources res) {
-        return (int) (dp * res.getDisplayMetrics().density + 0.5f);
+
+    /**
+     * 判断当前应用程序处于最上层
+     */
+    public static boolean isTopActivity(final Context context,String className) {
+        boolean isTop = false;
+        ActivityManager am = (ActivityManager) context.getSystemService(context.ACTIVITY_SERVICE);
+        ComponentName cn = am.getRunningTasks(1).get(0).topActivity;
+        if (cn.getClassName().contains(className)) {
+            isTop = true;
+        }
+        return isTop;
     }
 }

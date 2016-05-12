@@ -46,14 +46,13 @@ import java.util.List;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.activity.SetupIotLinkActivity1;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_ap_config.GoReadyActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
-import cc.seeed.iot.activity.SetupIotLinkActivity;
+import cc.seeed.iot.ui_setnode.SetupIotLinkActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
@@ -104,7 +103,6 @@ public class MainScreenActivity extends AppCompatActivity
 
         initData();
         initView();
-        initMenu();
 
         if (firstUseState) {
             Message message = Message.obtain();
@@ -126,6 +124,18 @@ public class MainScreenActivity extends AppCompatActivity
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+
+        }
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+        if (headerLayout != null) {
+            mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
+            mEmail.setText(user.email);
+        }
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.listview);
         if (mRecyclerView != null) {
@@ -177,18 +187,6 @@ public class MainScreenActivity extends AppCompatActivity
         mProgressDialog = new ProgressDialog(this);
 
         mAddTip = (ImageView) findViewById(R.id.add_node_tip);
-    }
-
-    private void initMenu(){
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-        }
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
-        if (headerLayout != null) {
-            mEmail = (TextView) headerLayout.findViewById(R.id.mTvEmail);
-            mEmail.setText(user.email );
-        }
     }
 
     private void initData() {

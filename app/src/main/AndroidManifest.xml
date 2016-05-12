@@ -46,7 +46,11 @@
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="cc.seeed.iot.ui_login.ResetActivity"
+            android:name=".ui_login.ResetPwd01Activity"
+            android:theme="@style/AppTheme.Dark"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui_login.ResetPwd02Activity"
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
@@ -73,7 +77,7 @@
             android:launchMode="singleTop"/>
         <!-- launchMode="singleTop" 保证activity在栈里的唯一性 -->
         <activity
-            android:name="cc.seeed.iot.ui_main.ChangePwdActivity"
+            android:name=".ui_login.ChangePwdActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".activity.WelcomeActivity"
