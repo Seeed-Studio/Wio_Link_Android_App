@@ -104,6 +104,7 @@ public class MainScreenActivity extends AppCompatActivity
 
         initData();
         initView();
+        initMenu();
 
         if (firstUseState) {
             Message message = Message.obtain();
@@ -125,24 +126,6 @@ public class MainScreenActivity extends AppCompatActivity
         }
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        if (navigationView != null) {
-            setupDrawerContent(navigationView);
-
-        }
-        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
-        if (headerLayout != null) {
-            mEmail = (TextView) headerLayout.findViewById(R.id.hd_email);
-            if (((App) getApplication()).getOtaServerUrl().equals(CommonUrl.OTA_SERVER_URL)) {
-                mEmail.setText(user.email + " (China)");
-            } else if (((App) getApplication()).getOtaServerUrl().equals(CommonUrl.OTA_SERVER_URL)) {
-                mEmail.setText(user.email + " (International)");
-            } else
-                mEmail.setText(user.email + " (Customer)\n" +
-                        ((App) getApplication()).getOtaServerUrl());
-        }
-
 
         mRecyclerView = (RecyclerView) findViewById(R.id.listview);
         if (mRecyclerView != null) {
@@ -194,6 +177,18 @@ public class MainScreenActivity extends AppCompatActivity
         mProgressDialog = new ProgressDialog(this);
 
         mAddTip = (ImageView) findViewById(R.id.add_node_tip);
+    }
+
+    private void initMenu(){
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if (navigationView != null) {
+            setupDrawerContent(navigationView);
+        }
+        View headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
+        if (headerLayout != null) {
+            mEmail = (TextView) headerLayout.findViewById(R.id.mTvEmail);
+            mEmail.setText(user.email );
+        }
     }
 
     private void initData() {
@@ -433,7 +428,7 @@ public class MainScreenActivity extends AppCompatActivity
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
-                User user =  user = UserLogic.getInstance().getUser();
+                User user = user = UserLogic.getInstance().getUser();
                 api.setAccessToken(user.token);
                 final IotService iot = api.getService();
                 iot.nodesDelete(node.node_sn, new Callback<SuccessResponse>() {

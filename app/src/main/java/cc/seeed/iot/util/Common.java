@@ -1,5 +1,9 @@
 package cc.seeed.iot.util;
 
+import android.os.Environment;
+
+import cc.seeed.iot.App;
+
 /**
  * Created by tenwong on 15/10/20.
  */
@@ -13,4 +17,8 @@ public class Common {
 
         public static String API_GET_TOKEN_KEY = "seeed_wiolink_return_token_2016#0509";
         public static String API_CHECK_TOKEN_KEY= "seeed_wiolink_check_token_2016#0509";
+
+        public static String AppRootPath = Environment.getExternalStorageDirectory().getPath() + "/seeed/"+ App.getApp().getPackageName()+"/";
+        public static String ImgPath = Environment.getExternalStorageDirectory().getPath()+ "/seeed/wiolink/img/";
+
 }
