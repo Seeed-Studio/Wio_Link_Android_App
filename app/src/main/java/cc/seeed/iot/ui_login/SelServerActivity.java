@@ -140,9 +140,7 @@ public class SelServerActivity extends AppCompatActivity {
 
                 getHostAddress(ota_server_url, progressDialog);
                 break;
-
         }
-
     }
 
     private void getHostAddress(final String ota_server_url, final ProgressDialog progressDialog) {

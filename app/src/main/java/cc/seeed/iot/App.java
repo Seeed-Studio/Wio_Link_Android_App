@@ -72,7 +72,6 @@ public class App extends com.activeandroid.app.Application {
               }
           }).start();
       }
-
     }
 
     private void init() {

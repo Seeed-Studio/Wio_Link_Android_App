@@ -9,5 +9,8 @@ public interface CmdConst {
     String Cmd_UserLogout = "user_logout";
     String Cmd_UserOtherLogin = "user_other_login";
     String Cmd_UserRegiest = "user_regiest";
+    String Cmd_UserForgetPwd = "user_forget_pwd";
+    String Cmd_UserResetPwd = "user_reset_pwd";
+    String Cmd_UserChangePwd = "user_chenge_pwd";
     String Cmd_SetToken = "set_token";
 }

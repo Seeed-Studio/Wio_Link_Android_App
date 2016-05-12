@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import cc.seeed.iot.App;
+import cc.seeed.iot.entity.User;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.EncryptUtil;
@@ -35,14 +36,15 @@ public class BaseLogic implements CmdConst {
         return sign;
     }
 
-/*    public static String getToken() {
-        User user = UserLogic.getInstance().getUserBean();
-        if (user != null) {
-            String decrypt = EncryptUtil.decrypt(user.getToken(), Constant.API_GET_TOKEN_KEY);
-            String encrypt = EncryptUtil.encrypt(decrypt, Constant.API_CHECK_TOKEN_KEY);
+    public static String getToken() {
+        User userBean = UserLogic.getInstance().getUser();
+        if (userBean != null) {
+            String decrypt = EncryptUtil.decrypt(userBean.getToken(), Common.API_GET_TOKEN_KEY);
+            String encrypt = EncryptUtil.encrypt(decrypt, Common.API_CHECK_TOKEN_KEY);
             return encrypt;
         }
         return null;
-    }*/
+    }
+
 
 }

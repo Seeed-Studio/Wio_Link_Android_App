@@ -46,7 +46,11 @@
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name="cc.seeed.iot.ui_login.ResetActivity"
+            android:name=".ui_login.ResetPwd01Activity"
+            android:theme="@style/AppTheme.Dark"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".ui_login.ResetPwd02Activity"
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
@@ -64,7 +68,7 @@
         <activity android:name="cc.seeed.iot.ui_main.MainSettingActivity" />
         <activity android:name="cc.seeed.iot.activity.TestActivity" />
         <activity
-            android:name="cc.seeed.iot.ui_main.ChangePwdActivity"
+            android:name=".ui_login.ChangePwdActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".activity.WelcomeActivity"

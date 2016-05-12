@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    android:background="@color/primary"
     android:fitsSystemWindows="true">
 
     <LinearLayout
@@ -30,18 +31,24 @@
                 android:id="@+id/input_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email"
+                android:textColorHint="#ffffff"
+                android:hint="Email Address"
                 android:inputType="textEmailAddress" />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="13sp"
+            android:textColor="#ba7d7e"
+            android:text="You will recieve an email with verification code shortly."/>
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_reset"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:text="Reset" />
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="40dp"
+            android:text="Reset password" />
 
 
         <TextView
@@ -49,7 +56,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
+            android:layout_marginTop="25dp"
             android:gravity="center"
+            android:textColor="#ba7d7e"
             android:text="Cancel"
             android:textSize="16sp" />
     </LinearLayout>
