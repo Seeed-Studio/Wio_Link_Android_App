@@ -85,8 +85,8 @@ public class SignupActivity extends BaseActivity {
     }
 
     private void refresh_layout() {
-        String ota_server_ip = ((App) getApplication()).getOtaServerIP();
-        _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_ip + getString(R.string.change));
+        String ota_server_url = ((App) getApplication()).getOtaServerUrl();
+        _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_url + getString(R.string.change));
     }
 
     public void signup() {
