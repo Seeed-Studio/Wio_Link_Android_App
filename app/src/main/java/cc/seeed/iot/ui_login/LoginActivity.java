@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import butterknife.ButterKnife;
@@ -14,9 +15,11 @@ import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.util.ToolUtil;
 
 public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
@@ -36,6 +39,8 @@ public class LoginActivity extends BaseActivity {
     TextView _serverLink;
     @InjectView(R.id.link_signup)
     TextView _signupLink;
+    @InjectView(R.id.mIvLogo)
+    ImageView mIvLogo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,17 @@ public class LoginActivity extends BaseActivity {
                 // Start the Signup activity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivityForResult(intent, REQUEST_SIGNUP);
+            }
+        });
+        mIvLogo.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // Start the Signup activity
+                if (ToolUtil.isApkDebug()){
+                    Intent intent = new Intent(getApplicationContext(), TestActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }

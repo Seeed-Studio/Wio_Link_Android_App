@@ -9,6 +9,8 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
@@ -19,14 +21,17 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.udp.ConfigUdpSocket;
+import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.util.RegularUtils;
+import cc.seeed.iot.util.ToolUtil;
 
 
 /**
@@ -54,6 +59,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     RadioButton mRBOutNet;
     @InjectView(R.id.mRGServer)
     RadioGroup mRGServer;
+    @InjectView(R.id.mBtnCreatUser)
+    Button mBtnCreatUser;
 
     private ConfigUdpSocket udpClient;
     public int checkId = 0;
@@ -63,7 +70,11 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         ButterKnife.inject(this);
+        if (!ToolUtil.isApkDebug()){
+            finish();
+        }
         mRGServer.setOnCheckedChangeListener(this);
+        initData();
     }
 
     public void initData() {
@@ -99,7 +110,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp,R.id.mBtnCreatUser})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -111,10 +122,38 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             case R.id.mBtngetIp:
                 getIpAddress();
                 break;
+            case R.id.mBtnCreatUser:
+                addUser();
+                break;
         }
     }
 
+    private void addUser(){
+        String userStr = App.getSp().getString(Constant.USER_TEST_INFO, "");
+        String userStr1 = App.getSp().getString(Constant.USER_INFO, "");
+        if (!TextUtils.isEmpty(userStr1)){
+            return;
+        }
+        try {
+            Gson gson = new Gson();
+            User user = gson.fromJson(userStr, User.class);
+            if (user == null){
+                user = new User();
+                user.setEmail("947700923@qq.com");
+                user.setNickname("Jerry_Test");
+                user.setToken("VSFFsdgagagF");
+                user.setUserid("161319");
+                UserLogic.getInstance().setUser(user);
+                UserLogic.getInstance().setToken("");
+            }else {
+                UserLogic.getInstance().setUser(user);
+            }
 
+            startActivity(new Intent(this, MainScreenActivity.class));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     public void getIpAddress() {
         new Thread(new Runnable() {
@@ -197,6 +236,5 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         }
     }
-
 
 }

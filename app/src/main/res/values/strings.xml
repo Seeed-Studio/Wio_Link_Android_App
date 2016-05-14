@@ -18,6 +18,8 @@
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="notification_error_ssl_cert_invalid">"You're accessing a page with an untrusted or invalid certificate. Do you want to continue?"</string>
+    <string name="website_format_error">hmmm..website looks wrong..</string>
+
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
     <string name="title_section2">Section 2</string>
@@ -67,6 +69,9 @@
     <string name="offline">Offline</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_name">New Wio name</string>
+    <string name="add_your_first_device">ADD YOUR FIRST DEVICE</string>
+    <string name="hint_not_device">You havent connected to any device yet,get started now!</string>
+    <string name="confirm_quit">Confirm the exit</string>
 
 
     <!--NavigationView-->
@@ -131,5 +136,8 @@
     <string name="serverOn">Server on</string>
     <string name="change">. Change?</string>
     <string name="location_tip">Make sure that location services turned on</string>
+    <string name="password">Password</string>
+    <string name="connect_server">Connect Server</string>
+    <string name="setting_logout">Log Out</string>
 
 </resources>

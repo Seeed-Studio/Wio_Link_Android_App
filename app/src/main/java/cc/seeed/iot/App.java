@@ -11,6 +11,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import cc.seeed.iot.util.CommonUrl;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.webapi.IotApi;
 
 /**
@@ -45,8 +46,8 @@ public class App extends com.activeandroid.app.Application {
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
      //   user.email = sp.getString("userName", "awong1900@163.com");
      //   user.user_key = sp.getString("userToken", "sBoKhjQNdtT8oTjukEeg98Ui3fuF3416zh-1Qm5Nkm0");
-        ota_server_url = sp.getString("ota_server_url", CommonUrl.OTA_SERVER_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
-        ota_server_ip = sp.getString("ota_server_ip", CommonUrl.OTA_SERVER_IP);
+        ota_server_url = sp.getString(Constant.SERVER_URL, CommonUrl.OTA_SERVER_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
+        ota_server_ip = sp.getString(Constant.SERVER_IP, CommonUrl.OTA_SERVER_IP);
         configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);
         firstUseState = sp.getBoolean("firstUseState", true);
@@ -143,7 +144,7 @@ public class App extends com.activeandroid.app.Application {
         this.ota_server_url = ota_server_url;
         IotApi.SetServerUrl(ota_server_url);
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("ota_server_url", ota_server_url);
+        editor.putString(Constant.SERVER_URL, ota_server_url);
         editor.apply();
     }
 /*
@@ -167,7 +168,7 @@ public class App extends com.activeandroid.app.Application {
     public void setOtaServerIP(String ota_server_ip) {
         this.ota_server_ip = ota_server_ip;
         SharedPreferences.Editor editor = sp.edit();
-        editor.putString("ota_server_ip", ota_server_ip);
+        editor.putString(Constant.SERVER_IP, ota_server_ip);
         editor.apply();
     }
 

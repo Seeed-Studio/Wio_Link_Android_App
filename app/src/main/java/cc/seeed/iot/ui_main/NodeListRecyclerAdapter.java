@@ -50,8 +50,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_node, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_node, parent, false);
         return new MainViewHolder(v, mOnClickListener);
     }
 

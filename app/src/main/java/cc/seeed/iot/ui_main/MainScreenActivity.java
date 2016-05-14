@@ -16,12 +16,16 @@
 
 package cc.seeed.iot.ui_main;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Process;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,11 +36,21 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,7 +61,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
@@ -63,7 +76,9 @@ import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.ImgUtil;
+import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -79,14 +94,17 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainScreenActivity extends AppCompatActivity
-        implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener {
+        implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener, Animation.AnimationListener {
     private static final String TAG = "MainScreenActivity";
     private static final int MESSAGE_GROVE_LIST_START = 0x00;
     private static final int MESSAGE_GROVE_LIST_COMPLETE = 0x01;
     private static final int MESSAGE_NODE_LIST_START = 0x02;
     private static final int MESSAGE_NODE_LIST_COMPLETE = 0x03;
     private static final int MESSAGE_NODE_CONFIG_COMPLETE = 0x04;
+    NavigationView navview;
+    DrawerLayout drawerlayout;
 
+    Toolbar toolbar;
     private DrawerLayout mDrawerLayout;
     private SimpleDraweeView mSDVAvatar;
     private LinearLayout mLLUserInfo;
@@ -99,6 +117,14 @@ public class MainScreenActivity extends AppCompatActivity
     private TextView mTVAbout;
     private TextView mTvUpdateApp;
     private NavigationView navigationView;
+    private LinearLayout mLLNoDevice;
+    private Button mBtnAddDevice;
+    private RelativeLayout mRlSelectAddDevies;
+    private CoordinatorLayout mMainContent;
+    private LinearLayout mLLWioLink;
+    private LinearLayout mLLWioNode;
+    private LinearLayout mLLAddDevice;
+    private ImageView mIvAddDevice;
 
     //    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -110,6 +136,8 @@ public class MainScreenActivity extends AppCompatActivity
 
     private Handler mHandler;
     private ProgressDialog mProgressDialog;
+    private boolean isShowPopWindow = false;
+    private boolean isAnimationRuning = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,15 +157,30 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     private void initView() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        mLLNoDevice = (LinearLayout) findViewById(R.id.mLLNoDevice);
+        mBtnAddDevice = (Button) findViewById(R.id.mBtnAddDevice);
+        mRlSelectAddDevies = (RelativeLayout) findViewById(R.id.mRlSelectAddDevies);
+        mMainContent = (CoordinatorLayout) findViewById(R.id.main_content);
+        mLLWioLink = (LinearLayout) findViewById(R.id.mLLWioLink);
+        mLLWioNode = (LinearLayout) findViewById(R.id.mLLWioNode);
+        mLLAddDevice = (LinearLayout) findViewById(R.id.mLLAddDevice);
+        mIvAddDevice = (ImageView) findViewById(R.id.mIvAddDevice);
+
+        mBtnAddDevice.setOnClickListener(this);
+        mLLWioLink.setOnClickListener(this);
+        mLLWioNode.setOnClickListener(this);
+        mLLAddDevice.setOnClickListener(this);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         final ActionBar ab = getSupportActionBar();
         if (ab != null) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setHomeAsUpIndicator(R.mipmap.menu);
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setTitle(R.string.app_name);
         }
+        toolbar.setOnClickListener(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.listview);
         if (mRecyclerView != null) {
@@ -150,46 +193,14 @@ public class MainScreenActivity extends AppCompatActivity
             mRecyclerView.setAdapter(mAdapter);
         }
 
-        // Do not need refresh
-        /*
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.activity_main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Message message = Message.obtain();
-                        message.what = MESSAGE_NODE_LIST_START;
-                        mHandler.sendMessage(message);
-                        getNodeList();
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                }, 0);
-            }
-        });
-        */
-
- /*       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((App) getApplication()).setConfigState(true);
-                Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
-                startActivity(intent);
-            }
-        });*/
-
         FloatingActionButton setupLinkAction = (FloatingActionButton) findViewById(R.id.setup_link);
         FloatingActionButton setupNodeAction = (FloatingActionButton) findViewById(R.id.setup_node);
         setupLinkAction.setOnClickListener(this);
         setupNodeAction.setOnClickListener(this);
 
         mProgressDialog = new ProgressDialog(this);
-
-        mAddTip = (ImageView) findViewById(R.id.add_node_tip);
     }
+
 
     private void initMenu() {
 
@@ -223,7 +234,6 @@ public class MainScreenActivity extends AppCompatActivity
                 mTvUpdateApp.setOnClickListener(this);
             }
         }
-
     }
 
     private void initData() {
@@ -256,14 +266,18 @@ public class MainScreenActivity extends AppCompatActivity
                         if (msg.arg2 == 1) {
                             mAdapter.updateAll(nodes);
                             if (nodes.isEmpty()) {
-                                mAddTip.setVisibility(View.VISIBLE);
+                                mTvDeviceNum.setText("0 DEVICES");
+                                mLLNoDevice.setVisibility(View.VISIBLE);
                             } else {
-                                mAddTip.setVisibility(View.GONE);
+                                mLLNoDevice.setVisibility(View.GONE);
+                                mTvDeviceNum.setText(nodes.size() + " DEVICES");
                             }
 
                             for (Node n : nodes) {
                                 getNodesConfig(n, nodes.indexOf(n));
                             }
+                        } else if (msg.arg2 == 0) {
+                            mTvDeviceNum.setText("0 DEVICES");
                         }
                         break;
                     case MESSAGE_NODE_CONFIG_COMPLETE:
@@ -277,8 +291,33 @@ public class MainScreenActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                float downX = ev.getX();
+                float downY = ev.getY();
+                if (isAnimationRuning) {
+                    return true;
+                } else {
+                    if (isShowPopWindow) {
+                        if (downX > mRlSelectAddDevies.getTop() && downX < mRlSelectAddDevies.getRight() &&
+                                downY > mRlSelectAddDevies.getTop() && downY < mRlSelectAddDevies.getBottom()) {
+                            hideSelectAddDevicePopWindow();
+                        } else {
+                            hideSelectAddDevicePopWindow();
+                            return true;
+                        }
+
+                    }
+                }
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.ui_main, menu);
+        //  getMenuInflater().inflate(R.menu.ui_main, menu);
         return true;
     }
 
@@ -288,12 +327,13 @@ public class MainScreenActivity extends AppCompatActivity
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.update:
-                Message message = Message.obtain();
+          /*  case R.id.update:
+               *//* Message message = Message.obtain();
                 message.what = MESSAGE_NODE_LIST_START;
                 mHandler.sendMessage(message);
-                getNodeList();
-                return true;
+                getNodeList();*//*
+                showSelectAddDevicePopWindow();
+                return true;*/
         }
         return super.onOptionsItemSelected(item);
     }
@@ -312,61 +352,15 @@ public class MainScreenActivity extends AppCompatActivity
         getNodeList();
     }
 
-    private void setupDrawerContent(NavigationView navigationView) {
-        navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-                        mDrawerLayout.closeDrawers();
-                        switch (menuItem.getItemId()) {
-                            case R.id.nav_node_list:
-                                menuItem.setChecked(true);
-                                break;
-                            case R.id.nav_grove_list: {
-                                Intent intent = new Intent(MainScreenActivity.this,GrovesActivity.class);
-                                startActivity(intent);
-                            }
-                            break;
-//                            case R.id.nav_smartconfig: {
-//                                ((App) getApplication()).setConfigState(false);
-//                                Intent intent = new Intent(MainScreenActivity.this,
-//                                        GoReadyActivity.class);
-//                                startActivity(intent);
-//                            }
-//                            break;
-                            case R.id.nav_setting: {
-                                Intent intent = new Intent(MainScreenActivity.this,MainSettingActivity.class);
-                                startActivity(intent);
-                            }
-                            break;
-                            case R.id.nav_about: {
-                                Intent intent = new Intent(MainScreenActivity.this,AboutActivity.class);
-                                startActivity(intent);
-                            }
-                            break;
-                            case R.id.nav_logout: {
-                                //   ((App) getApplication()).setLoginState(false);
-                                UserLogic.getInstance().logOut();
-                                ((App) getApplication()).setFirstUseState(true);
-                                DBHelper.delNodesAll();
-                                DBHelper.delGrovesAll();
-                                PinConfigDBHelper.delPinConfigAll();
-                                Intent intent = new Intent(MainScreenActivity.this, SetupActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                startActivity(intent);
-                            }
-                            break;
-                            case R.id.nav_test: {
-                                Intent intent = new Intent(MainScreenActivity.this, TestActivity.class);
-                                startActivity(intent);
-                            }
-                            break;
-                        }
 
-                        return true;
-                    }
-                });
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            DialogUtils.showQuitDialog(MainScreenActivity.this);
+        }
+        return super.onKeyDown(keyCode, event);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -385,7 +379,7 @@ public class MainScreenActivity extends AppCompatActivity
             case R.id.mTvDeviceNum:
                 break;
             case R.id.mTvSupportDevices:
-                intent = new Intent(MainScreenActivity.this,GrovesActivity.class);
+                intent = new Intent(MainScreenActivity.this, GrovesActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mTvFAQ:
@@ -393,17 +387,60 @@ public class MainScreenActivity extends AppCompatActivity
             case R.id.mTvGetDevices:
                 break;
             case R.id.mTvSetting:
-                intent = new Intent(MainScreenActivity.this,MainSettingActivity.class);
+                intent = new Intent(MainScreenActivity.this, MainSettingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mTVAbout:
-                intent = new Intent(MainScreenActivity.this,AboutActivity.class);
+                intent = new Intent(MainScreenActivity.this, AboutActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mTvUpdateApp:
                 break;
+            case R.id.mBtnAddDevice:
+                showSelectAddDevicePopWindow();
+                break;
+            case R.id.mLLWioNode:
+                setupActivity(Constant.WIO_NODE_V1_0);
+                break;
+            case R.id.mLLWioLink:
+                setupActivity(Constant.WIO_LINK_V1_0);
+                break;
+            case R.id.mLLAddDevice:
+                showSelectAddDevicePopWindow();
+                break;
+            case R.id.toolbar:
+                intent = new Intent(MainScreenActivity.this, TestActivity.class);
+                startActivity(intent);
+                break;
         }
     }
+
+    private void showSelectAddDevicePopWindow() {
+        if (!isShowPopWindow && !isAnimationRuning) {
+            isShowPopWindow = !isShowPopWindow;
+            mRlSelectAddDevies.setVisibility(View.VISIBLE);
+            Animation animationAdd = AnimationUtils.loadAnimation(this, R.anim.main_add_device_in);
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.main_select_window_in);
+            animation.setAnimationListener(this);
+            animationAdd.setFillAfter(true);
+            mIvAddDevice.startAnimation(animationAdd);
+            mRlSelectAddDevies.setAnimation(animation);
+        }
+    }
+
+    private void hideSelectAddDevicePopWindow() {
+        if (isShowPopWindow && !isAnimationRuning) {
+            isShowPopWindow = !isShowPopWindow;
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.main_select_window_out);
+            Animation animationAdd = AnimationUtils.loadAnimation(this, R.anim.main_add_device_out);
+            animation.setAnimationListener(this);
+            animationAdd.setFillAfter(true);
+            mRlSelectAddDevies.setAnimation(animation);
+            mRlSelectAddDevies.setVisibility(View.GONE);
+            mIvAddDevice.startAnimation(animationAdd);
+        }
+    }
+
 
     private void setupActivity(String board) {
         ((App) getApplication()).setConfigState(true);
@@ -433,34 +470,6 @@ public class MainScreenActivity extends AppCompatActivity
             case R.id.remove:
                 nodeRemove(node, position);
                 break;
-//            case R.id.dot:
-//                PopupMenu popupMenu = new PopupMenu(this, v);
-//                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        switch (item.getItemId()) {
-//                            case R.id.remove:
-//                                nodeRemove(node, position);
-//                                return true;
-//                            case R.id.detail:
-//                                nodeApi(node);
-//                                return true;
-//                            case R.id.rename:
-//                                nodeRename(node, position);
-//                                return true;
-//                        }
-//                        return false;
-//                    }
-//                });
-//                popupMenu.inflate(R.menu.ui_node_action);
-//                popupMenu.show();
-//                if (popupMenu.getDragToOpenListener() instanceof ListPopupWindow.ForwardingListener) {
-//                    ListPopupWindow.ForwardingListener listener =
-//                            (ListPopupWindow.ForwardingListener) popupMenu.getDragToOpenListener();
-//                    listener.getPopup().setVerticalOffset(-v.getHeight());
-//                    listener.getPopup().show();
-//                }
-//                break;
         }
     }
 
@@ -584,8 +593,7 @@ public class MainScreenActivity extends AppCompatActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(MainScreenActivity.this, error.getLocalizedMessage(),
-                        Toast.LENGTH_LONG).show();
+                Toast.makeText(MainScreenActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 Message message = Message.obtain();
                 message.arg2 = 0;
                 message.what = MESSAGE_NODE_LIST_COMPLETE;
@@ -649,4 +657,24 @@ public class MainScreenActivity extends AppCompatActivity
         });
     }
 
+    @Override
+    public void onAnimationStart(Animation animation) {
+        isAnimationRuning = true;
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+        isAnimationRuning = false;
+        if (isShowPopWindow) {
+            MLog.e(this, "top: " + mRlSelectAddDevies.getTop());
+            MLog.e(this, "left: " + mRlSelectAddDevies.getLeft());
+            MLog.e(this, "buttom: " + mRlSelectAddDevies.getBottom());
+            MLog.e(this, "right: " + mRlSelectAddDevies.getRight());
+        }
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
 }

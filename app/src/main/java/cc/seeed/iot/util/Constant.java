@@ -40,6 +40,9 @@ public class Constant {
     //SharedPreferences
     public final static String SERVER_SELECT = "server_select";//保存服务器选择类型,内外 or 外网
     public final static String USER_INFO = "user_info";//保存用户信息
+    public final static String USER_TEST_INFO = "user_test_info";//保存用户信息
+    public final static String SERVER_URL = "server_url";
+    public final static String SERVER_IP = "server_ip";
 
 
     public enum Server {

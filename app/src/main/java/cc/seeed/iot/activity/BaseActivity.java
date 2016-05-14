@@ -1,6 +1,7 @@
 package cc.seeed.iot.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -8,8 +9,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import cc.seeed.iot.logic.CmdConst;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.mgr.IUiObserver;
 import cc.seeed.iot.mgr.UiObserverManager;
+import cc.seeed.iot.ui_login.LoginActivity;
 
 /**
  * Created by seeed on 2016/2/18.
@@ -62,5 +65,14 @@ public class BaseActivity extends AppCompatActivity implements IUiObserver, CmdC
     public void hideKeyboard(View view) {
         InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(view.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    public boolean isLogin(){
+        if (UserLogic.getInstance().isLogin()){
+            return true;
+        }else {
+            startActivity(new Intent(this, LoginActivity.class));
+            return false;
+        }
     }
 }

@@ -65,17 +65,17 @@ public class MLog {
 
     public static void d(Object tag, String msg) {
         if (isShowLog)
-            Log.i(tag.getClass().getSimpleName(), msg);
+            Log.d(tag.getClass().getSimpleName(), msg);
     }
 
     public static void e(Object tag, String msg) {
         if (isShowLog)
-            Log.i(tag.getClass().getSimpleName(), msg);
+            Log.e(tag.getClass().getSimpleName(), msg);
     }
 
     public static void v(Object tag, String msg) {
         if (isShowLog)
-            Log.i(tag.getClass().getSimpleName(), msg);
+            Log.v(tag.getClass().getSimpleName(), msg);
     }
 
     //------------------------自定义标签---------------------------------------------------
@@ -86,16 +86,16 @@ public class MLog {
 
     public static void d(String tag, String msg) {
         if (isShowLog)
-            Log.i(tag, msg);
+            Log.d(tag, msg);
     }
 
     public static void e(String tag, String msg) {
         if (isShowLog)
-            Log.i(tag, msg);
+            Log.e(tag, msg);
     }
 
     public static void v(String tag, String msg) {
         if (isShowLog)
-            Log.i(tag, msg);
+            Log.v(tag, msg);
     }
 }

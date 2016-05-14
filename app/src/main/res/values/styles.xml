@@ -77,5 +77,20 @@
         <item name="android:singleLine">true</item>
     </style>
 
+    <style name="popwin_anim_style">
+        <item name="android:windowEnterAnimation">@anim/main_select_window_in</item>
+        <item name="android:windowExitAnimation">@anim/main_select_window_out</item>
+    </style>
+
+    <style name="DialogStyle" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <!--无标题-->
+        <item name="android:windowBackground">@drawable/dialog_bg</item>
+        <!--背景透明-->
+    </style>
+
 
 </resources>

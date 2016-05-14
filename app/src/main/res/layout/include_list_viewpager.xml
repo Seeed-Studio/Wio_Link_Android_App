@@ -11,11 +11,31 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+            
+            <LinearLayout
+                android:id="@+id/mLLAddDevice"
+                android:layout_width="50dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:layout_height="50dp">
+                <ImageView
+                    android:id="@+id/mIvAddDevice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/add"/>
+            </LinearLayout>
+        </RelativeLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <!--
@@ -32,13 +52,121 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <ImageView
-        android:id="@+id/add_node_tip"
+    <LinearLayout
+        android:id="@+id/mLLNoDevice"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/main_bg"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/main_bg"/>
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:layout_marginRight="43dp"
+            android:layout_marginTop="133dp"
+            android:visibility="gone"
+            android:gravity="center_horizontal"
+            android:text="@string/hint_not_device"
+            android:textColor="#979797"
+            android:textSize="16sp"
+            app:cusTextFont="@string/Roboto_Regular" />
+
+        <Button
+            android:id="@+id/mBtnAddDevice"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="66dp"
+            android:background="@drawable/btn_long_bg"
+            android:text="@string/add_your_first_device"
+            android:visibility="gone"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/mRlSelectAddDevies"
+        android:layout_width="match_parent"
+        android:layout_height="207dp"
+        android:background="#930E12"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="CHOOSE A DEVICE TO START"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            app:cusTextFont="@string/Roboto_Medium" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="49dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/mLLWioLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/main_select_item_bg"
+                    android:src="@drawable/link_small" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.2dp"
+                    android:text="Wio Link"
+                    android:textColor="#ffffff"
+                    android:textSize="14.5sp"
+                    app:cusTextFont="@string/Roboto_Medium" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mLLWioNode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35.5dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:background="@drawable/main_select_item_bg"
+                    android:src="@drawable/node_small" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.2dp"
+                    android:text="Wio Node"
+                    android:textColor="#ffffff"
+                    android:textSize="14.5sp"
+                    app:cusTextFont="@string/Roboto_Medium" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
@@ -56,6 +184,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"
         fab:fab_addButtonColorNormal="@color/primary"
         fab:fab_addButtonColorPressed="@color/primary_dark"
         fab:fab_addButtonPlusIconColor="@color/white"
@@ -81,5 +210,6 @@
             fab:fab_size="mini"
             fab:fab_title="Setup Wio Link" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 
 </android.support.design.widget.CoordinatorLayout>

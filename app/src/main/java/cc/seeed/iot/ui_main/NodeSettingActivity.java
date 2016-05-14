@@ -38,15 +38,6 @@ public class NodeSettingActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Node Setting");
-
-        String node_sn = getIntent().getStringExtra("node_sn");
-
-        Bundle bundle = new Bundle();
-        bundle.putString("node_sn", node_sn);
-        NodePreferenceFragment fragment = new NodePreferenceFragment();
-        fragment.setArguments(bundle);
-
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
     }
 
 

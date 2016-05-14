@@ -204,7 +204,6 @@ public class UserLogic extends BaseLogic {
             @Override
             public void onResp(Request req, Packet resp) {
                 if (resp.status) {
-                    App.showToastShrot("ok");
                     UiObserverManager.getInstance().dispatchEvent(cmd, resp.status, resp.errorMsg, null);
                 } else {
                     UiObserverManager.getInstance().dispatchEvent(cmd, resp.status, resp.errorMsg, null);
@@ -218,12 +217,13 @@ public class UserLogic extends BaseLogic {
         App.getSp().edit().putString(Constant.USER_INFO, "").commit();
     }
 
-    private void setUser(User user) {
+    public void setUser(User user) {
         this.user = user;
         try {
             Gson gson = new Gson();
             String userJson = gson.toJson(this.user);
             App.getSp().edit().putString(Constant.USER_INFO, userJson).commit();
+            App.getSp().edit().putString(Constant.USER_TEST_INFO, userJson).commit();
         } catch (Exception e) {
             MLog.e(UserLogic.this, e.toString());
         }
