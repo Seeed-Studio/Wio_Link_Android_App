@@ -32,6 +32,7 @@ import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
@@ -159,9 +160,11 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                                         @Override
                                         public void run() {
                                             String ota_server_url = ((App) getApplication()).getOtaServerUrl();
+                                            ota_server_url = NetworkUtils.getDomainName(ota_server_url);
+                                            String ota_server_ip = ((App) getApplication()).getOtaServerIP();
                                             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
                                                     node_key + "\t" + node_sn + "\t" + ota_server_url + "\t"
-                                                    + ota_server_url + "\t";
+                                                    + ota_server_ip + "\t";
                                             Log.i(TAG, "cmd_connect: " + cmd_connect);
                                             Log.i(TAG, "AP ip: " + AP_IP);
                                             new SetNodeSn().execute(cmd_connect, AP_IP);
@@ -314,7 +317,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             mProgressBar.setMessage("Setting Wio name...");
             mProgressBar.show();
             IotApi api = new IotApi();
-            User user =  UserLogic.getInstance().getUser();
+            User user = UserLogic.getInstance().getUser();
             api.setAccessToken(user.token);
             IotService iot = api.getService();
             iot.nodesRename(node_name, node_sn, new Callback<SuccessResponse>() {

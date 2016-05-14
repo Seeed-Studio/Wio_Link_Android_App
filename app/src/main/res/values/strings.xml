@@ -98,7 +98,7 @@
 
     <!--login-->
     <string-array name="server">
-        <item>Server</item>
+        <item>Default Server</item>
         <item>Custom</item>
     </string-array>
 

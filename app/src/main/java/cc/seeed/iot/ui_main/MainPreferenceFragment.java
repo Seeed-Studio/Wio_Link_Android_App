@@ -44,10 +44,8 @@ public class MainPreferenceFragment extends PreferenceFragment implements Prefer
     }
 
     private void initView() {
-        if (ota_ip.equals(CommonUrl.OTA_SERVER_IP)) {
-            ep_server.setSummary(ota_url + " (China)");
-        } else if (ota_ip.equals(CommonUrl.OTA_SERVER_URL)) {
-            ep_server.setSummary(ota_url + " (International)");
+        if (ota_url.equals(CommonUrl.OTA_SERVER_URL)) {
+            ep_server.setSummary(ota_url + " (Default Server)");
         } else {
             ep_server.setSummary(ota_ip + " (Custom)");
         }

@@ -322,11 +322,6 @@ public class MainScreenActivity extends AppCompatActivity
                                 startActivity(intent);
                             }
                             break;
-                            case R.id.nav_test: {
-                                Intent intent = new Intent(MainScreenActivity.this, TestActivity.class);
-                                startActivity(intent);
-                            }
-                            break;
                         }
 
                         return true;

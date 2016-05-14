@@ -9,7 +9,7 @@ public class CommonUrl {
     public static String Server_In_Ota_Url_Prefix = "https://192.168.4.99";
     public static String Server_In_Ota_Ip_Prefix = "192.168.4.99";
     public static String Server_Out_Ota_Url_Prefix = "https://wio.seeed.io";
-    public static String Server_Out_Ota_Ip_Prefix = "192.168.21.48";
+    public static String Server_Out_Ota_Ip_Prefix = "120.25.216.117";
 
     public static String Hinge_User_Login = "r=common/user/login";
     public static String Hinge_User_Register = "r=common/user/register";

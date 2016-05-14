@@ -29,6 +29,7 @@ import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.util.CommonUrl;
+import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.webapi.IotApi;
 
 public class SelServerActivity extends AppCompatActivity {
@@ -76,7 +77,7 @@ public class SelServerActivity extends AppCompatActivity {
         String ota_server_url = ((App) getApplication()).getOtaServerUrl();
         if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
             _serverSpinner.setSelection(0, true);
-        }  else {
+        } else {
             _serverSpinner.setSelection(1, true);
             _inputLayout.setVisibility(View.VISIBLE);
             _serverIpText.setText(ota_server_url);
@@ -125,25 +126,27 @@ public class SelServerActivity extends AppCompatActivity {
             case 0:
                 ota_server_ip = CommonUrl.OTA_SERVER_IP;
                 ota_server_url = CommonUrl.OTA_SERVER_URL;
-                saveUrlAndIp(ota_server_url, ota_server_ip);
-                onSaveSuccess();
+                getHostAddress(ota_server_url);
+             /*   saveUrlAndIp(ota_server_url, ota_server_ip);
+                onSaveSuccess();*/
                 break;
             case 1:
-
                 ota_server_url = _serverIpText.getText().toString();
+                if (RegularUtils.isWebsite(ota_server_url)){
+                    getHostAddress(ota_server_url);
+                }else {
+                    _serverIpText.setError("e.g. https://192.168.31.2 or https://iot.seeed.cc");
+                }
 
-                final ProgressDialog progressDialog = new ProgressDialog(SelServerActivity.this,
-                        R.style.AppTheme_Dark_Dialog);
-                progressDialog.setIndeterminate(true);
-                progressDialog.setMessage("Get your server's host address...");
-                progressDialog.show();
-
-                getHostAddress(ota_server_url, progressDialog);
                 break;
         }
     }
 
-    private void getHostAddress(final String ota_server_url, final ProgressDialog progressDialog) {
+    private void getHostAddress(final String ota_server_url) {
+        final ProgressDialog progressDialog = new ProgressDialog(SelServerActivity.this, R.style.AppTheme_Dark_Dialog);
+        progressDialog.setIndeterminate(true);
+        progressDialog.setMessage("Get your server's host address...");
+        progressDialog.show();
         new Thread() {
             @Override
             public void run() {
@@ -226,7 +229,7 @@ public class SelServerActivity extends AppCompatActivity {
     }
 
     public class GetStausCode {
-//        OkHttpClient client = new OkHttpClient();
+        //        OkHttpClient client = new OkHttpClient();
         OkHttpClient client = IotApi.getUnsafeOkHttpClient();
 
         int run(String url) throws IOException {

@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -42,6 +43,10 @@ public class TestActivity extends BaseActivity {
     EditText mEtIpAdress;
     @InjectView(R.id.mBtngetIp)
     Button mBtngetIp;
+    @InjectView(R.id.mTvDomain)
+    TextView mTvDomain;
+    @InjectView(R.id.mTvIP)
+    TextView mTvIP;
 
     private ConfigUdpSocket udpClient;
 
@@ -62,18 +67,28 @@ public class TestActivity extends BaseActivity {
                 regular();
                 break;
             case R.id.mBtngetIp:
-                getIpAddress();
+               getDomain();
                 break;
         }
     }
 
-    public void getIpAddress() {
+    public void getDomain(){
+        String url = mEtIpAdress.getText().toString().trim();
+        if (!RegularUtils.isWebsite(url)){
+            App.showToastShrot("格式不正确");
+        }else {
+            mTvDomain.setText(NetworkUtils.getDomainName(url));
+            getIpAddress(url);
+        }
+    }
+
+    public void getIpAddress(final String url) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 InetAddress address = null;
                 try {
-                    address = InetAddress.getByName(NetworkUtils.getDomainName(CommonUrl.OTA_SERVER_URL));
+                    address = InetAddress.getByName(NetworkUtils.getDomainName(url));
                 } catch (UnknownHostException e) {
                     e.printStackTrace();
                 }
@@ -83,7 +98,7 @@ public class TestActivity extends BaseActivity {
                         @Override
                         public void run() {
                             try {
-                                mEtIpAdress.setText(NetworkUtils.getDomainName(CommonUrl.OTA_SERVER_URL) + " : " + finalAddress.getHostAddress());
+                                mTvIP.setText(finalAddress.getHostAddress());
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
