@@ -1,5 +1,6 @@
 package cc.seeed.iot.ui_login;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,7 +71,7 @@ public class ResetPwd01Activity extends BaseActivity {
 
         String email = _emailText.getText().toString();
         App.getSp().edit().putString("user_email", email).commit();
-        UserLogic.getInstance().forgetPwd(email);
+        UserLogic.getInstance().sendCheckCodeToEmail(email);
     }
 
     public boolean validate() {
@@ -104,10 +105,19 @@ public class ResetPwd01Activity extends BaseActivity {
            }
            _resetButton.setEnabled(true);
            if (ret){
-               App.showToastShrot("Verification code has been sent");
-               Intent intent = new Intent(ResetPwd01Activity.this, ResetPwd02Activity.class);
-               intent.putExtra(ResetPwd02Activity.Intent_Email,_emailText.getText().toString());
-               startActivity(intent);
+               if (App.getApp().isDefaultServer()){
+                   App.showToastShrot("Verification code has been sent");
+                   Intent intent = new Intent(ResetPwd01Activity.this, ResetPwd02Activity.class);
+                   intent.putExtra(ResetPwd02Activity.Intent_Email,_emailText.getText().toString());
+                   startActivity(intent);
+               }else {
+                   AlertDialog.Builder builder = new AlertDialog.Builder(ResetPwd01Activity.this);
+                   builder.setPositiveButton(R.string.ok, null).create();
+                   builder.setTitle("Success");
+                   builder.setMessage(errInfo);
+                   builder.show();
+               }
+
            }else {
                _emailText.setError(errInfo);
                _emailText.requestFocus();

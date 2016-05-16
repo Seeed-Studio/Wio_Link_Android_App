@@ -16,6 +16,7 @@ import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.logic.UserLogic;
+import cc.seeed.iot.util.ToolUtil;
 
 public class ResetPwd02Activity extends BaseActivity {
 
@@ -115,7 +116,7 @@ public class ResetPwd02Activity extends BaseActivity {
         dialog.setMessage("Reset your email...");
         dialog.show();
 
-        UserLogic.getInstance().forgetPwd(email);
+        UserLogic.getInstance().sendCheckCodeToEmail(email);
     }
 
     @Override
@@ -136,6 +137,9 @@ public class ResetPwd02Activity extends BaseActivity {
                 App.showToastLong(errInfo);
             }
         } else if (Cmd_UserForgetPwd.equals(event)) {
+            if (!ToolUtil.isTopActivity(ResetPwd02Activity.this, ResetPwd02Activity.this.getClass().getSimpleName())){
+                return;
+            }
             if (dialog != null) {
                 dialog.dismiss();
             }

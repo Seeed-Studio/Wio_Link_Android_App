@@ -56,6 +56,11 @@ public class ChangePwdActivity extends BaseActivity {
     }
 
     private void initView() {
+        if (App.getApp().isDefaultServer()){
+            _oldPwdText.setVisibility(View.VISIBLE);
+        }else {
+            _oldPwdText.setVisibility(View.GONE);
+        }
         _savePwdButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +88,7 @@ public class ChangePwdActivity extends BaseActivity {
 
         String oldPwd = _oldPwdText.getText().toString().trim();
         String newPwd = _newPwdText.getText().toString().trim();
-        UserLogic.getInstance().changePassword(oldPwd, newPwd);
+        UserLogic.getInstance().changePwd(oldPwd, newPwd);
         //checkOldPassword(progressDialog);
     }
 
@@ -93,6 +98,9 @@ public class ChangePwdActivity extends BaseActivity {
         String oldPwd = _oldPwdText.getText().toString();
         String new_pwd = _newPwdText.getText().toString();
         String new_verify = _newPwdVerifyText.getText().toString();
+        if (!App.getApp().isDefaultServer()){
+            oldPwd = "123456";
+        }
         if (oldPwd.isEmpty() || oldPwd.length() < 6) {
             _oldPwdText.setError("Password is too short (minimum is 6 characters)");
             valid = false;
@@ -123,6 +131,7 @@ public class ChangePwdActivity extends BaseActivity {
             }
             _savePwdButton.setEnabled(true);
             if (ret) {
+                App.showToastShrot("Password changed successfully.");
                 finish();
             } else {
                 App.showToastLong(errInfo);

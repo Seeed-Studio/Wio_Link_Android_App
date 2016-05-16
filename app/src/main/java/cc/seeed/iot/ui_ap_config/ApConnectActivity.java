@@ -161,10 +161,10 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                                         public void run() {
                                             String ota_server_url = ((App) getApplication()).getOtaServerUrl();
                                             ota_server_url = NetworkUtils.getDomainName(ota_server_url);
-                                            String ota_server_ip = ((App) getApplication()).getOtaServerIP();
+                                          //  String ota_server_ip = ((App) getApplication()).getOtaServerIP();
                                             String cmd_connect = "APCFG: " + ssid + "\t" + password + "\t" +
                                                     node_key + "\t" + node_sn + "\t" + ota_server_url + "\t"
-                                                    + ota_server_ip + "\t";
+                                                    + ota_server_url + "\t";
                                             Log.i(TAG, "cmd_connect: " + cmd_connect);
                                             Log.i(TAG, "AP ip: " + AP_IP);
                                             new SetNodeSn().execute(cmd_connect, AP_IP);

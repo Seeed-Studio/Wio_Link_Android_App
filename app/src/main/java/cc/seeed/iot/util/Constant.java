@@ -22,6 +22,7 @@ public class Constant {
     //SharedPreferences
     public final static String SERVER_SELECT = "server_select";
     public final static String USER_INFO = "user_info";
+    public final static String APP_FIRST_START = "app_first_start";//app first start
 
 
     public enum Server{
