@@ -1,90 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fitsSystemWindows="true">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="56dp">
+        android:layout_height="match_parent"
+        android:background="@mipmap/background_01">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/logo_mini" />
+        <LinearLayout
+            android:id="@+id/mLLOrtherLogin"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
 
-        <!--  Email Label -->
-        <android.support.design.widget.TextInputLayout
+            <RelativeLayout
+                android:id="@+id/mRlGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#ffAE171B">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/google_ic" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/mRlFacebook"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="#ff43619C">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/facebook_ic" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <cc.seeed.iot.view.FontTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_above="@id/mLLOrtherLogin"
+            android:layout_marginBottom="11dp"
+            android:gravity="center_horizontal"
+            android:text="OR JOIN WITH"
+            android:textColor="#979797"
+            android:textSize="12sp"
+            app:cusTextFont="@string/Roboto_Medium" />
 
-            <EditText
-                android:id="@+id/input_email"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/mLLOrtherLogin"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_height="54dp"
+                android:background="#FFC62828"
+                android:elevation="5dp"
+                android:orientation="horizontal">
 
-        <!--  Password Label -->
-        <android.support.design.widget.TextInputLayout
+                <RelativeLayout
+                    android:id="@+id/mRlRegist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <cc.seeed.iot.view.FontTextView
+                        android:id="@+id/mTvRegist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="1dp"
+                        android:singleLine="true"
+                        android:text="SIGN UP"
+                        android:textColor="#ffffff"
+                        android:textSize="16sp"
+                        app:cusTextFont="@string/Roboto_Medium" />
+
+                    <View
+                        android:id="@+id/mRegistrTag"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/white"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/mRlLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <cc.seeed.iot.view.FontTextView
+                        android:id="@+id/mTvLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="1dp"
+                        android:singleLine="true"
+                        android:text="LOG IN"
+                        android:textColor="#b2ffffff"
+                        android:textSize="16sp"
+                        app:cusTextFont="@string/Roboto_Medium" />
+
+                    <View
+                        android:id="@+id/mLoginTag"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/white" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/mMainPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="78dp">
 
-            <EditText
-                android:id="@+id/input_password"
-                android:layout_width="match_parent"
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvSelectServer"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Password"
-                android:inputType="textPassword" />
-        </android.support.design.widget.TextInputLayout>
-
-        <TextView
-            android:id="@+id/link_server"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:gravity="center"
-            android:text="Server on 192.168.111.192. Change?"
-            android:textSize="16sp" />
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_login"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:text="Login" />
-
-
-        <TextView
-            android:id="@+id/forgot_pwd"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="Forgot your password?"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/link_signup"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="No account yet? Create one"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-</ScrollView>
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="17dp"
+                android:singleLine="true"
+                android:text="USE CUSTOMIZE SERVER?"
+                android:textColor="#777777"
+                android:textSize="12sp"
+                app:cusTextFont="@string/Roboto_Bold" />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

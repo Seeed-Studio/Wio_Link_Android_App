@@ -59,7 +59,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -69,15 +69,27 @@ Alternivetely, you can choose our default server which justhas been optimized."
             android:layout_height="wrap_content"
             android:checked="false" />
 
-        <cc.seeed.iot.view.FontEditView
-            android:id="@+id/mTvCustomServer"
+        <RelativeLayout
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:hint="Customize Server"
-            android:textColor="#9B9B9B"
-            android:textSize="20sp"
-            app:cusEditFont="@string/Roboto_Regular" />
+            android:layout_height="45dp">
+
+            <cc.seeed.iot.view.FontEditView
+                android:id="@+id/mTvCustomServer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:hint="Customize Server"
+                android:textColor="#9B9B9B"
+                android:textSize="20sp"
+                app:cusEditFont="@string/Roboto_Regular" />
+
+            <View
+                android:id="@+id/mCustomServer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 

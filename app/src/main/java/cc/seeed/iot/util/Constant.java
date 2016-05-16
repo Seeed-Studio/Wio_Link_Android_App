@@ -38,11 +38,12 @@ public class Constant {
     public final static String WIO_NODE_V1_0 = "Wio Node v1.0";
 
     //SharedPreferences
-    public final static String SERVER_SELECT = "server_select";//保存服务器选择类型,内外 or 外网
-    public final static String USER_INFO = "user_info";//保存用户信息
-    public final static String USER_TEST_INFO = "user_test_info";//保存用户信息
-    public final static String SERVER_URL = "server_url";
-    public final static String SERVER_IP = "server_ip";
+    public final static String SP_SERVER_SELECT = "sp_server_select";//保存服务器选择类型,内外 or 外网
+    public final static String SP_USER_INFO = "sp_user_info";//保存用户信息
+    public final static String SP_USER_TEST_INFO = "sp_user_test_info";//保存用户信息
+    public final static String SP_SERVER_URL = "sp_server_url";
+    public final static String SP_SERVER_IP = "sp_server_ip";
+    public final static String SP_USER_EMAIL = "sp_user_email";
 
 
     public enum Server {

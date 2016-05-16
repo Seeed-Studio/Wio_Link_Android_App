@@ -1,172 +1,173 @@
 package cc.seeed.iot.activity.user;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
+import android.graphics.Color;
+import android.os.*;
+import android.os.Process;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
-import cc.seeed.iot.entity.User;
-import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_login.ResetPwd01Activity;
-import cc.seeed.iot.ui_login.SelServerActivity;
-import cc.seeed.iot.ui_login.SignupActivity;
-import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.util.CommonUrl;
+import cc.seeed.iot.adapter.LoginAndRegistAdapter;
+import cc.seeed.iot.fragment.LoginFragment;
+import cc.seeed.iot.fragment.RegistFragment;
+import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.view.FontTextView;
 
-public class LoginAndRegistActivity extends BaseActivity {
-    private static final String TAG = "LoginAndRegistActivity";
-    private static final int REQUEST_SIGNUP = 0;
-    User user;
-    ProgressDialog dialog;
+public class LoginAndRegistActivity extends BaseActivity implements ViewPager.OnPageChangeListener, GoogleApiClient.OnConnectionFailedListener {
 
-    @InjectView(R.id.input_email)
-    EditText _emailText;
-    @InjectView(R.id.input_password)
-    EditText _passwordText;
-    @InjectView(R.id.btn_login)
-    Button _loginButton;
-    @InjectView(R.id.forgot_pwd)
-    TextView _forgotPwd;
-    @InjectView(R.id.link_server)
-    TextView _serverLink;
-    @InjectView(R.id.link_signup)
-    TextView _signupLink;
+    @InjectView(R.id.mRegistrTag)
+    View mRegistrTag;
+    @InjectView(R.id.mRlRegist)
+    RelativeLayout mRlRegist;
+    @InjectView(R.id.mLoginTag)
+    View mLoginTag;
+    @InjectView(R.id.mRlLogin)
+    RelativeLayout mRlLogin;
+    @InjectView(R.id.mMainPager)
+    ViewPager mMainPager;
+    @InjectView(R.id.mRlGoogle)
+    RelativeLayout mRlGoogle;
+    @InjectView(R.id.mRlFacebook)
+    RelativeLayout mRlFacebook;
+    @InjectView(R.id.mTvRegist)
+    FontTextView mTvRegist;
+    @InjectView(R.id.mTvLogin)
+    FontTextView mTvLogin;
+    @InjectView(R.id.mTvSelectServer)
+    FontTextView mTvSelectServer;
+    @InjectView(R.id.mLLOrtherLogin)
+    LinearLayout mLLOrtherLogin;
+
+    private List<Fragment> mFList;
+    private LoginAndRegistAdapter mAdapter;
+    private int mSelectTab = 1;//默认选择登录界面
+    private static final int RC_SIGN_IN = 9001;
+    int[] menuIds = {R.id.mRlRegist, R.id.mRlLogin};
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login_and_regist);
         ButterKnife.inject(this);
-        _emailText.setText(App.getSp().getString("user_email", ""));
+        initData();
+    }
 
-        user =  UserLogic.getInstance().getUser();
+    private void initData() {
+        mMainPager.setOffscreenPageLimit(2);
+        mFList = new ArrayList<Fragment>();
+        mFList.add(new RegistFragment());
+        mFList.add(new LoginFragment());
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                hideKeyboard(_emailText);
-                login();
-            }
-        });
-
-        _forgotPwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), ResetPwd01Activity.class);
-                startActivity(intent);
-            }
-        });
-
-        _serverLink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), SelServerActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        _signupLink.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-            }
-        });
+        mAdapter = new LoginAndRegistAdapter(getSupportFragmentManager(), mFList);
+        mMainPager.setAdapter(mAdapter);
+        mMainPager.setOnPageChangeListener(this);
+        mMainPager.setCurrentItem(mSelectTab, false);
+        seleted(menuIds[mSelectTab]);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        refresh_layout();
     }
 
-    private void refresh_layout() {
-        String ota_server_url = ((App) getApplication()).getOtaServerUrl();
-        if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
-            _serverLink.setText(getString(R.string.serverOn) + " International" + getString(R.string.change));
-        } else if (ota_server_url.equals(CommonUrl.OTA_SERVER_URL)) {
-            _serverLink.setText(getString(R.string.serverOn) + " China" + getString(R.string.change));
-        } else {
-            _serverLink.setText(getString(R.string.serverOn) + " " + ota_server_url + getString(R.string.change));
+    @OnClick({R.id.mTvSelectServer,R.id.mRlLogin,R.id.mRlRegist,R.id.mRlGoogle, R.id.mRlFacebook})
+    public void onClick(View view) {
+        seleted(view.getId());
+        mMainPager.setCurrentItem(mSelectTab, false);
+        switch (view.getId()) {
+            case R.id.mTvSelectServer:
+                DialogUtils.showSelectServer(LoginAndRegistActivity.this,null);
+                break;
+            case R.id.mRlGoogle:
+                App.showToastShrot("G+");
+                break;
+            case R.id.mRlFacebook:
+                App.showToastShrot("F");
+                break;
         }
     }
 
-    public void login() {
-        Log.d(TAG, "Login");
-
-        if (!validate()) {
-        //    onLoginFailed();
-            return;
-        }
-
-  //      _loginButton.setEnabled(false);
-
-        dialog = new ProgressDialog(LoginAndRegistActivity.this,
-                R.style.AppTheme_Dark_Dialog);
-        dialog.setIndeterminate(true);
-        dialog.setMessage("Authenticating...");
-        dialog.show();
-
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-        App.getSp().edit().putString("user_email",email).commit();
-        UserLogic.getInstance().login(email, password);
+    private void loginWithGoogle(){
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleApiClient  mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this )
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    public boolean validate() {
-        boolean valid = true;
-
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            _emailText.setError(null);
+    /**
+     * 设置menu_tab的选中项.
+     *
+     * @param id, 传入对应的id
+     */
+    public void seleted(int id) {
+        switch (id) {
+            case R.id.mRlRegist:
+                mSelectTab = 0;
+                mRegistrTag.setVisibility(View.VISIBLE);
+                mLoginTag.setVisibility(View.GONE);
+                mTvRegist.setTextColor(Color.parseColor("#ffffffff"));
+                mTvLogin.setTextColor(Color.parseColor("#b2ffffff"));
+                break;
+            case R.id.mRlLogin:
+                mSelectTab = 1;
+                mRegistrTag.setVisibility(View.GONE);
+                mLoginTag.setVisibility(View.VISIBLE);
+                mTvLogin.setTextColor(Color.parseColor("#ffffffff"));
+                mTvRegist.setTextColor(Color.parseColor("#b2ffffff"));
+                break;
+            default:
+                break;
         }
-
-        if (password.isEmpty() || password.length() < 6) {
-            _passwordText.setError("enter more than six characters");
-            valid = false;
-        } else {
-            _passwordText.setError(null);
-        }
-
-        return valid;
     }
 
     @Override
-    public String[] monitorEvents() {
-        return new String[]{Cmd_UserLogin};
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
     }
 
     @Override
-    public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
-        if (Cmd_UserLogin.equals(event)) {
-            if (dialog != null){
-                dialog.dismiss();
-            }
-            if (ret) {
-                Intent intent = new Intent(this, MainScreenActivity.class);
-                startActivity(intent);
-                finish();
-            }else {
-                App.showToastShrot(errInfo);
-            }
+    public void onPageSelected(int position) {
+        mSelectTab = position;
+        seleted(menuIds[position]);
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            android.os.Process.killProcess(Process.myPid());
         }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
 
     }
 }

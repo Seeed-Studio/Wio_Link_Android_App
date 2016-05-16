@@ -12,9 +12,11 @@ import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.view.FontTextView;
@@ -40,12 +42,22 @@ public class MainSettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
         ButterKnife.inject(this);
         initToolBar();
+        initData();
     }
 
     public void initToolBar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Setting");
+    }
+
+    private void initData(){
+        String url = App.getApp().getOtaServerUrl();
+        if (CommonUrl.OTA_SERVER_URL.equals(url)){
+            mTvConnectServer.setText(url +"(default)");
+        }else {
+            mTvConnectServer.setText(url +"(custom)");
+        }
     }
 
 
@@ -56,9 +68,15 @@ public class MainSettingActivity extends BaseActivity {
                 break;
             case R.id.mLLConnectServer:
                 DialogUtils.showSelectServer(this, new DialogUtils.ButtonClickListenter() {
+
                     @Override
-                    public void okClick(String url) {
-                        App.showToastShrot(url);
+                    public void okClick(String url, String ip) {
+                        if (CommonUrl.OTA_SERVER_URL.equals(url)){
+                            mTvConnectServer.setText(url +"(default)");
+                        }else {
+                            mTvConnectServer.setText(url +"(custom)");
+                        }
+                       // App.showToastShrot("url: "+url +" ip: "+ip);
                     }
 
                     @Override
@@ -69,11 +87,7 @@ public class MainSettingActivity extends BaseActivity {
                 break;
             case R.id.mLLLogout:
                 UserLogic.getInstance().logOut();
-                ((App) getApplication()).setFirstUseState(true);
-                DBHelper.delNodesAll();
-                DBHelper.delGrovesAll();
-                PinConfigDBHelper.delPinConfigAll();
-                Intent intent = new Intent(this, SetupActivity.class);
+                Intent intent = new Intent(this, LoginAndRegistActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 break;

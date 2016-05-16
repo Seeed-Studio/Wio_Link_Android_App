@@ -25,8 +25,6 @@ import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.util.Common;
-import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
@@ -82,7 +80,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     public void initData() {
-        int server = App.getApp().getSp().getInt(Constant.SERVER_SELECT, Constant.Server.In_Net.getValue());
+        int server = App.getApp().getSp().getInt(Constant.SP_SERVER_SELECT, Constant.Server.In_Net.getValue());
 
         if (server == Constant.Server.In_Net.getValue()) {
             checkId = mRBInterNet.getId();
@@ -103,11 +101,11 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         }
         if (checkedId == R.id.mRBInterNet) {
-            App.getApp().getSp().edit().putInt(Constant.SERVER_SELECT, Constant.Server.In_Net.getValue()).commit();
+            App.getApp().getSp().edit().putInt(Constant.SP_SERVER_SELECT, Constant.Server.In_Net.getValue()).commit();
             UserLogic.getInstance().logOut();
             startActivity(new Intent(TestActivity.this, WelcomeActivity.class));
         } else {
-            App.getApp().getSp().edit().putInt(Constant.SERVER_SELECT, Constant.Server.Out_Net.getValue()).commit();
+            App.getApp().getSp().edit().putInt(Constant.SP_SERVER_SELECT, Constant.Server.Out_Net.getValue()).commit();
             UserLogic.getInstance().logOut();
             startActivity(new Intent(TestActivity.this, WelcomeActivity.class));
         }
@@ -133,8 +131,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void addUser(){
-        String userStr = App.getSp().getString(Constant.USER_TEST_INFO, "");
-        String userStr1 = App.getSp().getString(Constant.USER_INFO, "");
+        String userStr = App.getSp().getString(Constant.SP_USER_TEST_INFO, "");
+        String userStr1 = App.getSp().getString(Constant.SP_USER_INFO, "");
         if (!TextUtils.isEmpty(userStr1)){
             return;
         }
@@ -195,7 +193,6 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
             }
         }).start();
-
     }
 
     public void regular() {

@@ -46,13 +46,15 @@
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".ui_login.ResetPwd01Activity"
-            android:theme="@style/AppTheme.Dark"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:name=".activity.user.ResetPwd01Activity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".ui_login.ResetPwd02Activity"
-            android:theme="@style/AppTheme.Dark"
-            android:windowSoftInputMode="stateAlwaysHidden" />
+            android:name=".activity.user.ResetPwd02Activity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+        <activity
+            android:name=".activity.user.ResetPwd03Activity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name="cc.seeed.iot.ui_login.SelServerActivity"
             android:theme="@style/AppTheme.Dark"
@@ -69,13 +71,12 @@
         <activity android:name="cc.seeed.iot.activity.TestActivity" />
         <activity
             android:name=".activity.user.LoginAndRegistActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTop"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
             android:name=".activity.SetupIotLinkActivity1"
             android:launchMode="singleTop"/>
-        <!-- launchMode="singleTop" 保证activity在栈里的唯一性 -->
+        <!-- launchMode="singleTop" 保证activity在栈顶的唯一性 -->
         <activity
             android:name=".ui_login.ChangePwdActivity"
             android:theme="@style/AppTheme.Dark" />

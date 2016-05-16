@@ -1,97 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/primary"
-    android:fitsSystemWindows="true">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="56dp">
+        android:layout_height="match_parent"
+        android:background="@mipmap/background_01"
+        android:orientation="vertical">
 
-        <TextView
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/mToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="5dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
-            android:textColor="#ba7d7e"
-            android:text="If you dont recive verification code after a few minutes."/>
-        <TextView
-            android:id="@+id/mTvReqAgain"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="#ffffff"
-            android:text="Click here to request again"/>
+            android:layout_marginTop="124dp"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp"
+            android:paddingTop="56dp">
 
-        <!--  email Label -->
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="30dp">
-
-            <EditText
+            <cc.seeed.iot.view.FontEditView
                 android:id="@+id/mEtCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="#ffffff"
-                android:hint="Enter verification code"
-                android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
+                android:hint="Verification code"
+                android:textColor="#000000"
+                android:singleLine="true"
+                android:textColorHint="#FFC7C7C7"
+                android:textSize="14sp"
+                app:cusEditFont="@string/Roboto_Regular" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="30dp">
+            <cc.seeed.iot.view.FontButton
+                android:id="@+id/mBtnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/btn_long_bg"
+                android:elevation="5dp"
+                android:text="VERIFY"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:cusButtonFont="@string/Roboto_Medium" />
+            <View
+                android:layout_width="match_parent"
+                android:background="@drawable/shadow_down_bg"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_height="3dp"/>
 
-            <EditText
-                android:id="@+id/mEtNewPwd"
+            <cc.seeed.iot.view.FontTextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="#ffffff"
-                android:hint="Enter new password"
-                android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginTop="24dp"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="If you do not recieve verification code in your inbox"
+                android:textColor="#c7c7c7"
+                android:textSize="12sp"
+                app:cusTextFont="@string/Roboto_Regular" />
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="30dp">
-
-            <EditText
-                android:id="@+id/mEtReNewPwd"
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvReqAgain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="#ffffff"
-                android:hint="Renter new password"
-                android:inputType="textEmailAddress" />
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/mBtnResetPwd"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="30dp"
-            android:text="Reset password" />
-
-
-        <TextView
-            android:id="@+id/mTvCancel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="25dp"
-            android:gravity="center"
-            android:textColor="#ba7d7e"
-            android:text="Cancel"
-            android:textSize="16sp" />
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="Click here to request again."
+                android:textColor="#777777"
+                android:textSize="12sp"
+                app:cusTextFont="@string/Roboto_Regular" />
+        </LinearLayout>
     </LinearLayout>
-</ScrollView>
+</RelativeLayout>

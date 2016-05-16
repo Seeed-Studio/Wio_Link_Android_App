@@ -21,5 +21,8 @@
     <declare-styleable name="CusFontEditView">
         <attr name="cusEditFont" format="string" />
     </declare-styleable>
+    <declare-styleable name="CusFontButton">
+        <attr name="cusButtonFont" format="string" />
+    </declare-styleable>
 
 </resources>

@@ -16,7 +16,7 @@ public class SmartValue<T> {
     }
 
     public T getVal() {
-        int server = App.getApp().getSp().getInt(Constant.SERVER_SELECT, Constant.Server.In_Net.getValue());
+        int server = App.getApp().getSp().getInt(Constant.SP_SERVER_SELECT, Constant.Server.In_Net.getValue());
 
         if (ToolUtil.isApkDebug()) {
             if (server == Constant.Server.In_Net.getValue()){

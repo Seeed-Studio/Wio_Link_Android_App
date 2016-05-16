@@ -12,10 +12,10 @@ import cc.seeed.iot.net.INetUiThreadCallBack;
 import cc.seeed.iot.net.NetManager;
 import cc.seeed.iot.net.Packet;
 import cc.seeed.iot.net.Request;
-import cc.seeed.iot.util.Common;
+import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
-import cc.seeed.iot.util.EncryptUtil;
+import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -214,7 +214,11 @@ public class UserLogic extends BaseLogic {
 
     public void logOut() {
         this.user = null;
-        App.getSp().edit().putString(Constant.USER_INFO, "").commit();
+        App.getApp().setFirstUseState(true);
+        DBHelper.delNodesAll();
+        DBHelper.delGrovesAll();
+        PinConfigDBHelper.delPinConfigAll();
+        App.getSp().edit().putString(Constant.SP_USER_INFO, "").commit();
     }
 
     public void setUser(User user) {
@@ -222,8 +226,8 @@ public class UserLogic extends BaseLogic {
         try {
             Gson gson = new Gson();
             String userJson = gson.toJson(this.user);
-            App.getSp().edit().putString(Constant.USER_INFO, userJson).commit();
-            App.getSp().edit().putString(Constant.USER_TEST_INFO, userJson).commit();
+            App.getSp().edit().putString(Constant.SP_USER_INFO, userJson).commit();
+            App.getSp().edit().putString(Constant.SP_USER_TEST_INFO, userJson).commit();
         } catch (Exception e) {
             MLog.e(UserLogic.this, e.toString());
         }
@@ -231,7 +235,7 @@ public class UserLogic extends BaseLogic {
 
     public User getUser() {
         if (user == null) {
-            String userJson = App.getSp().getString(Constant.USER_INFO, "");
+            String userJson = App.getSp().getString(Constant.SP_USER_INFO, "");
             try {
                 Gson gson = new Gson();
                 user = gson.fromJson(userJson, User.class);

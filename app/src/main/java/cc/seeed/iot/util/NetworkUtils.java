@@ -1,5 +1,6 @@
 package cc.seeed.iot.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -53,6 +54,48 @@ public class NetworkUtils {
 
     }*/
 
+    public static  void getIpAddress(final Activity context,final String url, final OnIpCallback callback) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                InetAddress address = null;
+                try {
+                    address = InetAddress.getByName(getDomainName(url));
+                } catch (UnknownHostException e) {
+                    e.printStackTrace();
+                    if (callback != null){
+                        callback.failCallback(e.toString());
+                    }
+                }
+                if (address != null) {
+                    final InetAddress finalAddress = address;
+                    context.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (callback != null){
+                                    callback.okCallback(finalAddress.getHostAddress());
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                if (callback != null){
+                                    callback.failCallback(e.toString());
+                                }
+                            }
+                        }
+                    });
+
+                }
+            }
+        }).start();
+    }
+
+    public interface OnIpCallback{
+        void okCallback(String ip);
+        void failCallback(String error);
+    }
+
+
     /**
      * 获取域名,不带任何开头的纯粹域名:iot.seeed.io
      * @param str
@@ -86,7 +129,6 @@ public class NetworkUtils {
             App.showToastShrot("get IP fail!");
             return "";
         }
-
     }
 
     /**

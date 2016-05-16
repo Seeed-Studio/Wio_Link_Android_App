@@ -11,6 +11,7 @@ import java.util.List;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.MainScreenActivity;
@@ -55,9 +56,10 @@ public class WelcomeActivity extends BaseActivity {
             Intent intent = new Intent(this, MainScreenActivity.class);
             startActivity(intent);
         } else {
-            Intent intent = new Intent(this, SetupActivity.class);
+            Intent intent = new Intent(this, LoginAndRegistActivity.class);
             startActivity(intent);
         }
+        finish();
     }
 
 }

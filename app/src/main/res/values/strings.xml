@@ -19,6 +19,12 @@
     <string name="cancel">Cancel</string>
     <string name="notification_error_ssl_cert_invalid">"You're accessing a page with an untrusted or invalid certificate. Do you want to continue?"</string>
     <string name="website_format_error">hmmm..website looks wrong..</string>
+    <string name="email_format_error">hmmm..email address looks wrong..</string>
+    <string name="pwd_format_error">Password is too short (minimum is 6 characters)</string>
+    <string name="pwd_dont_match_error">Passwords don\'t match</string>
+    <string name="website_format_hint">"e.g: https://wio.seeed.io or https://192.168.31.2"</string>
+    <string name="hint_get_host_address">"Get your server's host address..."</string>
+    <string name="loading">"loading ..."</string>
 
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
@@ -140,4 +146,12 @@
     <string name="connect_server">Connect Server</string>
     <string name="setting_logout">Log Out</string>
 
+    <!-- login and regist activity-->
+    <string name="loading_login">Authenticating ...</string>
+    <string name="loading_regist">Creating Account ...</string>
+
+    <!-- reset pwd-->
+    <string name="reset_pwd_email">Reset your email...</string>
+    <string name="reset_pwd_pwd">Reset your password...</string>
+    <string name="reset_pwd_title_01">Password Recovery</string>
 </resources>

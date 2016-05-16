@@ -29,11 +29,25 @@
             android:paddingTop="56dp">
 
             <cc.seeed.iot.view.FontEditView
-                android:id="@+id/mEtEmail"
+                android:id="@+id/mEtPwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Email address"
+                android:hint="Enter new password"
+                android:inputType="textPassword"
                 android:singleLine="true"
+                android:textColor="#000000"
+                android:textColorHint="#FFC7C7C7"
+                android:textSize="14sp"
+                app:cusEditFont="@string/Roboto_Regular" />
+
+            <cc.seeed.iot.view.FontEditView
+                android:id="@+id/mEtRePwd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Re-enter new password"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:layout_marginTop="24dp"
                 android:textColor="#000000"
                 android:textColorHint="#FFC7C7C7"
                 android:textSize="14sp"
@@ -43,7 +57,7 @@
                 android:id="@+id/mBtnSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="30dp"
                 android:background="@drawable/btn_long_bg"
                 android:elevation="5dp"
                 android:text="SUBMIT"

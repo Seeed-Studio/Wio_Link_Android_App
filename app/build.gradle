@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -10,9 +11,24 @@ android {
         versionCode 18
         versionName "2.2.3"
     }
+
+
+    signingConfigs {
+        release {
+            storeFile file("E:\\seeed\\wio_link\\seeed.jks")
+            storePassword "depot0510se"
+            keyAlias "seeed"
+            keyPassword "depot0510se"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
