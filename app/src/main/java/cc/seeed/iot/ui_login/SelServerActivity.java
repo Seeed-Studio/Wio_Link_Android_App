@@ -29,6 +29,7 @@ import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.util.CommonUrl;
+import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.webapi.IotApi;
 
@@ -132,7 +133,7 @@ public class SelServerActivity extends AppCompatActivity {
                 break;
             case 1:
                 ota_server_url = _serverIpText.getText().toString();
-                if (RegularUtils.isWebsite(ota_server_url)){
+                if (RegularUtils.isDomainName(NetworkUtils.getDomainName(ota_server_url))){
                     getHostAddress(ota_server_url);
                 }else {
                     _serverIpText.setError("e.g. https://192.168.31.2 or https://iot.seeed.cc");

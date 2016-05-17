@@ -57,7 +57,7 @@ public class SignupActivity extends BaseActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                hideKeyboard();
+                hideKeyboard(v);
                 signup();
             }
         });
@@ -107,26 +107,11 @@ public class SignupActivity extends BaseActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
         App.getSp().edit().putString("user_email", email).commit();
-        UserLogic.getInstance().regiest(email, password);
-        // Implement your own resetEmail logic here.
-
-        // attemptRegister(progressDialog);
-    }
-
-    public void onSignupSuccess(String email, UserResponse userResponse) {
-        _signupButton.setEnabled(true);
-        user.email = email;
-        user.token = userResponse.token;
-//        user.user_id = userResponse.user_id;
-        // ((App) getApplication()).setUser(user);
-        ((App) getApplication()).setLoginState(true);
-        Intent intent = new Intent(this, MainScreenActivity.class);
-        startActivity(intent);
+        UserLogic.getInstance().regist(email, password);
     }
 
     public void onSignupFailed() {
         Toast.makeText(getBaseContext(), "Create account failed", Toast.LENGTH_LONG).show();
-
         _signupButton.setEnabled(true);
     }
 
@@ -150,52 +135,9 @@ public class SignupActivity extends BaseActivity {
         } else {
             _passwordText.setError(null);
         }
-
-//        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-//            _pwdVerifyText.setError("between 4 and 10 alphanumeric characters");
-//            valid = false;
-//        } else {
-//            _pwdVerifyText.setError(null);
-//        }
-
         return valid;
     }
 
-
-    private void attemptRegister(final ProgressDialog progressDialog) {
-        _emailText.setError(null);
-        _passwordText.setError(null);
-
-        final String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-//        String passwordVerify = mPasswordVerifyView.getText().toString();
-
-        IotApi api = new IotApi();
-        IotService iot = api.getService();
-        iot.userCreate(email, password, new Callback<UserResponse>() {
-            @Override
-            public void success(UserResponse userResponse, retrofit.client.Response response) {
-                onSignupSuccess(email, userResponse);
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                _emailText.setError(error.getLocalizedMessage());
-                _emailText.requestFocus();
-                onSignupFailed();
-                progressDialog.dismiss();
-            }
-        });
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager inputManager = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-
-        inputManager.hideSoftInputFromWindow(_signupButton.getWindowToken(),
-                InputMethodManager.HIDE_NOT_ALWAYS);
-    }
 
     @Override
     public String[] monitorEvents() {

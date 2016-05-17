@@ -1,6 +1,8 @@
 package cc.seeed.iot.logic;
 
 import android.text.TextUtils;
+import android.app.AlertDialog;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -20,6 +22,8 @@ import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.LoginResponse;
+import cc.seeed.iot.webapi.model.SuccessResponse;
+import cc.seeed.iot.webapi.model.UserResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -43,7 +47,40 @@ public class UserLogic extends BaseLogic {
         return sIns;
     }
 
-    public void oldLogin(final String email, String pwd) {
+    public void login(String email, String pwd) {
+        if (App.getApp().isDefaultServer()) {
+            loginDefault(email, pwd);
+        } else {
+            loginCustom(email, pwd);
+        }
+    }
+
+    public void regist(String email, String pwd) {
+        if (App.getApp().isDefaultServer()) {
+            regiestDefault(email, pwd);
+        } else {
+            registCustom(email, pwd);
+        }
+    }
+
+    public void changePwd(String oldPwd, String newPwd) {
+        if (App.getApp().isDefaultServer()) {
+            changePwdDefault(oldPwd, newPwd);
+        } else {
+            changePwdCustom(newPwd);
+        }
+    }
+
+    public void sendCheckCodeToEmail(String email) {
+        if (App.getApp().isDefaultServer()) {
+            sendCheckCodeToEmailDefault(email);
+        } else {
+            sendCheckCodeToEmailCustom(email);
+        }
+    }
+
+
+    public void loginCustom(final String email, String pwd) {
         IotApi api = new IotApi();
         IotService iot = api.getService();
         iot.userLogin(email, pwd, new Callback<LoginResponse>() {
@@ -58,7 +95,7 @@ public class UserLogic extends BaseLogic {
                     user.setToken(loginResponse.token);
                     user.setUserid(loginResponse.user_id);
 
-                    setUser(user);
+                    saveUser(user);
 
                     UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, true, "", null);
                 } else {
@@ -73,7 +110,7 @@ public class UserLogic extends BaseLogic {
         });
     }
 
-    public void login(String email, String pwd) {
+    public void loginDefault(String email, String pwd) {
         RequestParams params = new RequestParams();
 
         params.put("email", email);
@@ -86,7 +123,7 @@ public class UserLogic extends BaseLogic {
                         Gson gson = new Gson();
                         user = gson.fromJson(resp.data, User.class);
                         if (user != null) {
-                            setUser(user);
+                            saveUser(user);
                             setToken(Cmd_UserLogin);
                             //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                         } else {
@@ -102,7 +139,30 @@ public class UserLogic extends BaseLogic {
         });
     }
 
-    public void regiest(String email, String pwd){
+    public void registCustom(final String email, String pwd) {
+        IotApi api = new IotApi();
+        IotService iot = api.getService();
+        iot.userCreate(email, pwd, new Callback<UserResponse>() {
+            @Override
+            public void success(UserResponse userResponse, retrofit.client.Response response) {
+                if (user == null) {
+                    user = new User();
+                }
+
+                user.setEmail(email);
+                user.setToken(userResponse.token);
+                saveUser(user);
+                UiObserverManager.getInstance().dispatchEvent(Cmd_UserRegiest, true, "", null);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_UserRegiest, false, error.toString(), null);
+            }
+        });
+    }
+
+    public void regiestDefault(String email, String pwd) {
         RequestParams params = new RequestParams();
 
         params.put("email", email);
@@ -115,27 +175,23 @@ public class UserLogic extends BaseLogic {
                         Gson gson = new Gson();
                         user = gson.fromJson(resp.data, User.class);
                         if (user != null) {
-                            setUser(user);
+                            saveUser(user);
                             setToken(Cmd_UserRegiest);
-                            //  UiObserverManager.getInstance().dispatchEvent(Cmd_UserLogin, resp.status, resp.errorMsg, null);
                         } else {
-                              UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                            UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
-                      UiObserverManager.getInstance().dispatchEvent(Cmd_UserRegiest, resp.status, resp.errorMsg, null);
+                    UiObserverManager.getInstance().dispatchEvent(Cmd_UserRegiest, resp.status, resp.errorMsg, null);
                 }
             }
         });
     }
 
-    /**
-     * 重置密码并且发送验证码到邮件
-     * @param email
-     */
-    public void forgetPwd(String email) {
+
+    public void sendCheckCodeToEmailDefault(String email) {
         RequestParams params = new RequestParams();
         params.put("email", email);
         NetManager.getInstance().postRequest(CommonUrl.Hinge_User_ForgetPwd, Cmd_UserForgetPwd, params, new INetUiThreadCallBack() {
@@ -147,6 +203,23 @@ public class UserLogic extends BaseLogic {
                 UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
             }
         });
+    }
+
+    public void sendCheckCodeToEmailCustom(String email) {
+        IotApi api = new IotApi();
+        IotService iot = api.getService();
+        iot.userRetrievePassword(email, new Callback<SuccessResponse>() {
+            @Override
+            public void success(SuccessResponse successResponse, Response response1) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_UserForgetPwd, true, successResponse.result, null);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_UserForgetPwd, false, error.toString(), null);
+            }
+        });
+
     }
 
 
@@ -166,7 +239,7 @@ public class UserLogic extends BaseLogic {
         });
     }
 
-    public void changePassword(String oldPwd, String newPwd) {
+    public void changePwdDefault(String oldPwd, String newPwd) {
         if (user == null) {
             return;
         }
@@ -185,10 +258,31 @@ public class UserLogic extends BaseLogic {
         });
     }
 
-    public void setToken(final String cmd){
+    public void changePwdCustom(String pwd) {
+        IotApi api = new IotApi();
+        IotService iot = api.getService();
+        api.setAccessToken(user.token);
+        iot.userChangePassword(pwd, new Callback<UserResponse>() {
+            @Override
+            public void success(UserResponse userResponse, retrofit.client.Response response) {
+                if (userResponse != null) {
+                    user.setToken(userResponse.token);
+                    saveUser(user);
+                }
+                UiObserverManager.getInstance().dispatchEvent(Cmd_UserChangePwd, true, "Password changed successfully.", null);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_UserChangePwd, true, "Password changed failed", null);
+            }
+        });
+    }
+
+    public void setToken(final String cmd) {
         RequestParams params = new RequestParams();
-     //   User user = UserLogic.getInstance().getUser();
-        if (user == null){
+        //   User user = UserLogic.getInstance().getUser();
+        if (user == null) {
             return;
         }
 
@@ -200,7 +294,7 @@ public class UserLogic extends BaseLogic {
         params.put("bind_region", "seeed");
         params.put("token", user.token);
         params.put("secret", "!@#$%^&*RG)))))))JM<==TTTT==>((((((&^HVFT767JJH");
-        NetManager.getInstance().post(CommonUrl.OTA_SERVER_URL+CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
+        NetManager.getInstance().post(CommonUrl.OTA_SERVER_URL + CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
             @Override
             public void onResp(Request req, Packet resp) {
                 if (resp.status) {
@@ -221,7 +315,7 @@ public class UserLogic extends BaseLogic {
         App.getSp().edit().putString(Constant.SP_USER_INFO, "").commit();
     }
 
-    public void setUser(User user) {
+    private void saveUser(User user) {
         this.user = user;
         try {
             Gson gson = new Gson();
