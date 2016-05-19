@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="131dp"
+        android:layout_marginLeft="12dp"
+        android:background="@drawable/item_write_bg"
+        android:layout_marginBottom="13dp"
+        android:elevation="3dp"
+        android:layout_marginRight="12dp"
+        android:orientation="horizontal">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/mSDVNode"
+            android:layout_width="93dp"
+            android:layout_height="100dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            app:placeholderImage="@drawable/link_small"
+            app:placeholderImageScaleType="fitXY" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="14.2dp"
+            android:orientation="vertical">
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:singleLine="true"
+                android:layout_marginRight="10dp"
+                android:text="Wio Link"
+                android:textColor="#A6000000"
+                android:textSize="18sp"
+                app:cusTextFont="@string/Roboto_Medium" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <cc.seeed.iot.view.FontTextView
+                    android:id="@+id/mTvConnected"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="CONNECTED"
+                    android:textColor="#FF9B9B9B"
+                    android:textSize="10sp"
+                    app:cusTextFont="@string/Roboto_Medium" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:id="@+id/mTvConnectedNum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3dp"
+                    android:singleLine="true"
+                    android:text="3"
+                    android:textColor="#A6000000"
+                    android:textSize="10sp"
+                    app:cusTextFont="@string/Roboto_Medium" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:id="@+id/mTvState"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="22.5dp"
+                    android:background="@drawable/online_state_bg"
+                    android:singleLine="true"
+                    android:text="ONLINE"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="10sp"
+                    app:cusTextFont="@string/Roboto_Medium" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="9dp"
+                android:orientation="horizontal">
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/mSDVGrove01"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginRight="6dp"
+                    app:placeholderImage="@drawable/link_small"
+                    app:placeholderImageScaleType="fitXY"
+                    app:roundAsCircle="true" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/mSDVGrove02"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginRight="6dp"
+                    app:placeholderImage="@drawable/link_small"
+                    app:placeholderImageScaleType="fitXY"
+                    app:roundAsCircle="true" />
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/mSDVGrove03"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_marginRight="6dp"
+                    app:placeholderImage="@drawable/link_small"
+                    app:placeholderImageScaleType="fitXY"
+                    app:roundAsCircle="true" />
+
+                <RelativeLayout
+                    android:id="@+id/mRlMoreGrove"
+                    android:layout_width="44dp"
+                    android:layout_marginRight="6dp"
+                    android:layout_height="44dp">
+
+                    <com.facebook.drawee.view.SimpleDraweeView
+                        android:id="@+id/mSDVGrove04"
+                        android:layout_width="44dp"
+                        android:layout_height="44dp"
+                        app:placeholderImage="@drawable/link_small"
+                        app:placeholderImageScaleType="fitXY"
+                        app:roundAsCircle="true" />
+
+                    <cc.seeed.iot.view.FontTextView
+                        android:id="@+id/mTvMoreGroveNum"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/circle"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="+2"
+                        android:textColor="#FFFFFFFF"
+                        android:textSize="14sp"
+                        app:cusTextFont="@string/Roboto_Regular" />
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

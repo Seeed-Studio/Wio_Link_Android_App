@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="285dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg_write"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:visibility="visible"
+        android:layout_marginBottom="18.5dp"
+        android:text="Connection Error"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        app:cusTextFont="@string/Roboto_Medium" />
+
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTvDesc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:text="Using customize server will alow you to tansmit data diretly to wherever you wish.\r\n\r\n
+Alternivetely, you can choose our default server which justhas been optimized."
+        android:textColor="#A6000000"
+        android:textSize="14sp"
+        app:cusTextFont="@string/Roboto_Regular" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:text="CANCEL"
+                android:textColor="#FF830D10"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Roboto_Medium" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="29dp"
+                android:text="SUBMIT"
+                android:textColor="#FF830D10"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Roboto_Medium" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

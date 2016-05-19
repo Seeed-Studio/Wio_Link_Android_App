@@ -17,6 +17,7 @@ import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_login.LoginActivity;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontButton;
 import cc.seeed.iot.view.FontEditView;
 import cc.seeed.iot.view.FontTextView;
@@ -63,7 +64,7 @@ public class ResetPwd02Activity extends BaseActivity {
     public void sendCodeAgain() {
         dialog = DialogUtils.showProgressDialog(this, getString(R.string.reset_pwd_email));
         String email = App.getSp().getString(Constant.SP_USER_EMAIL, "");
-        UserLogic.getInstance().forgetPwd(email);
+        UserLogic.getInstance().sendCheckCodeToEmail(email);
     }
 
     @Override
@@ -74,6 +75,9 @@ public class ResetPwd02Activity extends BaseActivity {
     @Override
     public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
       if (Cmd_UserForgetPwd.equals(event)) {
+          if (!ToolUtil.isTopActivity(ResetPwd02Activity.this, ResetPwd02Activity.this.getClass().getSimpleName())) {
+              return;
+          }
             if (dialog != null) {
                 dialog.dismiss();
             }

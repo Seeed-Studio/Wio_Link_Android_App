@@ -1,9 +1,7 @@
-package cc.seeed.iot.ui_setnode;
+package cc.seeed.iot.adapter.set_node;
 
 import android.content.Context;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
 /**
@@ -56,6 +55,11 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
         final GroverDriver grove = groves.get(position);
+        if (position == 0){
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+            params.setMargins(ToolUtil.dp2px(16,context.getResources()),0,ToolUtil.dp2px(10,context.getResources()),0);
+            holder.itemView.setLayoutParams(params);
+        }
         ImageView grove_image = holder.grove_image;
         UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_no, UrlImageViewHelper.CACHE_DURATION_INFINITE);
         holder.mView.setPressed(selector.get(position, false));

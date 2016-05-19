@@ -59,9 +59,11 @@
             android:name="cc.seeed.iot.ui_login.SelServerActivity"
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name="cc.seeed.iot.ui_ap_config.GoReadyActivity" />
-        <activity android:name=".ui_ap_config.WifiWioListActivity" />
-        <activity android:name="cc.seeed.iot.ui_ap_config.WifiListActivity" />
+        <activity android:name=".activity.add_step.Step01GoReadyActivity" />
+        <activity android:name=".activity.add_step.Step02WifiWioListActivity"
+            />
+        <activity android:name=".activity.add_step.Step03WifiListActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
         <activity android:name="cc.seeed.iot.ui_main.GrovesActivity" />
         <activity android:name="cc.seeed.iot.ui_main.SettingActivity" />
@@ -88,7 +90,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="cc.seeed.iot.ui_ap_config.ApConnectActivity" />
+        <activity android:name=".activity.add_step.Step04ApConnectActivity" />
     </application>
 
 </manifest>

@@ -28,8 +28,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.adapter.set_node.GroveFilterRecyclerAdapter;
+import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
+import cc.seeed.iot.adapter.set_node.GroveListRecyclerAdapter;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.NodeApiActivity;

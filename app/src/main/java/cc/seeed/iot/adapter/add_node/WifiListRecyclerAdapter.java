@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_ap_config;
+package cc.seeed.iot.adapter.add_node;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;
@@ -23,16 +22,14 @@ public class WifiListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerVi
     private Context context;
     WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks;
 
-    public WifiListRecyclerAdapter(List<ScanResult> wifiList,
-                                   WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks) {
+    public WifiListRecyclerAdapter(List<ScanResult> wifiList,WifiRecyclerViewHolder.IMyViewHolderClicks iMyViewHolderClicks) {
         this.wifiList = wifiList;
         this.iMyViewHolderClicks = iMyViewHolderClicks;
     }
 
     @Override
     public WifiRecyclerViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.wifi_list_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.wifi_list_item, parent, false);
         this.context = parent.getContext();
 
         WifiRecyclerViewHolder vh = new WifiRecyclerViewHolder(v, iMyViewHolderClicks);

@@ -145,10 +145,10 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 user.setNickname("Jerry_Test");
                 user.setToken("VSFFsdgagagF");
                 user.setUserid("161319");
-                UserLogic.getInstance().setUser(user);
+                UserLogic.getInstance().saveUser(user);
                 UserLogic.getInstance().setToken("");
             }else {
-                UserLogic.getInstance().setUser(user);
+                UserLogic.getInstance().saveUser(user);
             }
 
             startActivity(new Intent(this, MainScreenActivity.class));

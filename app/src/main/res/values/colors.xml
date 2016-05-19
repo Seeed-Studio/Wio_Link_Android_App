@@ -85,4 +85,9 @@
     <!-- main menu-->
     <color name="main_menu_item">#a5000000</color>
 
+    <!-- add device-->
+    <color name="step_did">#FFFFFFFF</color>
+    <color name="step_do1">#FF8A2324</color>
+    <color name="step_do2">#FFB71C1C</color>
+
 </resources>

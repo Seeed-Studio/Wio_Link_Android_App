@@ -11,9 +11,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ import cc.seeed.iot.fragment.RegistFragment;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.view.FontTextView;
 
-public class LoginAndRegistActivity extends BaseActivity implements ViewPager.OnPageChangeListener, GoogleApiClient.OnConnectionFailedListener {
+public class LoginAndRegistActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
 
     @InjectView(R.id.mRegistrTag)
     View mRegistrTag;
@@ -104,7 +101,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         }
     }
 
-    private void loginWithGoogle(){
+/*    private void loginWithGoogle(){
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();
@@ -114,7 +111,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 .build();
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+    }*/
 
     /**
      * 设置menu_tab的选中项.
@@ -164,10 +161,5 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
             android.os.Process.killProcess(Process.myPid());
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 }

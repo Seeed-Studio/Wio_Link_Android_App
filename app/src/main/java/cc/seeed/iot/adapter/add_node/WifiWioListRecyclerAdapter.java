@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_ap_config;
+package cc.seeed.iot.adapter.add_node;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cc.seeed.iot.R;

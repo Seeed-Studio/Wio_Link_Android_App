@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTVItem"
+        style="@style/popWindowItem"
+        app:cusTextFont="@string/Roboto_Regular"
+        android:text="Report a technical issue" />
+
+    <View
+        android:id="@+id/mDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:background="#e7e7e7" />
+
+</LinearLayout>

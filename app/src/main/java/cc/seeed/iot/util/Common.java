@@ -21,4 +21,17 @@ public class Common {
         public static String AppRootPath = Environment.getExternalStorageDirectory().getPath() + "/seeed/"+ App.getApp().getPackageName()+"/";
         public static String ImgPath = Environment.getExternalStorageDirectory().getPath()+ "/seeed/wiolink/img/";
 
+        public enum NodeOrder {
+                VERSION("VERSION"), APCFG("APCFG"), SCAN("SCAN"), REBOOT("REBOOT");
+                private String value;
+
+                NodeOrder(String value) {
+                        this.value = value;
+                }
+
+                public String getValue() {
+                        return value;
+                }
+        }
+
 }

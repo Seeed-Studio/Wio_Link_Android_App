@@ -11,6 +11,8 @@ public class CommonUrl {
     public static String OTA_SERVER_URL = "https://wio.seeed.io";
     public static String OTA_SERVER_IP = "120.25.216.117";
 
+    public static final String AP_IP = "192.168.4.1";
+
     public static String Hinge_User_Login = "r=common/user/login";
     public static String Hinge_User_Register = "r=common/user/register";
     public static String Hinge_User_ForgetPwd = "r=common/user/forget-password";

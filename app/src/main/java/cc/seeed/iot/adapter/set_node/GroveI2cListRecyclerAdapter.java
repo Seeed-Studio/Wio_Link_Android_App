@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_setnode;
+package cc.seeed.iot.adapter.set_node;
 
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
 /**
@@ -24,6 +26,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
     private static final String TAG = "...ListRecyclerAdapter";
     private List<PinConfig> pinConfigs;
     private OnLongClickListener mOnLongClickListener;
+    private OnRemoveItemListener mOnRemoveItemListener;
     private GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener mItemClickListener;
 
     public interface OnLongClickListener {
@@ -34,6 +37,14 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
         mOnLongClickListener = l;
     }
 
+    public interface OnRemoveItemListener {
+        void onRemoveItem(PinConfig pinConfig, int position,int totalPin);
+    }
+
+    public void setOnRemoveItemListener(OnRemoveItemListener l) {
+        mOnRemoveItemListener = l;
+    }
+
     public GroveI2cListRecyclerAdapter(List<PinConfig> pinConfigs) {
         this.pinConfigs = new ArrayList<>();
         this.pinConfigs = pinConfigs;
@@ -41,22 +52,36 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
 
     @Override
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.grove_i2c_list_item, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.grove_i2c_list_item, parent, false);
         return new MainViewHolder(v, mOnLongClickListener);
     }
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
-        PinConfig pinConfig = pinConfigs.get(position);
-        ImageView grove_image = holder.grove_image;
+        final PinConfig pinConfig = pinConfigs.get(position);
         try {
             GroverDriver groverDriver = DBHelper.getGroves(pinConfig.sku).get(0);
-            UrlImageViewHelper.setUrlDrawable(grove_image, groverDriver.ImageURL, R.drawable.grove_no,
-                    UrlImageViewHelper.CACHE_DURATION_INFINITE);
+            UrlImageViewHelper.setUrlDrawable(holder.mIvGrove, groverDriver.ImageURL, R.drawable.grove_no,UrlImageViewHelper.CACHE_DURATION_INFINITE);
         } catch (Exception e) {
             Log.e(TAG, "getGroves:" + e);
         }
+
+        List<GroverDriver> groves = DBHelper.getGroves(pinConfig.sku);
+        if (groves != null && groves.size() > 0){
+            holder.mTvName.setText(groves.get(0).GroveName);
+        }else {
+            holder.mTvName.setText("");
+        }
+        holder.mRlRemove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mOnRemoveItemListener != null){
+                    pinConfigs.remove(position);
+                    mOnRemoveItemListener.onRemoveItem(pinConfig,position,pinConfigs.size());
+                    notifyDataSetChanged();
+                }
+            }
+        });
 
     }
 
@@ -75,18 +100,22 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
     }
 
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
+    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener{
         private OnLongClickListener mOnLongClickListener;
 
-        ImageView grove_image;
         View mView;
+        ImageView mIvGrove;
+        RelativeLayout mRlRemove;
+        FontTextView mTvName;
 
         public MainViewHolder(View itemView, OnLongClickListener mOnLongClickListener) {
             super(itemView);
             this.mOnLongClickListener = mOnLongClickListener;
 
             mView = itemView;
-            grove_image = (ImageView) itemView.findViewById(R.id.grove_image);
+            mIvGrove = (ImageView) itemView.findViewById(R.id.mIvGrove);
+            mRlRemove = (RelativeLayout) itemView.findViewById(R.id.mRlRemove);
+            mTvName = (FontTextView) itemView.findViewById(R.id.mTvName);
 
             mView.setTag("I2cList");
             mView.setOnLongClickListener(this);
@@ -99,5 +128,6 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
             }
             return true;
         }
+
     }
 }

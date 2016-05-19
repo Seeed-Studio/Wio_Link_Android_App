@@ -315,7 +315,7 @@ public class UserLogic extends BaseLogic {
         App.getSp().edit().putString(Constant.SP_USER_INFO, "").commit();
     }
 
-    private void saveUser(User user) {
+    public void saveUser(User user) {
         this.user = user;
         try {
             Gson gson = new Gson();

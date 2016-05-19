@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@mipmap/step_bg"
+    android:layout_height="70dp">
+
+    <View
+        android:id="@+id/mLine"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="73dp"
+        android:layout_marginRight="73dp"
+        android:layout_height="3dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="26dp"
+        android:background="#FF8A2324"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="56dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/mIvStep1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:background="@drawable/circle_did"/>
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvStep1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mIvStep1"
+            android:layout_toLeftOf="@id/mLine"
+            android:text="STEP 1"
+            android:layout_marginTop="5.6dp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="12sp"
+            app:cusTextFont="@string/Roboto_Regular" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/mIvStep2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:background="@drawable/circle_did"/>
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvStep2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mIvStep1"
+            android:layout_toLeftOf="@id/mLine"
+            android:text="STEP 2"
+            android:layout_marginTop="5.6dp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="12sp"
+            app:cusTextFont="@string/Roboto_Regular" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="56dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/mIvStep3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:background="@drawable/circle_did"/>
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvStep3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/mIvStep1"
+            android:layout_toLeftOf="@id/mLine"
+            android:text="STEP 3"
+            android:layout_marginTop="5.6dp"
+            android:textColor="#FFFFFFFF"
+            android:textSize="12sp"
+            app:cusTextFont="@string/Roboto_Regular" />
+
+    </LinearLayout>
+
+</RelativeLayout>

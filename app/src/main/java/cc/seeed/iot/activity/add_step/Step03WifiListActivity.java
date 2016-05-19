@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_ap_config;
+package cc.seeed.iot.activity.add_step;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,44 +7,67 @@ import android.content.IntentFilter;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.adapter.add_node.WifiListRecyclerAdapter;
+import cc.seeed.iot.adapter.add_node.WifiRecyclerViewHolder;
+import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.view.StepView;
 
 
-public class WifiListActivity extends AppCompatActivity
+public class Step03WifiListActivity extends BaseActivity
         implements WifiRecyclerViewHolder.IMyViewHolderClicks {
-    private final static String TAG = "WifiListActivity";
+    private final static String TAG = "Step03WifiListActivity";
     private final static String PION_WIFI_PREFIX = "PionOne";
     private final static String WIO_WIFI_PREFIX = "Wio";
-    private Toolbar mToolbar;
-    private RecyclerView mWifiListView;
-    private WifiListRecyclerAdapter mWifiListAdapter;
 
     private String board;
     private String node_sn;
     private String node_key;
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+    @InjectView(R.id.mStepView)
+    StepView mStepView;
+    @InjectView(R.id.tip)
+    TextView mTip;
+    @InjectView(R.id.wifi_list)
+    RecyclerView mWifiListView;
+
+    private WifiListRecyclerAdapter mWifiListAdapter;
+    private ScanResult scanResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_list);
+        ButterKnife.inject(this);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        initToolBar();
+        initData();
+
+    }
+
+    private void initToolBar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_wifi_list_activity);
+    }
 
-        mWifiListView = (RecyclerView) findViewById(R.id.wifi_list);
+    private void initData() {
+        mStepView.setDoingStep(2);
         if (mWifiListView != null) {
             mWifiListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -53,7 +76,6 @@ public class WifiListActivity extends AppCompatActivity
             mWifiListAdapter = new WifiListRecyclerAdapter(getWifiExceptPionList(), this);
             mWifiListView.setAdapter(mWifiListAdapter);
         }
-
     }
 
     @Override
@@ -129,14 +151,21 @@ public class WifiListActivity extends AppCompatActivity
     @Override
     public void onItem(View caller) {
         int position = mWifiListView.getChildLayoutPosition(caller);
-        ScanResult scanResult = mWifiListAdapter.getItem(position);
-
-        Intent intent = new Intent(this, ApConnectActivity.class);
-        intent.putExtra("ssid", scanResult.SSID);
-        intent.putExtra("board", board);
-        intent.putExtra("node_key", node_key);
-        intent.putExtra("node_sn", node_sn);
-        startActivity(intent);
+        scanResult = mWifiListAdapter.getItem(position);
+        DialogUtils.showEditWifiPwdDialog(Step03WifiListActivity.this, new DialogUtils.ButtonEditClickListenter() {
+            @Override
+            public void okClick(String pwd) {
+                //  App.showToastShrot(pwd);
+           //     DialogUtils.showProgressDialog(Step03WifiListActivity.this, "Sending wifi password to Wio...");
+                Intent intent = new Intent(Step03WifiListActivity.this, Step04ApConnectActivity.class);
+                intent.putExtra(Step04ApConnectActivity.Intent_Ssid, scanResult.SSID);
+                intent.putExtra(Step04ApConnectActivity.Intent_Board, board);
+                intent.putExtra(Step04ApConnectActivity.Intent_NodeKey, node_key);
+                intent.putExtra(Step04ApConnectActivity.Intent_NodeSn, node_sn);
+                intent.putExtra(Step04ApConnectActivity.Intent_WifiPwd, pwd);
+                startActivity(intent);
+            }
+        });
     }
 
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
@@ -164,5 +193,7 @@ public class WifiListActivity extends AppCompatActivity
     private void refreshWifiList() {
         mWifiListAdapter.updateAll(getWifiExceptPionList());
     }
+
+
 }
 

@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:background="@drawable/grove_filter_tag_bg"
-        android:layout_height="56dp">
+        android:layout_height="46dp">
 
         <cc.seeed.iot.view.FontTextView
             android:id="@+id/grove_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+            app:cusTextFont="@string/Roboto_Medium"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:layout_centerInParent="true"
+            android:textColor="#A6000000"
             android:text="All"
-            android:textSize="20sp"/>
+            android:textSize="14sp"/>
 
         <View
             android:id="@+id/mViewTag"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
+            android:layout_height="3.5dp"
             android:layout_alignParentBottom="true"
-            android:background="#bc1d21" />
+            android:background="#FFC62828" />
     </RelativeLayout>
 </LinearLayout>

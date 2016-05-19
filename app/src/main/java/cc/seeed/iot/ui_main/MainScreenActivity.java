@@ -1,30 +1,11 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package cc.seeed.iot.ui_main;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Process;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -37,19 +18,15 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,20 +37,15 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_ap_config.GoReadyActivity;
-import cc.seeed.iot.ui_login.SetupActivity;
-import cc.seeed.iot.ui_main.util.DividerItemDecoration;
+import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
 import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
-import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
@@ -187,7 +159,7 @@ public class MainScreenActivity extends AppCompatActivity
             mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(layout);
-            mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
+       //     mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
             mAdapter = new NodeListRecyclerAdapter(nodes);
             mAdapter.setOnClickListener(this);
             mRecyclerView.setAdapter(mAdapter);
@@ -444,7 +416,7 @@ public class MainScreenActivity extends AppCompatActivity
 
     private void setupActivity(String board) {
         ((App) getApplication()).setConfigState(true);
-        Intent intent = new Intent(MainScreenActivity.this, GoReadyActivity.class);
+        Intent intent = new Intent(MainScreenActivity.this, Step01GoReadyActivity.class);
         intent.putExtra("board", board);
         startActivity(intent);
     }
@@ -453,8 +425,9 @@ public class MainScreenActivity extends AppCompatActivity
     public void onClick(View v, final int position) {
         final Node node = mAdapter.getItem(position);
         int id = v.getId();
+        nodeSet(node);
         switch (id) {
-            case R.id.node_item:
+         /*   case R.id.node_item:
                 nodeSet(node);
                 break;
 //            case R.id.location:
@@ -469,7 +442,7 @@ public class MainScreenActivity extends AppCompatActivity
                 break;
             case R.id.remove:
                 nodeRemove(node, position);
-                break;
+                break;*/
         }
     }
 

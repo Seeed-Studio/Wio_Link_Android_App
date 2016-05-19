@@ -71,8 +71,8 @@
     <string name="title_activity_test">test</string>
 
     <!--Mian Screen-->
-    <string name="online">Online</string>
-    <string name="offline">Offline</string>
+    <string name="online">ONLINE</string>
+    <string name="offline">OFFLINE</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_name">New Wio name</string>
     <string name="add_your_first_device">ADD YOUR FIRST DEVICE</string>
@@ -123,9 +123,9 @@
     </string-array>
 
     <!-- ui_ap_config -->
-    <string name="title_wio_activity">Select Wio</string>
-    <string name="title_wifi_list_activity">Select AP</string>
-    <string name="title_ap_connect_activity">Set Wio</string>
+    <string name="title_wio_activity">Connect to Wio Device</string>
+    <string name="title_wifi_list_activity">Connect to Wifi Network</string>
+    <string name="title_ap_connect_activity">Trasmitting Configuraion</string>
     <string name="ap_config_progress_msg">Setting Wio name...</string>
 
     <!-- main list-->

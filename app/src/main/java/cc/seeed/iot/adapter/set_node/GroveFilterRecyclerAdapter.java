@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_setnode;
+package cc.seeed.iot.adapter.set_node;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

@@ -1,12 +1,16 @@
 package cc.seeed.iot.activity;
 
+import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,12 +19,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
@@ -28,13 +40,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.NodeApiActivity;
-import cc.seeed.iot.ui_setnode.GroveFilterRecyclerAdapter;
-import cc.seeed.iot.ui_setnode.GroveI2cListRecyclerAdapter;
-import cc.seeed.iot.ui_setnode.GroveListRecyclerAdapter;
+import cc.seeed.iot.adapter.set_node.GroveFilterRecyclerAdapter;
+import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
+import cc.seeed.iot.adapter.set_node.GroveListRecyclerAdapter;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
@@ -42,6 +58,8 @@ import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -68,25 +86,57 @@ public class SetupIotLinkActivity extends AppCompatActivity
 
     private static final int MESSAGE_UPDATE_DONE = 0x10;
 
-    public Toolbar mToolbar;
     Node node;
     User user;
     List<PinConfig> pinConfigs = new ArrayList<>();
 
-    RecyclerView mGroveI2cListView;
     GroveI2cListRecyclerAdapter mGroveI2cListAdapter;
 
-    RecyclerView mGroveListView;
     GroveListRecyclerAdapter mGroveListAdapter;
 
-    RecyclerView mGroveTypeListView;
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
-    private List<GroverDriver> mGroveDrivers;
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+    @InjectView(R.id.grove_selector)
+    RecyclerView mGroveTypeListView;
+    @InjectView(R.id.grove_list)
+    RecyclerView mGroveListView;
+    @InjectView(R.id.mIvRemove)
+    ImageView mIvRemove;
+    @InjectView(R.id.mTvUpdate)
+    FontTextView mTvUpdate;
+    @InjectView(R.id.mIvUpdate)
+    ImageView mIvUpdate;
+    @InjectView(R.id.mRlUpdate)
+    RelativeLayout mRlUpdate;
+    @InjectView(R.id.node_view)
+    ImageView nodeView;
+    @InjectView(R.id.grove_0)
+    ImageButton grove0;
+    @InjectView(R.id.grove_1)
+    ImageButton grove1;
+    @InjectView(R.id.grove_2)
+    ImageButton grove2;
+    @InjectView(R.id.grove_3)
+    ImageButton grove3;
+    @InjectView(R.id.grove_4)
+    ImageButton grove4;
+    @InjectView(R.id.grove_5)
+    ImageButton grove5;
+    @InjectView(R.id.grove_i2c_list)
+    RecyclerView mGroveI2cListView;
+    @InjectView(R.id.set_link)
+    RelativeLayout mSetNodeLayout;
+    @InjectView(R.id.setup_iot_link)
+    LinearLayout setupIotLink;
+    @InjectView(R.id.mRlRemove)
+    RelativeLayout mRlRemove;
 
-    View mSetNodeLayout;
+    private List<GroverDriver> mGroveDrivers;
+    private Animation animation;
     GrovePinsView mGrovePinsView;
     ProgressDialog mProgressDialog;
-    private ImageView mDragRemoveView;
+    private boolean isUpdateIng = false;
 
     private Handler mHandler;
 
@@ -94,7 +144,9 @@ public class SetupIotLinkActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_link);
-        View view = findViewById(R.id.setup_iot_link);
+        ButterKnife.inject(this);
+
+        initView();
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setCanceledOnTouchOutside(false);
 //        mProgressDialog.setCancelable(false);
@@ -107,34 +159,16 @@ public class SetupIotLinkActivity extends AppCompatActivity
 //        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
 
         mGroveDrivers = DBHelper.getGrovesAll();
+        mRlRemove.setOnDragListener(this);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-
-        mDragRemoveView = (ImageView) findViewById(R.id.grove_remove);
-        mDragRemoveView.setOnDragListener(this);
-
-        mSetNodeLayout = findViewById(R.id.set_link);
         mSetNodeLayout.setOnClickListener(this);
 
-        user =  UserLogic.getInstance().getUser();
+        user = UserLogic.getInstance().getUser();
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
 
-        /**
-         * fake node for test
-         */
-//        node = new Node();
-//        node.board = Constant.WIO_NODE_V1_0;
-//        node.node_sn = "112233";
-//        node.name = "menu_item_bg";
-//        node.online = true;
-//        node.node_key = "key1213";
 
-        mGrovePinsView = new GrovePinsView(this, view, node);
+        mGrovePinsView = new GrovePinsView(this, setupIotLink, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
             pinView.setOnDragListener(this);
             pinView.setOnClickListener(this);
@@ -142,21 +176,15 @@ public class SetupIotLinkActivity extends AppCompatActivity
         }
 
         pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
-        /**
-         * make fake pinConfig data
-         */
-//        PinConfig fake_pinConfig = new PinConfig();
-//        fake_pinConfig.interfaceType = InterfaceType.GPIO;
-//        fake_pinConfig.node_sn = "112233";
-//        fake_pinConfig.position = 0;
-//        fake_pinConfig.sku = "104990089";
-//        pinConfigs.add(fake_pinConfig);
-//        Log.e(TAG, "pinConfig" + pinConfigs.toString());
 
         getSupportActionBar().setTitle(node.name);
+        if (node.online) {
+            mToolbar.setLogo(R.drawable.online_led);
+        } else {
+            mToolbar.setLogo(R.drawable.offline_led);
+        }
 
 
-        mGroveListView = (RecyclerView) findViewById(R.id.grove_list);
         if (mGroveListView != null) {
             mGroveListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -167,7 +195,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
             mGroveListView.setAdapter(mGroveListAdapter);
         }
 
-        mGroveI2cListView = (RecyclerView) findViewById(R.id.grove_i2c_list);
         if (mGroveI2cListView != null) {
             mGroveI2cListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -177,8 +204,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
             mGroveI2cListAdapter.setOnLongClickListen(this);
             mGroveI2cListView.setAdapter(mGroveI2cListAdapter);
         }
-
-        mGroveTypeListView = (RecyclerView) findViewById(R.id.grove_selector);
         if (mGroveTypeListView != null) {
             mGroveTypeListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -190,6 +215,13 @@ public class SetupIotLinkActivity extends AppCompatActivity
         pinBadgeUpdateAll();
 
         initData();
+    }
+
+    private void initView() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void pinBadgeUpdateAll() {
@@ -252,13 +284,13 @@ public class SetupIotLinkActivity extends AppCompatActivity
                     break;
 
                     case MESSAGE_UPDATE_DONE: {
-                        String message = (String) msg.obj;
+                     /*   String message = (String) msg.obj;
                         new AlertDialog.Builder(SetupIotLinkActivity.this)
-                                .setTitle(R.string.update)
-                                .setMessage(message)
+                                .setMessage("Firware Updated!")
                                 .setCancelable(false)
                                 .setPositiveButton(R.string.ok, null)
-                                .show();
+                                .show();*/
+                        DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!",null);
                     }
                     break;
                 }
@@ -320,55 +352,91 @@ public class SetupIotLinkActivity extends AppCompatActivity
         if (id == android.R.id.home) {
             finish();
             return true;
-        } else if (id == R.id.api) {
-            Intent intent = new Intent(this, NodeApiActivity.class);
-            intent.putExtra("node_sn", node.node_sn);
-            startActivity(intent);
         } else if (id == R.id.update) {
-            if (node.name == null)
-                return true;
+            List<String> menu = new ArrayList<>();
+            menu.add("View API");
+            menu.add("Device Setting");
+            DialogUtils.showMenuPopWindow(this, mToolbar, menu, new DialogUtils.OnMenuItemChickListener() {
+                @Override
+                public void chickItem(View v, int position) {
+                    switch (position) {
+                        case 0:
+                            Intent intent = new Intent(SetupIotLinkActivity.this, NodeApiActivity.class);
+                            intent.putExtra("node_sn", node.node_sn);
+                            startActivity(intent);
+                            break;
+                        case 1:
 
-            NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-//            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
-            if (node_josn.connections.isEmpty()) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setMessage("Forger add grove?");
-                builder.setTitle("Tip");
-                builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
+                            break;
                     }
-                });
-                builder.create().show();
-                return true;
-            }
-            updateNode(node.node_key, node_josn);
+                    App.showToastShrot("" + position);
+                }
+            });
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void updateNode(final String node_key, NodeJson node_json) {
-        mProgressDialog.show();
+       /* mProgressDialog.show();
         mProgressDialog.setMessage("Ready to ota...");
-        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
+        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);*/
         IotApi api = new IotApi();
         api.setAccessToken(node_key);
         final IotService iot = api.getService();
         iot.userDownload(node_json, new Callback<OtaStatusResponse>() {
             @Override
             public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                mProgressDialog.setMessage(otaStatusResponse.ota_msg);
+                //  mProgressDialog.setMessage(otaStatusResponse.ota_msg);
                 displayStatus(node_key);
             }
 
             @Override
             public void failure(RetrofitError error) {
-                mProgressDialog.setMessage("Error:" + error.getLocalizedMessage());
-                mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
+                stopUpdate();
+                DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "Connection Error", "TRY AGAIN", "CANCEL", error.getLocalizedMessage(), new DialogUtils.OnErrorButtonClickListenter() {
+                    @Override
+                    public void okClick() {
+                        startUpdate();
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
             }
         });
+    }
+
+    private void startUpdate() {
+        if (node.name == null)
+            return;
+
+        NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
+//            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
+        if (node_josn.connections.isEmpty()) {
+            DialogUtils.showErrorDialog(this,"Tip","OK","","Forger add grove?",null);
+            return;
+        }
+        mIvUpdate.setVisibility(View.VISIBLE);
+        mTvUpdate.setVisibility(View.GONE);
+        mRlRemove.setVisibility(View.GONE);
+        animation = AnimationUtils.loadAnimation(this, R.anim.loading);
+        LinearInterpolator lir = new LinearInterpolator();
+        animation.setInterpolator(lir);
+        mIvUpdate.setAnimation(animation);
+        animation.start();
+        isUpdateIng = true;
+        updateNode(node.node_key, node_josn);
+    }
+
+    private void stopUpdate() {
+        isUpdateIng = false;
+        mIvUpdate.clearAnimation();
+        mIvUpdate.setVisibility(View.GONE);
+        mTvUpdate.setVisibility(View.VISIBLE);
+        mRlRemove.setVisibility(View.GONE);
     }
 
     private void displayStatus(final String node_key) {
@@ -381,13 +449,13 @@ public class SetupIotLinkActivity extends AppCompatActivity
                               switch (otaStatusResponse.ota_status) {
                                   case "going":
                                       displayStatus(node_key);
-                                      mProgressDialog.setMessage(otaStatusResponse.ota_msg);
                                       break;
                                   case "done":
                                       if (SetupIotLinkActivity.this.isFinishing()) {
                                           return;
                                       }
-                                      dismissProgressDialog();
+                                      stopUpdate();
+                                   //   dismissProgressDialog();
 
                                       Message message = Message.obtain();
                                       message.what = MESSAGE_UPDATE_DONE;
@@ -396,11 +464,14 @@ public class SetupIotLinkActivity extends AppCompatActivity
 
                                       break;
                                   case "error":
-                                      mProgressDialog.setMessage(otaStatusResponse.ota_status + ":" + otaStatusResponse.ota_msg);
-                                      mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                                      mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                      DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "Connection Error", "TRY AGAIN", "CANCEL", otaStatusResponse.ota_msg, new DialogUtils.OnErrorButtonClickListenter() {
                                           @Override
-                                          public void onClick(DialogInterface dialog, int which) {
+                                          public void okClick() {
+                                              startUpdate();
+                                          }
+
+                                          @Override
+                                          public void cancelClick() {
 
                                           }
                                       });
@@ -410,6 +481,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
 
                           @Override
                           public void failure(RetrofitError error) {
+                              stopUpdate();
                               mProgressDialog.setMessage(error.getLocalizedMessage());
                               mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
                               mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
@@ -489,6 +561,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
     }
 
     @Override
+    @OnClick(R.id.mRlUpdate)
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.grove_0:
@@ -499,8 +572,23 @@ public class SetupIotLinkActivity extends AppCompatActivity
             case R.id.grove_5:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
-                if (pinDeviceCount(position) > 1)
-                    displayI2cListView(position);
+                if (pinDeviceCount(position) > 0) {
+                    //   displayI2cListView(position);
+                    List<PinConfig> pinConfigs = new ArrayList<>();
+                    for (PinConfig p : this.pinConfigs) {
+                        if (p.position == position)
+                            pinConfigs.add(p);
+                    }
+                    showRemoveGroveDialog(this, pinConfigs);
+                  //  mGroveI2cListAdapter.updateAll(pinConfigs);
+                }
+                break;
+            case R.id.mRlUpdate:
+                if (isUpdateIng) {
+                    return;
+                } else {
+                    startUpdate();
+                }
                 break;
         }
     }
@@ -519,7 +607,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
                 if (pinDeviceCount(position) == 1) {
                     startDragRemove(v);
                 } else if (pinDeviceCount(position) > 1) {
-                    displayI2cListView(position);
+                  //  displayI2cListView(position);
                 }
                 break;
         }
@@ -546,6 +634,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
         return count;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public boolean onDrag(View v, DragEvent event) {
 //        Log.e(TAG, v.toString());
@@ -622,16 +711,16 @@ public class SetupIotLinkActivity extends AppCompatActivity
                     break;
                 }
                 break;
-            case R.id.grove_remove:
+            case R.id.mRlRemove:
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED: {
                         return event.getClipDescription().hasMimeType(GROVE_REMOVE);
                     }
                     case DragEvent.ACTION_DRAG_ENTERED:
-                        ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
+                        mIvRemove.setColorFilter(Color.RED, PorterDuff.Mode.SRC_IN);
                         break;
                     case DragEvent.ACTION_DRAG_EXITED:
-                        ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
+                        mIvRemove.setColorFilter(Color.RED, PorterDuff.Mode.DST);
                         break;
                     case DragEvent.ACTION_DROP: {
                         if (event.getClipDescription().hasMimeType(GROVE_REMOVE)) {
@@ -656,8 +745,9 @@ public class SetupIotLinkActivity extends AppCompatActivity
                         break;
                     }
                     case DragEvent.ACTION_DRAG_ENDED:
-                        ((ImageView) v).setColorFilter(Color.RED, PorterDuff.Mode.DST);
-                        mDragRemoveView.setVisibility(View.INVISIBLE);
+                        mIvRemove.setColorFilter(Color.RED, PorterDuff.Mode.DST);
+                        mRlRemove.setVisibility(View.INVISIBLE);
+                        mRlUpdate.setVisibility(View.VISIBLE);
                 }
                 break;
             default:
@@ -729,7 +819,8 @@ public class SetupIotLinkActivity extends AppCompatActivity
     }
 
     private void startDragRemove(View v) {
-        mDragRemoveView.setVisibility(View.VISIBLE);
+        mRlRemove.setVisibility(View.VISIBLE);
+        mRlUpdate.setVisibility(View.GONE);
 
         String label = "grove_remove";
         String[] mimeTypes = {GROVE_REMOVE};
@@ -740,7 +831,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
 
         int pin_position = ((GrovePinsView.Tag) v.getTag()).position;
         PinConfig pinConfig = getPinConfig(pin_position);
-
         v.startDrag(clipData, shadowBuiler, pinConfig, 0);
     }
 
@@ -774,7 +864,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
             }
             break;
             case "I2cList": {
-                mDragRemoveView.setVisibility(View.VISIBLE);
+                mRlRemove.setVisibility(View.VISIBLE);
 
                 String label = "grove_remove";
                 String[] mimeTypes = {GROVE_REMOVE};
@@ -821,6 +911,41 @@ public class SetupIotLinkActivity extends AppCompatActivity
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    public Dialog showRemoveGroveDialog(Context context, List<PinConfig> pinConfigs) {
+
+        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+      //  dialog.setCanceledOnTouchOutside(true);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_remove_grove, null);
+
+        RecyclerView mRvGrove = (RecyclerView) view.findViewById(R.id.mRvGrove);
+
+        if (mRvGrove != null) {
+            mRvGrove.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRvGrove.setLayoutManager(layoutManager);
+            GroveI2cListRecyclerAdapter mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
+            mGroveI2cListAdapter.setOnRemoveItemListener(new GroveI2cListRecyclerAdapter.OnRemoveItemListener() {
+                @Override
+                public void onRemoveItem(PinConfig pinConfig, int position,int totalPin) {
+                    removeGrove(pinConfig);
+                    Message message = Message.obtain();
+                    message.what = RMV_I2C_GROVE;
+                    message.obj = pinConfig;
+                    mHandler.sendMessage(message);
+                    if (totalPin <1){
+                        dialog.dismiss();
+                    }
+                }
+            });
+            mRvGrove.setAdapter(mGroveI2cListAdapter);
+        }
+
+        dialog.show();
+        dialog.setContentView(view);
+        return dialog;
     }
 }
 

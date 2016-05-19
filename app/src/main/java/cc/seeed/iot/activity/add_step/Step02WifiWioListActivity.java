@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_ap_config;
+package cc.seeed.iot.activity.add_step;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -29,17 +28,30 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.adapter.add_node.WifiRecyclerViewHolder;
+import cc.seeed.iot.adapter.add_node.WifiWioListRecyclerAdapter;
+import cc.seeed.iot.view.StepView;
 
 
-public class WifiWioListActivity extends AppCompatActivity
+public class Step02WifiWioListActivity extends BaseActivity
         implements WifiRecyclerViewHolder.IMyViewHolderClicks {
     private final static String TAG = "WifiPionListActivity";
     private final static int PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION = 0x00;
     private final static String PION_WIFI_PREFIX = "PionOne_";
     private final static String WIO_WIFI_PREFIX = "Wio";
-    private Toolbar mToolbar;
-    private RecyclerView mWifiListView;
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+    @InjectView(R.id.mStepView)
+    StepView mStepView;
+    @InjectView(R.id.tip)
+    TextView mTip;
+    @InjectView(R.id.wifi_list)
+    RecyclerView mWifiListView;
+
     private WifiWioListRecyclerAdapter mWifiListAdapter;
     private ProgressDialog mWaitDialog;
     private List<ScanResult> scanPionResult = new ArrayList<>();
@@ -54,13 +66,20 @@ public class WifiWioListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_list);
+        ButterKnife.inject(this);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        initToolBar();
+        initData();
+    }
+
+    private void initToolBar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.title_wio_activity);
+    }
 
-        mWifiListView = (RecyclerView) findViewById(R.id.wifi_list);
+    private void initData() {
+        mStepView.setDoingStep(1);
         if (mWifiListView != null) {
             mWifiListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -70,11 +89,10 @@ public class WifiWioListActivity extends AppCompatActivity
             mWifiListView.setAdapter(mWifiListAdapter);
         }
 
-        TextView textView = (TextView) findViewById(R.id.tip);
         if (!isLocationEnabled(this)) {
-            textView.setVisibility(View.VISIBLE);
+            mTip.setVisibility(View.VISIBLE);
         } else {
-            textView.setVisibility(View.GONE);
+            mTip.setVisibility(View.GONE);
         }
         mWaitDialog = new ProgressDialog(this);
     }
@@ -238,7 +256,7 @@ public class WifiWioListActivity extends AppCompatActivity
     }
 
     private void goWifiListActivity() {
-        Intent intentActivity = new Intent(this, WifiListActivity.class);
+        Intent intentActivity = new Intent(this, Step03WifiListActivity.class);
         intentActivity.putExtra("board", board);
         intentActivity.putExtra("node_key", node_key);
         intentActivity.putExtra("node_sn", node_sn);

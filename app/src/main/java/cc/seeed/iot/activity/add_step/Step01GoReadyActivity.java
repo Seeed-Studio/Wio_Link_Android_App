@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_ap_config;
+package cc.seeed.iot.activity.add_step;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,13 +8,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import cc.seeed.iot.App;
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.Constant;
@@ -25,9 +27,13 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class GoReadyActivity extends AppCompatActivity {
-    public Toolbar mToolbar;
-    public Button mGoReadyButtonView;
+public class Step01GoReadyActivity extends BaseActivity {
+    @InjectView(R.id.toolbar)
+    Toolbar mToolbar;
+    @InjectView(R.id.mIvCourse)
+    ImageView mIvCourse;
+    @InjectView(R.id.mBtnGo)
+    Button mBtnGo;
 
     private String board;
     private String node_sn;
@@ -36,39 +42,35 @@ public class GoReadyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.ap_ready);
+        setContentView(R.layout.step01_go_ready_activity);
+        ButterKnife.inject(this);
 
-        this.board = getIntent().getStringExtra("board");
+        initToolBar();
+        initData();
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+    }
+
+    private void initToolBar() {
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Wio " + board.split(" ")[1]);
+            getSupportActionBar().setTitle("Get Your Wio Ready");
         }
+    }
 
-        ImageView imageView = (ImageView) findViewById(R.id.bg);
+    private void initData() {
+        this.board = getIntent().getStringExtra("board");
 
         switch (board) {
             default:
             case Constant.WIO_LINK_V1_0:
-                imageView.setImageResource(R.drawable.link_config);
+                mIvCourse.setImageResource(R.drawable.link_config);
                 break;
             case Constant.WIO_NODE_V1_0:
-                imageView.setImageResource(R.drawable.node_config);
+                mIvCourse.setImageResource(R.drawable.node_config);
                 break;
         }
 
-        mGoReadyButtonView = (Button) findViewById(R.id.ap_ready_btn);
-        mGoReadyButtonView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                attemptLogin("node000", board);
-                WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-                wifiManager.startScan();
-            }
-        });
     }
 
     @Override
@@ -102,7 +104,7 @@ public class GoReadyActivity extends AppCompatActivity {
                         mProgressBar.dismiss();
                         node_key = nodeResponse.node_key;
                         node_sn = nodeResponse.node_sn;
-                        Intent intent = new Intent(GoReadyActivity.this, WifiWioListActivity.class);
+                        Intent intent = new Intent(Step01GoReadyActivity.this, Step02WifiWioListActivity.class);
                         intent.putExtra("board", board);
                         intent.putExtra("node_key", node_key);
                         intent.putExtra("node_sn", node_sn);
@@ -112,10 +114,17 @@ public class GoReadyActivity extends AppCompatActivity {
                     @Override
                     public void failure(RetrofitError error) {
                         mProgressBar.dismiss();
-                        Toast.makeText(GoReadyActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(Step01GoReadyActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
         );
+    }
+
+    @OnClick(R.id.mBtnGo)
+    public void onClick() {
+        attemptLogin("node000", board);
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiManager.startScan();
     }
 }
 

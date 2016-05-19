@@ -5,16 +5,33 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Process;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import java.util.List;
+import java.util.Random;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
+import cc.seeed.iot.ui_setnode.model.PinConfig;
+import cc.seeed.iot.view.FontButton;
 import cc.seeed.iot.view.FontEditView;
 import cc.seeed.iot.view.FontTextView;
 
@@ -60,7 +77,9 @@ public class DialogUtils {
         FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
         FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
 
-        final String serverUrl = App.getSp().getString(Constant.SP_SERVER_URL, "");
+
+        // final String serverUrl = App.getSp().getString(Constant.SP_SERVER_URL, "");
+        final String serverUrl = App.getApp().getOtaServerUrl();
         if (CommonUrl.OTA_SERVER_URL.equals(serverUrl)) {
             mRbDefaultServer.setChecked(true);
             mRbCustomServer.setChecked(false);
@@ -119,7 +138,7 @@ public class DialogUtils {
                         mTvCustomServer.setError(context.getResources().getString(R.string.website_format_hint));
                         return;
                     }
-                    getIpAddress(context,dialog, url, mTvCustomServer, listenter);
+                    getIpAddress(context, dialog, url, mTvCustomServer, listenter);
                 } else {
                     getIpAddress(context, dialog, CommonUrl.OTA_SERVER_URL, mTvCustomServer, listenter);
                 }
@@ -142,7 +161,7 @@ public class DialogUtils {
     }
 
     public interface ButtonClickListenter {
-        void okClick(String url,String ip);
+        void okClick(String url, String ip);
 
         void cancelClick();
     }
@@ -152,12 +171,12 @@ public class DialogUtils {
         NetworkUtils.getIpAddress(context, NetworkUtils.getDomainName(url), new NetworkUtils.OnIpCallback() {
             @Override
             public void okCallback(String ip) {
-                if (progressDialog != null){
+                if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
                 if (listenter != null) {
-                    App.getApp().saveUrlAndIp(url,ip);
-                    listenter.okClick(url,ip);
+                    App.getApp().saveUrlAndIp(url, ip);
+                    listenter.okClick(url, ip);
                 }
                 if (dialog != null) {
                     dialog.dismiss();
@@ -166,7 +185,7 @@ public class DialogUtils {
 
             @Override
             public void failCallback(String error) {
-                if (progressDialog != null){
+                if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
                 if (editText != null) {
@@ -182,5 +201,202 @@ public class DialogUtils {
         progressDialog.setMessage(str);
         progressDialog.show();
         return progressDialog;
+    }
+
+
+    public static Dialog showEditWifiPwdDialog(Context context, final ButtonEditClickListenter listenter) {
+
+        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_wifi_pwd, null);
+        FontTextView mTvTitle = (FontTextView) view.findViewById(R.id.mTvTitle);
+        final FontEditView mEtPwd = (FontEditView) view.findViewById(R.id.mEtPwd);
+        FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
+        FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
+        mTvSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listenter != null) {
+                    listenter.okClick(mEtPwd.getText().toString().trim());
+                }
+                dialog.dismiss();
+            }
+        });
+
+        mTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
+        dialog.setContentView(view);
+        return dialog;
+    }
+
+    public interface ButtonEditClickListenter {
+        void okClick(String content);
+    }
+
+    public static Dialog showEditNodeNameDialog(Context context, final String defaultName, final ButtonEditClickListenter listenter) {
+
+        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        dialog.setCanceledOnTouchOutside(false);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_node_name, null);
+
+        FontTextView mTvTitle = (FontTextView) view.findViewById(R.id.mTvTitle);
+        FontTextView mTvHint = (FontTextView) view.findViewById(R.id.mTvHint);
+        final FontEditView mEtName = (FontEditView) view.findViewById(R.id.mEtName);
+        FontButton mTvSubmit = (FontButton) view.findViewById(R.id.mTvSubmit);
+
+        mEtName.setHint(defaultName);
+        mTvSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (listenter != null) {
+                    String name = mEtName.getText().toString().trim();
+                    if (TextUtils.isEmpty(name)){
+                        name  = defaultName;
+                    }
+                    listenter.okClick(name);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.setContentView(view);
+        return dialog;
+    }
+
+    public static void showMenuPopWindow(Activity activity, View targetView, List<String> list, final OnMenuItemChickListener listener) {
+        if (list == null) {
+            return;
+        }
+
+        View view = LayoutInflater.from(activity).inflate(R.layout.popwindow_menu, null);
+        final PopupWindow popWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popWindow.dismiss();
+            }
+        });
+
+        LinearLayout mLLMenuContainer = (LinearLayout) view.findViewById(R.id.mLLMenuContainer);
+        for (int i = 0; i < list.size(); i++) {
+            View itemView = LayoutInflater.from(activity).inflate(R.layout.item_popwindow_menu, null);
+            FontTextView mTVItem = (FontTextView) itemView.findViewById(R.id.mTVItem);
+            View mDivider = itemView.findViewById(R.id.mDivider);
+
+            mTVItem.setText(list.get(i));
+            if (i == 0 && list.size() == 1){
+                mDivider.setVisibility(View.GONE);
+            }else if (i == list.size()-1){
+                mDivider.setVisibility(View.GONE);
+            }else {
+                mDivider.setVisibility(View.VISIBLE);
+            }
+
+            final int finalI = i;
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (listener != null) {
+                        listener.chickItem(v, finalI);
+                    }
+                    popWindow.dismiss();
+                }
+            });
+            mLLMenuContainer.addView(itemView);
+        }
+
+      //  mLLMenuContainer.setBackgroundResource(R.drawable.withe_shadow_bg);
+
+        popWindow.setFocusable(true);
+        popWindow.setOutsideTouchable(true);
+        popWindow.setBackgroundDrawable(new BitmapDrawable());
+        popWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //   popWindow.showAtLocation(targetView, Gravity.NO_GRAVITY,0 ,targetView.getBottom());
+        popWindow.showAsDropDown(targetView);
+    }
+
+    public interface OnMenuItemChickListener{
+        void chickItem(View v,int position);
+    }
+
+    public static Dialog showErrorDialog(Context context,String title,String okName,String cancelName,String content, final OnErrorButtonClickListenter listenter){
+        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        dialog.setCanceledOnTouchOutside(false);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_show_error, null);
+        FontTextView mTvTitle = (FontTextView) view.findViewById(R.id.mTvTitle);
+        FontTextView mTvDesc = (FontTextView) view.findViewById(R.id.mTvDesc);
+        FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
+        FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
+
+        if (!TextUtils.isEmpty(title)){
+            dialog.setTitle(title);
+        }else {
+            mTvTitle.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(okName)) {
+            mTvSubmit.setText(okName);
+        }else {
+            mTvSubmit.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(cancelName)){
+            mTvCancel.setText(cancelName);
+        }else {
+            mTvCancel.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(content)){
+            mTvDesc.setText(content);
+        }else {
+            mTvDesc.setVisibility(View.GONE);
+        }
+
+        mTvSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listenter != null) {
+                    listenter.okClick();
+                }
+                dialog.dismiss();
+            }
+        });
+
+        mTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listenter != null) {
+                    listenter.cancelClick();
+                }
+                dialog.dismiss();
+            }
+        });
+
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK ) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+        dialog.show();
+        dialog.setContentView(view);
+        return dialog;
+    }
+
+    public interface OnErrorButtonClickListenter {
+        void okClick();
+        void cancelClick();
     }
 }

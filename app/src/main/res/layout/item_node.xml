@@ -59,7 +59,7 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/main_node_list"
             android:layout_width="match_parent"
-            android:layout_height="115dp"
+            android:layout_height="131dp"
             android:background="?android:attr/selectableItemBackground">
 
             <ImageView

@@ -1,7 +1,9 @@
 package cc.seeed.iot.activity.user;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -60,9 +62,8 @@ public class ResetPwd01Activity extends BaseActivity {
         }
         dialog = DialogUtils.showProgressDialog(this, getString(R.string.reset_pwd_email));
         App.getSp().edit().putString(Constant.SP_USER_EMAIL, email).commit();
-        UserLogic.getInstance().forgetPwd(email);
+        UserLogic.getInstance().sendCheckCodeToEmail(email);
     }
-
 
     @OnClick(R.id.mBtnSubmit)
     public void onClick() {
@@ -85,8 +86,22 @@ public class ResetPwd01Activity extends BaseActivity {
                 dialog.dismiss();
             }
             if (ret) {
-                App.showToastShrot("Verification code has been sent");
-                startActivity( new Intent(ResetPwd01Activity.this, ResetPwd02Activity.class));
+                if (App.getApp().isDefaultServer()){
+                    App.showToastShrot("Verification code has been sent");
+                    startActivity( new Intent(ResetPwd01Activity.this, ResetPwd02Activity.class));
+                }else {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ResetPwd01Activity.this);
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            finish();
+                        }
+                    }).create();
+                    builder.setTitle("Success");
+                    builder.setMessage("Verification code has been sent");
+                    builder.show();
+                }
             } else {
                 mEtEmail.setError(errInfo);
                 mEtEmail.requestFocus();
