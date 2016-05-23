@@ -48,6 +48,7 @@ import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.NodeApiActivity;
+import cc.seeed.iot.ui_main.NodeSettingActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
@@ -119,8 +120,8 @@ public class SetupIotLinkActivity extends BaseActivity
     ImageButton grove4;
     @InjectView(R.id.grove_5)
     ImageButton grove5;
-    @InjectView(R.id.grove_i2c_list)
-    RecyclerView mGroveI2cListView;
+    /*  @InjectView(R.id.grove_i2c_list)
+      RecyclerView mGroveI2cListView;*/
     @InjectView(R.id.set_link)
     RelativeLayout mSetNodeLayout;
     @InjectView(R.id.setup_iot_link)
@@ -175,7 +176,7 @@ public class SetupIotLinkActivity extends BaseActivity
             mGroveListView.setAdapter(mGroveListAdapter);
         }
 
-        if (mGroveI2cListView != null) {
+      /*  if (mGroveI2cListView != null) {
             mGroveI2cListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -183,7 +184,7 @@ public class SetupIotLinkActivity extends BaseActivity
             mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
             mGroveI2cListAdapter.setOnLongClickListen(this);
             mGroveI2cListView.setAdapter(mGroveI2cListAdapter);
-        }
+        }*/
         if (mGroveTypeListView != null) {
             mGroveTypeListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -228,25 +229,26 @@ public class SetupIotLinkActivity extends BaseActivity
                     case ADD_I2C_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
-                        updateI2cGroveList(position);
-                        scrollI2cGroveListToEnd();
+                        //  updateI2cGroveList(position);
+                        //     scrollI2cGroveListToEnd();
                         pinBadgeUpdateAll();
                     }
                     break;
                     case ADD_GROVE: {
-                        PinConfig pinConfig = (PinConfig) msg.obj;
+                      /*  PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
                         if (isI2cInterface(position)) {
                             mGroveI2cListView.setVisibility(View.INVISIBLE);
-                        }
+                        }*/
                     }
                     case RMV_I2C_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
-                        if (pinDeviceCount(position) < 2)
-                            mGroveI2cListView.setVisibility(View.INVISIBLE);
-                        else
-                            updateI2cGroveList(position);
+                        if (pinDeviceCount(position) < 2) {
+                            //  mGroveI2cListView.setVisibility(View.INVISIBLE);
+                        } else {
+                          //  updateI2cGroveList(position);
+                        }
                         pinBadgeUpdateAll();
                         if (pinDeviceCount(position) == 0)
                             mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
@@ -263,17 +265,17 @@ public class SetupIotLinkActivity extends BaseActivity
                 }
             }
 
-            private boolean isI2cInterface(int position) {
+          /*  private boolean isI2cInterface(int position) {
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) mGrovePinsView.pinViews[position].getTag();
                 return Arrays.asList(tag.interfaceTypes).contains(InterfaceType.I2C);
-            }
+            }*/
         };
     }
 
-    private void scrollI2cGroveListToEnd() {
-        mGroveI2cListView.smoothScrollToPosition(mGroveI2cListAdapter.getItemCount() - 1);
-    }
-
+    /*  private void scrollI2cGroveListToEnd() {
+          mGroveI2cListView.smoothScrollToPosition(mGroveI2cListAdapter.getItemCount() - 1);
+      }
+  */
     private void updateI2cGroveList(int position) {
         List<PinConfig> pinConfigs = new ArrayList<>();
         for (PinConfig p : this.pinConfigs) {
@@ -325,17 +327,21 @@ public class SetupIotLinkActivity extends BaseActivity
             DialogUtils.showMenuPopWindow(this, mToolbar, menu, new DialogUtils.OnMenuItemChickListener() {
                 @Override
                 public void chickItem(View v, int position) {
+                    Intent intent;
                     switch (position) {
                         case 0:
-                            Intent intent = new Intent(SetupIotLinkActivity.this, NodeApiActivity.class);
+
+                            intent = new Intent(SetupIotLinkActivity.this, NodeApiActivity.class);
                             intent.putExtra("node_sn", node.node_sn);
                             startActivity(intent);
                             break;
                         case 1:
-
+                            intent = new Intent(SetupIotLinkActivity.this, NodeSettingActivity.class);
+                            intent.putExtra("node_sn", node.node_sn);
+                            startActivity(intent);
                             break;
                     }
-                    App.showToastShrot("" + position);
+                    //App.showToastShrot("" + position);
                 }
             });
             return true;
@@ -418,9 +424,9 @@ public class SetupIotLinkActivity extends BaseActivity
 
         if (groveType.equals("All")) {
             updateGroveListAdapter(mGroveDrivers);
-        } else if (groveType.equals("Input")) {
+        } else if (groveType.equals("INPUT")) {
             updateGroveListAdapter(inputGroves);
-        } else if (groveType.equals("Output")) {
+        } else if (groveType.equals("OUTPUT")) {
             updateGroveListAdapter(outputGroves);
         } else if (groveType.equals("GPIO")) {
             updateGroveListAdapter(gpioGroves);
@@ -748,9 +754,9 @@ public class SetupIotLinkActivity extends BaseActivity
                 ClipData clipData = new ClipData(clipDescription, item);
                 View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
 
-                PinConfig pinConfig = mGroveI2cListAdapter.getItem(mGroveI2cListView.getChildAdapterPosition(v));
+                //    PinConfig pinConfig = mGroveI2cListAdapter.getItem(mGroveI2cListView.getChildAdapterPosition(v));
 
-                v.startDrag(clipData, shadowBuiler, pinConfig, 0);
+                //    v.startDrag(clipData, shadowBuiler, pinConfig, 0);
             }
             break;
         }

@@ -471,9 +471,9 @@ public class SetupIotNodeActivity extends AppCompatActivity
 
         if (groveType.equals("All")) {
             updateGroveListAdapter(mGroveDrivers);
-        } else if (groveType.equals("Input")) {
+        } else if (groveType.equals("INPUT")) {
             updateGroveListAdapter(inputGroves);
-        } else if (groveType.equals("Output")) {
+        } else if (groveType.equals("OUTPUT")) {
             updateGroveListAdapter(outputGroves);
         } else if (groveType.equals("GPIO")) {
             updateGroveListAdapter(gpioGroves);
