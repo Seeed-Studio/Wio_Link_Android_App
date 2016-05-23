@@ -139,6 +139,32 @@ public class UserLogic extends BaseLogic {
         });
     }
 
+    public void loginOther(String id, int type, String name, String avatar) {
+        RequestParams params = new RequestParams();
+
+        params.put("platformID", id);
+        params.put("platformType", type);
+        params.put("platformNickname", name);
+        params.put("platformAvatar", avatar);
+        NetManager.getInstance().postRequest(CommonUrl.Hinge_User_OtherLoginUrl, Cmd_UserOtherLogin, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+                    Gson gson = new Gson();
+                    user = gson.fromJson(resp.data, User.class);
+                    if (user != null) {
+                        saveUser(user);
+                        setToken(Cmd_UserOtherLogin);
+                    } else {
+                        UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                    }
+                } else {
+                    UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
+                }
+            }
+        });
+    }
+
     public void registCustom(final String email, String pwd) {
         IotApi api = new IotApi();
         IotService iot = api.getService();

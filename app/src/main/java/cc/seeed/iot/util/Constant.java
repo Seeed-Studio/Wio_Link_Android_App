@@ -60,4 +60,17 @@ public class Constant {
             return value;
         }
     }
+
+    public enum DialogButtonText {
+        OK("OK"), CANCEL("CANCEL"), FAQ("FAQ"), TRY_AGAIN("TRY AGAIN");
+        private String value;
+
+        DialogButtonText(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+    }
 }

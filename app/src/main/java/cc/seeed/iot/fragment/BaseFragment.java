@@ -73,5 +73,13 @@ public abstract class BaseFragment extends Fragment implements IUiObserver,CmdCo
 		inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
+	@Override
+	public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
 
+	}
+
+	@Override
+	public void onEvent(String event, int ret, String errInfo, Object[] data) {
+
+	}
 }

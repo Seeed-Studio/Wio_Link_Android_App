@@ -44,7 +44,7 @@ import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
-import cc.seeed.iot.ui_setnode.SetupIotNodeActivity;
+import cc.seeed.iot.activity.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
@@ -66,7 +66,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 public class MainScreenActivity extends AppCompatActivity
-        implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener, Animation.AnimationListener {
+        implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener, Animation.AnimationListener, NodeListRecyclerAdapter.OnItemLongClickListener {
     private static final String TAG = "MainScreenActivity";
     private static final int MESSAGE_GROVE_LIST_START = 0x00;
     private static final int MESSAGE_GROVE_LIST_COMPLETE = 0x01;
@@ -162,6 +162,7 @@ public class MainScreenActivity extends AppCompatActivity
        //     mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
             mAdapter = new NodeListRecyclerAdapter(nodes);
             mAdapter.setOnClickListener(this);
+            mAdapter.setOnItemLongClickListener(this);
             mRecyclerView.setAdapter(mAdapter);
         }
 
@@ -649,5 +650,11 @@ public class MainScreenActivity extends AppCompatActivity
     @Override
     public void onAnimationRepeat(Animation animation) {
 
+    }
+
+    @Override
+    public void onItemLongClick(View v, int position) {
+        final Node node = mAdapter.getItem(position);
+        nodeRemove(node, position);
     }
 }

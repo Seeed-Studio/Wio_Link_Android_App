@@ -18,6 +18,7 @@ public class CommonUrl {
     public static String Hinge_User_ForgetPwd = "r=common/user/forget-password";
     public static String Hinge_User_ResetPwd = "r=common/user/rest-password";
     public static String Hinge_User_ChangePwd = "r=common/user/modify-password";
+    public static String Hinge_User_OtherLoginUrl = "r=common/user/other-login";
     public static String Hinge_Set_Token = "/v1/ext_users";
 
 

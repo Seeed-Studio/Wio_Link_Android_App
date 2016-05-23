@@ -35,7 +35,7 @@
             android:name="cc.seeed.iot.ui_main.MainScreenActivity"
             android:theme="@style/DrawTheme" />
         <activity android:name=".activity.SetupIotLinkActivity" />
-        <activity android:name=".ui_setnode.SetupIotNodeActivity" />
+        <activity android:name=".activity.SetupIotNodeActivity" />
         <activity android:name="cc.seeed.iot.ui_login.SetupActivity" />
         <activity
             android:name="cc.seeed.iot.ui_login.LoginActivity"
@@ -75,9 +75,6 @@
             android:name=".activity.user.LoginAndRegistActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name=".activity.SetupIotLinkActivity1"
-            android:launchMode="singleTop"/>
         <!-- launchMode="singleTop" 保证activity在栈顶的唯一性 -->
         <activity
             android:name=".ui_login.ChangePwdActivity"
@@ -91,6 +88,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.add_step.Step04ApConnectActivity" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <provider
+            android:name="com.facebook.FacebookContentProvider"
+            android:authorities="com.facebook.app.FacebookContentProvider636196369868072"
+            android:exported="true" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
     </application>
 
 </manifest>

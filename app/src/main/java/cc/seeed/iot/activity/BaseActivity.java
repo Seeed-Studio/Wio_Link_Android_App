@@ -75,6 +75,11 @@ public class BaseActivity extends AppCompatActivity implements IUiObserver, CmdC
 
     }
 
+    @Override
+    public void onEvent(String event, int ret, String errInfo, Object[] data) {
+
+    }
+
     public void hideKeyboard(View view) {
         InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         inputManager.hideSoftInputFromWindow(view.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);

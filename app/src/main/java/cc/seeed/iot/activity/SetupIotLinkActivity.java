@@ -2,11 +2,9 @@ package cc.seeed.iot.activity;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -14,12 +12,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -45,12 +40,14 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.entity.User;
-import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.adapter.set_node.GroveFilterRecyclerAdapter;
 import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
 import cc.seeed.iot.adapter.set_node.GroveListRecyclerAdapter;
+import cc.seeed.iot.entity.DialogBean;
+import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.ConfigDeviceLogic;
+import cc.seeed.iot.logic.UserLogic;
+import cc.seeed.iot.ui_main.NodeApiActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
@@ -66,12 +63,11 @@ import cc.seeed.iot.webapi.model.GroveDriverListResponse;
 import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeJson;
-import cc.seeed.iot.webapi.model.OtaStatusResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SetupIotLinkActivity extends AppCompatActivity
+public class SetupIotLinkActivity extends BaseActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
         View.OnClickListener, View.OnDragListener, View.OnLongClickListener,
         GroveI2cListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnLongClickListener {
@@ -135,7 +131,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
     private List<GroverDriver> mGroveDrivers;
     private Animation animation;
     GrovePinsView mGrovePinsView;
-    ProgressDialog mProgressDialog;
     private boolean isUpdateIng = false;
 
     private Handler mHandler;
@@ -147,26 +142,11 @@ public class SetupIotLinkActivity extends AppCompatActivity
         ButterKnife.inject(this);
 
         initView();
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCanceledOnTouchOutside(false);
-//        mProgressDialog.setCancelable(false);
-        mProgressDialog.setButton(ProgressDialog.BUTTON_POSITIVE,
-                "OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-//        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);
 
         mGroveDrivers = DBHelper.getGrovesAll();
-        mRlRemove.setOnDragListener(this);
-
-        mSetNodeLayout.setOnClickListener(this);
-
         user = UserLogic.getInstance().getUser();
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
-
 
         mGrovePinsView = new GrovePinsView(this, setupIotLink, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
@@ -213,7 +193,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
         }
 
         pinBadgeUpdateAll();
-
         initData();
     }
 
@@ -222,6 +201,8 @@ public class SetupIotLinkActivity extends AppCompatActivity
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        mRlRemove.setOnDragListener(this);
+        mSetNodeLayout.setOnClickListener(this);
     }
 
     private void pinBadgeUpdateAll() {
@@ -234,7 +215,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
         if (pinDeviceCount(position) > 1) {
             mGrovePinsView.badgeViews[position].setBadgeCount(pinDeviceCount(position));
             mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
-
         } else {
             mGrovePinsView.badgeViews[position].setVisibility(View.GONE);
         }
@@ -267,9 +247,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
                             mGroveI2cListView.setVisibility(View.INVISIBLE);
                         else
                             updateI2cGroveList(position);
-
                         pinBadgeUpdateAll();
-
                         if (pinDeviceCount(position) == 0)
                             mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
                         else
@@ -280,17 +258,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
                     case RMV_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
-                    }
-                    break;
-
-                    case MESSAGE_UPDATE_DONE: {
-                     /*   String message = (String) msg.obj;
-                        new AlertDialog.Builder(SetupIotLinkActivity.this)
-                                .setMessage("Firware Updated!")
-                                .setCancelable(false)
-                                .setPositiveButton(R.string.ok, null)
-                                .show();*/
-                        DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!",null);
                     }
                     break;
                 }
@@ -324,7 +291,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        dismissProgressDialog();
         super.onDestroy();
     }
 
@@ -377,46 +343,13 @@ public class SetupIotLinkActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void updateNode(final String node_key, NodeJson node_json) {
-       /* mProgressDialog.show();
-        mProgressDialog.setMessage("Ready to ota...");
-        mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.INVISIBLE);*/
-        IotApi api = new IotApi();
-        api.setAccessToken(node_key);
-        final IotService iot = api.getService();
-        iot.userDownload(node_json, new Callback<OtaStatusResponse>() {
-            @Override
-            public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                //  mProgressDialog.setMessage(otaStatusResponse.ota_msg);
-                displayStatus(node_key);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                stopUpdate();
-                DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "Connection Error", "TRY AGAIN", "CANCEL", error.getLocalizedMessage(), new DialogUtils.OnErrorButtonClickListenter() {
-                    @Override
-                    public void okClick() {
-                        startUpdate();
-                    }
-
-                    @Override
-                    public void cancelClick() {
-
-                    }
-                });
-            }
-        });
-    }
-
     private void startUpdate() {
         if (node.name == null)
             return;
 
         NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-//            Log.i(TAG, "node_json:\n" + new Gson().toJson(node_josn));
         if (node_josn.connections.isEmpty()) {
-            DialogUtils.showErrorDialog(this,"Tip","OK","","Forger add grove?",null);
+            DialogUtils.showErrorDialog(this, "Tip", "OK", "", "Forger add grove?", null);
             return;
         }
         mIvUpdate.setVisibility(View.VISIBLE);
@@ -428,7 +361,7 @@ public class SetupIotLinkActivity extends AppCompatActivity
         mIvUpdate.setAnimation(animation);
         animation.start();
         isUpdateIng = true;
-        updateNode(node.node_key, node_josn);
+        ConfigDeviceLogic.getInstance().updateFirware(node.node_key, node_josn);
     }
 
     private void stopUpdate() {
@@ -437,63 +370,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
         mIvUpdate.setVisibility(View.GONE);
         mTvUpdate.setVisibility(View.VISIBLE);
         mRlRemove.setVisibility(View.GONE);
-    }
-
-    private void displayStatus(final String node_key) {
-        IotApi api = new IotApi();
-        api.setAccessToken(node_key);
-        final IotService iot = api.getService();
-        iot.otaStatus(new Callback<OtaStatusResponse>() {
-                          @Override
-                          public void success(OtaStatusResponse otaStatusResponse, Response response) {
-                              switch (otaStatusResponse.ota_status) {
-                                  case "going":
-                                      displayStatus(node_key);
-                                      break;
-                                  case "done":
-                                      if (SetupIotLinkActivity.this.isFinishing()) {
-                                          return;
-                                      }
-                                      stopUpdate();
-                                   //   dismissProgressDialog();
-
-                                      Message message = Message.obtain();
-                                      message.what = MESSAGE_UPDATE_DONE;
-                                      message.obj = otaStatusResponse.ota_msg;
-                                      mHandler.sendMessage(message);
-
-                                      break;
-                                  case "error":
-                                      DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "Connection Error", "TRY AGAIN", "CANCEL", otaStatusResponse.ota_msg, new DialogUtils.OnErrorButtonClickListenter() {
-                                          @Override
-                                          public void okClick() {
-                                              startUpdate();
-                                          }
-
-                                          @Override
-                                          public void cancelClick() {
-
-                                          }
-                                      });
-                                      break;
-                              }
-                          }
-
-                          @Override
-                          public void failure(RetrofitError error) {
-                              stopUpdate();
-                              mProgressDialog.setMessage(error.getLocalizedMessage());
-                              mProgressDialog.getButton(ProgressDialog.BUTTON_POSITIVE).setVisibility(View.VISIBLE);
-                              mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                  @Override
-                                  public void onClick(DialogInterface dialog, int which) {
-
-                                  }
-                              });
-                          }
-                      }
-
-        );
     }
 
     @Override
@@ -564,24 +440,10 @@ public class SetupIotLinkActivity extends AppCompatActivity
     @OnClick(R.id.mRlUpdate)
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.grove_0:
-            case R.id.grove_1:
-            case R.id.grove_2:
-            case R.id.grove_3:
-            case R.id.grove_4:
             case R.id.grove_5:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
-                if (pinDeviceCount(position) > 0) {
-                    //   displayI2cListView(position);
-                    List<PinConfig> pinConfigs = new ArrayList<>();
-                    for (PinConfig p : this.pinConfigs) {
-                        if (p.position == position)
-                            pinConfigs.add(p);
-                    }
-                    showRemoveGroveDialog(this, pinConfigs);
-                  //  mGroveI2cListAdapter.updateAll(pinConfigs);
-                }
+                displayI2cListView(position);
                 break;
             case R.id.mRlUpdate:
                 if (isUpdateIng) {
@@ -595,34 +457,47 @@ public class SetupIotLinkActivity extends AppCompatActivity
 
     @Override
     public boolean onLongClick(View v) {
+        GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
+        int position = tag.position;
         switch (v.getId()) {
             case R.id.grove_0:
             case R.id.grove_1:
             case R.id.grove_2:
             case R.id.grove_3:
             case R.id.grove_4:
-            case R.id.grove_5:
-                GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
-                int position = tag.position;
                 if (pinDeviceCount(position) == 1) {
                     startDragRemove(v);
-                } else if (pinDeviceCount(position) > 1) {
-                  //  displayI2cListView(position);
                 }
+                break;
+            case R.id.grove_5:
+                displayI2cListView(position);
                 break;
         }
         return true;
     }
 
     private void displayI2cListView(int position) {
-        if (pinDeviceCount(position) > 0) {
-            if (mGroveI2cListView.getVisibility() == View.VISIBLE)
-                mGroveI2cListView.setVisibility(View.INVISIBLE);
-            else {
-                mGroveI2cListView.setVisibility(View.VISIBLE);
-                updateI2cGroveList(position);
-            }
+        if (pinDeviceCount(position) <= 0) {
+            return;
         }
+        List<PinConfig> pinConfigs = new ArrayList<>();
+        for (PinConfig p : this.pinConfigs) {
+            if (p.position == position)
+                pinConfigs.add(p);
+        }
+        DialogUtils.showRemoveGroveDialog(this, pinConfigs, new DialogUtils.OnItemRemoveClickListenter() {
+            @Override
+            public void onRemoveItem(Dialog dialog, PinConfig pinConfig, int position, int totalPin) {
+                removeGrove(pinConfig);
+                Message message = Message.obtain();
+                message.what = RMV_I2C_GROVE;
+                message.obj = pinConfig;
+                mHandler.sendMessage(message);
+                if (totalPin < 1) {
+                    dialog.dismiss();
+                }
+            }
+        });
     }
 
     private int pinDeviceCount(int position) {
@@ -894,9 +769,6 @@ public class SetupIotLinkActivity extends AppCompatActivity
                     groveDriver.save();
                 }
                 List<GroverDriver> g = DBHelper.getGrovesAll();
-//                for (GroverDriver s : g) {
-//                    Log.e(TAG, s.Reads.toString());
-//                }
                 updateGroveListAdapter(g);
             }
 
@@ -907,45 +779,49 @@ public class SetupIotLinkActivity extends AppCompatActivity
         });
     }
 
-    private void dismissProgressDialog() {
-        if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            mProgressDialog.dismiss();
+    @Override
+    public String[] monitorEvents() {
+        return new String[]{Cmd_UpdateFirware, Cmd_UpdateFirwareStute};
+    }
+
+    @Override
+    public void onEvent(String event, int ret, String errInfo, Object[] data) {
+        if (Cmd_UpdateFirwareStute.equals(event)) {
+            if (ret == ConfigDeviceLogic.UPDATE_DONE) {
+                stopUpdate();
+                DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
+            } else if (ret == ConfigDeviceLogic.FAIL) {
+                if (data != null && data.length > 0) {
+                    DialogBean bean = (DialogBean) data[0];
+                    showErrDialog(bean);
+                }
+            }
+        } else if (Cmd_UpdateFirware.equals(event)) {
+            if (ret == ConfigDeviceLogic.FAIL) {
+                if (data != null && data.length > 0) {
+                    DialogBean bean = (DialogBean) data[0];
+                    showErrDialog(bean);
+                }
+            }
         }
     }
 
-    public Dialog showRemoveGroveDialog(Context context, List<PinConfig> pinConfigs) {
-
-        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
-      //  dialog.setCanceledOnTouchOutside(true);
-        View view = LayoutInflater.from(context).inflate(R.layout.dialog_remove_grove, null);
-
-        RecyclerView mRvGrove = (RecyclerView) view.findViewById(R.id.mRvGrove);
-
-        if (mRvGrove != null) {
-            mRvGrove.setHasFixedSize(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
-            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-            mRvGrove.setLayoutManager(layoutManager);
-            GroveI2cListRecyclerAdapter mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
-            mGroveI2cListAdapter.setOnRemoveItemListener(new GroveI2cListRecyclerAdapter.OnRemoveItemListener() {
-                @Override
-                public void onRemoveItem(PinConfig pinConfig, int position,int totalPin) {
-                    removeGrove(pinConfig);
-                    Message message = Message.obtain();
-                    message.what = RMV_I2C_GROVE;
-                    message.obj = pinConfig;
-                    mHandler.sendMessage(message);
-                    if (totalPin <1){
-                        dialog.dismiss();
-                    }
+    private void showErrDialog(final DialogBean bean) {
+        DialogUtils.showErrorDialog(SetupIotLinkActivity.this, bean.title, bean.okName, bean.cancelName, bean.content, new DialogUtils.OnErrorButtonClickListenter() {
+            @Override
+            public void okClick() {
+                if (bean.okName.equals(Constant.DialogButtonText.TRY_AGAIN.getValue())) {
+                    startUpdate();
+                } else {
+                    stopUpdate();
                 }
-            });
-            mRvGrove.setAdapter(mGroveI2cListAdapter);
-        }
+            }
 
-        dialog.show();
-        dialog.setContentView(view);
-        return dialog;
+            @Override
+            public void cancelClick() {
+                stopUpdate();
+            }
+        });
     }
 }
 

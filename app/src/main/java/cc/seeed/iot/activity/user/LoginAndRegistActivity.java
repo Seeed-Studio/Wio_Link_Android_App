@@ -1,7 +1,9 @@
 package cc.seeed.iot.activity.user;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.*;
 import android.os.Process;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,19 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+
+import com.facebook.CallbackManager;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInApi;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.common.api.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +39,15 @@ import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.adapter.LoginAndRegistAdapter;
 import cc.seeed.iot.fragment.LoginFragment;
 import cc.seeed.iot.fragment.RegistFragment;
+import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.OtherPlatformUtils;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
 
-public class LoginAndRegistActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+import static com.google.android.gms.common.Scopes.PLUS_LOGIN;
+
+public class LoginAndRegistActivity extends BaseActivity implements ViewPager.OnPageChangeListener, GoogleApiClient.OnConnectionFailedListener {
 
     @InjectView(R.id.mRegistrTag)
     View mRegistrTag;
@@ -54,9 +74,13 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
 
     private List<Fragment> mFList;
     private LoginAndRegistAdapter mAdapter;
+    private Dialog dialog;
     private int mSelectTab = 1;//默认选择登录界面
+    private CallbackManager callbackManager;
     private static final int RC_SIGN_IN = 9001;
     int[] menuIds = {R.id.mRlRegist, R.id.mRlLogin};
+
+    GoogleApiClient mGoogleApiClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +91,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     }
 
     private void initData() {
+        callbackManager = CallbackManager.Factory.create();
         mMainPager.setOffscreenPageLimit(2);
         mFList = new ArrayList<Fragment>();
         mFList.add(new RegistFragment());
@@ -77,6 +102,52 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         mMainPager.setOnPageChangeListener(this);
         mMainPager.setCurrentItem(mSelectTab, false);
         seleted(menuIds[mSelectTab]);
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .requestId()
+                .requestProfile()
+                .build();
+
+      /*  String serverClientId = getString(R.string.server_client_id);
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                .requestServerAuthCode(serverClientId)
+                .requestEmail()
+                .build();*/
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+
+     /*   mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this *//* FragmentActivity *//*,
+                        this *//* OnConnectionFailedListener *//*)
+                .addApi(Plus.API)
+                .addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addScope(Plus.SCOPE_PLUS_PROFILE)
+                .build();
+        mGoogleApiClient.connect();*/
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+     /*   OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+        if (opr.isDone()) {
+            GoogleSignInResult result = opr.get();
+            handleSignInResult(result);
+        } else {
+            opr.setResultCallback(new ResultCallback<GoogleSignInResult>() {
+                @Override
+                public void onResult(GoogleSignInResult googleSignInResult) {
+                    handleSignInResult(googleSignInResult);
+                }
+            });
+        }*/
     }
 
     @Override
@@ -84,34 +155,75 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         super.onResume();
     }
 
-    @OnClick({R.id.mTvSelectServer,R.id.mRlLogin,R.id.mRlRegist,R.id.mRlGoogle, R.id.mRlFacebook})
+    @OnClick({R.id.mTvSelectServer, R.id.mRlLogin, R.id.mRlRegist, R.id.mRlGoogle, R.id.mRlFacebook})
     public void onClick(View view) {
         seleted(view.getId());
         mMainPager.setCurrentItem(mSelectTab, false);
         switch (view.getId()) {
             case R.id.mTvSelectServer:
-                DialogUtils.showSelectServer(LoginAndRegistActivity.this,null);
+                DialogUtils.showSelectServer(LoginAndRegistActivity.this, null);
                 break;
             case R.id.mRlGoogle:
-                App.showToastShrot("G+");
+                //  App.showToastShrot("G+");
+                loginWithGoogle();
                 break;
             case R.id.mRlFacebook:
-                App.showToastShrot("F");
+                if (!ToolUtil.isInstallByread("com.facebook.katana")){
+                    App.showToastShrot("You don't have to install Facebook");
+                    return;
+                }
+                OtherPlatformUtils.getFacebookInfo(this, callbackManager, OtherPlatformUtils.LoginWithFacebook);
+                dialog = DialogUtils.showProgressDialog(LoginAndRegistActivity.this, getString(R.string.loading_login));
                 break;
         }
     }
 
-/*    private void loginWithGoogle(){
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleApiClient  mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this )
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }*/
+    private void loginWithGoogle() {
+        try {
+            /*OptionalPendingResult<GoogleSignInResult> opr = Auth.GoogleSignInApi.silentSignIn(mGoogleApiClient);
+            if (opr.isDone()) {
+              *//*  GoogleSignInResult result = opr.get();
+                handleSignInResult(result);*//*
+             //   revokeAccess();
+                signOut();
+            }else {*/
+                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(signInIntent, RC_SIGN_IN);
+//            revokeAccess();
+          //  signOut();
+        } catch (Exception e) {
+            e.printStackTrace();
+            revokeAccess();
+            signOut();
+        }
+    }
+
+    private void signOut() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        App.showToastShrot("quxiao:" + status.toString());
+                        // ...
+                      /*  Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                        startActivityForResult(signInIntent, RC_SIGN_IN);*/
+                        revokeAccess();
+                    }
+                });
+    }
+
+    private void revokeAccess() {
+        Auth.GoogleSignInApi.revokeAccess(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        App.showToastShrot("quxiao:" + status.toString());
+                        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                        startActivityForResult(signInIntent, RC_SIGN_IN);
+                     //   signOut();
+                    }
+                });
+    }
 
     /**
      * 设置menu_tab的选中项.
@@ -161,5 +273,65 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
             android.os.Process.killProcess(Process.myPid());
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result != null) {
+                handleSignInResult(result);
+            }
+        }
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        //   Log.d(TAG, "handleSignInResult:" + result.isSuccess());
+        if (result.isSuccess()) {
+            App.showToastShrot("success");
+            // Signed in successfully, show authenticated UI.
+            GoogleSignInAccount acct = result.getSignInAccount();
+            //   mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
+            // updateUI(true);
+            //    GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            String personName = acct.getDisplayName();
+            String personEmail = acct.getEmail();
+            String personId = acct.getId();
+            Uri personPhoto = acct.getPhotoUrl();
+        } else {
+            // Signed out, show unauthenticated UI.
+            //  updateUI(false);
+        }
+    }
+
+    @Override
+    public String[] monitorEvents() {
+        return new String[]{Cmd_UserOtherLogin, Cmd_AuthorizeCancel};
+    }
+
+    @Override
+    public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
+        if (Cmd_UserOtherLogin.equals(event)) {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            if (ret) {
+                Intent intent = new Intent(this, MainScreenActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                App.showToastLong(errInfo);
+            }
+        } else if (Cmd_AuthorizeCancel.equals(event)) {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+        }
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        App.showToastShrot(connectionResult.toString());
     }
 }

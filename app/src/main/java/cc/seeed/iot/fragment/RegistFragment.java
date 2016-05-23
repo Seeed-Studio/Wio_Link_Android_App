@@ -118,6 +118,11 @@ public class RegistFragment extends BaseFragment {
     }
 
     @Override
+    public void onEvent(String event, int ret, String errInfo, Object[] data) {
+
+    }
+
+    @Override
     public String[] monitorEvents() {
         return new String[]{Cmd_UserRegiest};
     }

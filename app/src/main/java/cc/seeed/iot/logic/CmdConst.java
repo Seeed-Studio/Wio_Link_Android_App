@@ -13,4 +13,11 @@ public interface CmdConst {
     String Cmd_UserResetPwd = "user_reset_pwd";
     String Cmd_UserChangePwd = "user_chenge_pwd";
     String Cmd_SetToken = "set_token";
+    String Cmd_AuthorizeCancel = "authorize_cancel";
+
+
+    String Cmd_UpdateFirware = "update_firware";
+    String Cmd_UpdateFirwareStute = "update_firware_stute";
+
+
 }

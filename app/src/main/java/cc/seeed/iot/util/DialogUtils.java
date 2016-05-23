@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Message;
 import android.os.Process;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
@@ -398,5 +399,38 @@ public class DialogUtils {
     public interface OnErrorButtonClickListenter {
         void okClick();
         void cancelClick();
+    }
+
+    public static Dialog showRemoveGroveDialog(Context context, List<PinConfig> pinConfigs, final OnItemRemoveClickListenter listenter) {
+
+        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        //  dialog.setCanceledOnTouchOutside(true);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_remove_grove, null);
+
+        RecyclerView mRvGrove = (RecyclerView) view.findViewById(R.id.mRvGrove);
+
+        if (mRvGrove != null) {
+            mRvGrove.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mRvGrove.setLayoutManager(layoutManager);
+            GroveI2cListRecyclerAdapter mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
+            mGroveI2cListAdapter.setOnRemoveItemListener(new GroveI2cListRecyclerAdapter.OnRemoveItemListener() {
+                @Override
+                public void onRemoveItem(PinConfig pinConfig, int position, int totalPin) {
+                    if (listenter != null){
+                        listenter.onRemoveItem(dialog,pinConfig, position, totalPin);
+                    }
+                }
+            });
+            mRvGrove.setAdapter(mGroveI2cListAdapter);
+        }
+        dialog.show();
+        dialog.setContentView(view);
+        return dialog;
+    }
+
+    public interface OnItemRemoveClickListenter {
+        void onRemoveItem( Dialog dialog,PinConfig pinConfig, int position, int totalPin);
     }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.view.Gravity;
 import android.widget.Toast;
 
+import com.facebook.FacebookSdk;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 import java.net.InetAddress;
@@ -50,6 +51,7 @@ public class App extends com.activeandroid.app.Application {
         configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);
         firstUseState = sp.getBoolean("firstUseState", true);
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         init();
         getIpAddress();

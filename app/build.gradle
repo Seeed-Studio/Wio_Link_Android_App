@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.google.gms.google-services'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -12,6 +11,9 @@ android {
         versionName "2.3.0"
     }
 
+    repositories {
+        mavenCentral()
+    }
 
     signingConfigs {
         release {
@@ -54,6 +56,11 @@ dependencies {
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
     compile 'com.jakewharton:butterknife:6.1.0'
     compile 'com.getbase:floatingactionbutton:1.10.1'
+    compile 'com.google.android.gms:play-services-auth:8.4.0'
+//    compile 'com.google.android.gms:play-services-plus:8.3.0'
+    compile('com.facebook.android:facebook-android-sdk:4.5.0') {
+        exclude group: 'com.parse.bolts', module: 'bolts-android'
+    }
     compile('com.facebook.fresco:fresco:0.9.0') {
     //    exclude module: 'bolts-android'
     }
@@ -63,4 +70,6 @@ dependencies {
 repositories {
     mavenCentral()
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
+
+    apply plugin: 'com.google.gms.google-services'
 }

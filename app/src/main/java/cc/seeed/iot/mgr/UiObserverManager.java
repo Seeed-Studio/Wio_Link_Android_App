@@ -77,7 +77,30 @@ public class UiObserverManager {
             },0);
         }
     }
+    public void dispatchEvent(final String e,final int ret,final String errInfo,final Object[] data) {
+        if (Thread.currentThread().getId() == Looper.getMainLooper().getThread().getId()) {
+            dispatchEventOnUiThread(e,ret,errInfo,data);
+        } else {
+            ThreadManager.getInstance().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    dispatchEventOnUiThread(e,ret,errInfo,data);
+                }
+            },0);
+        }
+    }
 
+    void dispatchEventOnUiThread(String e,int ret,String errInfo,Object[] data) {
+        if(TextUtils.isEmpty(errInfo))errInfo="请求失败";
+        if (observers.containsKey(e)) {
+            List<IUiObserver> obs = observers.get(e);
+            List<IUiObserver> copy = new ArrayList<>(obs);
+            for (IUiObserver ob : copy) {
+                Log.d(TAG, "cmd: " + e);
+                ob.onEvent(e,ret,errInfo,data);
+            }
+        }
+    }
     void dispatchEventOnUiThread(String e,boolean ret,String errInfo,Object[] data) {
         if(TextUtils.isEmpty(errInfo))errInfo="请求失败";
         if (observers.containsKey(e)) {

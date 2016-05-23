@@ -13,21 +13,52 @@
       },
       "oauth_client": [
         {
-          "client_id": "350434064578-vmjap19jb80falkf8fa6dank5huu41mr.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "cc.seeed.iot",
-            "certificate_hash": "52E2180184E6E1292B5F18F0453CBF32BD293999"
-          }
-        },
-        {
-          "client_id": "350434064578-1p2vojkhrisp9qc58ktgees87t1e6g9r.apps.googleusercontent.com",
+          "client_id": "350434064578-u19t8r6e2l019dceh5rr0knspbop0ep8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB3vqvofjHsi-glhRN3s9qBbhbA9z_S1_o"
+          "current_key": "AIzaSyDvkYAXcEaUIkSnoP7cBsaZq-9OZHgV6Hw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350434064578:android:b0c096f5be65d0b1",
+        "android_client_info": {
+          "package_name": "cc.seeed.iot.ap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350434064578-ntcsdur516cbg6d5vfi328mshnkcpcrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cc.seeed.iot.ap",
+            "certificate_hash": "52E2180184E6E1292B5F18F0453CBF32BD293999"
+          }
+        },
+        {
+          "client_id": "350434064578-u19t8r6e2l019dceh5rr0knspbop0ep8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvkYAXcEaUIkSnoP7cBsaZq-9OZHgV6Hw"
         }
       ],
       "services": {

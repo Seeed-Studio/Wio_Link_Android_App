@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
@@ -26,6 +28,7 @@ import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.ImgUtil;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.Node;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -39,13 +42,20 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     private Context context;
 
     private OnClickListener mOnClickListener;
+    private OnItemLongClickListener mOnItemLongClickListener;
 
     public interface OnClickListener {
         void onClick(View v, int position);
     }
+    public interface OnItemLongClickListener {
+        void onItemLongClick(View v, int position);
+    }
 
     public void setOnClickListener(OnClickListener l) {
         mOnClickListener = l;
+    }
+    public void setOnItemLongClickListener(OnItemLongClickListener l) {
+        mOnItemLongClickListener = l;
     }
 
     public NodeListRecyclerAdapter(List<Node> nodes) {
@@ -56,11 +66,21 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_node1, parent, false);
-        return new MainViewHolder(v, mOnClickListener);
+        return new MainViewHolder(v, mOnClickListener,mOnItemLongClickListener);
     }
 
     @Override
     public void onBindViewHolder(MainViewHolder holder, final int position) {
+        if (position == 0) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.mLlItem.getLayoutParams();
+            int top = ToolUtil.dp2px(13, context.getResources());
+            int left = ToolUtil.dp2px(12, context.getResources());
+            int right = ToolUtil.dp2px(12, context.getResources());
+            int buttom = ToolUtil.dp2px(13, context.getResources());
+            params.setMargins(left, top, right, buttom);
+            holder.mLlItem.setLayoutParams(params);
+        }
+
         Node node = nodes.get(position);
 
         if (node.board == null) {
@@ -75,20 +95,14 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
                 holder.mSDVNode.setImageResource(R.drawable.node_small);
                 break;
         }
-        holder.mTvTitle.setText(TextUtils.isEmpty(node.name)?"Wio Link"+position+1:node.name);
-        if (node.online){
+        holder.mTvTitle.setText(TextUtils.isEmpty(node.name) ? "Wio Link" + position + 1 : node.name);
+        if (node.online) {
             holder.mTvState.setText(R.string.online);
             holder.mTvState.setBackgroundResource(R.drawable.online_state_bg);
-        }else {
+        } else {
             holder.mTvState.setText(R.string.offline);
             holder.mTvState.setBackgroundResource(R.drawable.offline_state_bg);
         }
-
-
-     /*   if (node.dataxserver == null || node.dataxserver.equals(CommonUrl.OTA_SERVER_IP)|| node.dataxserver.equals(CommonUrl.OTA_SERVER_IP))
-            holder.mXserverView.setText("");
-        else
-            holder.mXserverView.setText(node.dataxserver);*/
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         for (int i = 0; i < 4; i++) {
@@ -96,18 +110,18 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
                 holder.mGroveViews.get(i).setVisibility(View.VISIBLE);
                 PinConfig pinConfig = pinConfigs.get(i); //IndexOutOfBoundsException
                 String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL; //maybe null
-                ImgUtil.displayImg(holder.mGroveViews.get(i),url,R.drawable.link_small);
+                ImgUtil.displayImg(holder.mGroveViews.get(i), url, R.drawable.grove_no);
             } catch (Exception e) {
                 Log.e(TAG, "getGroves:" + e);
                 holder.mGroveViews.get(i).setVisibility(View.GONE);
             }
         }
 
-        holder.mTvConnectedNum.setText(""+pinConfigs.size());
+        holder.mTvConnectedNum.setText("" + pinConfigs.size());
         if (pinConfigs.size() > 4) {
             Integer over_num = pinConfigs.size() - 4;
             holder.mTvMoreGroveNum.setVisibility(View.VISIBLE);
-            holder.mTvMoreGroveNum.setText("+"+over_num);
+            holder.mTvMoreGroveNum.setText("+" + over_num);
         } else {
             holder.mTvMoreGroveNum.setVisibility(View.GONE);
         }
@@ -125,8 +139,12 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return nodes.get(position);
     }
 
+
     public void removeItem(int position) {
         notifyItemRemoved(position);
+        if (position == 0){
+            notifyItemChanged(position);
+        }
     }
 
     public Node updateItem(int position) {
@@ -146,8 +164,9 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         return 0;
     }
 
-    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MainViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         private OnClickListener mOnClickListener;
+        private OnItemLongClickListener mOnItemLongClickListener;
 
         private SimpleDraweeView mSDVNode;
         private FontTextView mTvTitle;
@@ -160,33 +179,16 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         private RelativeLayout mRlMoreGrove;
         private SimpleDraweeView mSDVGrove04;
         private FontTextView mTvMoreGroveNum;
+        private LinearLayout mLlItem;
         View mItemView;
 
         List<SimpleDraweeView> mGroveViews;
 
-/*
-        ImageView mBoardView;
-        TextView mNameView;
-        TextView mOnlineView;
-        ImageView mOnlineLedView;
-        TextView mXserverView;
-        ImageView mFavoriteView;
-        ImageView mPopMenuView;
-        View mStatusView;
-
-        TextView mRenameView;
-        TextView mDetailView;
-        TextView mRemoveView;
-
-        List<ImageView> mGroveViews;
-        TextView mGroveOverView;
-
-        SwipeLayout mSwipeLayout;*/
-
-        public MainViewHolder(View itemView, OnClickListener mOnClickListener) {
+        public MainViewHolder(View itemView, OnClickListener mOnClickListener,OnItemLongClickListener onItemLongClickListener ) {
             super(itemView);
             mItemView = itemView;
             this.mOnClickListener = mOnClickListener;
+            this.mOnItemLongClickListener = onItemLongClickListener;
 
             mSDVNode = (SimpleDraweeView) itemView.findViewById(R.id.mSDVNode);
             mTvTitle = (FontTextView) itemView.findViewById(R.id.mTvTitle);
@@ -199,35 +201,16 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             mRlMoreGrove = (RelativeLayout) itemView.findViewById(R.id.mRlMoreGrove);
             mSDVGrove04 = (SimpleDraweeView) itemView.findViewById(R.id.mSDVGrove04);
             mTvMoreGroveNum = (FontTextView) itemView.findViewById(R.id.mTvMoreGroveNum);
+            mLlItem = (LinearLayout) itemView.findViewById(R.id.mLlItem);
 
             mGroveViews = new ArrayList<>();
-            mGroveViews.add(0,mSDVGrove01);
-            mGroveViews.add(1,mSDVGrove02);
-            mGroveViews.add(2,mSDVGrove03);
-            mGroveViews.add(3,mSDVGrove04);
+            mGroveViews.add(0, mSDVGrove01);
+            mGroveViews.add(1, mSDVGrove02);
+            mGroveViews.add(2, mSDVGrove03);
+            mGroveViews.add(3, mSDVGrove04);
 
             mItemView.setOnClickListener(this);
-/*
-            mStatusView = itemView.findViewById(R.id.status);
-
-            mRenameView = (TextView) itemView.findViewById(R.id.setting);
-            mDetailView = (TextView) itemView.findViewById(R.id.api);
-            mRemoveView = (TextView) itemView.findViewById(R.id.remove);
-
-            mGroveViews = new ArrayList<>();
-            mGroveViews.add(0, (CircleImageView) itemView.findViewById(R.id.grove_image_1));
-            mGroveViews.add(1, (CircleImageView) itemView.findViewById(R.id.grove_image_2));
-            mGroveViews.add(2, (CircleImageView) itemView.findViewById(R.id.grove_image_3));
-            mGroveViews.add(3, (CircleImageView) itemView.findViewById(R.id.grove_image_4));
-            mGroveOverView = (TextView) itemView.findViewById(R.id.grove_over);
-
-            mItemView.setOnClickListener(this);
-//            mLocationView.setOnClickListener(this);
-//            mFavoriteView.setOnClickListener(this);
-//            mPopMenuView.setOnClickListener(this);
-            mRenameView.setOnClickListener(this);
-            mDetailView.setOnClickListener(this);
-            mRemoveView.setOnClickListener(this);*/
+            mItemView.setOnLongClickListener(this);
         }
 
         @Override
@@ -236,6 +219,14 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
                 mOnClickListener.onClick(v, getLayoutPosition());
             }
 
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            if (mOnItemLongClickListener != null){
+                mOnItemLongClickListener.onItemLongClick(v,getLayoutPosition());
+            }
+            return false;
         }
     }
 }

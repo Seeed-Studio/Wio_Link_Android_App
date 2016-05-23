@@ -14,6 +14,7 @@
             android:id="@+id/mLLOrtherLogin"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:visibility="gone"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal">
 
@@ -53,6 +54,7 @@
             android:layout_marginBottom="11dp"
             android:gravity="center_horizontal"
             android:text="OR JOIN WITH"
+            android:visibility="gone"
             android:textColor="#979797"
             android:textSize="12sp"
             app:cusTextFont="@string/Roboto_Medium" />

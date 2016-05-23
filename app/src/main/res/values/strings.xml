@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Wio</string>
+    <string name="facebook_app_id">636196369868072</string>
+    <string name="server_client_id">350434064578-ntcsdur516cbg6d5vfi328mshnkcpcrg.apps.googleusercontent.com</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
