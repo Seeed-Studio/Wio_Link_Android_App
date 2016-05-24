@@ -4,7 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.*;
+import android.os.Bundle;
 import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -13,19 +13,16 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-
 import com.facebook.CallbackManager;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInApi;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +42,6 @@ import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.OtherPlatformUtils;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
-
-import static com.google.android.gms.common.Scopes.PLUS_LOGIN;
 
 public class LoginAndRegistActivity extends BaseActivity implements ViewPager.OnPageChangeListener, GoogleApiClient.OnConnectionFailedListener {
 
@@ -163,7 +158,8 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         mMainPager.setCurrentItem(mSelectTab, false);
         switch (view.getId()) {
             case R.id.mTvSelectServer:
-                DialogUtils.showSelectServer(LoginAndRegistActivity.this,"", new DialogUtils.ButtonClickListenter() {
+                MobclickAgent.onEvent(this, "10005");
+                DialogUtils.showSelectServer(LoginAndRegistActivity.this,App.getApp().getOtaServerUrl(), new DialogUtils.ButtonClickListenter() {
                     @Override
                     public void okClick(String url, String ip) {
                         App.getApp().saveUrlAndIp(url, ip);
@@ -177,9 +173,11 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 break;
             case R.id.mRlGoogle:
                 //  App.showToastShrot("G+");
+                MobclickAgent.onEvent(this, "10006");
                 loginWithGoogle();
                 break;
             case R.id.mRlFacebook:
+                MobclickAgent.onEvent(this, "10007");
                 if (!ToolUtil.isInstallByread("com.facebook.katana")) {
                     App.showToastShrot("You don't have to install Facebook");
                     return;
@@ -250,8 +248,10 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 mLoginTag.setVisibility(View.GONE);
                 mTvRegist.setTextColor(Color.parseColor("#ffffffff"));
                 mTvLogin.setTextColor(Color.parseColor("#b2ffffff"));
+                MobclickAgent.onEvent(this, "10001");
                 break;
             case R.id.mRlLogin:
+                MobclickAgent.onEvent(this, "10002");
                 mSelectTab = 1;
                 mRegistrTag.setVisibility(View.GONE);
                 mLoginTag.setVisibility(View.VISIBLE);

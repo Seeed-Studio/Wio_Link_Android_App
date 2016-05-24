@@ -10,6 +10,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ import android.widget.Toast;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,6 +103,7 @@ public class MainScreenActivity extends BaseActivity
     private LinearLayout mLLWioNode;
     private LinearLayout mLLAddDevice;
     private ImageView mIvAddDevice;
+    private SwipeRefreshLayout mSRL;
 
     //    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -141,6 +144,14 @@ public class MainScreenActivity extends BaseActivity
         mLLWioNode = (LinearLayout) findViewById(R.id.mLLWioNode);
         mLLAddDevice = (LinearLayout) findViewById(R.id.mLLAddDevice);
         mIvAddDevice = (ImageView) findViewById(R.id.mIvAddDevice);
+        mSRL = (SwipeRefreshLayout) findViewById(R.id.mSRL);
+        mSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mSRL.setRefreshing(true);
+                getNodeList();
+            }
+        });
 
         mBtnAddDevice.setOnClickListener(this);
         mLLWioLink.setOnClickListener(this);
@@ -240,13 +251,16 @@ public class MainScreenActivity extends BaseActivity
 
                     case MESSAGE_NODE_LIST_COMPLETE:
                         mProgressDialog.dismiss();
+                        mSRL.setRefreshing(false);
                         if (msg.arg2 == 1) {
                             mAdapter.updateAll(nodes);
                             if (nodes.isEmpty()) {
                                 mTvDeviceNum.setText("0 DEVICES");
                                 mLLNoDevice.setVisibility(View.VISIBLE);
+                                mSRL.setVisibility(View.GONE);
                             } else {
                                 mLLNoDevice.setVisibility(View.GONE);
+                                mSRL.setVisibility(View.VISIBLE);
                                 mTvDeviceNum.setText(nodes.size() + " DEVICES");
                             }
 
@@ -356,30 +370,38 @@ public class MainScreenActivity extends BaseActivity
             case R.id.mTvDeviceNum:
                 break;
             case R.id.mTvSupportDevices:
+                MobclickAgent.onEvent(this, "12001");
                 intent = new Intent(MainScreenActivity.this, GrovesActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mTvFAQ:
+                MobclickAgent.onEvent(this, "12002");
                 break;
             case R.id.mTvGetDevices:
+                MobclickAgent.onEvent(this, "12003");
                 break;
             case R.id.mTvSetting:
+                MobclickAgent.onEvent(this, "12004");
                 intent = new Intent(MainScreenActivity.this, MainSettingActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mTVAbout:
+                MobclickAgent.onEvent(this, "12005");
                 intent = new Intent(MainScreenActivity.this, AboutActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mTvUpdateApp:
+                MobclickAgent.onEvent(this, "12006");
                 break;
             case R.id.mBtnAddDevice:
                 showSelectAddDevicePopWindow();
                 break;
             case R.id.mLLWioNode:
+                MobclickAgent.onEvent(this, "13002");
                 setupActivity(Constant.WIO_NODE_V1_0);
                 break;
             case R.id.mLLWioLink:
+                MobclickAgent.onEvent(this, "13001");
                 setupActivity(Constant.WIO_LINK_V1_0);
                 break;
             case R.id.mLLAddDevice:
@@ -431,24 +453,6 @@ public class MainScreenActivity extends BaseActivity
         final Node node = mAdapter.getItem(position);
         int id = v.getId();
         nodeSet(node);
-        switch (id) {
-         /*   case R.id.node_item:
-                nodeSet(node);
-                break;
-//            case R.id.location:
-//                break;
-//            case R.id.favorite:
-//                break;
-            case R.id.setting:
-                nodeSetting(node);
-                break;
-            case R.id.api:
-                nodeApi(node);
-                break;
-            case R.id.remove:
-                nodeRemove(node, position);
-                break;*/
-        }
     }
 
     private void nodeSetting(Node node) {
@@ -506,6 +510,7 @@ public class MainScreenActivity extends BaseActivity
 
     public boolean nodeSet(Node node) {
         // check database is correct?
+        MobclickAgent.onEvent(this, "13004");
         try {
             DBHelper.getNodes(node.node_sn).get(0);
         } catch (IndexOutOfBoundsException e) {
@@ -658,6 +663,7 @@ public class MainScreenActivity extends BaseActivity
 
     @Override
     public void onItemLongClick(View v, int position) {
+        MobclickAgent.onEvent(this, "13003");
         final Node node = mAdapter.getItem(position);
         ConfigDeviceLogic.getInstance().removeNode(MainScreenActivity.this, node, position);
         //   nodeRemove(node, position);

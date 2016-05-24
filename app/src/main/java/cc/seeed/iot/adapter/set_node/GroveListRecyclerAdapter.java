@@ -59,6 +59,10 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             params.setMargins(ToolUtil.dp2px(16,context.getResources()),0,ToolUtil.dp2px(10,context.getResources()),0);
             holder.itemView.setLayoutParams(params);
+        }else {
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+            params.setMargins(0,0,ToolUtil.dp2px(10,context.getResources()),0);
+            holder.itemView.setLayoutParams(params);
         }
         ImageView grove_image = holder.grove_image;
         UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_no, UrlImageViewHelper.CACHE_DURATION_INFINITE);

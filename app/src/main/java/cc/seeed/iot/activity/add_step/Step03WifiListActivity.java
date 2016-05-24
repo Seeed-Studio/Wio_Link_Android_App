@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -156,6 +158,7 @@ public class Step03WifiListActivity extends BaseActivity
         DialogUtils.showEditOneRowDialog(Step03WifiListActivity.this,"Enter Wifi Password", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog,String pwd) {
+                MobclickAgent.onEvent(Step03WifiListActivity.this, "17003");
                 dialog.dismiss();
                 //  App.showToastShrot(pwd);
                 //     DialogUtils.showProgressDialog(Step03WifiListActivity.this, "Sending wifi password to Wio...");

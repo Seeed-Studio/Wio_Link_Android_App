@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -94,10 +96,12 @@ public class LoginFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnLogin:
+                MobclickAgent.onEvent(mActivity, "10004");
                 hideKeyboard(view);
                 login();
                 break;
             case R.id.mTvForgotPwd:
+                MobclickAgent.onEvent(mActivity, "10008");
                 Intent intent = new Intent(mActivity, ResetPwd01Activity.class);
                 startActivity(intent);
                 break;

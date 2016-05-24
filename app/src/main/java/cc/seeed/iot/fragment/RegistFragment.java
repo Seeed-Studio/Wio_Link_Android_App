@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -98,6 +100,7 @@ public class RegistFragment extends BaseFragment {
 
     @OnClick(R.id.mBtnRegist)
     public void onClick() {
+        MobclickAgent.onEvent(mActivity, "10003");
         regiest();
     }
 

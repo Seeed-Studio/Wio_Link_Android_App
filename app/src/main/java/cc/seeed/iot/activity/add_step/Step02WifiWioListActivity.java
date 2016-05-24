@@ -25,6 +25,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +36,7 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.adapter.add_node.WifiRecyclerViewHolder;
 import cc.seeed.iot.adapter.add_node.WifiWioListRecyclerAdapter;
+import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.view.StepView;
 
 
@@ -175,6 +178,7 @@ public class Step02WifiWioListActivity extends BaseActivity
 
     @Override
     public void onItem(View caller) {
+        MobclickAgent.onEvent(this, "17002");
         state_selected = true;
         int position = mWifiListView.getChildLayoutPosition(caller);
         ScanResult scanResult = mWifiListAdapter.getItem(position);
@@ -220,10 +224,12 @@ public class Step02WifiWioListActivity extends BaseActivity
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             endTime = System.currentTimeMillis();
-            if (endTime - startTime > 60*1000){
+            if (startTime != 0 && endTime - startTime > 60*1000){
+                startTime = 0;
                 if (mWaitDialog != null && mWaitDialog.isShowing()){
                     mWaitDialog.dismiss();
                 }
+                DialogUtils.showErrorDialog(Step02WifiWioListActivity.this,"","OK","","Connect fail..",null);
             }
             if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);

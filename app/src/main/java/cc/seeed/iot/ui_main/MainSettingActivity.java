@@ -6,6 +6,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -66,10 +68,12 @@ public class MainSettingActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mLLPassword:
+                MobclickAgent.onEvent(this, "14001");
                 startActivity(new Intent(MainSettingActivity.this, ChangePwdActivity.class));
                 break;
             case R.id.mLLConnectServer:
-                DialogUtils.showSelectServer(this, "",new DialogUtils.ButtonClickListenter() {
+                MobclickAgent.onEvent(this, "14002");
+                DialogUtils.showSelectServer(this, App.getApp().getOtaServerUrl(),new DialogUtils.ButtonClickListenter() {
 
                     @Override
                     public void okClick(String url, String ip) {
@@ -79,6 +83,8 @@ public class MainSettingActivity extends BaseActivity {
                             mTvConnectServer.setText(url +"(custom)");
                         }
                         App.getApp().saveUrlAndIp(url, ip);
+                        UserLogic.getInstance().logOut();
+                        startActivity(new Intent(MainSettingActivity.this,LoginAndRegistActivity.class));
                     }
 
                     @Override
@@ -88,6 +94,7 @@ public class MainSettingActivity extends BaseActivity {
                 });
                 break;
             case R.id.mLLLogout:
+                MobclickAgent.onEvent(this, "14003");
                 UserLogic.getInstance().logOut();
                 Intent intent = new Intent(this, LoginAndRegistActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -85,6 +87,7 @@ public class ResetPwd03Activity extends BaseActivity {
 
     @OnClick(R.id.mBtnSubmit)
     public void onClick(View v) {
+        MobclickAgent.onEvent(this, "11004");
         hideKeyboard(v);
        resetPwd();
     }

@@ -14,25 +14,27 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
+
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-            
+
             <LinearLayout
                 android:id="@+id/mLLAddDevice"
                 android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
-                android:layout_alignParentRight="true"
-                android:gravity="center"
-                android:layout_height="50dp">
+                android:gravity="center">
+
                 <ImageView
                     android:id="@+id/mIvAddDevice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/add"/>
+                    android:src="@mipmap/add" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -46,12 +48,20 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     -->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/listview"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/mSRL"
         android:layout_width="match_parent"
-        android:background="#FFEDEDED"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFEDEDED"
+          />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
     <LinearLayout
         android:id="@+id/mLLNoDevice"
@@ -64,7 +74,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/main_bg"/>
+            android:src="@drawable/main_bg" />
 
         <cc.seeed.iot.view.FontTextView
             android:layout_width="match_parent"
@@ -72,11 +82,11 @@
             android:layout_marginLeft="43dp"
             android:layout_marginRight="43dp"
             android:layout_marginTop="133dp"
-            android:visibility="gone"
             android:gravity="center_horizontal"
             android:text="@string/hint_not_device"
             android:textColor="#979797"
             android:textSize="16sp"
+            android:visibility="gone"
             app:cusTextFont="@string/Roboto_Regular" />
 
         <Button
@@ -88,9 +98,9 @@
             android:layout_marginTop="66dp"
             android:background="@drawable/btn_long_bg"
             android:text="@string/add_your_first_device"
-            android:visibility="gone"
             android:textColor="#ffffff"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </LinearLayout>
 
     <RelativeLayout

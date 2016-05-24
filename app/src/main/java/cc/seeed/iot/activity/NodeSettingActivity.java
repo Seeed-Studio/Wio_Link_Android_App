@@ -9,6 +9,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -97,12 +99,15 @@ public class NodeSettingActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mLLName:
+                MobclickAgent.onEvent(this, "16001");
                 reName();
                 break;
             case R.id.mLLConnectServer:
+                MobclickAgent.onEvent(this, "16002");
               saveUrl();
                 break;
             case R.id.mLlDeleteDevice:
+                MobclickAgent.onEvent(this, "16003");
                 ConfigDeviceLogic.getInstance().removeNode(NodeSettingActivity.this,node,0);
                 break;
         }

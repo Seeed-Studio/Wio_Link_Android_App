@@ -28,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +37,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.adapter.set_node.GroveFilterRecyclerAdapter;
 import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
@@ -231,6 +233,7 @@ public class SetupIotLinkActivity extends BaseActivity
                             mGroveI2cListView.setVisibility(View.INVISIBLE);
                         }*/
                     }
+                    break;
                     case RMV_I2C_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
@@ -261,19 +264,6 @@ public class SetupIotLinkActivity extends BaseActivity
             }*/
         };
     }
-
-    /*  private void scrollI2cGroveListToEnd() {
-          mGroveI2cListView.smoothScrollToPosition(mGroveI2cListAdapter.getItemCount() - 1);
-      }
-  */
-/*    private void updateI2cGroveList(int position) {
-        List<PinConfig> pinConfigs = new ArrayList<>();
-        for (PinConfig p : this.pinConfigs) {
-            if (p.position == position)
-                pinConfigs.add(p);
-        }
-        mGroveI2cListAdapter.updateAll(pinConfigs);
-    }*/
 
     @Override
     protected void onResume() {
@@ -319,12 +309,18 @@ public class SetupIotLinkActivity extends BaseActivity
                     Intent intent;
                     switch (position) {
                         case 0:
-
-                            intent = new Intent(SetupIotLinkActivity.this, NodeApiActivity.class);
-                            intent.putExtra("node_sn", node.node_sn);
-                            startActivity(intent);
+                            MobclickAgent.onEvent(SetupIotLinkActivity.this, "15003");
+                            NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
+                            if (node_josn.connections.isEmpty()) {
+                                DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "Tip", "OK", "", "Forger add grove?", null);
+                            }else {
+                                intent = new Intent(SetupIotLinkActivity.this, NodeApiActivity.class);
+                                intent.putExtra("node_sn", node.node_sn);
+                                startActivity(intent);
+                            }
                             break;
                         case 1:
+                            MobclickAgent.onEvent(SetupIotLinkActivity.this, "15004");
                             intent = new Intent(SetupIotLinkActivity.this, NodeSettingActivity.class);
                             intent.putExtra(NodeSettingActivity.Intent_NodeSn, node.node_sn);
                             startActivity(intent);
@@ -440,6 +436,7 @@ public class SetupIotLinkActivity extends BaseActivity
                 displayI2cListView(position);
                 break;
             case R.id.mRlUpdate:
+                MobclickAgent.onEvent(this, "15002");
                 if (isUpdateIng) {
                     return;
                 } else {
@@ -779,7 +776,8 @@ public class SetupIotLinkActivity extends BaseActivity
         if (Cmd_UpdateFirwareStute.equals(event)) {
             if (ret == ConfigDeviceLogic.UPDATE_DONE) {
                 stopUpdate();
-                DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
+              //  DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
+                App.showToastShrot("Firmware Updated!");
             } else if (ret == ConfigDeviceLogic.FAIL) {
                 if (data != null && data.length > 0) {
                     DialogBean bean = (DialogBean) data[0];

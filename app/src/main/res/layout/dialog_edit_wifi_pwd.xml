@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="48dp"
         app:cusEditFont="@string/Roboto_Medium"
+        android:singleLine="true"
         android:textColor="#A6000000"
         android:textSize="14sp"
         android:layout_height="wrap_content" />

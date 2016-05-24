@@ -159,7 +159,7 @@
 
     <!-- activity node setting-->
     <string name="device_name">Device Name</string>
-    <string name="customer_server">Customer Server (Optional)</string>
+    <string name="customer_server">Customized Server</string>
     <string name="delete_device">Delete this device</string>
     <string name="toolBar_title">Device Setting</string>
 </resources>

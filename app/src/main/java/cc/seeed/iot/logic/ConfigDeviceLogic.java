@@ -135,8 +135,7 @@ public class ConfigDeviceLogic extends BaseLogic {
     public void removeNode(final Context context, final Node node, final int position){
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCancelable(false);
-        builder.setTitle("Remove Wio");
-        builder.setMessage("Confirm remove?");
+        builder.setMessage("Sure to delete this device?");
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {

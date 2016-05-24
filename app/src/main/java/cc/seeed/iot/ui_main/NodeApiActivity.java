@@ -121,7 +121,7 @@ public class NodeApiActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.copy) {
             copyTextUrl(getApiUrl());
-            Toast.makeText(this, "API url coped!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "API url copied!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.share) {
             shareTextUrl(getApiUrl());
         }
@@ -152,7 +152,7 @@ public class NodeApiActivity extends AppCompatActivity {
 
     private String getApiUrl() {
         String url;
-        String ota_server_url = ((App) NodeApiActivity.this.getApplication()).getOtaServerUrl();
+        String ota_server_url = App.getApp().getOtaServerUrl();
         String server_endpoint = ota_server_url + RESOURCE;
         server_endpoint = server_endpoint.replace("https", "http");
         String node_key = node.node_key;

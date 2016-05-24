@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -122,6 +124,7 @@ public class Step01GoReadyActivity extends BaseActivity {
 
     @OnClick(R.id.mBtnGo)
     public void onClick() {
+        MobclickAgent.onEvent(this, "17001");
         attemptLogin("node000", board);
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         wifiManager.startScan();

@@ -33,7 +33,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="25dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,6 +45,8 @@ Alternivetely, you can choose our default server which justhas been optimized."
                 android:id="@+id/mTvCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="7dp"
+                android:paddingBottom="3dp"
                 android:background="@color/white"
                 android:text="CANCEL"
                 android:textColor="#FF830D10"
@@ -56,6 +58,8 @@ Alternivetely, you can choose our default server which justhas been optimized."
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="29dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="3dp"
                 android:text="SUBMIT"
                 android:textColor="#FF830D10"
                 android:textSize="14sp"

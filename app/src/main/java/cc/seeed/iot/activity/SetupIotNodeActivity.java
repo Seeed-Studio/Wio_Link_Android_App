@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.adapter.set_node.GroveFilterRecyclerAdapter;
 import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
@@ -323,12 +325,18 @@ public class SetupIotNodeActivity extends BaseActivity
                     Intent intent;
                     switch (position) {
                         case 0:
-
-                            intent = new Intent(SetupIotNodeActivity.this, NodeApiActivity.class);
-                            intent.putExtra("node_sn", node.node_sn);
-                            startActivity(intent);
+                            MobclickAgent.onEvent(SetupIotNodeActivity.this, "15003");
+                            NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
+                            if (node_josn.connections.isEmpty()) {
+                                DialogUtils.showErrorDialog(SetupIotNodeActivity.this, "Tip", "OK", "", "Forger add grove?", null);
+                            }else {
+                                intent = new Intent(SetupIotNodeActivity.this, NodeApiActivity.class);
+                                intent.putExtra("node_sn", node.node_sn);
+                                startActivity(intent);
+                            }
                             break;
                         case 1:
+                            MobclickAgent.onEvent(SetupIotNodeActivity.this, "15004");
                             intent = new Intent(SetupIotNodeActivity.this, NodeSettingActivity.class);
                             intent.putExtra(NodeSettingActivity.Intent_NodeSn, node.node_sn);
                             startActivity(intent);
@@ -445,6 +453,7 @@ public class SetupIotNodeActivity extends BaseActivity
                     displayI2cListView(position);
                 break;
             case R.id.mRlUpdate:
+                MobclickAgent.onEvent(SetupIotNodeActivity.this, "15002");
                 if (isUpdateIng) {
                     return;
                 } else {
@@ -779,7 +788,8 @@ public class SetupIotNodeActivity extends BaseActivity
         if (Cmd_UpdateFirwareStute.equals(event)) {
             if (ret == ConfigDeviceLogic.UPDATE_DONE) {
                 stopUpdate();
-                DialogUtils.showErrorDialog(SetupIotNodeActivity.this, "", "OK", "", "Firware Updated!", null);
+               // DialogUtils.showErrorDialog(SetupIotNodeActivity.this, "", "OK", "", "Firware Updated!", null);
+                App.showToastShrot("Firmware Updated!");
             } else if (ret == ConfigDeviceLogic.FAIL) {
                 if (data != null && data.length > 0) {
                     DialogBean bean = (DialogBean) data[0];

@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.umeng.analytics.MobclickAgent;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -94,10 +96,12 @@ public class ResetPwd02Activity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSubmit:
+                MobclickAgent.onEvent(this, "11002");
                 hideKeyboard(view);
                 checkCode();
                 break;
             case R.id.mTvReqAgain:
+                MobclickAgent.onEvent(this, "11003");
                 hideKeyboard(view);
                 sendCodeAgain();
                 break;

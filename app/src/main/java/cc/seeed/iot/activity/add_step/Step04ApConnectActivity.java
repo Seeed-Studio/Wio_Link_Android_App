@@ -27,6 +27,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
@@ -93,6 +95,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         ButterKnife.inject(this);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initToolBar();
+        mStepView.setDoingStep(3);
 
         initData();
     }
@@ -257,6 +260,7 @@ public class Step04ApConnectActivity extends BaseActivity {
             dialog = DialogUtils.showEditNodeNameDialog(Step04ApConnectActivity.this, defaultName, new DialogUtils.ButtonEditClickListenter() {
                 @Override
                 public void okClick(Dialog dialog,String content) {
+                    MobclickAgent.onEvent(Step04ApConnectActivity.this, "17004");
                     dialog.dismiss();
                     node_name = content;
                     new checkNodeIsOnline().execute();
@@ -341,11 +345,13 @@ public class Step04ApConnectActivity extends BaseActivity {
                         "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
                     @Override
                     public void okClick() {
+                        MobclickAgent.onEvent(Step04ApConnectActivity.this, "17005");
                         new checkNodeIsOnline().execute();
                     }
 
                     @Override
                     public void cancelClick() {
+                        MobclickAgent.onEvent(Step04ApConnectActivity.this, "17006");
                         stopLoading();
                         finish();
                     }

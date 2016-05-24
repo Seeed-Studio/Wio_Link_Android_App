@@ -50,13 +50,13 @@ public class DialogUtils {
     public static void showQuitDialog(Context context) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(context.getResources().getString(R.string.confirm_quit));
-        builder.setNeutralButton("Yes", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Process.killProcess(Process.myPid());
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
@@ -65,7 +65,7 @@ public class DialogUtils {
         builder.show();
     }
 
-    public static Dialog showSelectServer(final Activity context,String defUrl, final ButtonClickListenter listenter) {
+    public static Dialog showSelectServer(final Activity context,String serverUrl, final ButtonClickListenter listenter) {
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_select_server, null);
         FontTextView mTvTitle = (FontTextView) view.findViewById(R.id.mTvTitle);
@@ -80,12 +80,6 @@ public class DialogUtils {
 
 
         // final String serverUrl = App.getSp().getString(Constant.SP_SERVER_URL, "");
-        final String serverUrl;
-        if (TextUtils.isEmpty(defUrl)){
-            serverUrl = App.getApp().getOtaServerUrl();
-        }else {
-            serverUrl = defUrl;
-        }
         if (CommonUrl.OTA_SERVER_URL.equals(serverUrl)) {
             mRbDefaultServer.setChecked(true);
             mRbCustomServer.setChecked(false);
