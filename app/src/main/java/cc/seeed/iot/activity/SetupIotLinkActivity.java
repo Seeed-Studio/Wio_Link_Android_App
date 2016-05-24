@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -17,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.DragEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,7 +36,6 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.adapter.set_node.GroveFilterRecyclerAdapter;
 import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
@@ -48,7 +45,6 @@ import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.NodeApiActivity;
-import cc.seeed.iot.ui_main.NodeSettingActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
@@ -143,7 +139,20 @@ public class SetupIotLinkActivity extends BaseActivity
         ButterKnife.inject(this);
 
         initView();
+        initData();
+        initHandler();
+    }
 
+    private void initView() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+        mRlRemove.setOnDragListener(this);
+        mSetNodeLayout.setOnClickListener(this);
+    }
+
+    private void initData() {
         mGroveDrivers = DBHelper.getGrovesAll();
         user = UserLogic.getInstance().getUser();
         String node_sn = getIntent().getStringExtra("node_sn");
@@ -176,15 +185,6 @@ public class SetupIotLinkActivity extends BaseActivity
             mGroveListView.setAdapter(mGroveListAdapter);
         }
 
-      /*  if (mGroveI2cListView != null) {
-            mGroveI2cListView.setHasFixedSize(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            mGroveI2cListView.setLayoutManager(layoutManager);
-            mGroveI2cListAdapter = new GroveI2cListRecyclerAdapter(pinConfigs);
-            mGroveI2cListAdapter.setOnLongClickListen(this);
-            mGroveI2cListView.setAdapter(mGroveI2cListAdapter);
-        }*/
         if (mGroveTypeListView != null) {
             mGroveTypeListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -194,16 +194,6 @@ public class SetupIotLinkActivity extends BaseActivity
         }
 
         pinBadgeUpdateAll();
-        initData();
-    }
-
-    private void initView() {
-        setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        mRlRemove.setOnDragListener(this);
-        mSetNodeLayout.setOnClickListener(this);
     }
 
     private void pinBadgeUpdateAll() {
@@ -221,7 +211,7 @@ public class SetupIotLinkActivity extends BaseActivity
         }
     }
 
-    private void initData() {
+    private void initHandler() {
         mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
@@ -247,7 +237,7 @@ public class SetupIotLinkActivity extends BaseActivity
                         if (pinDeviceCount(position) < 2) {
                             //  mGroveI2cListView.setVisibility(View.INVISIBLE);
                         } else {
-                          //  updateI2cGroveList(position);
+                            //  updateI2cGroveList(position);
                         }
                         pinBadgeUpdateAll();
                         if (pinDeviceCount(position) == 0)
@@ -276,14 +266,14 @@ public class SetupIotLinkActivity extends BaseActivity
           mGroveI2cListView.smoothScrollToPosition(mGroveI2cListAdapter.getItemCount() - 1);
       }
   */
-    private void updateI2cGroveList(int position) {
+/*    private void updateI2cGroveList(int position) {
         List<PinConfig> pinConfigs = new ArrayList<>();
         for (PinConfig p : this.pinConfigs) {
             if (p.position == position)
                 pinConfigs.add(p);
         }
         mGroveI2cListAdapter.updateAll(pinConfigs);
-    }
+    }*/
 
     @Override
     protected void onResume() {
@@ -316,7 +306,6 @@ public class SetupIotLinkActivity extends BaseActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
         if (id == android.R.id.home) {
             finish();
             return true;
@@ -337,11 +326,10 @@ public class SetupIotLinkActivity extends BaseActivity
                             break;
                         case 1:
                             intent = new Intent(SetupIotLinkActivity.this, NodeSettingActivity.class);
-                            intent.putExtra("node_sn", node.node_sn);
+                            intent.putExtra(NodeSettingActivity.Intent_NodeSn, node.node_sn);
                             startActivity(intent);
                             break;
                     }
-                    //App.showToastShrot("" + position);
                 }
             });
             return true;
@@ -575,8 +563,6 @@ public class SetupIotLinkActivity extends BaseActivity
                         }
                         addGrove(pinConfig);
 
-//                        Log.e(TAG, "pinConfigs " + pinConfigs);
-
                         if (isHasI2cGrove(pin_position)) {
                             Message message = Message.obtain();
                             message.what = ADD_I2C_GROVE;
@@ -621,8 +607,6 @@ public class SetupIotLinkActivity extends BaseActivity
                                 mHandler.sendMessage(message);
                             }
                         }
-
-//                        Log.e(TAG, "pinConfigs " + pinConfigs);
                         break;
                     }
                     case DragEvent.ACTION_DRAG_ENDED:

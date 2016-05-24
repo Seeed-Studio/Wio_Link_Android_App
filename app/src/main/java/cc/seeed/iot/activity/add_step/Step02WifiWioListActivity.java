@@ -62,6 +62,9 @@ public class Step02WifiWioListActivity extends BaseActivity
     private String selected_ssid;
     private Boolean state_selected; //cause wifi broadcast up when wifi broadcast register
 
+    private long startTime = 0;
+    private long endTime = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,10 +184,6 @@ public class Step02WifiWioListActivity extends BaseActivity
             goWifiListActivity();
         else {
             wifiConnect(selected_ssid);
-
-            mWaitDialog.setMessage("Connecting to " + scanResult.SSID + "...");
-            mWaitDialog.setCanceledOnTouchOutside(false);
-            mWaitDialog.show();
         }
 
 
@@ -209,6 +208,10 @@ public class Step02WifiWioListActivity extends BaseActivity
                 wifiManager.enableNetwork(i.networkId, true);
                 wifiManager.reconnect();
 
+                mWaitDialog.setMessage("Connecting to " + SSID + "...");
+                mWaitDialog.setCanceledOnTouchOutside(false);
+                mWaitDialog.show();
+                startTime = System.currentTimeMillis();
                 break;
             }
         }
@@ -216,6 +219,12 @@ public class Step02WifiWioListActivity extends BaseActivity
 
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
+            endTime = System.currentTimeMillis();
+            if (endTime - startTime > 60*1000){
+                if (mWaitDialog != null && mWaitDialog.isShowing()){
+                    mWaitDialog.dismiss();
+                }
+            }
             if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {

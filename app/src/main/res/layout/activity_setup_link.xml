@@ -14,9 +14,7 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="5dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-    </android.support.v7.widget.Toolbar>
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/grove_selector"
@@ -58,9 +56,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:visibility="invisible"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="18dp"
-            android:layout_centerHorizontal="true">
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/mIvRemove"
@@ -111,96 +109,7 @@
 
         </RelativeLayout>
 
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="35dp">
-
-            <ImageView
-                android:id="@+id/node_view"
-                android:layout_width="204dp"
-                android:layout_height="153dp"
-                android:layout_centerInParent="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/link_large" />
-
-            <ImageButton
-                android:id="@+id/grove_0"
-                android:layout_width="80dp"
-                android:layout_height="@dimen/grove_width"
-                android:layout_alignTop="@+id/node_view"
-                android:layout_marginTop="18dp"
-                android:layout_toLeftOf="@+id/node_view"
-                android:layout_toStartOf="@+id/node_view"
-                android:background="@drawable/state_grove_indicator_digital0"
-                android:clickable="true"
-                android:scaleType="centerCrop" />
-
-            <ImageButton
-                android:id="@+id/grove_1"
-                android:layout_width="80dp"
-                android:layout_height="@dimen/grove_width"
-                android:layout_alignTop="@+id/node_view"
-                android:layout_marginTop="59dp"
-                android:layout_toLeftOf="@+id/node_view"
-                android:layout_toStartOf="@+id/node_view"
-                android:background="@drawable/state_grove_indicator_digital1"
-                android:clickable="true"
-                android:scaleType="centerCrop" />
-
-            <ImageButton
-                android:id="@+id/grove_2"
-                android:layout_width="80dp"
-                android:layout_height="@dimen/grove_width"
-                android:layout_alignTop="@+id/node_view"
-                android:layout_marginTop="100dp"
-                android:layout_toLeftOf="@+id/node_view"
-                android:layout_toStartOf="@+id/node_view"
-                android:background="@drawable/state_grove_indicator_digital2"
-                android:clickable="true"
-                android:scaleType="centerCrop" />
-
-            <ImageButton
-                android:id="@+id/grove_3"
-                android:layout_width="80dp"
-                android:layout_height="@dimen/grove_width"
-                android:layout_alignTop="@+id/node_view"
-                android:layout_marginTop="18dp"
-                android:layout_toEndOf="@+id/node_view"
-                android:layout_toRightOf="@+id/node_view"
-                android:background="@drawable/state_grove_indicator_analog"
-                android:clickable="true"
-                android:scaleType="centerCrop" />
-
-            <ImageButton
-                android:id="@+id/grove_4"
-                android:layout_width="80dp"
-                android:layout_height="@dimen/grove_width"
-                android:layout_alignTop="@+id/node_view"
-                android:layout_marginTop="59dp"
-                android:layout_toEndOf="@+id/node_view"
-                android:layout_toRightOf="@+id/node_view"
-                android:background="@drawable/state_grove_indicator_uart"
-                android:clickable="true"
-                android:scaleType="centerCrop" />
-
-            <ImageButton
-                android:id="@+id/grove_5"
-                android:layout_width="80dp"
-                android:layout_height="@dimen/grove_width"
-                android:layout_alignTop="@+id/node_view"
-                android:layout_marginTop="100dp"
-                android:layout_toEndOf="@+id/node_view"
-                android:layout_toRightOf="@+id/node_view"
-                android:background="@drawable/state_grove_indicator_i2c"
-                android:clickable="true"
-                android:scaleType="centerCrop" />
-
-        </RelativeLayout>
-
+        <include layout="@layout/wiolink_layout" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/grove_i2c_list"
@@ -210,9 +119,8 @@
             android:layout_margin="10dp"
             android:background="@color/red"
             android:clickable="true"
-            android:visibility="invisible"/>
+            android:visibility="invisible" />
 
     </RelativeLayout>
-
 
 </LinearLayout>

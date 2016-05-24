@@ -1,5 +1,6 @@
 package cc.seeed.iot.activity.add_step;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -152,11 +153,12 @@ public class Step03WifiListActivity extends BaseActivity
     public void onItem(View caller) {
         int position = mWifiListView.getChildLayoutPosition(caller);
         scanResult = mWifiListAdapter.getItem(position);
-        DialogUtils.showEditWifiPwdDialog(Step03WifiListActivity.this, new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(Step03WifiListActivity.this,"Enter Wifi Password", new DialogUtils.ButtonEditClickListenter() {
             @Override
-            public void okClick(String pwd) {
+            public void okClick(Dialog dialog,String pwd) {
+                dialog.dismiss();
                 //  App.showToastShrot(pwd);
-           //     DialogUtils.showProgressDialog(Step03WifiListActivity.this, "Sending wifi password to Wio...");
+                //     DialogUtils.showProgressDialog(Step03WifiListActivity.this, "Sending wifi password to Wio...");
                 Intent intent = new Intent(Step03WifiListActivity.this, Step04ApConnectActivity.class);
                 intent.putExtra(Step04ApConnectActivity.Intent_Ssid, scanResult.SSID);
                 intent.putExtra(Step04ApConnectActivity.Intent_Board, board);

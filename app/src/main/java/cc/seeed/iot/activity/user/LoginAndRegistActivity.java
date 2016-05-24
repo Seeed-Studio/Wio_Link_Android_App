@@ -36,6 +36,7 @@ import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.adapter.LoginAndRegistAdapter;
 import cc.seeed.iot.fragment.LoginFragment;
 import cc.seeed.iot.fragment.RegistFragment;
@@ -81,6 +82,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     int[] menuIds = {R.id.mRlRegist, R.id.mRlLogin};
 
     GoogleApiClient mGoogleApiClient;
+    int goToTest = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,14 +163,24 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         mMainPager.setCurrentItem(mSelectTab, false);
         switch (view.getId()) {
             case R.id.mTvSelectServer:
-                DialogUtils.showSelectServer(LoginAndRegistActivity.this, null);
+                DialogUtils.showSelectServer(LoginAndRegistActivity.this,"", new DialogUtils.ButtonClickListenter() {
+                    @Override
+                    public void okClick(String url, String ip) {
+                        App.getApp().saveUrlAndIp(url, ip);
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
                 break;
             case R.id.mRlGoogle:
                 //  App.showToastShrot("G+");
                 loginWithGoogle();
                 break;
             case R.id.mRlFacebook:
-                if (!ToolUtil.isInstallByread("com.facebook.katana")){
+                if (!ToolUtil.isInstallByread("com.facebook.katana")) {
                     App.showToastShrot("You don't have to install Facebook");
                     return;
                 }
@@ -187,10 +199,10 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
              //   revokeAccess();
                 signOut();
             }else {*/
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+            Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+            startActivityForResult(signInIntent, RC_SIGN_IN);
 //            revokeAccess();
-          //  signOut();
+            //  signOut();
         } catch (Exception e) {
             e.printStackTrace();
             revokeAccess();
@@ -220,7 +232,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                         App.showToastShrot("quxiao:" + status.toString());
                         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                         startActivityForResult(signInIntent, RC_SIGN_IN);
-                     //   signOut();
+                        //   signOut();
                     }
                 });
     }
@@ -245,6 +257,14 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 mLoginTag.setVisibility(View.VISIBLE);
                 mTvLogin.setTextColor(Color.parseColor("#ffffffff"));
                 mTvRegist.setTextColor(Color.parseColor("#b2ffffff"));
+
+                if (ToolUtil.isApkDebug()) {
+                    goToTest++;
+                    if (goToTest == 6) {
+                        goToTest = 0;
+                        startActivity(new Intent(this, TestActivity.class));
+                    }
+                }
                 break;
             default:
                 break;

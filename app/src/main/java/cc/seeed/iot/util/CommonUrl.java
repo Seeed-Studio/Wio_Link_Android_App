@@ -6,8 +6,8 @@ package cc.seeed.iot.util;
 public class CommonUrl {
     public static String Server_In_Prefix = "http://192.168.1.40/seeedcc-develop/api/index.php?";
     public static String Server_Out_Prefix = "http://bazaar.seeed.cc/api/index.php?";
-    public static String Server_In_Ota_Url_Prefix = "https://192.168.4.99";
-    public static String Server_In_Ota_Ip_Prefix = "192.168.4.99";
+    public static String Server_In_Ota_Url_Prefix = "https://192.168.4.110";
+    public static String Server_In_Ota_Ip_Prefix = "192.168.4.110";
     public static String OTA_SERVER_URL = "https://wio.seeed.io";
     public static String OTA_SERVER_IP = "120.25.216.117";
 

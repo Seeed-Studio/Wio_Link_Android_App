@@ -1,11 +1,12 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--suppress ALL -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/setup_iot_node"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/third_color"
-    android:orientation="vertical"
-    tools:context=".ui_setnode.SetupIotLinkActivity">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,60 +14,102 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         android:elevation="5dp"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    </android.support.v7.widget.Toolbar>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/grove_selector"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@drawable/grove_filter_bg"
+        android:elevation="3dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#fafafa"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grove_list"
+            android:layout_width="match_parent"
+            android:layout_height="162dp"
+            android:layout_marginBottom="19dp"
+            android:layout_marginTop="19dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="#FFE7E7E7" />
+
 
     <RelativeLayout
         android:id="@+id/set_node"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/grove_list"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentStart="false"
-        android:layout_below="@+id/toolbar">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/grove_remove"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <RelativeLayout
+            android:id="@+id/mRlRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_cancel"
-            android:visibility="invisible" />
+            android:layout_marginBottom="18dp"
+            android:visibility="invisible">
 
-        <ImageView
-            android:id="@+id/node_view"
-            android:layout_width="194dp"
-            android:layout_height="153dp"
-            android:layout_centerInParent="true"
-            android:src="@drawable/node_large"
-            android:scaleType="centerCrop" />
+            <ImageView
+                android:id="@+id/mIvRemove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/remove"
+                android:visibility="visible" />
 
-        <ImageButton
-            android:id="@+id/grove_0"
-            android:layout_width="80dp"
-            android:layout_height="@dimen/grove_width"
-            android:layout_alignTop="@+id/node_view"
-            android:layout_marginTop="59dp"
-            android:layout_toLeftOf="@+id/node_view"
-            android:layout_toStartOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_node_01"
-            android:clickable="true"
-            android:scaleType="centerCrop" />
+            <cc.seeed.iot.view.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mIvRemove"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Remove Driver"
+                android:textColor="#4a4a4a"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Roboto_Medium" />
 
-        <ImageButton
-            android:id="@+id/grove_1"
-            android:layout_width="80dp"
-            android:layout_height="@dimen/grove_width"
-            android:layout_alignTop="@+id/node_view"
-            android:layout_marginTop="59dp"
-            android:layout_toEndOf="@+id/node_view"
-            android:layout_toRightOf="@+id/node_view"
-            android:background="@drawable/state_grove_indicator_node_02"
-            android:clickable="true"
-            android:scaleType="centerCrop" />
-        <!--todo change interface tip-->
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/mRlUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/btn_long_bg">
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvUpdate"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:gravity="center"
+                android:text="Update Setting to Wio"
+                android:textColor="#ffffff"
+                android:textSize="16sp"
+                app:cusTextFont="@string/Roboto_Medium" />
+
+            <ImageView
+                android:id="@+id/mIvUpdate"
+                android:layout_width="24.6dp"
+                android:layout_height="24.6dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/uploading_white"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+
+        <include layout="@layout/wionode_layout" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/grove_i2c_list"
@@ -76,29 +119,8 @@
             android:layout_margin="10dp"
             android:background="@color/red"
             android:clickable="true"
-            android:visibility="invisible">
-
-        </android.support.v7.widget.RecyclerView>
+            android:visibility="invisible" />
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/grove_list"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_above="@+id/grove_selector"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true">
-
-    </android.support.v7.widget.RecyclerView>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/grove_selector"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/primary">
-
-    </android.support.v7.widget.RecyclerView>
-
-</RelativeLayout>
+</LinearLayout>

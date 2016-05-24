@@ -39,9 +39,12 @@ import java.util.List;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.NodeSettingActivity;
 import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
 import cc.seeed.iot.activity.SetupIotNodeActivity;
@@ -51,6 +54,7 @@ import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.MLog;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
@@ -65,7 +69,7 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MainScreenActivity extends AppCompatActivity
+public class MainScreenActivity extends BaseActivity
         implements NodeListRecyclerAdapter.OnClickListener, View.OnClickListener, Animation.AnimationListener, NodeListRecyclerAdapter.OnItemLongClickListener {
     private static final String TAG = "MainScreenActivity";
     private static final int MESSAGE_GROVE_LIST_START = 0x00;
@@ -159,7 +163,7 @@ public class MainScreenActivity extends AppCompatActivity
             mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(layout);
-       //     mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
+            //     mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
             mAdapter = new NodeListRecyclerAdapter(nodes);
             mAdapter.setOnClickListener(this);
             mAdapter.setOnItemLongClickListener(this);
@@ -468,7 +472,7 @@ public class MainScreenActivity extends AppCompatActivity
                 progressDialog.setCanceledOnTouchOutside(false);
                 progressDialog.show();
                 IotApi api = new IotApi();
-                User user = user = UserLogic.getInstance().getUser();
+                User user = UserLogic.getInstance().getUser();
                 api.setAccessToken(user.token);
                 final IotService iot = api.getService();
                 iot.nodesDelete(node.node_sn, new Callback<SuccessResponse>() {
@@ -655,6 +659,41 @@ public class MainScreenActivity extends AppCompatActivity
     @Override
     public void onItemLongClick(View v, int position) {
         final Node node = mAdapter.getItem(position);
-        nodeRemove(node, position);
+        ConfigDeviceLogic.getInstance().removeNode(MainScreenActivity.this, node, position);
+        //   nodeRemove(node, position);
+    }
+
+    @Override
+    public String[] monitorEvents() {
+        return new String[]{Cmd_Node_Remove};
+    }
+
+    @Override
+    public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
+        if (Cmd_Node_Remove.equals(event)) {
+            if (ret) {
+                if (ToolUtil.isTopActivity(MainScreenActivity.this, MainScreenActivity.this.getClass().getSimpleName())) {
+                    int position;
+                    try {
+                        position = Integer.parseInt(errInfo);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return;
+                    }
+                    final Node node = mAdapter.getItem(position);
+                    nodes.remove(node);
+                    mAdapter.removeItem(position);
+                    if (nodes.isEmpty()) {
+                        mTvDeviceNum.setText("0 DEVICES");
+                        mLLNoDevice.setVisibility(View.VISIBLE);
+                    } else {
+                        mLLNoDevice.setVisibility(View.GONE);
+                        mTvDeviceNum.setText(nodes.size() + " DEVICES");
+                    }
+                }
+            } else {
+                App.showToastShrot(errInfo);
+            }
+        }
     }
 }

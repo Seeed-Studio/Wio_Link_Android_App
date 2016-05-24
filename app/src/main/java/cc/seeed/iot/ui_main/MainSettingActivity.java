@@ -14,6 +14,7 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.UserLogic;
+import cc.seeed.iot.ui_login.ChangePwdActivity;
 import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.CommonUrl;
@@ -65,9 +66,10 @@ public class MainSettingActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mLLPassword:
+                startActivity(new Intent(MainSettingActivity.this, ChangePwdActivity.class));
                 break;
             case R.id.mLLConnectServer:
-                DialogUtils.showSelectServer(this, new DialogUtils.ButtonClickListenter() {
+                DialogUtils.showSelectServer(this, "",new DialogUtils.ButtonClickListenter() {
 
                     @Override
                     public void okClick(String url, String ip) {
@@ -76,7 +78,7 @@ public class MainSettingActivity extends BaseActivity {
                         }else {
                             mTvConnectServer.setText(url +"(custom)");
                         }
-                       // App.showToastShrot("url: "+url +" ip: "+ip);
+                        App.getApp().saveUrlAndIp(url, ip);
                     }
 
                     @Override

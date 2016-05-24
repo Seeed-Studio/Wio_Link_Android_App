@@ -63,12 +63,14 @@
         <TextView
             android:id="@+id/mTvFAQ"
             style="@style/menuItemStyle"
+            android:visibility="gone"
             android:text="FAQ" />
 
 
         <TextView
             android:id="@+id/mTvGetDevices"
             style="@style/menuItemStyle"
+            android:visibility="gone"
             android:text="Get Devices" />
 
         <View

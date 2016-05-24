@@ -68,7 +68,7 @@
         <activity android:name="cc.seeed.iot.ui_main.GrovesActivity" />
         <activity android:name="cc.seeed.iot.ui_main.SettingActivity" />
         <activity android:name="cc.seeed.iot.ui_main.NodeApiActivity" />
-        <activity android:name="cc.seeed.iot.ui_main.NodeSettingActivity" />
+        <activity android:name=".activity.NodeSettingActivity" />
         <activity android:name="cc.seeed.iot.ui_main.MainSettingActivity" />
         <activity android:name="cc.seeed.iot.activity.TestActivity" />
         <activity

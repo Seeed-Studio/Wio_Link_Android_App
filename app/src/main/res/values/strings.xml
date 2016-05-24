@@ -156,4 +156,10 @@
     <string name="reset_pwd_email">Reset your email...</string>
     <string name="reset_pwd_pwd">Reset your password...</string>
     <string name="reset_pwd_title_01">Password Recovery</string>
+
+    <!-- activity node setting-->
+    <string name="device_name">Device Name</string>
+    <string name="customer_server">Customer Server (Optional)</string>
+    <string name="delete_device">Delete this device</string>
+    <string name="toolBar_title">Device Setting</string>
 </resources>

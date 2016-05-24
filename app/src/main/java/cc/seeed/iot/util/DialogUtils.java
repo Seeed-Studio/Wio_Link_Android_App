@@ -65,7 +65,7 @@ public class DialogUtils {
         builder.show();
     }
 
-    public static Dialog showSelectServer(final Activity context, final ButtonClickListenter listenter) {
+    public static Dialog showSelectServer(final Activity context,String defUrl, final ButtonClickListenter listenter) {
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_select_server, null);
         FontTextView mTvTitle = (FontTextView) view.findViewById(R.id.mTvTitle);
@@ -80,7 +80,12 @@ public class DialogUtils {
 
 
         // final String serverUrl = App.getSp().getString(Constant.SP_SERVER_URL, "");
-        final String serverUrl = App.getApp().getOtaServerUrl();
+        final String serverUrl;
+        if (TextUtils.isEmpty(defUrl)){
+            serverUrl = App.getApp().getOtaServerUrl();
+        }else {
+            serverUrl = defUrl;
+        }
         if (CommonUrl.OTA_SERVER_URL.equals(serverUrl)) {
             mRbDefaultServer.setChecked(true);
             mRbCustomServer.setChecked(false);
@@ -175,8 +180,8 @@ public class DialogUtils {
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
+
                 if (listenter != null) {
-                    App.getApp().saveUrlAndIp(url, ip);
                     listenter.okClick(url, ip);
                 }
                 if (dialog != null) {
@@ -205,7 +210,7 @@ public class DialogUtils {
     }
 
 
-    public static Dialog showEditWifiPwdDialog(Context context, final ButtonEditClickListenter listenter) {
+    public static Dialog showEditOneRowDialog(Context context,String title, final ButtonEditClickListenter listenter) {
 
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_wifi_pwd, null);
@@ -213,13 +218,16 @@ public class DialogUtils {
         final FontEditView mEtPwd = (FontEditView) view.findViewById(R.id.mEtPwd);
         FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
         FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
+
+        if (!TextUtils.isEmpty(title)){
+            mTvTitle.setText(title);
+        }
         mTvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listenter != null) {
-                    listenter.okClick(mEtPwd.getText().toString().trim());
+                    listenter.okClick(dialog,mEtPwd.getText().toString().trim());
                 }
-                dialog.dismiss();
             }
         });
 
@@ -237,7 +245,7 @@ public class DialogUtils {
     }
 
     public interface ButtonEditClickListenter {
-        void okClick(String content);
+        void okClick(Dialog dialog,String content);
     }
 
     public static Dialog showEditNodeNameDialog(Context context, final String defaultName, final ButtonEditClickListenter listenter) {
@@ -261,9 +269,8 @@ public class DialogUtils {
                     if (TextUtils.isEmpty(name)){
                         name  = defaultName;
                     }
-                    listenter.okClick(name);
+                    listenter.okClick(dialog,name);
                 }
-                dialog.dismiss();
             }
         });
 

@@ -15,7 +15,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <LinearLayout
-        android:id="@+id/mLLPassword"
+        android:id="@+id/mLLName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/menu_item_bg"
@@ -26,15 +26,16 @@
         <cc.seeed.iot.view.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/password"
+            android:text="@string/device_name"
             android:textColor="#4a4a4a"
             android:textSize="16sp"
             app:cusTextFont="@string/Roboto_Medium" />
 
         <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="******"
+            android:text="Wio Link 1"
             android:textColor="#9b9b9b"
             android:layout_marginTop="4dp"
             android:textSize="14sp"
@@ -52,7 +53,7 @@
         <cc.seeed.iot.view.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connect_server"
+            android:text="@string/customer_server"
             android:textColor="#4a4a4a"
             android:textSize="16sp"
             app:cusTextFont="@string/Roboto_Medium" />
@@ -75,7 +76,7 @@
         android:background="#f6f6f6"/>
 
     <LinearLayout
-        android:id="@+id/mLLLogout"
+        android:id="@+id/mLlDeleteDevice"
         android:layout_width="match_parent"
         android:layout_height="43dp"
         android:background="@drawable/menu_item_bg"
@@ -86,7 +87,7 @@
         <cc.seeed.iot.view.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/setting_logout"
+            android:text="@string/delete_device"
             android:gravity="center_vertical"
             android:textColor="#9b9b9b"
             android:textSize="16sp"

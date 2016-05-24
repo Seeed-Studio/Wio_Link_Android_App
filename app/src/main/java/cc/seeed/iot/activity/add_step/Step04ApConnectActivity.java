@@ -256,7 +256,8 @@ public class Step04ApConnectActivity extends BaseActivity {
             }
             dialog = DialogUtils.showEditNodeNameDialog(Step04ApConnectActivity.this, defaultName, new DialogUtils.ButtonEditClickListenter() {
                 @Override
-                public void okClick(String content) {
+                public void okClick(Dialog dialog,String content) {
+                    dialog.dismiss();
                     node_name = content;
                     new checkNodeIsOnline().execute();
                 }

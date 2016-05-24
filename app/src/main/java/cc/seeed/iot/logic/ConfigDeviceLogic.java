@@ -1,10 +1,18 @@
 package cc.seeed.iot.logic;
 
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Message;
+import android.preference.EditTextPreference;
+import android.preference.SwitchPreference;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import java.util.List;
 
+import cc.seeed.iot.R;
 import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.entity.DialogBean;
 import cc.seeed.iot.entity.User;
@@ -16,8 +24,10 @@ import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
 import cc.seeed.iot.webapi.model.GroverDriver;
+import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.OtaStatusResponse;
+import cc.seeed.iot.webapi.model.SuccessResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -85,6 +95,74 @@ public class ConfigDeviceLogic extends BaseLogic {
                 UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirware, FAIL, "error.getLocalizedMessage()", new DialogBean[]{bean});
             }
         });
+    }
+
+    public  void nodeReName(final Node node, final String newName) {
+        IotApi api = new IotApi();
+        User user =  UserLogic.getInstance().getUser();
+        api.setAccessToken(user.token);
+        final IotService iot = api.getService();
+        iot.nodesRename(newName, node.node_sn, new Callback<SuccessResponse>() {
+            @Override
+            public void success(SuccessResponse successResponse, Response response) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_Node_ReName, true, newName, null);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_Node_ReName, false, error.toString(), null);
+            }
+        });
+    }
+
+    public void nodeXserverIp(final Node node, String ip, final String url) {
+        IotApi api = new IotApi();
+        api.setAccessToken(node.node_key);
+        final IotService iot = api.getService();
+        iot.nodeSettingDataxserver(ip, url, new Callback<SuccessResponse>() {
+            @Override
+            public void success(SuccessResponse successResponse, Response response) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_Node_SaveIp, true, url, null);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                UiObserverManager.getInstance().dispatchEvent(Cmd_Node_SaveIp, false, error.toString(), null);
+            }
+        });
+    }
+
+    public void removeNode(final Context context, final Node node, final int position){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setCancelable(false);
+        builder.setTitle("Remove Wio");
+        builder.setMessage("Confirm remove?");
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                final Dialog progressDialog = DialogUtils.showProgressDialog(context,"Wio remove...");
+                IotApi api = new IotApi();
+                User user = UserLogic.getInstance().getUser();
+                api.setAccessToken(user.token);
+                final IotService iot = api.getService();
+                iot.nodesDelete(node.node_sn, new Callback<SuccessResponse>() {
+                    @Override
+                    public void success(SuccessResponse successResponse, Response response) {
+                        progressDialog.dismiss();
+                        DBHelper.delNode(node.node_sn);
+                        UiObserverManager.getInstance().dispatchEvent(Cmd_Node_Remove, true, ""+position, null);
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        UiObserverManager.getInstance().dispatchEvent(Cmd_Node_Remove, false, error.toString(), null);
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.show();
     }
 
    /* private void getGrovesData() {

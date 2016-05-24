@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="144dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="35dp">
+
+    <ImageView
+        android:id="@+id/node_view"
+        android:layout_width="194dp"
+        android:layout_height="153dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/node_large" />
+
+    <ImageButton
+        android:id="@+id/grove_0"
+        android:layout_width="80dp"
+        android:layout_height="@dimen/grove_width"
+        android:layout_alignTop="@+id/node_view"
+        android:layout_marginTop="56dp"
+        android:layout_toLeftOf="@+id/node_view"
+        android:layout_toStartOf="@+id/node_view"
+        android:background="@drawable/state_grove_indicator_node_01"
+        android:clickable="true"
+        android:scaleType="centerCrop" />
+
+    <ImageButton
+        android:id="@+id/grove_1"
+        android:layout_width="80dp"
+        android:layout_height="@dimen/grove_width"
+        android:layout_alignTop="@+id/node_view"
+        android:layout_marginTop="56dp"
+        android:layout_toEndOf="@+id/node_view"
+        android:layout_toRightOf="@+id/node_view"
+        android:background="@drawable/state_grove_indicator_node_02"
+        android:clickable="true"
+        android:scaleType="centerCrop" />
+
+</RelativeLayout>

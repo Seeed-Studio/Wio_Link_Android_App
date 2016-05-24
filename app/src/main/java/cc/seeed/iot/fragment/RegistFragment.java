@@ -81,7 +81,7 @@ public class RegistFragment extends BaseFragment {
 
         dialog = DialogUtils.showProgressDialog(mActivity, getString(R.string.loading_regist));
         App.getSp().edit().putString(Constant.SP_USER_EMAIL, email).commit();
-        UserLogic.getInstance().login(email, pwd);
+        UserLogic.getInstance().regist(email, pwd);
     }
 
 

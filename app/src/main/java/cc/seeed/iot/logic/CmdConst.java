@@ -18,6 +18,9 @@ public interface CmdConst {
 
     String Cmd_UpdateFirware = "update_firware";
     String Cmd_UpdateFirwareStute = "update_firware_stute";
+    String Cmd_Node_ReName = "node_rename";
+    String Cmd_Node_SaveIp = "node_saveip";
+    String Cmd_Node_Remove = "node_remove";
 
 
 }

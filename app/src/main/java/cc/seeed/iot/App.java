@@ -192,13 +192,8 @@ public class App extends com.activeandroid.app.Application {
     }
 
     public void saveUrlAndIp(String url, String ip) {
-        this.ota_server_url = url;
-        this.ota_server_ip = ip;
-
-        SharedPreferences.Editor edit = getSp().edit();
-        edit.putString(Constant.SP_SERVER_URL, url);
-        edit.putString(Constant.SP_SERVER_IP, ip);
-        edit.commit();
+        setOtaServerUrl(url);
+        setOtaServerIP(ip);
     }
 
     public boolean isDefaultServer() {
