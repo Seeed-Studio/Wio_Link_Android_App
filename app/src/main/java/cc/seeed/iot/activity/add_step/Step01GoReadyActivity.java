@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -106,10 +105,10 @@ public class Step01GoReadyActivity extends BaseActivity {
                         mProgressBar.dismiss();
                         node_key = nodeResponse.node_key;
                         node_sn = nodeResponse.node_sn;
-                        Intent intent = new Intent(Step01GoReadyActivity.this, Step02WifiWioListActivity.class);
-                        intent.putExtra("board", board);
-                        intent.putExtra("node_key", node_key);
-                        intent.putExtra("node_sn", node_sn);
+                        Intent intent = new Intent(Step01GoReadyActivity.this, Step02WifiListActivity.class);
+                        intent.putExtra(Step04ApConnectActivity.Intent_Board, board);
+                        intent.putExtra(Step04ApConnectActivity.Intent_NodeKey, node_key);
+                        intent.putExtra(Step04ApConnectActivity.Intent_NodeSn, node_sn);
                         startActivity(intent);
                     }
 

@@ -93,7 +93,7 @@ public class GrovesActivity extends AppCompatActivity {
         public void onBindViewHolder(MainViewHolder holder, final int position) {
             GroverDriver grove = groves.get(position);
             ImageView grove_image = holder.grove_image;
-            UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_no,
+            UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.mipmap.grove_default,
                     UrlImageViewHelper.CACHE_DURATION_INFINITE);
 //            String name = grove.GroveName.replaceFirst("Grove[\\s_-]+", "");
             holder.mGroveNameView.setText(grove.GroveName);

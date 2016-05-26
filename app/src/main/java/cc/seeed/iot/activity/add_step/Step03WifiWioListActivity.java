@@ -23,12 +23,15 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -40,7 +43,7 @@ import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.view.StepView;
 
 
-public class Step02WifiWioListActivity extends BaseActivity
+public class Step03WifiWioListActivity extends BaseActivity
         implements WifiRecyclerViewHolder.IMyViewHolderClicks {
     private final static String TAG = "WifiPionListActivity";
     private final static int PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION = 0x00;
@@ -54,6 +57,8 @@ public class Step02WifiWioListActivity extends BaseActivity
     TextView mTip;
     @InjectView(R.id.wifi_list)
     RecyclerView mWifiListView;
+    @InjectView(R.id.progressBar)
+    ProgressBar mProgressBar;
 
     private WifiWioListRecyclerAdapter mWifiListAdapter;
     private ProgressDialog mWaitDialog;
@@ -62,11 +67,15 @@ public class Step02WifiWioListActivity extends BaseActivity
     private String board;
     private String node_sn;
     private String node_key;
+    private String wifi_ssid;
+    private String wifi_pwd;
+
     private String selected_ssid;
     private Boolean state_selected; //cause wifi broadcast up when wifi broadcast register
 
     private long startTime = 0;
     private long endTime = 0;
+    Timer timer = new Timer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +85,8 @@ public class Step02WifiWioListActivity extends BaseActivity
 
         initToolBar();
         initData();
+
+        startProgress();
     }
 
     private void initToolBar() {
@@ -85,7 +96,7 @@ public class Step02WifiWioListActivity extends BaseActivity
     }
 
     private void initData() {
-        mStepView.setDoingStep(1);
+        mStepView.setDoingStep(2);
         if (mWifiListView != null) {
             mWifiListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -108,11 +119,14 @@ public class Step02WifiWioListActivity extends BaseActivity
         super.onResume();
         state_selected = false;
         selected_ssid = "";
+        showProgress(true);
 
         Intent intent = getIntent();
-        board = intent.getStringExtra("board");
-        node_sn = intent.getStringExtra("node_sn");
-        node_key = intent.getStringExtra("node_key");
+        board = intent.getStringExtra(Step04ApConnectActivity.Intent_Board);
+        node_sn = intent.getStringExtra(Step04ApConnectActivity.Intent_NodeSn);
+        node_key = intent.getStringExtra(Step04ApConnectActivity.Intent_NodeKey);
+        wifi_pwd = intent.getStringExtra(Step04ApConnectActivity.Intent_WifiPwd);
+        wifi_ssid = intent.getStringExtra(Step04ApConnectActivity.Intent_Ssid);
         IntentFilter actionFilter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
         actionFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         registerReceiver(wifiActionReceiver, actionFilter);
@@ -139,10 +153,13 @@ public class Step02WifiWioListActivity extends BaseActivity
     protected void onPause() {
         super.onPause();
         unregisterReceiver(wifiActionReceiver);
+        showProgress(false);
     }
 
     @Override
     protected void onDestroy() {
+        if (timer != null)
+        timer.cancel();
         super.onDestroy();
     }
 
@@ -180,10 +197,12 @@ public class Step02WifiWioListActivity extends BaseActivity
     public void onItem(View caller) {
         MobclickAgent.onEvent(this, "17002");
         state_selected = true;
+
         int position = mWifiListView.getChildLayoutPosition(caller);
         ScanResult scanResult = mWifiListAdapter.getItem(position);
         selected_ssid = scanResult.SSID;
 
+        showProgress(false);
         if (selected_ssid.equals(getCurrentSsid()))
             goWifiListActivity();
         else {
@@ -224,12 +243,13 @@ public class Step02WifiWioListActivity extends BaseActivity
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             endTime = System.currentTimeMillis();
-            if (startTime != 0 && endTime - startTime > 60*1000){
+            if (startTime != 0 && endTime - startTime > 60 * 1000) {
                 startTime = 0;
-                if (mWaitDialog != null && mWaitDialog.isShowing()){
+                if (mWaitDialog != null && mWaitDialog.isShowing()) {
                     mWaitDialog.dismiss();
                 }
-                DialogUtils.showErrorDialog(Step02WifiWioListActivity.this,"","OK","","Connect fail..",null);
+                DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "", "OK", "", "Connect fail..", null);
+                showProgress(true);
             }
             if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
@@ -271,10 +291,12 @@ public class Step02WifiWioListActivity extends BaseActivity
     }
 
     private void goWifiListActivity() {
-        Intent intentActivity = new Intent(this, Step03WifiListActivity.class);
-        intentActivity.putExtra("board", board);
-        intentActivity.putExtra("node_key", node_key);
-        intentActivity.putExtra("node_sn", node_sn);
+        Intent intentActivity = new Intent(this, Step04ApConnectActivity.class);
+        intentActivity.putExtra(Step04ApConnectActivity.Intent_Board, board);
+        intentActivity.putExtra(Step04ApConnectActivity.Intent_NodeKey, node_key);
+        intentActivity.putExtra(Step04ApConnectActivity.Intent_NodeSn, node_sn);
+        intentActivity.putExtra(Step04ApConnectActivity.Intent_Ssid, wifi_ssid);
+        intentActivity.putExtra(Step04ApConnectActivity.Intent_WifiPwd, wifi_pwd);
         startActivity(intentActivity);
     }
 
@@ -322,6 +344,27 @@ public class Step02WifiWioListActivity extends BaseActivity
         } else {
             locationProviders = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
             return !TextUtils.isEmpty(locationProviders);
+        }
+    }
+
+    private void startProgress(){
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                mProgressBar.incrementProgressBy(1);
+                if (mProgressBar.getProgress() >= 100) {
+                    mProgressBar.setProgress(0);
+                } else {
+                    mProgressBar.setProgress(mProgressBar.getProgress());
+                }
+            }
+        }, 10, 60);
+    }
+
+    private void showProgress(boolean isShow){
+        if(isShow){
+            mProgressBar.setVisibility(View.VISIBLE);
+        }else {
+            mProgressBar.setVisibility(View.GONE);
         }
     }
 }

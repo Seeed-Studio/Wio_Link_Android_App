@@ -1,5 +1,6 @@
 package cc.seeed.iot.util;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Message;
 import android.os.Process;
 import android.support.v7.app.AlertDialog;
@@ -18,7 +20,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
@@ -41,6 +45,11 @@ import cc.seeed.iot.view.FontTextView;
  * description:
  */
 public class DialogUtils {
+    private static void hideKeyboard(Context context,View view) {
+        InputMethodManager inputManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(view.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
 
     /**
      * 退出提示
@@ -65,32 +74,60 @@ public class DialogUtils {
         builder.show();
     }
 
+  static   boolean isShow = false;
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public static Dialog showSelectServer(final Activity context,String serverUrl, final ButtonClickListenter listenter) {
+
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_select_server, null);
         FontTextView mTvTitle = (FontTextView) view.findViewById(R.id.mTvTitle);
         FontTextView mTvDesc = (FontTextView) view.findViewById(R.id.mTvDesc);
         final RadioButton mRbDefaultServer = (RadioButton) view.findViewById(R.id.mRbDefaultServer);
-        FontTextView mTvDefaultServer = (FontTextView) view.findViewById(R.id.mTvDefaultServer);
+        final FontTextView mTvDefaultServer = (FontTextView) view.findViewById(R.id.mTvDefaultServer);
         final RadioButton mRbCustomServer = (RadioButton) view.findViewById(R.id.mRbCustomServer);
         final FontEditView mTvCustomServer = (FontEditView) view.findViewById(R.id.mTvCustomServer);
         final View mCustomServer = (View) view.findViewById(R.id.mCustomServer);
+         final RelativeLayout mRlHelp = (RelativeLayout) view.findViewById(R.id.mRlHelp);
         FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
         FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
 
-
+        if (serverUrl == null){
+            serverUrl = "";
+        }
         // final String serverUrl = App.getSp().getString(Constant.SP_SERVER_URL, "");
         if (CommonUrl.OTA_SERVER_URL.equals(serverUrl)) {
             mRbDefaultServer.setChecked(true);
             mRbCustomServer.setChecked(false);
             mTvCustomServer.setEnabled(false);
+            mRlHelp.setVisibility(View.GONE);
         } else {
             mRbDefaultServer.setChecked(false);
             mRbCustomServer.setChecked(true);
             mTvCustomServer.setEnabled(true);
             mTvCustomServer.setText(serverUrl);
             mTvCustomServer.setSelection(serverUrl.length());
+            mRlHelp.setVisibility(View.VISIBLE);
         }
+
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                isShow = false;
+                mTvCustomServer.setError(null);
+            }
+        });
+
+        mRlHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (isShow){
+                    mTvCustomServer.setError(null);
+                }else {
+                    mTvCustomServer.setError(context.getResources().getString(R.string.website_format_hint),context.getDrawable(R.mipmap.edit_help));
+                }
+                isShow = !isShow;
+            }
+        });
         mTvDefaultServer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +135,8 @@ public class DialogUtils {
                 mRbDefaultServer.setChecked(true);
                 mTvCustomServer.setEnabled(false);
                 mCustomServer.setVisibility(View.VISIBLE);
+                mRlHelp.setVisibility(View.GONE);
+                mTvCustomServer.setError(null);
             }
         });
 
@@ -108,6 +147,7 @@ public class DialogUtils {
                 mRbDefaultServer.setChecked(false);
                 mRbCustomServer.setChecked(true);
                 mTvCustomServer.setEnabled(true);
+                mRlHelp.setVisibility(View.VISIBLE);
             }
         });
 
@@ -117,6 +157,8 @@ public class DialogUtils {
                 mCustomServer.setVisibility(View.VISIBLE);
                 mRbCustomServer.setChecked(false);
                 mTvCustomServer.setEnabled(false);
+                mRlHelp.setVisibility(View.GONE);
+                mTvCustomServer.setError(null);
             }
         });
         mRbCustomServer.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +167,7 @@ public class DialogUtils {
                 mCustomServer.setVisibility(View.GONE);
                 mRbDefaultServer.setChecked(false);
                 mTvCustomServer.setEnabled(true);
+                mRlHelp.setVisibility(View.VISIBLE);
             }
         });
 
@@ -135,7 +178,7 @@ public class DialogUtils {
                     String url = mTvCustomServer.getText().toString().trim();
                     if (!RegularUtils.isWebsite(url)) {
                         //  App.showToastShrot(context.getString(R.string.website_format_error));
-                        mTvCustomServer.setError(context.getResources().getString(R.string.website_format_hint));
+                        mTvCustomServer.setError(context.getResources().getString(R.string.website_format_hint),context.getDrawable(R.mipmap.edit_help));
                         return;
                     }
                     getIpAddress(context, dialog, url, mTvCustomServer, listenter);
@@ -166,7 +209,7 @@ public class DialogUtils {
         void cancelClick();
     }
 
-    public static void getIpAddress(Activity context, final Dialog dialog, final String url, final EditText editText, final ButtonClickListenter listenter) {
+    public static void getIpAddress(final Activity context, final Dialog dialog, final String url, final EditText editText, final ButtonClickListenter listenter) {
         final Dialog progressDialog = showProgressDialog(context, context.getResources().getString(R.string.hint_get_host_address));
         NetworkUtils.getIpAddress(context, NetworkUtils.getDomainName(url), new NetworkUtils.OnIpCallback() {
             @Override
@@ -183,28 +226,30 @@ public class DialogUtils {
                 }
             }
 
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void failCallback(String error) {
                 if (progressDialog != null) {
                     progressDialog.dismiss();
                 }
                 if (editText != null) {
-                    editText.setError(error);
+                    editText.setError(error,context.getDrawable(R.mipmap.edit_help));
                 }
             }
         });
     }
 
-    public static Dialog showProgressDialog(Context context, String str) {
+    public static ProgressDialog showProgressDialog(Context context, String str) {
         ProgressDialog progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.setMessage(str);
         progressDialog.show();
         return progressDialog;
     }
 
 
-    public static Dialog showEditOneRowDialog(Context context,String title, final ButtonEditClickListenter listenter) {
+    public static Dialog showEditOneRowDialog(final Context context,String title, final ButtonEditClickListenter listenter) {
 
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_wifi_pwd, null);
@@ -221,6 +266,7 @@ public class DialogUtils {
             public void onClick(View v) {
                 if (listenter != null) {
                     listenter.okClick(dialog,mEtPwd.getText().toString().trim());
+                    hideKeyboard(context,mEtPwd);
                 }
             }
         });
@@ -229,6 +275,7 @@ public class DialogUtils {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                hideKeyboard(context,mEtPwd);
             }
         });
 

@@ -65,7 +65,7 @@ public class GroveListRecyclerAdapter extends RecyclerView.Adapter<GroveListRecy
             holder.itemView.setLayoutParams(params);
         }
         ImageView grove_image = holder.grove_image;
-        UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.drawable.grove_no, UrlImageViewHelper.CACHE_DURATION_INFINITE);
+        UrlImageViewHelper.setUrlDrawable(grove_image, grove.ImageURL, R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
         holder.mView.setPressed(selector.get(position, false));
         String name = grove.GroveName.replaceFirst("Grove[\\s_-]+", "");
         holder.mGroveNameView.setText(name);

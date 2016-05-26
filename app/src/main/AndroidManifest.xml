@@ -60,9 +60,9 @@
             android:theme="@style/AppTheme.Dark"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activity.add_step.Step01GoReadyActivity" />
-        <activity android:name=".activity.add_step.Step02WifiWioListActivity"
+        <activity android:name=".activity.add_step.Step03WifiWioListActivity"
             />
-        <activity android:name=".activity.add_step.Step03WifiListActivity"
+        <activity android:name=".activity.add_step.Step02WifiListActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
         <activity android:name="cc.seeed.iot.ui_main.GrovesActivity" />

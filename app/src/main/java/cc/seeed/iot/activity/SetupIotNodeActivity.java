@@ -553,7 +553,7 @@ public class SetupIotNodeActivity extends BaseActivity
                     case DragEvent.ACTION_DROP: {
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
                         UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL,
-                                R.drawable.grove_no, UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                                R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
                         int pin_position = ((GrovePinsView.Tag) v.getTag()).position;
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = pin_position;

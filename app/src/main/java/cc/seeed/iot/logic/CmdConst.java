@@ -22,5 +22,7 @@ public interface CmdConst {
     String Cmd_Node_SaveIp = "node_saveip";
     String Cmd_Node_Remove = "node_remove";
 
+    String Cmd_App_Update = "app_update";
+
 
 }

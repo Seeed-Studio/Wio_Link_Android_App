@@ -123,7 +123,7 @@ public class NodeSettingActivity extends BaseActivity {
                 } else {
                     dialog.dismiss();
                     progressDialog = DialogUtils.showProgressDialog(NodeSettingActivity.this, getString(R.string.loading));
-                    ConfigDeviceLogic.getInstance().nodeReName(node,content);
+                    ConfigDeviceLogic.getInstance().nodeReName(node.node_sn,content);
                 }
             }
         });

@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_marginTop="48dp"
         app:cusEditFont="@string/Roboto_Medium"
+        android:paddingBottom="20dp"
         android:singleLine="true"
         android:textColor="#A6000000"
         android:textSize="14sp"
@@ -31,7 +32,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp">
+        android:layout_marginTop="25dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,6 +46,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:text="CANCEL"
+                android:paddingTop="7dp"
+                android:paddingBottom="5dp"
                 android:textColor="#C7C7C7"
                 android:textSize="14sp"
                 app:cusTextFont="@string/Roboto_Medium" />
@@ -53,6 +56,8 @@
                 android:id="@+id/mTvSubmit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingTop="7dp"
+                android:paddingBottom="5dp"
                 android:layout_marginLeft="29dp"
                 android:text="SUBMIT"
                 android:textColor="#4A4A4A"

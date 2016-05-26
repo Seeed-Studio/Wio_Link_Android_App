@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -40,6 +42,7 @@ import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.entity.User;
+import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
@@ -47,6 +50,7 @@ import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
+import cc.seeed.iot.util.WifiUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.view.StepView;
 import cc.seeed.iot.webapi.IotApi;
@@ -87,6 +91,8 @@ public class Step04ApConnectActivity extends BaseActivity {
     private ConfigUdpSocket udpClient;
     private Animation animation;
     private Dialog dialog;
+    private String defaultName = "";
+    private boolean isSetDefName = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +206,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         }).start();
     }
 
-    private class SetNodeSn extends AsyncTask<String, Void, Boolean> implements DialogInterface.OnKeyListener {
+    private class SetNodeSn extends AsyncTask<String, Void, Boolean> {
         private ProgressDialog mProgressDialog;
 
         @Override
@@ -246,47 +252,74 @@ public class Step04ApConnectActivity extends BaseActivity {
                     wifiManager.saveConfiguration();
                 }
             }
-            Random random = new Random();
-            String defaultName = "";
-            switch (board) {
-                default:
-                case Constant.WIO_LINK_V1_0:
-                    defaultName = "Wio Link " + random.nextInt(50);
-                    break;
-                case Constant.WIO_NODE_V1_0:
-                    defaultName = "Wio Node " + random.nextInt(50);
-                    break;
-            }
-            dialog = DialogUtils.showEditNodeNameDialog(Step04ApConnectActivity.this, defaultName, new DialogUtils.ButtonEditClickListenter() {
-                @Override
-                public void okClick(Dialog dialog,String content) {
-                    MobclickAgent.onEvent(Step04ApConnectActivity.this, "17004");
-                    dialog.dismiss();
-                    node_name = content;
-                    new checkNodeIsOnline().execute();
-                }
-            });
-            dialog.setOnKeyListener(this);
-            //   new checkNodeIsOnline().execute();
-        }
-
-        @Override
-        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-            if (keyCode == KeyEvent.KEYCODE_BACK ) {
-                return true;
-            } else {
-                return false;
-            }
+            connectWifi(ssid, wifiPwd);
         }
     }
 
-    private class checkNodeIsOnline extends AsyncTask<Void, Integer, Boolean>  {
+    int flag = 0;
+
+    private void connectWifi(final String ssid, String pwd) {
+        flag = 0;
+        mTvHint.setText("Waiting Wio get ip address...");
+        final Timer timer = new Timer();
+        final WifiUtils wifiUtils = new WifiUtils(this);
+        wifiUtils.openWifi();
+        wifiUtils.addNetwork(wifiUtils.CreateWifiInfo(ssid, pwd, 3));
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                flag++;
+                if (flag >= 30) {
+                    timer.cancel();
+                    MLog.e(this, "超时");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Fail connect to Wifi", "TRY AGAIN", "CANCEL", "Please check your internet connection and try again.\r\n" +
+                                    "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
+                                @Override
+                                public void okClick() {
+                                    connectWifi(ssid, wifiPwd);
+                                }
+
+                                @Override
+                                public void cancelClick() {
+                                }
+                            });
+                        }
+                    });
+                }
+                if (wifiUtils.isWifiConnected(Step04ApConnectActivity.this)) {
+                    timer.cancel();
+                    MLog.e(this, "连接成功");
+                    //checkIsOnline();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            new checkNodeIsOnline().execute();
+                        }
+                    });
+
+                } else {
+                    MLog.e(this, "连接失败");
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mTvHint.setText("Waiting Wio get ip address...[" + (30 - flag) + "]");
+                    }
+                });
+
+            }
+        }, 1500, 1000);
+    }
+
+    private class checkNodeIsOnline extends AsyncTask<Void, Integer, Boolean> {
         private Boolean state_online = false;
 
         @Override
         protected void onPreExecute() {
             //  showProgressDialog("Waiting Wio get ip address...");
-            mTvHint.setText("Waiting Wio get ip address...");
+            showProgressText("Get device status...");
         }
 
         @Override
@@ -304,6 +337,8 @@ public class Step04ApConnectActivity extends BaseActivity {
                                 state_online = true;
                                 break;
                             }
+                            if (state_online)
+                                break;
                         }
                     }
 
@@ -329,7 +364,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         protected void onProgressUpdate(Integer... values) {
             int i = values[0];
             //  showProgressDialog("Waiting Wio get ip address...[" + i + "]");
-            mTvHint.setText("Waiting Wio get ip address...[" + i + "]");
+            showProgressText("Get device status...[" + i + "]");
         }
 
         @Override
@@ -339,7 +374,8 @@ public class Step04ApConnectActivity extends BaseActivity {
             }
 
             if (state_online) {
-                attemptRename(node_name);
+               // attemptRename();
+                setDefaultName();
             } else {
                 DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connection Error", "TRY AGAIN", "CANCEL", "Please check your internet connection and try again.\r\n" +
                         "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
@@ -358,34 +394,98 @@ public class Step04ApConnectActivity extends BaseActivity {
                 });
             }
         }
+    }
 
-        private void attemptRename(final String node_name) {
-          /*  final ProgressDialog mProgressBar = new ProgressDialog(Step04ApConnectActivity.this);
-            mProgressBar.setMessage("Setting Wio name...");
-            mProgressBar.show();*/
-            mTvHint.setText("Setting Wio name...");
-
-            IotApi api = new IotApi();
-            User user = UserLogic.getInstance().getUser();
-            api.setAccessToken(user.token);
-            IotService iot = api.getService();
-            iot.nodesRename(node_name, node_sn, new Callback<SuccessResponse>() {
-                @Override
-                public void success(SuccessResponse successResponse, Response response) {
-                    Intent intent = new Intent(Step04ApConnectActivity.this, MainScreenActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    stopLoading();
-                }
-
-                @Override
-                public void failure(RetrofitError error) {
-                    stopLoading();
-                    Toast.makeText(Step04ApConnectActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    finish();
-                }
-            });
+    private void setDefaultName(){
+        isSetDefName = true;
+        Random random = new Random();
+        switch (board) {
+            default:
+            case Constant.WIO_LINK_V1_0:
+                defaultName = "Wio Link " + random.nextInt(50);
+                break;
+            case Constant.WIO_NODE_V1_0:
+                defaultName = "Wio Node " + random.nextInt(50);
+                break;
         }
+        ConfigDeviceLogic.getInstance().nodeReName(node_sn,defaultName);
+        showProgressText("Setting Wio name...");
+    }
+
+    private void customName(){
+        isSetDefName = false;
+        dialog = DialogUtils.showEditNodeNameDialog(Step04ApConnectActivity.this, defaultName, new DialogUtils.ButtonEditClickListenter() {
+            @Override
+            public void okClick(Dialog dialog, String content) {
+                MobclickAgent.onEvent(Step04ApConnectActivity.this, "17004");
+                dialog.dismiss();
+                node_name = content;
+                ConfigDeviceLogic.getInstance().nodeReName(node_sn,content);
+                showProgressText("Setting Wio name...");
+            }
+        });
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+    }
+    private void attemptRename() {
+        Random random = new Random();
+        String defaultName = "";
+        switch (board) {
+            default:
+            case Constant.WIO_LINK_V1_0:
+                defaultName = "Wio Link " + random.nextInt(50);
+                break;
+            case Constant.WIO_NODE_V1_0:
+                defaultName = "Wio Node " + random.nextInt(50);
+                break;
+        }
+        dialog = DialogUtils.showEditNodeNameDialog(Step04ApConnectActivity.this, defaultName, new DialogUtils.ButtonEditClickListenter() {
+            @Override
+            public void okClick(Dialog dialog, String content) {
+                MobclickAgent.onEvent(Step04ApConnectActivity.this, "17004");
+                dialog.dismiss();
+                node_name = content;
+
+            }
+        });
+        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+            @Override
+            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+        showProgressText("Setting Wio name...");
+
+        IotApi api = new IotApi();
+        User user = UserLogic.getInstance().getUser();
+        api.setAccessToken(user.token);
+        IotService iot = api.getService();
+        iot.nodesRename(node_name, node_sn, new Callback<SuccessResponse>() {
+            @Override
+            public void success(SuccessResponse successResponse, Response response) {
+                Intent intent = new Intent(Step04ApConnectActivity.this, MainScreenActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                stopLoading();
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                stopLoading();
+            }
+        });
     }
 
     @Override
@@ -411,6 +511,38 @@ public class Step04ApConnectActivity extends BaseActivity {
     private void stopLoading() {
         if (animation != null) {
             animation.cancel();
+        }
+    }
+
+    public void showProgressText(final String str){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTvHint.setText(str);
+            }
+        });
+    }
+
+    @Override
+    public String[] monitorEvents() {
+        return new String[]{Cmd_Node_ReName};
+    }
+
+    @Override
+    public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
+        if (Cmd_Node_ReName.equals(event)){
+            if (ret){
+                if (isSetDefName){
+                    customName();
+                }else {
+                    Intent intent = new Intent(Step04ApConnectActivity.this, MainScreenActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                    stopLoading();
+                }
+            }else {
+                stopLoading();
+            }
         }
     }
 }

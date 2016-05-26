@@ -96,7 +96,7 @@
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:layout_marginRight="6dp"
-                    app:placeholderImage="@drawable/grove_no"
+                    app:placeholderImage="@mipmap/grove_default"
                     app:placeholderImageScaleType="fitXY"
                     app:roundAsCircle="true" />
 
@@ -105,7 +105,7 @@
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:layout_marginRight="6dp"
-                    app:placeholderImage="@drawable/grove_no"
+                    app:placeholderImage="@mipmap/grove_default"
                     app:placeholderImageScaleType="fitXY"
                     app:roundAsCircle="true" />
 
@@ -114,7 +114,7 @@
                     android:layout_width="44dp"
                     android:layout_height="44dp"
                     android:layout_marginRight="6dp"
-                    app:placeholderImage="@drawable/grove_no"
+                    app:placeholderImage="@mipmap/grove_default"
                     app:placeholderImageScaleType="fitXY"
                     app:roundAsCircle="true" />
 
@@ -128,7 +128,7 @@
                         android:id="@+id/mSDVGrove04"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        app:placeholderImage="@drawable/grove_no"
+                        app:placeholderImage="@mipmap/grove_default"
                         app:placeholderImageScaleType="fitXY"
                         app:roundAsCircle="true" />
 
@@ -143,14 +143,9 @@
                         android:textColor="#FFFFFFFF"
                         android:textSize="14sp"
                         app:cusTextFont="@string/Roboto_Regular" />
-
                 </RelativeLayout>
-
             </LinearLayout>
-
         </LinearLayout>
-
-
     </LinearLayout>
 
 </LinearLayout>

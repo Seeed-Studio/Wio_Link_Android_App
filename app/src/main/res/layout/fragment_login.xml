@@ -44,6 +44,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:singleLine="true"
+                        android:inputType="textEmailAddress"
                         android:hint="Email"
                         android:textColor="#000000"
                         android:textColorHint="#FFC7C7C7"

@@ -5,12 +5,15 @@
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_bg_write"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:paddingBottom="24dp"
+    android:paddingLeft="24dp"
+    android:paddingTop="24dp">
 
     <cc.seeed.iot.view.FontTextView
         android:id="@+id/mTvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="24dp"
         android:background="@color/white"
         android:text="Use Comstumer Server"
         android:textColor="#000000"
@@ -22,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="18.5dp"
+        android:layout_marginRight="24dp"
         android:background="@color/white"
         android:text="Using customize server will alow you to tansmit data diretly to wherever you wish.\r\n\r\n
 Alternivetely, you can choose our default server which justhas been optimized."
@@ -70,8 +74,8 @@ Alternivetely, you can choose our default server which justhas been optimized."
             android:checked="false" />
 
         <RelativeLayout
-
             android:layout_width="match_parent"
+            android:layout_marginRight="14dp"
             android:layout_height="45dp">
 
             <cc.seeed.iot.view.FontEditView
@@ -79,6 +83,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:hint="Customize Server"
                 android:textColor="#9B9B9B"
                 android:textSize="20sp"
@@ -89,6 +94,23 @@ Alternivetely, you can choose our default server which justhas been optimized."
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
+            <RelativeLayout
+                android:id="@+id/mRlHelp"
+                android:layout_width="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/mIvHelp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/edit_help"/>
+            </RelativeLayout>
+
         </RelativeLayout>
 
     </LinearLayout>
@@ -96,6 +118,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="24dp"
         android:layout_marginTop="27dp">
 
         <LinearLayout

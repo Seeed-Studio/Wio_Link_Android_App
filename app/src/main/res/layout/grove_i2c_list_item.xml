@@ -13,7 +13,7 @@
         <ImageView
             android:id="@+id/mIvGrove"
             android:layout_width="60dp"
-            android:src="@drawable/grove_no"
+            android:src="@mipmap/grove_default"
             android:layout_height="60dp" />
 
         <RelativeLayout

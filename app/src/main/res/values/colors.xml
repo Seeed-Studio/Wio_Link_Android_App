@@ -88,6 +88,6 @@
     <!-- add device-->
     <color name="step_did">#FFFFFFFF</color>
     <color name="step_do1">#FF8A2324</color>
-    <color name="step_do2">#FFB71C1C</color>
+    <color name="step_do2">#FF8A2324</color>
 
 </resources>

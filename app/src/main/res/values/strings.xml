@@ -27,6 +27,10 @@
     <string name="website_format_hint">"e.g: https://wio.seeed.io or https://192.168.31.2"</string>
     <string name="hint_get_host_address">"Get your server's host address..."</string>
     <string name="loading">"loading ..."</string>
+    <string name="dialog_btn_tryAgain">TRY AGAIN</string>
+    <string name="dialog_btn_OK">OK</string>
+    <string name="dialog_btn_Cancel">CANCEL</string>
+    <string name="dialog_btn_FAQ">FAQ</string>
 
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
@@ -162,4 +166,5 @@
     <string name="customer_server">Customized Server</string>
     <string name="delete_device">Delete this device</string>
     <string name="toolBar_title">Device Setting</string>
+    <string name="cont_connection_wifi">Could not connection to Wi-Fi. Please check Wi-Fi password and try again</string>
 </resources>

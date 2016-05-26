@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.security.cert.CertificateException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
@@ -56,6 +57,7 @@ public class IotApi {
 
     private IotService init(Executor httpExecutor, Executor callbackExecutor, String url) {
         OkHttpClient client = getUnsafeOkHttpClient();
+        client.setConnectTimeout(20,TimeUnit.SECONDS);
         final RestAdapter restAdapter = new RestAdapter.Builder()
                 .setLogLevel(RestAdapter.LogLevel.BASIC)
                 .setExecutors(httpExecutor, callbackExecutor)

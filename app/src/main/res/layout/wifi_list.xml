@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#ffffffff"
     android:orientation="vertical">
 
@@ -9,11 +10,21 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
         android:elevation="5dp"
+        android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     </android.support.v7.widget.Toolbar>
+
+    <!--  style="?android:attr/progressBarStyleHorizontal"-->
+    <!--  style="@style/ProgressBar_Mini"-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/ProgressBar_Mini"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="30" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,8 +33,8 @@
         <cc.seeed.iot.view.StepView
             android:id="@+id/mStepView"
             android:layout_width="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,13 +46,13 @@
                 android:id="@+id/tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/location_tip"
                 android:layout_gravity="top|center"
                 android:gravity="center"
-                android:textSize="18sp"
                 android:padding="4dp"
                 android:singleLine="false"
-                android:visibility="gone"/>
+                android:text="@string/location_tip"
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/wifi_list"

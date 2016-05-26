@@ -97,12 +97,12 @@ public class ConfigDeviceLogic extends BaseLogic {
         });
     }
 
-    public  void nodeReName(final Node node, final String newName) {
+    public  void nodeReName(String nodeSN, final String newName) {
         IotApi api = new IotApi();
         User user =  UserLogic.getInstance().getUser();
         api.setAccessToken(user.token);
         final IotService iot = api.getService();
-        iot.nodesRename(newName, node.node_sn, new Callback<SuccessResponse>() {
+        iot.nodesRename(newName, nodeSN, new Callback<SuccessResponse>() {
             @Override
             public void success(SuccessResponse successResponse, Response response) {
                 UiObserverManager.getInstance().dispatchEvent(Cmd_Node_ReName, true, newName, null);
