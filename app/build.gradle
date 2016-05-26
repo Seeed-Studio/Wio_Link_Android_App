@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "cc.seeed.iot.ap"
+        applicationId "cc.seeed.iot.ap.test"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 17
-        versionName "2.2.2"
+        versionName "2.2.2_test"
     }
     buildTypes {
         release {

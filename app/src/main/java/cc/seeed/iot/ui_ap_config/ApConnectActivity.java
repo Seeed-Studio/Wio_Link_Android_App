@@ -150,7 +150,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
             String ipAddr = params[1];
             udpClient.setSoTimeout(1000); //1s timeout
             udpClient.sendData(cmd, ipAddr);
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 10; i++) {
                 try {
                     byte[] bytes = udpClient.receiveData();
                     if (new String(bytes).substring(0, 1 + 1).equals("ok")) {
@@ -159,6 +159,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                     }
                 } catch (SocketTimeoutException e) {
                     udpClient.setSoTimeout(3000);
+                    Log.e(TAG, "Sending wifi password to Wio timeout[" + i + "]");
                     udpClient.sendData(cmd, ipAddr);
 
                 } catch (IOException e) {
@@ -195,7 +196,8 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            for (int i = 0; i < 30; i++) {
+            int count = 60;
+            for (int i = 0; i < count; i++) {
                 IotApi api = new IotApi();
                 User user = ((MyApplication) getApplication()).getUser();
                 api.setAccessToken(user.user_key);
@@ -224,7 +226,7 @@ public class ApConnectActivity extends AppCompatActivity implements OnClickListe
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                publishProgress(30-i);
+                publishProgress(count-i);
             }
             return state_online;
         }
