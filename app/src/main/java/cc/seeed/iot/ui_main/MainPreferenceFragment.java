@@ -9,7 +9,7 @@ import android.preference.PreferenceFragment;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.ui_login.ChangePwdActivity;
+import cc.seeed.iot.activity.user.ChangePwdActivity;
 import cc.seeed.iot.util.CommonUrl;
 
 /**

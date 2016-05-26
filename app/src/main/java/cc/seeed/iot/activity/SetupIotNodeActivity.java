@@ -212,28 +212,14 @@ public class SetupIotNodeActivity extends BaseActivity
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case ADD_I2C_GROVE: {
-                        PinConfig pinConfig = (PinConfig) msg.obj;
-                        int position = pinConfig.position;
-                        //     updateI2cGroveList(position);
-                        //    scrollI2cGroveListToEnd();
                         pinBadgeUpdateAll();
                     }
                     break;
                     case ADD_GROVE: {
-                     /*   PinConfig pinConfig = (PinConfig) msg.obj;
-                        int position = pinConfig.position;
-                        if (isI2cInterface(position)) {
-                            mGroveI2cListView.setVisibility(View.INVISIBLE);
-                        }*/
                     }
                     case RMV_I2C_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
-                        if (pinDeviceCount(position) < 2) {
-                            //  mGroveI2cListView.setVisibility(View.INVISIBLE);
-                        } else {
-                            //  updateI2cGroveList(position);
-                        }
                         pinBadgeUpdateAll();
 
                         if (pinDeviceCount(position) == 0)
@@ -267,19 +253,6 @@ public class SetupIotNodeActivity extends BaseActivity
             }*/
         };
     }
-
-  /*  private void scrollI2cGroveListToEnd() {
-        mGroveI2cListView.smoothScrollToPosition(mGroveI2cListAdapter.getItemCount() - 1);
-    }*/
-
-/*    private void updateI2cGroveList(int position) {
-        List<PinConfig> pinConfigs = new ArrayList<>();
-        for (PinConfig p : this.pinConfigs) {
-            if (p.position == position)
-                pinConfigs.add(p);
-        }
-        mGroveI2cListAdapter.updateAll(pinConfigs);
-    }*/
 
     @Override
     protected void onResume() {
@@ -516,8 +489,6 @@ public class SetupIotNodeActivity extends BaseActivity
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public boolean onDrag(View v, DragEvent event) {
-//        Log.e(TAG, v.toString());
-//        Log.e(TAG, event.toString());
         int action = event.getAction();
 
         switch (v.getId()) {
@@ -743,10 +714,6 @@ public class SetupIotNodeActivity extends BaseActivity
                 ClipData.Item item = new ClipData.Item("drag grove");
                 ClipData clipData = new ClipData(clipDescription, item);
                 View.DragShadowBuilder shadowBuiler = new View.DragShadowBuilder(v);
-
-              //  PinConfig pinConfig = mGroveI2cListAdapter.getItem(mGroveI2cListView.getChildAdapterPosition(v));
-
-              //  v.startDrag(clipData, shadowBuiler, pinConfig, 0);
             }
             break;
         }
@@ -765,9 +732,6 @@ public class SetupIotNodeActivity extends BaseActivity
                     groveDriver.save();
                 }
                 List<GroverDriver> g = DBHelper.getGrovesAll();
-//                for (GroverDriver s : g) {
-//                    Log.e(TAG, s.Reads.toString());
-//                }
                 updateGroveListAdapter(g);
             }
 
@@ -788,7 +752,6 @@ public class SetupIotNodeActivity extends BaseActivity
         if (Cmd_UpdateFirwareStute.equals(event)) {
             if (ret == ConfigDeviceLogic.UPDATE_DONE) {
                 stopUpdate();
-               // DialogUtils.showErrorDialog(SetupIotNodeActivity.this, "", "OK", "", "Firware Updated!", null);
                 App.showToastShrot("Firmware Updated!");
             } else if (ret == ConfigDeviceLogic.FAIL) {
                 if (data != null && data.length > 0) {

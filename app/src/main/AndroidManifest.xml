@@ -36,15 +36,6 @@
             android:theme="@style/DrawTheme" />
         <activity android:name=".activity.SetupIotLinkActivity" />
         <activity android:name=".activity.SetupIotNodeActivity" />
-        <activity android:name="cc.seeed.iot.ui_login.SetupActivity" />
-        <activity
-            android:name="cc.seeed.iot.ui_login.LoginActivity"
-            android:theme="@style/AppTheme.Dark"
-            android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity
-            android:name="cc.seeed.iot.ui_login.SignupActivity"
-            android:theme="@style/AppTheme.Dark"
-            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".activity.user.ResetPwd01Activity"
             android:launchMode="singleTop"
@@ -55,10 +46,6 @@
         <activity
             android:name=".activity.user.ResetPwd03Activity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
-        <activity
-            android:name="cc.seeed.iot.ui_login.SelServerActivity"
-            android:theme="@style/AppTheme.Dark"
-            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".activity.add_step.Step01GoReadyActivity" />
         <activity android:name=".activity.add_step.Step03WifiWioListActivity"
             />
@@ -66,7 +53,6 @@
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
         <activity android:name="cc.seeed.iot.ui_main.GrovesActivity" />
-        <activity android:name="cc.seeed.iot.ui_main.SettingActivity" />
         <activity android:name="cc.seeed.iot.ui_main.NodeApiActivity" />
         <activity android:name=".activity.NodeSettingActivity" />
         <activity android:name="cc.seeed.iot.ui_main.MainSettingActivity" />
@@ -77,7 +63,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <!-- launchMode="singleTop" 保证activity在栈顶的唯一性 -->
         <activity
-            android:name=".ui_login.ChangePwdActivity"
+            android:name=".activity.user.ChangePwdActivity"
             android:theme="@style/AppTheme.Dark" />
         <activity
             android:name=".activity.WelcomeActivity"

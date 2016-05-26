@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.CmdConst;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.mgr.IUiObserver;
@@ -90,7 +91,7 @@ public class BaseActivity extends AppCompatActivity implements IUiObserver, CmdC
         if (UserLogic.getInstance().isLogin()){
             return true;
         }else {
-            startActivity(new Intent(this, LoginActivity.class));
+            startActivity(new Intent(this, LoginAndRegistActivity.class));
             return false;
         }
     }

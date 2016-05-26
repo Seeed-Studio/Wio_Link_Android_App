@@ -3,17 +3,13 @@ package cc.seeed.iot.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import java.util.List;
 
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_login.SetupActivity;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.webapi.model.GroverDriver;
@@ -50,8 +46,6 @@ public class WelcomeActivity extends BaseActivity {
     }
 
     private void choice() {
-      //  Boolean loginState = ((App) getApplication()).getLoginState();
-
         if (UserLogic.getInstance().isLogin()) {
             Intent intent = new Intent(this, MainScreenActivity.class);
             startActivity(intent);

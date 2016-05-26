@@ -435,58 +435,6 @@ public class Step04ApConnectActivity extends BaseActivity {
             }
         });
     }
-    private void attemptRename() {
-        Random random = new Random();
-        String defaultName = "";
-        switch (board) {
-            default:
-            case Constant.WIO_LINK_V1_0:
-                defaultName = "Wio Link " + random.nextInt(50);
-                break;
-            case Constant.WIO_NODE_V1_0:
-                defaultName = "Wio Node " + random.nextInt(50);
-                break;
-        }
-        dialog = DialogUtils.showEditNodeNameDialog(Step04ApConnectActivity.this, defaultName, new DialogUtils.ButtonEditClickListenter() {
-            @Override
-            public void okClick(Dialog dialog, String content) {
-                MobclickAgent.onEvent(Step04ApConnectActivity.this, "17004");
-                dialog.dismiss();
-                node_name = content;
-
-            }
-        });
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-        showProgressText("Setting Wio name...");
-
-        IotApi api = new IotApi();
-        User user = UserLogic.getInstance().getUser();
-        api.setAccessToken(user.token);
-        IotService iot = api.getService();
-        iot.nodesRename(node_name, node_sn, new Callback<SuccessResponse>() {
-            @Override
-            public void success(SuccessResponse successResponse, Response response) {
-                Intent intent = new Intent(Step04ApConnectActivity.this, MainScreenActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                stopLoading();
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                stopLoading();
-            }
-        });
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

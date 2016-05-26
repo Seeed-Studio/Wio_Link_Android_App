@@ -1,4 +1,4 @@
-package cc.seeed.iot.ui_login;
+package cc.seeed.iot.activity.user;
 
 import android.app.ProgressDialog;
 import android.content.Context;
