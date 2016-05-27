@@ -14,20 +14,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.lucky.indexablelistview.util.ContentAdapter;
+import com.lucky.indexablelistview.widget.IndexableListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.adapter.GrovesAdapter;
 import cc.seeed.iot.ui_main.util.DividerItemDecoration;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
 public class GrovesActivity extends AppCompatActivity {
     private static String TAG = "GrovesActivity";
     public Toolbar mToolbar;
-    RecyclerView mRecyclerView;
-    GrovesRecyclerAdapter mAdapter;
+    IndexableListView mRecyclerView;
+    GrovesAdapter mAdapter;
     List<GroverDriver> groverDrivers;
 
     @Override
@@ -40,20 +46,45 @@ public class GrovesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.groves);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.groves);
+        mRecyclerView = (IndexableListView) findViewById(R.id.groves);
+
 
         groverDrivers = DBHelper.getGrovesAll();
+        Collections.sort(groverDrivers, new ComparatorName());
         initView();
     }
 
     private void initView() {
+
         if (mRecyclerView != null) {
-            mRecyclerView.setHasFixedSize(true);
+          /*  mRecyclerView.setHasFixedSize(true);
             RecyclerView.LayoutManager layout = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(layout);
-            mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));
-            mAdapter = new GrovesRecyclerAdapter(groverDrivers);
+            mRecyclerView.addItemDecoration(new DividerItemDecoration(getResources().getDrawable(R.drawable.divider)));*/
+            mAdapter = new GrovesAdapter(this, groverDrivers);
+        //    mAdapter = new ContentAdapter(this,android.R.layout.simple_list_item_1, mItems);
             mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setFastScrollEnabled(true);
+        }
+    }
+
+    /**
+     * 按照距离排序
+     */
+    public class ComparatorName implements Comparator {
+        public int compare(Object arg0, Object arg1) {
+            GroverDriver bean1 = (GroverDriver) arg0;
+            GroverDriver bean2 = (GroverDriver) arg1;
+
+            int num1 = (int)ToolUtil.getSimpleName(bean1.GroveName).charAt(0);
+            int num2 = (int)ToolUtil.getSimpleName(bean2.GroveName).charAt(0);
+            if (num1 < num2) {
+                return -1;
+            } else if (num1 == num2) {
+                return 0;
+            } else {
+                return 1;
+            }
         }
     }
 
@@ -73,7 +104,7 @@ public class GrovesActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public class GrovesRecyclerAdapter extends RecyclerView.Adapter<GrovesRecyclerAdapter.MainViewHolder> {
+   /* public class GrovesRecyclerAdapter extends RecyclerView.Adapter<GrovesRecyclerAdapter.MainViewHolder> {
         private List<GroverDriver> groves;
 
         public GrovesRecyclerAdapter(List<GroverDriver> groves) {
@@ -131,5 +162,5 @@ public class GrovesActivity extends AppCompatActivity {
             }
 
         }
-    }
+    }*/
 }

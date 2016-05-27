@@ -211,4 +211,19 @@ public class ToolUtil {
             return false;
         }
     }
+
+    public static String getSimpleName(String name){
+        String groveName = "";
+        if (name.startsWith("Grove-")){
+            groveName = name.split("Grove-")[1];
+        }else if (name.startsWith("Grove - ")){
+            groveName = name.split("Grove - ")[1];
+        }else if (name.startsWith("Generic ")){
+            groveName = name.split("Generic ")[1];
+        }else {
+            groveName = name;
+        }
+
+        return groveName;
+    }
 }
