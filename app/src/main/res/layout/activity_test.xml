@@ -147,4 +147,18 @@
             android:layout_height="wrap_content"
             android:text="创建用户" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/mBtnOpenWifi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Open Wifi" />
+    </LinearLayout>
 </LinearLayout>

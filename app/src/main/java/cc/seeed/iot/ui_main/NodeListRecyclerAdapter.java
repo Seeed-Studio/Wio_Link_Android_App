@@ -79,6 +79,14 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             int buttom = ToolUtil.dp2px(13, context.getResources());
             params.setMargins(left, top, right, buttom);
             holder.mLlItem.setLayoutParams(params);
+        }else {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.mLlItem.getLayoutParams();
+            int top = ToolUtil.dp2px(0, context.getResources());
+            int left = ToolUtil.dp2px(12, context.getResources());
+            int right = ToolUtil.dp2px(12, context.getResources());
+            int buttom = ToolUtil.dp2px(13, context.getResources());
+            params.setMargins(left, top, right, buttom);
+            holder.mLlItem.setLayoutParams(params);
         }
 
         Node node = nodes.get(position);

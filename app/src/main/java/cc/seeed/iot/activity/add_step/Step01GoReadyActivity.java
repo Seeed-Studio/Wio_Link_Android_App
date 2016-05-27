@@ -21,6 +21,7 @@ import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.Constant;
+import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.NodeResponse;
@@ -124,9 +125,16 @@ public class Step01GoReadyActivity extends BaseActivity {
     @OnClick(R.id.mBtnGo)
     public void onClick() {
         MobclickAgent.onEvent(this, "17001");
-        attemptLogin("node000", board);
         WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        wifiManager.startScan();
+        if (wifiManager.isWifiEnabled()){
+            attemptLogin("node000", board);
+            wifiManager.startScan();
+        }else {
+            DialogUtils.showErrorDialog(this,"You are not connected to Wifi",getString(R.string.dialog_btn_OK),"",getString(R.string.link_to_wifi),null);
+        }
+
     }
+
+
 }
 

@@ -3,7 +3,6 @@ package cc.seeed.iot.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +14,6 @@ import cc.seeed.iot.logic.CmdConst;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.mgr.IUiObserver;
 import cc.seeed.iot.mgr.UiObserverManager;
-import cc.seeed.iot.ui_login.LoginActivity;
 import cc.seeed.iot.util.ToolUtil;
 
 /**

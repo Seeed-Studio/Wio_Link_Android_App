@@ -16,11 +16,8 @@ import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_login.LoginActivity;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
-import cc.seeed.iot.util.RegularUtils;
-import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontButton;
 import cc.seeed.iot.view.FontEditView;
 

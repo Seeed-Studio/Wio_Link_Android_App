@@ -167,4 +167,5 @@
     <string name="delete_device">Delete this device</string>
     <string name="toolBar_title">Device Setting</string>
     <string name="cont_connection_wifi">Could not connection to Wi-Fi. Please check Wi-Fi password and try again</string>
+    <string name="link_to_wifi">Linking Wio Devices can only be done under wifi,Please connect to wifi network before you start</string>
 </resources>

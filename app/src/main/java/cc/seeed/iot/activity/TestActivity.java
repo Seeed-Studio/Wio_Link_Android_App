@@ -1,6 +1,7 @@
 package cc.seeed.iot.activity;
 
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -8,9 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
-import android.widget.TextView;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.SocketTimeoutException;
@@ -30,6 +32,7 @@ import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.util.ToolUtil;
+import cc.seeed.iot.util.WifiUtils;
 
 
 /**
@@ -63,6 +66,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     TextView mTvDomain;
     @InjectView(R.id.mTvIP)
     TextView mTvIP;
+    @InjectView(R.id.mBtnOpenWifi)
+    Button mBtnOpenWifi;
 
     private ConfigUdpSocket udpClient;
     public int checkId = 0;
@@ -72,7 +77,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         ButterKnife.inject(this);
-        if (!ToolUtil.isApkDebug()){
+        if (!ToolUtil.isApkDebug()) {
             finish();
         }
         mRGServer.setOnCheckedChangeListener(this);
@@ -112,7 +117,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp,R.id.mBtnCreatUser})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser,R.id.mBtnOpenWifi})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -122,24 +127,28 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 regular();
                 break;
             case R.id.mBtngetIp:
-               getDomain();
+                getDomain();
                 break;
             case R.id.mBtnCreatUser:
                 addUser();
                 break;
+            case R.id.mBtnOpenWifi:
+                WifiManager wifiManager=(WifiManager)getSystemService(WIFI_SERVICE);
+                wifiManager.setWifiEnabled(true);
+                break;
         }
     }
 
-    private void addUser(){
+    private void addUser() {
         String userStr = App.getSp().getString(Constant.SP_USER_TEST_INFO, "");
         String userStr1 = App.getSp().getString(Constant.SP_USER_INFO, "");
-        if (!TextUtils.isEmpty(userStr1)){
+        if (!TextUtils.isEmpty(userStr1)) {
             return;
         }
         try {
             Gson gson = new Gson();
             User user = gson.fromJson(userStr, User.class);
-            if (user == null){
+            if (user == null) {
                 user = new User();
                 user.setEmail("947700923@qq.com");
                 user.setNickname("Jerry_Test");
@@ -147,21 +156,21 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 user.setUserid("161319");
                 UserLogic.getInstance().saveUser(user);
                 UserLogic.getInstance().setToken("");
-            }else {
+            } else {
                 UserLogic.getInstance().saveUser(user);
             }
 
             startActivity(new Intent(this, MainScreenActivity.class));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void getDomain(){
+    public void getDomain() {
         String url = mEtIpAdress.getText().toString().trim();
-        if (!RegularUtils.isWebsite(url)){
+        if (!RegularUtils.isWebsite(url)) {
             App.showToastShrot("格式不正确");
-        }else {
+        } else {
             mTvDomain.setText(NetworkUtils.getDomainName(url));
             getIpAddress(url);
         }
@@ -247,5 +256,4 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         }
     }
-
 }
