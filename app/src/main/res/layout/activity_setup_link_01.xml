@@ -42,7 +42,7 @@
             android:src="@drawable/link_large" />
 
         <ImageButton
-            android:id="@+id/grove_0"
+            android:id="@+id/grove_6"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"
@@ -54,7 +54,7 @@
             android:scaleType="centerCrop" />
 
         <ImageButton
-            android:id="@+id/grove_1"
+            android:id="@+id/grove_7"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@mipmap/step_bg"
+    android:background="@color/primary"
     android:layout_height="70dp">
 
     <LinearLayout
@@ -18,13 +18,13 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="3dp"
-            android:background="#FF8A2324"/>
+            android:background="@color/step_do1"/>
         <View
             android:id="@+id/mLine2"
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:layout_height="3dp"
-            android:background="#FF8A2324"/>
+            android:background="@color/step_do1"/>
     </LinearLayout>
 
 
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/mIvStep1"
             android:layout_toLeftOf="@id/mLLLine"
-            android:text="STEP 1"
+            android:text="Step 1"
             android:layout_marginTop="5.6dp"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp"
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/mIvStep1"
             android:layout_toLeftOf="@id/mLLLine"
-            android:text="STEP 2"
+            android:text="Step 2"
             android:layout_marginTop="5.6dp"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp"
@@ -102,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/mIvStep1"
             android:layout_toLeftOf="@id/mLLLine"
-            android:text="STEP 3"
+            android:text="Step 3"
             android:layout_marginTop="5.6dp"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp"

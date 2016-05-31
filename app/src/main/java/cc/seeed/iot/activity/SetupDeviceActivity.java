@@ -11,7 +11,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,10 +19,8 @@ import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
@@ -56,7 +53,6 @@ import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.view.CustomProgressDialog;
 import cc.seeed.iot.view.FontButton;
-import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.GroveDriverListResponse;
@@ -67,12 +63,12 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class SetupIotNodeActivity extends BaseActivity
+public class SetupDeviceActivity extends BaseActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
         View.OnClickListener, View.OnDragListener, View.OnLongClickListener,
         GroveI2cListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnLongClickListener {
 
-    private static final String TAG = "SetupIotNodeActivity";
+    private static final String TAG = "SetupIotLinkActivity";
     private static final String GROVE_REMOVE = "grove/remove";
     private static final String GROVE_ADD = "grove/add";
     private static final int ADD_I2C_GROVE = 0x00;
@@ -99,43 +95,49 @@ public class SetupIotNodeActivity extends BaseActivity
     RecyclerView mGroveListView;
     @InjectView(R.id.mIvRemove)
     ImageView mIvRemove;
-    @InjectView(R.id.mRlRemove)
-    RelativeLayout mRlRemove;
     @InjectView(R.id.mBtnUpdate)
     FontButton mBtnUpdate;
     @InjectView(R.id.node_view)
     ImageView nodeView;
-    @InjectView(R.id.grove_6)
+    @InjectView(R.id.grove_0)
     ImageButton grove0;
-    @InjectView(R.id.grove_7)
+    @InjectView(R.id.grove_1)
     ImageButton grove1;
-    @InjectView(R.id.grove_i2c_list)
-    RecyclerView groveI2cList;
-    @InjectView(R.id.set_node)
+    @InjectView(R.id.grove_2)
+    ImageButton grove2;
+    @InjectView(R.id.grove_3)
+    ImageButton grove3;
+    @InjectView(R.id.grove_4)
+    ImageButton grove4;
+    @InjectView(R.id.grove_5)
+    ImageButton grove5;
+    @InjectView(R.id.grove_6)
+    ImageButton grove6;
+    @InjectView(R.id.grove_7)
+    ImageButton grove7;
+    @InjectView(R.id.set_link)
     RelativeLayout mSetNodeLayout;
-    @InjectView(R.id.setup_iot_node)
-    LinearLayout setupIotNode;
-    @InjectView(R.id.mTvUpdate)
-    FontTextView mTvUpdate;
-    @InjectView(R.id.mIvUpdate)
-    ImageView mIvUpdate;
-    @InjectView(R.id.mRlUpdate)
-    RelativeLayout mRlUpdate;
-    private List<GroverDriver> mGroveDrivers;
+    @InjectView(R.id.setup_device)
+    RelativeLayout mSetupDevice;
+    @InjectView(R.id.mRlRemove)
+    RelativeLayout mRlRemove;
+    @InjectView(R.id.mWioLinkLayout)
+    RelativeLayout mWioLinkLayout;
+    @InjectView(R.id.mWioNodeLayout)
+    RelativeLayout mWioNodeLayout;
 
-    GrovePinsView mGrovePinsView;
-    private ImageView mDragRemoveView;
-    private Animation animation;
-    private boolean isUpdateIng = false;
-    CustomProgressDialog progressDialog;
+    private List<GroverDriver> mGroveDrivers;
     int progress = 0;
+    CustomProgressDialog progressDialog;
+    GrovePinsView mGrovePinsView;
+    private boolean isUpdateIng = false;
 
     private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setup_node);
+        setContentView(R.layout.activity_setup_device);
         ButterKnife.inject(this);
 
         initView();
@@ -155,10 +157,19 @@ public class SetupIotNodeActivity extends BaseActivity
 
     private void initData() {
         mGroveDrivers = DBHelper.getGrovesAll();
+        user = UserLogic.getInstance().getUser();
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
 
-        mGrovePinsView = new GrovePinsView(this, setupIotNode, node);
+        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+            mWioLinkLayout.setVisibility(View.VISIBLE);
+            mWioNodeLayout.setVisibility(View.GONE);
+        }else {
+            mWioLinkLayout.setVisibility(View.GONE);
+            mWioNodeLayout.setVisibility(View.VISIBLE);
+        }
+
+        mGrovePinsView = new GrovePinsView(this, mSetupDevice, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
             pinView.setOnDragListener(this);
             pinView.setOnClickListener(this);
@@ -172,7 +183,6 @@ public class SetupIotNodeActivity extends BaseActivity
         } else {
             mToolbar.setLogo(R.drawable.offline_led);
         }
-        user = UserLogic.getInstance().getUser();
 
         if (mGroveListView != null) {
             mGroveListView.setHasFixedSize(true);
@@ -184,7 +194,6 @@ public class SetupIotNodeActivity extends BaseActivity
             mGroveListView.setAdapter(mGroveListAdapter);
         }
 
-        mGroveTypeListView = (RecyclerView) findViewById(R.id.grove_selector);
         if (mGroveTypeListView != null) {
             mGroveTypeListView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -192,6 +201,7 @@ public class SetupIotNodeActivity extends BaseActivity
             mGroveTypeListView.setLayoutManager(layoutManager);
             setupGroveSelectorAdapter();
         }
+
         pinBadgeUpdateAll();
     }
 
@@ -203,11 +213,10 @@ public class SetupIotNodeActivity extends BaseActivity
 
     private void pinBadgeUpdate(int position) {
         if (pinDeviceCount(position) > 1) {
-            //  mGrovePinsView.badgeViews[position].setBadgeCount(pinDeviceCount(position));
-            //   mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
-
+            mGrovePinsView.badgeViews[position].setText("+" + pinDeviceCount(position));
+            mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
         } else {
-            // mGrovePinsView.badgeViews[position].setVisibility(View.GONE);
+            mGrovePinsView.badgeViews[position].setVisibility(View.GONE);
         }
     }
 
@@ -222,11 +231,11 @@ public class SetupIotNodeActivity extends BaseActivity
                     break;
                     case ADD_GROVE: {
                     }
+                    break;
                     case RMV_I2C_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
                         pinBadgeUpdateAll();
-
                         if (pinDeviceCount(position) == 0)
                             mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
                         else
@@ -239,23 +248,8 @@ public class SetupIotNodeActivity extends BaseActivity
                         mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
                     }
                     break;
-
-                    case MESSAGE_UPDATE_DONE: {
-                        String message = (String) msg.obj;
-                        new AlertDialog.Builder(SetupIotNodeActivity.this)
-                                .setTitle(R.string.update)
-                                .setMessage(message)
-                                .setPositiveButton(R.string.ok, null)
-                                .show();
-                    }
-                    break;
                 }
             }
-
-           /* private boolean isI2cInterface(int position) {
-                GrovePinsView.Tag tag = (GrovePinsView.Tag) mGrovePinsView.pinViews[position].getTag();
-                return Arrays.asList(tag.interfaceTypes).contains(InterfaceType.I2C);
-            }*/
         };
     }
 
@@ -303,19 +297,19 @@ public class SetupIotNodeActivity extends BaseActivity
                     Intent intent;
                     switch (position) {
                         case 0:
-                            MobclickAgent.onEvent(SetupIotNodeActivity.this, "15003");
+                            MobclickAgent.onEvent(SetupDeviceActivity.this, "15003");
                             NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
                             if (node_josn.connections.isEmpty()) {
-                                DialogUtils.showErrorDialog(SetupIotNodeActivity.this, "Tip", "OK", "", "Forger add grove?", null);
+                                DialogUtils.showErrorDialog(SetupDeviceActivity.this, "Tip", "OK", "", "Forger add grove?", null);
                             } else {
-                                intent = new Intent(SetupIotNodeActivity.this, NodeApiActivity.class);
+                                intent = new Intent(SetupDeviceActivity.this, NodeApiActivity.class);
                                 intent.putExtra("node_sn", node.node_sn);
                                 startActivity(intent);
                             }
                             break;
                         case 1:
-                            MobclickAgent.onEvent(SetupIotNodeActivity.this, "15004");
-                            intent = new Intent(SetupIotNodeActivity.this, NodeSettingActivity.class);
+                            MobclickAgent.onEvent(SetupDeviceActivity.this, "15004");
+                            intent = new Intent(SetupDeviceActivity.this, NodeSettingActivity.class);
                             intent.putExtra(NodeSettingActivity.Intent_NodeSn, node.node_sn);
                             startActivity(intent);
                             break;
@@ -330,24 +324,28 @@ public class SetupIotNodeActivity extends BaseActivity
     private void startUpdate() {
         if (node.name == null)
             return;
+        mBtnUpdate.setEnabled(false);
+        mBtnUpdate.setSelected(false);
+
+        progressDialog = new CustomProgressDialog(this, R.style.AlertDialogBg);
+        setProgressMsg("Preparing Server (10%)");
 
         NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
         if (node_josn.connections.isEmpty()) {
             DialogUtils.showErrorDialog(this, "Tip", "OK", "", "Forger add grove?", null);
             return;
         }
-        mBtnUpdate.setVisibility(View.GONE);
         mRlRemove.setVisibility(View.GONE);
-        progressDialog = new CustomProgressDialog(this, R.style.AlertDialogBg);
-        setProgressMsg("Preparing Server (10%)");
         isUpdateIng = true;
         ConfigDeviceLogic.getInstance().updateFirware(node.node_key, node_josn);
     }
 
     private void stopUpdate() {
         isUpdateIng = false;
-        mBtnUpdate.setVisibility(View.VISIBLE);
+        progressDialog.dismiss();
         mRlRemove.setVisibility(View.GONE);
+        mBtnUpdate.setEnabled(true);
+        mBtnUpdate.setSelected(true);
     }
 
     @Override
@@ -361,6 +359,7 @@ public class SetupIotNodeActivity extends BaseActivity
         List<GroverDriver> uartGroves = new ArrayList<GroverDriver>();
         List<GroverDriver> i2cGroves = new ArrayList<GroverDriver>();
         List<GroverDriver> eventGroves = new ArrayList<GroverDriver>();
+
 
         if (mGroveDrivers == null)
             return;
@@ -414,18 +413,18 @@ public class SetupIotNodeActivity extends BaseActivity
     }
 
     @Override
-    @OnClick(R.id.mRlUpdate)
+    @OnClick(R.id.mBtnUpdate)
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.grove_6:
             case R.id.grove_7:
+            case R.id.grove_5:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
-                if (pinDeviceCount(position) > 1)
-                    displayI2cListView(position);
+                displayI2cListView(position);
                 break;
-            case R.id.mRlUpdate:
-                MobclickAgent.onEvent(SetupIotNodeActivity.this, "15002");
+            case R.id.mBtnUpdate:
+                MobclickAgent.onEvent(this, "15002");
                 if (isUpdateIng) {
                     return;
                 } else {
@@ -437,18 +436,36 @@ public class SetupIotNodeActivity extends BaseActivity
 
     @Override
     public boolean onLongClick(View v) {
-        switch (v.getId()) {
-            case R.id.grove_6:
-            case R.id.grove_7:
-                GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
-                int position = tag.position;
-                if (pinDeviceCount(position) == 1) {
-                    startDragRemove(v);
-                } else if (pinDeviceCount(position) > 1) {
+        GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
+        int position = tag.position;
+        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+            switch (v.getId()) {
+                case R.id.grove_0:
+                case R.id.grove_1:
+                case R.id.grove_2:
+                case R.id.grove_3:
+                case R.id.grove_4:
+                    if (pinDeviceCount(position) == 1) {
+                        startDragRemove(v);
+                    }
+                    break;
+                case R.id.grove_5:
                     displayI2cListView(position);
-                }
-                break;
+                    break;
+            }
+        } else {
+            switch (v.getId()) {
+                case R.id.grove_6:
+                case R.id.grove_7:
+                    if (pinDeviceCount(position) == 1) {
+                        startDragRemove(v);
+                    } else if (pinDeviceCount(position) > 1) {
+                        displayI2cListView(position);
+                    }
+                    break;
+            }
         }
+
         return true;
     }
 
@@ -491,6 +508,12 @@ public class SetupIotNodeActivity extends BaseActivity
         int action = event.getAction();
 
         switch (v.getId()) {
+            case R.id.grove_0:
+            case R.id.grove_1:
+            case R.id.grove_2:
+            case R.id.grove_3:
+            case R.id.grove_4:
+            case R.id.grove_5:
             case R.id.grove_6:
             case R.id.grove_7:
                 switch (action) {
@@ -640,7 +663,6 @@ public class SetupIotNodeActivity extends BaseActivity
                 rPinConfigs.add(p);
             }
         }
-//        Log.e(TAG, "rPinconfigs:" + rPinConfigs);
         pinConfigs.removeAll(rPinConfigs);
     }
 
@@ -660,7 +682,8 @@ public class SetupIotNodeActivity extends BaseActivity
     }
 
     private void startDragRemove(View v) {
-        mDragRemoveView.setVisibility(View.VISIBLE);
+        mRlRemove.setVisibility(View.VISIBLE);
+        mBtnUpdate.setVisibility(View.GONE);
 
         String label = "grove_remove";
         String[] mimeTypes = {GROVE_REMOVE};
@@ -704,7 +727,7 @@ public class SetupIotNodeActivity extends BaseActivity
             }
             break;
             case "I2cList": {
-                mDragRemoveView.setVisibility(View.VISIBLE);
+                mRlRemove.setVisibility(View.VISIBLE);
 
                 String label = "grove_remove";
                 String[] mimeTypes = {GROVE_REMOVE};
@@ -750,13 +773,14 @@ public class SetupIotNodeActivity extends BaseActivity
         if (Cmd_UpdateFirwareStute.equals(event)) {
             if (ret == ConfigDeviceLogic.UPDATE_DONE) {
                 stopUpdate();
+                //  DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
                 App.showToastShrot("Firmware Updated!");
             } else if (ret == ConfigDeviceLogic.UPDATEING) {
-                if (progress <=80) {
+                if (progress <= 80) {
                     progress += 12;
                     setProgressMsg("Preparing Server (" + progress + "%)");
                 }
-            }else if (ret == ConfigDeviceLogic.FAIL) {
+            } else if (ret == ConfigDeviceLogic.FAIL) {
                 if (data != null && data.length > 0) {
                     DialogBean bean = (DialogBean) data[0];
                     showErrDialog(bean);
@@ -768,7 +792,7 @@ public class SetupIotNodeActivity extends BaseActivity
                     DialogBean bean = (DialogBean) data[0];
                     showErrDialog(bean);
                 }
-            }else if (ret == ConfigDeviceLogic.SUCCESS){
+            } else if (ret == ConfigDeviceLogic.SUCCESS) {
                 setProgressMsg("Preparing Server (40%)");
                 progress = 40;
             }
@@ -776,7 +800,7 @@ public class SetupIotNodeActivity extends BaseActivity
     }
 
     private void showErrDialog(final DialogBean bean) {
-        DialogUtils.showErrorDialog(SetupIotNodeActivity.this, bean.title, bean.okName, bean.cancelName, bean.content, new DialogUtils.OnErrorButtonClickListenter() {
+        DialogUtils.showErrorDialog(SetupDeviceActivity.this, bean.title, bean.okName, bean.cancelName, bean.content, new DialogUtils.OnErrorButtonClickListenter() {
             @Override
             public void okClick() {
                 if (bean.okName.equals(Constant.DialogButtonText.TRY_AGAIN.getValue())) {
@@ -793,8 +817,8 @@ public class SetupIotNodeActivity extends BaseActivity
         });
     }
 
-    private void setProgressMsg(String msg){
-        if (progressDialog != null && progressDialog.isShowing()){
+    private void setProgressMsg(String msg) {
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.setMessage(msg);
         }
     }

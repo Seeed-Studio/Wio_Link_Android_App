@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/setup_iot_link"
+    android:id="@+id/setup_device"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
@@ -19,15 +19,6 @@
             android:background="?attr/colorPrimary"
             android:elevation="5dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="@style/ProgressBar_Mini"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:max="100"
-            android:progress="30" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -68,7 +59,11 @@
                     android:layout_height="1px"
                     android:background="#FFE7E7E7" />
 
-                <include layout="@layout/wiolink_layout" />
+                <include
+                    layout="@layout/wiolink_layout" />
+
+                <include
+                    layout="@layout/wionode_layout" />
 
                 <cc.seeed.iot.view.FontTextView
                     android:layout_width="match_parent"

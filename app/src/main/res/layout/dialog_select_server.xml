@@ -16,7 +16,7 @@
         android:layout_marginRight="24dp"
         android:background="@color/white"
         android:text="Use Comstumer Server"
-        android:textColor="#000000"
+        android:textColor="#A6000000"
         android:textSize="20sp"
         app:cusTextFont="@string/Roboto_Medium" />
 

@@ -1,22 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="285dp"
+    android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:background="#FAFAFA"
     android:orientation="vertical">
-
-
-    <cc.seeed.iot.view.FontTextView
-        android:id="@+id/mTvTitle"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="#BC1D21"
-        android:gravity="center"
-        android:text="Ready to go!"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:cusTextFont="@string/Roboto_Medium" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -27,24 +15,25 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp">
+            android:layout_marginTop="5dp">
 
             <ImageView
-                android:layout_width="80dp"
+                android:layout_width="97dp"
                 android:layout_centerHorizontal="true"
-                android:src="@mipmap/success_blue"
-                android:layout_height="61dp" />
+                android:src="@mipmap/success_write"
+                android:layout_height="97dp" />
 
         </RelativeLayout>
 
         <cc.seeed.iot.view.FontTextView
             android:id="@+id/mTvHint"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="38.5dp"
-            android:text="Your device is now ready! Name this device if you wish."
-            android:textColor="#A6000000"
-            android:textSize="14sp"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="18dp"
+            android:text="Your device is now ready!\r\n\r\n Name this device if you wish."
+            android:textColor="#777777"
+            android:textSize="13sp"
             app:cusTextFont="@string/Roboto_Regular" />
 
         <cc.seeed.iot.view.FontEditView
@@ -52,9 +41,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Wio Link 1"
-            android:layout_marginTop="42dp"
+            android:layout_marginTop="37dp"
             android:textColorHint="#FF9B9B9B"
-            android:textColor="#A6000000"
+            android:textColor="#3A4271"
             android:textSize="14sp"
             app:cusEditFont="@string/Roboto_Medium" />
 
@@ -62,28 +51,20 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="23dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="horizontal">
-
+            android:layout_marginTop="20dp">
 
                 <cc.seeed.iot.view.FontButton
                     android:id="@+id/mTvSubmit"
-                    android:layout_width="120dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/btn_short_withe_bg"
-                    android:gravity="center"
-                    android:text="SUBMIT"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_long_bg"
+                    android:text="Start Wio-ing"
                     android:elevation="5dp"
-                    android:textColor="#333333"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFFFF"
                     android:textSize="14sp"
                     app:cusButtonFont="@string/Roboto_Medium" />
 
-            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

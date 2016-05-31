@@ -50,4 +50,6 @@ public class Node extends Model {
         result = PRIME * result + node_sn.hashCode();
         return result;
     }
+
+
 }

@@ -28,6 +28,6 @@
             android:layout_width="match_parent"
             android:layout_height="3.5dp"
             android:layout_alignParentBottom="true"
-            android:background="#FFC62828" />
+            android:background="#FF3A4271" />
     </RelativeLayout>
 </LinearLayout>

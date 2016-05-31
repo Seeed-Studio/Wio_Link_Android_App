@@ -49,7 +49,7 @@
 
 
     <!--Smart Config-->
-    <string name="smartconfig_ready">Got Ready</string>
+    <string name="smartconfig_ready">Next</string>
     <string name="smartconfig_connect">Connect Your Node to WiFi</string>
     <string name="smartconfig_error">Connection Failed</string>
     <string name="smartconfig_connected">Connected</string>
@@ -130,7 +130,6 @@
 
     <!-- ui_ap_config -->
     <string name="title_wio_activity">Connect to Wio Device</string>
-    <string name="title_wifi_list_activity">Connect to Wifi Network</string>
     <string name="title_ap_connect_activity">Trasmitting Configuraion</string>
     <string name="ap_config_progress_msg">Setting Wio name...</string>
 
@@ -168,4 +167,13 @@
     <string name="toolBar_title">Device Setting</string>
     <string name="cont_connection_wifi">Could not connection to Wi-Fi. Please check Wi-Fi password and try again</string>
     <string name="link_to_wifi">Linking Wio Devices can only be done under wifi,Please connect to wifi network before you start</string>
+
+    <!-- add device step 01-->
+    <string name="add_device_step01_link_title">Setup Your Wio Link</string>
+    <string name="add_device_step01_node_title">Setup Your Wio Node</string>
+    <string name="add_device_step01_progress_connect_server">connect server...</string>
+    <string name="add_device_step01_err_not_connect_wifi">You are not connected to Wifi</string>
+
+    <!-- add device step 02-->
+    <string name="title_wifi_list_activity">Connect to Wi-Fi Network</string>
 </resources>

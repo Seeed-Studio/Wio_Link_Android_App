@@ -8,7 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/background_01"
+        android:background="#ffffffff"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
@@ -22,11 +22,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="124dp"
+            android:layout_marginTop="32dp"
             android:orientation="vertical"
             android:paddingLeft="40dp"
-            android:paddingRight="40dp"
-            android:paddingTop="56dp">
+            android:paddingRight="40dp">
 
             <cc.seeed.iot.view.FontEditView
                 android:id="@+id/mEtCode"

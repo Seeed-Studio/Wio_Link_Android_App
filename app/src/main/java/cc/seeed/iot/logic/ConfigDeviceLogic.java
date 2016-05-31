@@ -41,6 +41,7 @@ public class ConfigDeviceLogic extends BaseLogic {
     public static  final int FAIL = -1;
     public static  final int UPDATE_DONE = 1;
     public static  final int FIRWARE_DOWNLOAD_DONE = 2;
+    public static  final int UPDATEING = 3;
     private static ConfigDeviceLogic sIns;
 
     public static ConfigDeviceLogic getInstance() {
@@ -60,6 +61,8 @@ public class ConfigDeviceLogic extends BaseLogic {
                               switch (otaStatusResponse.ota_status) {
                                   case "going":
                                       updateStute(node_key);
+                                      Log.e("Going: ", otaStatusResponse.ota_status);
+                                      UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirwareStute, UPDATEING, "", null);
                                       break;
                                   case "done":
                                       UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirwareStute, UPDATE_DONE, "error.getLocalizedMessage()", new Object[]{otaStatusResponse});
@@ -87,6 +90,7 @@ public class ConfigDeviceLogic extends BaseLogic {
             @Override
             public void success(OtaStatusResponse otaStatusResponse, Response response) {
                 updateStute(node_key);
+                UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirware, SUCCESS, "", null);
             }
 
             @Override

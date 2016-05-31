@@ -6,7 +6,7 @@
     <!-- 设置圆角半径 -->
 
     <!-- 填充 -->
-    <solid android:color="#FF009900" />
+    <solid android:color="#7ED321" />
     <!-- 填充的颜色 -->
 
     <padding

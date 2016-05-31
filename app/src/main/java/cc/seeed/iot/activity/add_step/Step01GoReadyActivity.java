@@ -56,7 +56,7 @@ public class Step01GoReadyActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("Get Your Wio Ready");
+            getSupportActionBar().setTitle(R.string.add_device_step01_link_title);
         }
     }
 
@@ -66,10 +66,12 @@ public class Step01GoReadyActivity extends BaseActivity {
         switch (board) {
             default:
             case Constant.WIO_LINK_V1_0:
-                mIvCourse.setImageResource(R.drawable.link_config);
+                mIvCourse.setImageResource(R.mipmap.link_config);
+                getSupportActionBar().setTitle(R.string.add_device_step01_link_title);
                 break;
             case Constant.WIO_NODE_V1_0:
-                mIvCourse.setImageResource(R.drawable.node_config);
+                mIvCourse.setImageResource(R.mipmap.node_config);
+                getSupportActionBar().setTitle(R.string.add_device_step01_node_title);
                 break;
         }
 
@@ -94,7 +96,7 @@ public class Step01GoReadyActivity extends BaseActivity {
     private void attemptLogin(final String node_name, final String board) {
         final ProgressDialog mProgressBar = new ProgressDialog(this);
 
-        mProgressBar.setMessage("connect server...");
+        mProgressBar.setMessage(getString(R.string.add_device_step01_progress_connect_server));
         mProgressBar.show();
         IotApi api = new IotApi();
         User user = UserLogic.getInstance().getUser();
@@ -130,7 +132,7 @@ public class Step01GoReadyActivity extends BaseActivity {
             attemptLogin("node000", board);
             wifiManager.startScan();
         }else {
-            DialogUtils.showErrorDialog(this,"You are not connected to Wifi",getString(R.string.dialog_btn_OK),"",getString(R.string.link_to_wifi),null);
+            DialogUtils.showErrorDialog(this,getString(R.string.add_device_step01_err_not_connect_wifi),getString(R.string.dialog_btn_OK),"",getString(R.string.link_to_wifi),null);
         }
 
     }

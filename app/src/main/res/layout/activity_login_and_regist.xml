@@ -8,42 +8,48 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/background_01">
+        android:background="#ffffffff">
 
         <LinearLayout
             android:id="@+id/mLLOrtherLogin"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:visibility="gone"
+            android:layout_height="65dp"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <RelativeLayout
                 android:id="@+id/mRlGoogle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#ffAE171B">
+                android:background="@drawable/btn_google_login_bg">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/google_ic" />
+                    android:src="@mipmap/google_gray" />
+
             </RelativeLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"/>
 
             <RelativeLayout
                 android:id="@+id/mRlFacebook"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="#ff43619C">
+                android:background="@drawable/btn_google_login_bg">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:src="@mipmap/facebook_ic" />
+                    android:src="@mipmap/facebook_gray" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -54,9 +60,9 @@
             android:layout_marginBottom="11dp"
             android:gravity="center_horizontal"
             android:text="OR JOIN WITH"
-            android:visibility="gone"
-            android:textColor="#979797"
+            android:textColor="#9b9b9b"
             android:textSize="12sp"
+            android:visibility="visible"
             app:cusTextFont="@string/Roboto_Medium" />
 
         <LinearLayout
@@ -68,7 +74,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
-                android:background="#FFC62828"
+                android:background="#FF3A4271"
                 android:elevation="5dp"
                 android:orientation="horizontal">
 
@@ -134,25 +140,54 @@
 
         </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp">
+            android:layout_marginTop="54dp"
+            android:orientation="vertical">
 
-            <cc.seeed.iot.view.FontTextView
-                android:id="@+id/mTvSelectServer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerInParent="true"
-                android:layout_marginRight="17dp"
-                android:singleLine="true"
-                android:text="USE CUSTOMIZE SERVER?"
-                android:textColor="#777777"
-                android:textSize="12sp"
-                app:cusTextFont="@string/Roboto_Bold" />
-        </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:background="#FF252C59"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:src="@mipmap/seeed_logo" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="21dp"
+                    android:text="If you registered with Seeed before, simply login with your Seeed account"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Roboto_Bold" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp">
+
+                <cc.seeed.iot.view.FontTextView
+                    android:id="@+id/mTvSelectServer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="17dp"
+                    android:singleLine="true"
+                    android:text="USE CUSTOMIZE SERVER?"
+                    android:textColor="#777777"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Roboto_Bold" />
+
+            </RelativeLayout>
+        </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

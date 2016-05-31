@@ -37,12 +37,14 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.activity.NodeSettingActivity;
+import cc.seeed.iot.activity.SetupDeviceActivity;
 import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
@@ -51,6 +53,7 @@ import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
 import cc.seeed.iot.activity.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
+import cc.seeed.iot.util.ComparatorUtils;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
@@ -165,7 +168,7 @@ public class MainScreenActivity extends BaseActivity
         if (ab != null) {
             ab.setHomeAsUpIndicator(R.mipmap.menu);
             ab.setDisplayHomeAsUpEnabled(true);
-            ab.setTitle(R.string.app_name);
+            ab.setTitle("Devices");
         }
         toolbar.setOnClickListener(this);
 
@@ -253,6 +256,7 @@ public class MainScreenActivity extends BaseActivity
                         mProgressDialog.dismiss();
                         mSRL.setRefreshing(false);
                         if (msg.arg2 == 1) {
+                            Collections.sort(nodes, new ComparatorUtils.ComparatorNode());
                             mAdapter.updateAll(nodes);
                             if (nodes.isEmpty()) {
                                 mTvDeviceNum.setText("0 DEVICES");
@@ -527,12 +531,12 @@ public class MainScreenActivity extends BaseActivity
             dialog.show();
             return true;
         }
-        Intent intent = new Intent();
-        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+        Intent intent = new Intent(this, SetupDeviceActivity.class);
+       /* if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             intent.setClass(this, SetupIotLinkActivity.class);
         } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
             intent.setClass(this, SetupIotNodeActivity.class);
-        }
+        }*/
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;

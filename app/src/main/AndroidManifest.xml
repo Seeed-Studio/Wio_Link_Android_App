@@ -36,6 +36,8 @@
             android:name="cc.seeed.iot.ui_main.MainScreenActivity"
             android:theme="@style/DrawTheme" />
         <activity android:name=".activity.SetupIotLinkActivity" />
+        <activity android:name=".activity.SetupDeviceActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".activity.SetupIotNodeActivity" />
         <activity
             android:name=".activity.user.ResetPwd01Activity"

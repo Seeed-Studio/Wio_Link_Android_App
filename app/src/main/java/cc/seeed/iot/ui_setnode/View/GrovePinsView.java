@@ -1,8 +1,11 @@
 package cc.seeed.iot.ui_setnode.View;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.jauker.widget.BadgeView;
@@ -46,8 +49,8 @@ public class GrovePinsView {
     }
 
     private void initNodeView() {
-        pinViews[0] = (ImageButton) view.findViewById(R.id.grove_0);
-        pinViews[1] = (ImageButton) view.findViewById(R.id.grove_1);
+        pinViews[0] = (ImageButton) view.findViewById(R.id.grove_6);
+        pinViews[1] = (ImageButton) view.findViewById(R.id.grove_7);
 
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO, InterfaceType.UART, InterfaceType.I2C}));
         pinViews[1].setTag(new Tag(1, new String[]{InterfaceType.GPIO, InterfaceType.ANALOG, InterfaceType.I2C}));
@@ -55,8 +58,10 @@ public class GrovePinsView {
         badgeViews[0] = new BadgeView(context);
         badgeViews[1] = new BadgeView(context);
 
-        badgeViews[0].setTargetView(pinViews[0]);
-        badgeViews[1].setTargetView(pinViews[1]);
+//        badgeViews[0].setTargetView(pinViews[0]);
+//        badgeViews[1].setTargetView(pinViews[1]);
+        setPinView(pinViews[0],badgeViews[0]);
+        setPinView(pinViews[1],badgeViews[1]);
 
         badgeViews[0].setVisibility(View.GONE);
         badgeViews[1].setVisibility(View.GONE);
@@ -91,8 +96,9 @@ public class GrovePinsView {
 
         for (int i = 0; i < 6; i++) {
             badgeViews[i] = new BadgeView(context);
-            badgeViews[i].setTargetView(pinViews[i]);
+          //  badgeViews[i].setTargetView(pinViews[i]);
             badgeViews[i].setVisibility(View.GONE);
+            setPinView(pinViews[i],badgeViews[i]);
         }
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
@@ -130,6 +136,24 @@ public class GrovePinsView {
             this.position = position;
             this.interfaceTypes = interfaceTypes;
         }
+    }
+
+    private void setPinView(ImageButton tragetView,BadgeView view){
+        int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        tragetView.measure(w, h);
+        int height = tragetView.getMeasuredHeight();
+        int width = tragetView.getMeasuredWidth();
+
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        params.height = height;
+        params.width = width;
+        view.setLayoutParams(params);
+        view.setBackgroundColor(Color.parseColor("#a0000000"));
+        view.setGravity(Gravity.CENTER);
+        view.setTextColor(Color.parseColor("#ffffff"));
+        view.setTextSize(14);
+        view.setTargetView(tragetView);
     }
 
 

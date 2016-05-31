@@ -46,10 +46,10 @@
     <color name="tag_text_press">#000000</color>
 
     <!-- CommonUrl -->
-    <color name="primary">#96141E</color>
-    <color name="primary_dark">#8c141e</color>
-    <color name="primary_darker">#82141e</color>
-    <color name="second_color">#c62828</color>
+    <color name="primary">#3A4271</color>
+    <color name="primary_dark">#3A4271</color>
+    <color name="primary_darker">#3A4271</color>
+    <color name="second_color">#3A4271</color>
     <color name="third_color">#5a5a5a</color>
     <color name="accent">#FFFFFF</color>
 
@@ -87,7 +87,7 @@
 
     <!-- add device-->
     <color name="step_did">#FFFFFFFF</color>
-    <color name="step_do1">#FF8A2324</color>
-    <color name="step_do2">#FF8A2324</color>
+    <color name="step_do1">#21295B</color>
+    <color name="step_do2">#21295B</color>
 
 </resources>

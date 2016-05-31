@@ -47,6 +47,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public interface OnClickListener {
         void onClick(View v, int position);
     }
+
     public interface OnItemLongClickListener {
         void onItemLongClick(View v, int position);
     }
@@ -54,6 +55,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public void setOnClickListener(OnClickListener l) {
         mOnClickListener = l;
     }
+
     public void setOnItemLongClickListener(OnItemLongClickListener l) {
         mOnItemLongClickListener = l;
     }
@@ -66,7 +68,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
     public MainViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         this.context = parent.getContext();
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_node1, parent, false);
-        return new MainViewHolder(v, mOnClickListener,mOnItemLongClickListener);
+        return new MainViewHolder(v, mOnClickListener, mOnItemLongClickListener);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             int buttom = ToolUtil.dp2px(13, context.getResources());
             params.setMargins(left, top, right, buttom);
             holder.mLlItem.setLayoutParams(params);
-        }else {
+        } else {
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.mLlItem.getLayoutParams();
             int top = ToolUtil.dp2px(0, context.getResources());
             int left = ToolUtil.dp2px(12, context.getResources());
@@ -97,10 +99,18 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         switch (node.board) {
             default:
             case Constant.WIO_LINK_V1_0:
-                holder.mSDVNode.setImageResource(R.drawable.link_small);
+                if (node.online) {
+                    holder.mSDVNode.setImageResource(R.drawable.link_small);
+                }else {
+                    holder.mSDVNode.setImageResource(R.mipmap.link_small_offline);
+                }
                 break;
             case Constant.WIO_NODE_V1_0:
-                holder.mSDVNode.setImageResource(R.drawable.node_small);
+                if (node.online) {
+                    holder.mSDVNode.setImageResource(R.drawable.node_small);
+                }else {
+                    holder.mSDVNode.setImageResource(R.mipmap.node_small_offline);
+                }
                 break;
         }
         holder.mTvTitle.setText(TextUtils.isEmpty(node.name) ? "Wio Link" + position + 1 : node.name);
@@ -150,7 +160,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
 
     public void removeItem(int position) {
         notifyItemRemoved(position);
-        if (position == 0){
+        if (position == 0) {
             notifyItemChanged(position);
         }
     }
@@ -192,7 +202,7 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
 
         List<SimpleDraweeView> mGroveViews;
 
-        public MainViewHolder(View itemView, OnClickListener mOnClickListener,OnItemLongClickListener onItemLongClickListener ) {
+        public MainViewHolder(View itemView, OnClickListener mOnClickListener, OnItemLongClickListener onItemLongClickListener) {
             super(itemView);
             mItemView = itemView;
             this.mOnClickListener = mOnClickListener;
@@ -231,8 +241,8 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
 
         @Override
         public boolean onLongClick(View v) {
-            if (mOnItemLongClickListener != null){
-                mOnItemLongClickListener.onItemLongClick(v,getLayoutPosition());
+            if (mOnItemLongClickListener != null) {
+                mOnItemLongClickListener.onItemLongClick(v, getLayoutPosition());
             }
             return false;
         }

@@ -183,7 +183,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                     return;
                 }
                 OtherPlatformUtils.getFacebookInfo(this, callbackManager, OtherPlatformUtils.LoginWithFacebook);
-                dialog = DialogUtils.showProgressDialog(LoginAndRegistActivity.this, getString(R.string.loading_login));
+            //    dialog = DialogUtils.showProgressDialog(LoginAndRegistActivity.this, getString(R.string.loading_login));
                 break;
         }
     }

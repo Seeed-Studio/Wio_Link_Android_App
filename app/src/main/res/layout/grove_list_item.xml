@@ -13,6 +13,7 @@
 
     <RelativeLayout
         android:layout_width="120dp"
+        android:elevation="3dp"
         android:layout_height="162dp">
 
         <ImageView
@@ -26,11 +27,11 @@
             android:id="@+id/grove_text"
             android:layout_width="match_parent"
             android:layout_height="42dp"
-            android:background="#FF215081"
+            android:background="#F5F4F1"
             android:maxLines="2"
             android:ellipsize="end"
-            android:textColor="#FFFFFFFF"
-            android:textSize="12sp"
+            android:textColor="#3A4271"
+            android:textSize="11sp"
             app:cusTextFont="@string/Roboto_Regular"
             android:layout_alignParentBottom="true"
             android:gravity="center"/>
