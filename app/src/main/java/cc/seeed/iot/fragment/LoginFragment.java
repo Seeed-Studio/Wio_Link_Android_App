@@ -86,7 +86,7 @@ public class LoginFragment extends BaseFragment {
             mEtPwd.requestFocus();
             return;
         }else {
-            dialog = DialogUtils.showProgressDialog(mActivity, getString(R.string.loading_login));
+            dialog = DialogUtils.showProgressDialog(mActivity, "");
             App.getSp().edit().putString(Constant.SP_USER_EMAIL, email).commit();
             UserLogic.getInstance().login(email,pwd);
         }

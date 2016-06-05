@@ -6,10 +6,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import java.util.List;
 
 import cc.seeed.iot.R;
+import cc.seeed.iot.util.ToolUtil;
 
 /**
  * Created by tenwong on 15/6/25.
@@ -38,6 +40,19 @@ public class WifiListRecyclerAdapter extends RecyclerView.Adapter<WifiRecyclerVi
 
     @Override
     public void onBindViewHolder(WifiRecyclerViewHolder holder, final int position) {
+
+        if (position == 0) {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.mLlItem.getLayoutParams();
+            int top = ToolUtil.dp2px(20, context.getResources());
+            params.setMargins(0, top, 0, 0);
+            holder.mLlItem.setLayoutParams(params);
+        } else {
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.mLlItem.getLayoutParams();
+            params.setMargins(0, 0, 0, 0);
+            holder.mLlItem.setLayoutParams(params);
+        }
+
+
         final ScanResult scanResult = wifiList.get(position);
         holder.mSsidView.setText(scanResult.SSID);
     }

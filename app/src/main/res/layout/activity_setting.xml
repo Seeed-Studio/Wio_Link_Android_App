@@ -29,7 +29,7 @@
             android:text="@string/password"
             android:textColor="#4a4a4a"
             android:textSize="16sp"
-            app:cusTextFont="@string/Roboto_Medium" />
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
         <cc.seeed.iot.view.FontTextView
             android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
             android:textColor="#9b9b9b"
             android:layout_marginTop="4dp"
             android:textSize="14sp"
-            app:cusTextFont="@string/Roboto_Regular" />
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/mLLConnectServer"
@@ -55,7 +55,7 @@
             android:text="@string/connect_server"
             android:textColor="#4a4a4a"
             android:textSize="16sp"
-            app:cusTextFont="@string/Roboto_Medium" />
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
         <cc.seeed.iot.view.FontTextView
             android:id="@+id/mTvConnectServer"
@@ -65,7 +65,7 @@
             android:textColor="#9b9b9b"
             android:layout_marginTop="4dp"
             android:textSize="14sp"
-            app:cusTextFont="@string/Roboto_Regular" />
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
     </LinearLayout>
 
     <View
@@ -90,7 +90,7 @@
             android:gravity="center_vertical"
             android:textColor="#9b9b9b"
             android:textSize="16sp"
-            app:cusTextFont="@string/Roboto_Medium" />
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
     </LinearLayout>
 
 </LinearLayout>

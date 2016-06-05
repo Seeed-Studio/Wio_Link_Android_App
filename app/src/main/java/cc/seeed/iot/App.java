@@ -26,8 +26,6 @@ public class App extends com.activeandroid.app.Application {
     //    private String exchange_server_url;
     private String ota_server_ip;
     //    private String exchange_server_ip;
-    private static String OLD_OTA_CHINA_URL = "https://cn.iot.seeed.cc";
-    private static String OLD_OTA_INTERNATIONAL_URL = "https://iot.seeed.cc";
 
     /**
      * into smartconfig state
@@ -82,7 +80,7 @@ public class App extends com.activeandroid.app.Application {
     private void init() {
         ota_server_url = sp.getString(Constant.SP_SERVER_URL, CommonUrl.OTA_SERVER_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
         ota_server_ip = sp.getString(Constant.SP_SERVER_IP, CommonUrl.OTA_SERVER_IP);
-        int firstStart = getSp().getInt(Constant.APP_FIRST_START, 0);
+      /*  int firstStart = getSp().getInt(Constant.APP_FIRST_START, 0);
         if (firstStart == 0) {
             if (OLD_OTA_CHINA_URL.equals(ota_server_url) || OLD_OTA_INTERNATIONAL_URL.equals(ota_server_url)) {
                 UserLogic.getInstance().logOut();
@@ -90,7 +88,7 @@ public class App extends com.activeandroid.app.Application {
                 ota_server_url = CommonUrl.OTA_SERVER_URL;
             }
             getSp().edit().putInt(Constant.APP_FIRST_START, 1).commit();
-        }
+        }*/
         IotApi.SetServerUrl(ota_server_url);
     }
 

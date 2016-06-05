@@ -28,11 +28,11 @@ import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Constant;
+import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.util.ToolUtil;
-import cc.seeed.iot.util.WifiUtils;
 
 
 /**
@@ -68,6 +68,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     TextView mTvIP;
     @InjectView(R.id.mBtnOpenWifi)
     Button mBtnOpenWifi;
+    @InjectView(R.id.mBtnEditName)
+    Button mBtnEditName;
 
     private ConfigUdpSocket udpClient;
     public int checkId = 0;
@@ -117,7 +119,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser,R.id.mBtnOpenWifi})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi,R.id.mBtnEditName})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -133,8 +135,11 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 addUser();
                 break;
             case R.id.mBtnOpenWifi:
-                WifiManager wifiManager=(WifiManager)getSystemService(WIFI_SERVICE);
+                WifiManager wifiManager = (WifiManager) getSystemService(WIFI_SERVICE);
                 wifiManager.setWifiEnabled(true);
+                break;
+            case R.id.mBtnEditName:
+                DialogUtils.showEditNodeNameDialog(this,"",null);
                 break;
         }
     }
@@ -256,4 +261,5 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
         }
     }
+
 }

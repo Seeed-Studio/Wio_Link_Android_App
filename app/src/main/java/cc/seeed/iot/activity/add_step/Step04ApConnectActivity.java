@@ -1,31 +1,24 @@
 package cc.seeed.iot.activity.add_step;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -57,7 +50,6 @@ import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeListResponse;
-import cc.seeed.iot.webapi.model.SuccessResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -73,6 +65,7 @@ public class Step04ApConnectActivity extends BaseActivity {
     public final static String Intent_Board = "Intent_board";
     public final static String Intent_NodeKey = "Intent_NodeKey";
     public final static String Intent_NodeSn = "Intent_NodeSn";
+    public final static String Intent_ChangeWifi = "Intent_ChangeWifi";
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.mIvLoading)
@@ -81,6 +74,8 @@ public class Step04ApConnectActivity extends BaseActivity {
     FontTextView mTvHint;
     @InjectView(R.id.mStepView)
     StepView mStepView;
+    @InjectView(R.id.progressBar)
+    ProgressBar mProgressBar;
 
     private String ssid;
     private String node_name;
@@ -93,6 +88,7 @@ public class Step04ApConnectActivity extends BaseActivity {
     private Dialog dialog;
     private String defaultName = "";
     private boolean isSetDefName = true;
+    private boolean isChangeWifi = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +98,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         initToolBar();
         mStepView.setDoingStep(3);
+        mProgressBar.setVisibility(View.VISIBLE);
 
         initData();
     }
@@ -109,11 +106,12 @@ public class Step04ApConnectActivity extends BaseActivity {
     private void initToolBar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
+        getSupportActionBar().setTitle("Syncing Data");
     }
 
     private void initData() {
         Intent intent = getIntent();
+        isChangeWifi = intent.getBooleanExtra(Intent_ChangeWifi, false);
         ssid = intent.getStringExtra(Intent_Ssid);
         node_sn = intent.getStringExtra(Intent_NodeSn);
         node_key = intent.getStringExtra(Intent_NodeKey);
@@ -121,6 +119,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         wifiPwd = intent.getStringExtra(Intent_WifiPwd);
 
         udpClient = new ConfigUdpSocket();
+        mProgressBar.setProgress(10);
         startLoading();
         sendOrder();
     }
@@ -253,6 +252,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                 }
             }
             connectWifi(ssid, wifiPwd);
+            mProgressBar.setProgress(30);
         }
     }
 
@@ -260,6 +260,7 @@ public class Step04ApConnectActivity extends BaseActivity {
 
     private void connectWifi(final String ssid, String pwd) {
         flag = 0;
+        getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
         mTvHint.setText("Waiting Wio get ip address...");
         final Timer timer = new Timer();
         final WifiUtils wifiUtils = new WifiUtils(this);
@@ -305,6 +306,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        mProgressBar.setProgress(30+flag);
                         mTvHint.setText("Waiting Wio get ip address...[" + (30 - flag) + "]");
                     }
                 });
@@ -365,6 +367,7 @@ public class Step04ApConnectActivity extends BaseActivity {
             int i = values[0];
             //  showProgressDialog("Waiting Wio get ip address...[" + i + "]");
             showProgressText("Get device status...[" + i + "]");
+            mProgressBar.setProgress(60+(30-i));
         }
 
         @Override
@@ -374,8 +377,12 @@ public class Step04ApConnectActivity extends BaseActivity {
             }
 
             if (state_online) {
-               // attemptRename();
-                setDefaultName();
+                // attemptRename();
+                if (isChangeWifi) {
+                    gotoMain();
+                } else {
+                    setDefaultName();
+                }
             } else {
                 DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connection Error", "TRY AGAIN", "CANCEL", "Please check your internet connection and try again.\r\n" +
                         "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
@@ -396,7 +403,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         }
     }
 
-    private void setDefaultName(){
+    private void setDefaultName() {
         isSetDefName = true;
         Random random = new Random();
         switch (board) {
@@ -408,29 +415,23 @@ public class Step04ApConnectActivity extends BaseActivity {
                 defaultName = "Wio Node " + random.nextInt(50);
                 break;
         }
-        ConfigDeviceLogic.getInstance().nodeReName(node_sn,defaultName);
+        ConfigDeviceLogic.getInstance().nodeReName(node_sn, defaultName);
         showProgressText("Setting Wio name...");
     }
 
-    private void customName(){
+    private void customName() {
         isSetDefName = false;
         dialog = DialogUtils.showEditNodeNameDialog(Step04ApConnectActivity.this, defaultName, new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
-                MobclickAgent.onEvent(Step04ApConnectActivity.this, "17004");
-                dialog.dismiss();
-                node_name = content;
-                ConfigDeviceLogic.getInstance().nodeReName(node_sn,content);
-                showProgressText("Setting Wio name...");
-            }
-        });
-        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-            @Override
-            public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK) {
-                    return true;
+                if (defaultName.equals(content)) {
+                    gotoMain();
                 } else {
-                    return false;
+                    MobclickAgent.onEvent(Step04ApConnectActivity.this, "17004");
+                    dialog.dismiss();
+                    node_name = content;
+                    ConfigDeviceLogic.getInstance().nodeReName(node_sn, content);
+                    showProgressText("Setting Wio name...");
                 }
             }
         });
@@ -462,7 +463,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         }
     }
 
-    public void showProgressText(final String str){
+    public void showProgressText(final String str) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -478,19 +479,25 @@ public class Step04ApConnectActivity extends BaseActivity {
 
     @Override
     public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
-        if (Cmd_Node_ReName.equals(event)){
-            if (ret){
-                if (isSetDefName){
+        if (Cmd_Node_ReName.equals(event)) {
+            if (ret) {
+                if (isSetDefName) {
                     customName();
-                }else {
-                    Intent intent = new Intent(Step04ApConnectActivity.this, MainScreenActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intent);
-                    stopLoading();
+                } else {
+                    mProgressBar.setProgress(100);
+                    gotoMain();
                 }
-            }else {
+            } else {
                 stopLoading();
             }
         }
+    }
+
+    private void gotoMain() {
+        Intent intent = new Intent(Step04ApConnectActivity.this, MainScreenActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        stopLoading();
+        finish();
     }
 }

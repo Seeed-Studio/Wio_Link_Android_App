@@ -19,13 +19,15 @@ public class ComparatorUtils {
 
             int num1 = (int) ToolUtil.getSimpleName(bean1.GroveName).charAt(0);
             int num2 = (int) ToolUtil.getSimpleName(bean2.GroveName).charAt(0);
+
             if (num1 < num2) {
                 return -1;
             } else if (num1 == num2) {
-                return 0;
+                return ToolUtil.getSimpleName(bean1.GroveName).compareTo(ToolUtil.getSimpleName(bean2.GroveName));
             } else {
                 return 1;
             }
+
         }
     }
 

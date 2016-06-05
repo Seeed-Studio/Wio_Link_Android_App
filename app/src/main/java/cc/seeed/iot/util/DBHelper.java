@@ -70,6 +70,13 @@ public class DBHelper {
                 .execute();
     }
 
+    public static List<GroverDriver> getSearchGroves(String key) {
+        return new Select()
+                .from(GroverDriver.class)
+                .where("grove_name like '%"+key+"%'")
+                .execute();
+    }
+
     public static void delGrovesAll(){
         new Delete()
                 .from(GroverDriver.class)

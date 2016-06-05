@@ -8,8 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -23,17 +23,21 @@ import android.widget.Toast;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.ShareUtils;
 import cc.seeed.iot.webapi.model.Node;
 
-public class NodeApiActivity extends AppCompatActivity {
-    private final static String TAG = "NodeApiActivity";
+public class WebActivity extends BaseActivity {
+    private final static String TAG = "WebActivity";
     private final static String RESOURCE = "/v1/node/resources?";
+    public final static String Intent_Url = "Intent_Url";
     private Toolbar mToolbar;
 
     private ProgressBar mProgressBar;
     private WebView mWebView;
     private Node node;
+    private String url;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,6 @@ public class NodeApiActivity extends AppCompatActivity {
     }
 
     private void initView() {
-
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -70,14 +73,14 @@ public class NodeApiActivity extends AppCompatActivity {
 
         mWebView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                Toast.makeText(NodeApiActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+                Toast.makeText(WebActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
             }
         });
 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public void onReceivedSslError(WebView view, final SslErrorHandler handler, SslError error) {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(NodeApiActivity.this);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(WebActivity.this);
                 builder.setMessage(R.string.notification_error_ssl_cert_invalid);
                 builder.setPositiveButton("continue", new DialogInterface.OnClickListener() {
                     @Override
@@ -96,14 +99,18 @@ public class NodeApiActivity extends AppCompatActivity {
             }
         });
 
-        String url = getApiUrl();
+     //   String url = getApiUrl();
         mWebView.loadUrl(url);
     }
 
 
     private void init() {
-        String node_sn = getIntent().getStringExtra("node_sn");
-        node = DBHelper.getNodes(node_sn).get(0);
+     //   String node_sn = getIntent().getStringExtra("node_sn");
+    //    node = DBHelper.getNodes(node_sn).get(0);
+        url = getIntent().getStringExtra(Intent_Url);
+        if (TextUtils.isEmpty(url)){
+            finish();
+        }
     }
 
     @Override
@@ -123,7 +130,8 @@ public class NodeApiActivity extends AppCompatActivity {
             copyTextUrl(getApiUrl());
             Toast.makeText(this, "API url copied!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.share) {
-            shareTextUrl(getApiUrl());
+           // shareTextUrl(getApiUrl());
+            ShareUtils.show(this,"API",getApiUrl(),null);
         }
         return super.onOptionsItemSelected(item);
     }

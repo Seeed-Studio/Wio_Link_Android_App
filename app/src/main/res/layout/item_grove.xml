@@ -9,15 +9,18 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/main_node_list"
         android:layout_width="match_parent"
-        android:layout_height="72dp">
+        android:layout_height="68.2dp">
 
         <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_centerVertical="true"
+            app:roundAsCircle="true"
+            app:roundingBorderColor="#E7E7E7"
+            app:roundingBorderWidth="1dp"
             app:placeholderImage="@mipmap/grove_default"
             app:placeholderImageScaleType="fitXY" />
 
@@ -25,28 +28,31 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="18dp"
             android:layout_marginStart="16dp"
             android:layout_toEndOf="@+id/image"
             android:layout_toRightOf="@+id/image"
             android:orientation="vertical">
 
-            <TextView
+            <cc.seeed.iot.view.FontTextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="16sp"
-                tools:text="Grove Button" />
-
-            <TextView
-                android:id="@+id/interface_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Grove Button"
+                android:textColor="#4A4A4A"
+                android:ellipsize="end"
+                android:maxLines="2"
                 android:textSize="14sp"
-                tools:text="Digital" />
+                app:cusTextFont="@string/Proxima_Nova_Bold" />
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="16.8dp"
+            android:layout_marginRight="16.8dp"
+            android:background="#F6F6F6"/>
     </RelativeLayout>
 </LinearLayout>

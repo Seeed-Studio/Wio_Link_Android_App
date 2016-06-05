@@ -9,7 +9,7 @@
     <cc.seeed.iot.view.FontTextView
         android:id="@+id/mTVItem"
         style="@style/popWindowItem"
-        app:cusTextFont="@string/Roboto_Regular"
+        app:cusTextFont="@string/Proxima_Nova_Regular"
         android:text="Report a technical issue" />
 
     <View

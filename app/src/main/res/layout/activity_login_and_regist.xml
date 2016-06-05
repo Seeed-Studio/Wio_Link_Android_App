@@ -16,7 +16,7 @@
             android:layout_height="65dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <RelativeLayout
                 android:id="@+id/mRlGoogle"
@@ -36,7 +36,7 @@
             <View
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
-                android:background="#ffffff"/>
+                android:background="#ffffff" />
 
             <RelativeLayout
                 android:id="@+id/mRlFacebook"
@@ -63,7 +63,7 @@
             android:textColor="#9b9b9b"
             android:textSize="12sp"
             android:visibility="visible"
-            app:cusTextFont="@string/Roboto_Medium" />
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,7 +94,7 @@
                         android:text="SIGN UP"
                         android:textColor="#ffffff"
                         android:textSize="16sp"
-                        app:cusTextFont="@string/Roboto_Medium" />
+                        app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
                     <View
                         android:id="@+id/mRegistrTag"
@@ -121,7 +121,7 @@
                         android:text="LOG IN"
                         android:textColor="#b2ffffff"
                         android:textSize="16sp"
-                        app:cusTextFont="@string/Roboto_Medium" />
+                        app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
                     <View
                         android:id="@+id/mLoginTag"
@@ -167,26 +167,54 @@
                     android:text="If you registered with Seeed before, simply login with your Seeed account"
                     android:textColor="#ffffff"
                     android:textSize="12sp"
-                    app:cusTextFont="@string/Roboto_Bold" />
+                    app:cusTextFont="@string/Proxima_Nova_Bold" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="35dp">
 
-                <cc.seeed.iot.view.FontTextView
-                    android:id="@+id/mTvSelectServer"
+                <RelativeLayout
+                    android:id="@+id/mRlSelectServer"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
-                    android:gravity="center_vertical"
-                    android:layout_marginRight="17dp"
-                    android:singleLine="true"
-                    android:text="USE CUSTOMIZE SERVER?"
-                    android:textColor="#777777"
-                    android:textSize="12sp"
-                    app:cusTextFont="@string/Roboto_Bold" />
+                    android:layout_height="match_parent">
 
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <cc.seeed.iot.view.FontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="3dp"
+                            android:text="Server Location:"
+                            android:textColor="#9B9B9B"
+                            android:textSize="14sp"
+                            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                        <cc.seeed.iot.view.FontTextView
+                            android:id="@+id/mTvSelectServer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:text="Global"
+                            android:textColor="#FF252C59"
+                            android:textSize="14sp"
+                            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="34dp"
+                            android:src="@mipmap/arrow_right" />
+
+                    </LinearLayout>
+                </RelativeLayout>
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

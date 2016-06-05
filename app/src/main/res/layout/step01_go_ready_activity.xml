@@ -1,43 +1,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff">
+    android:background="#ffffff"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:layout_height="wrap_content"
         android:elevation="5dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-    </android.support.v7.widget.Toolbar>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+            <LinearLayout
+                android:id="@+id/mLLAddDevice"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/mIvHelp"
+                    android:layout_width="22dp"
+                    android:layout_height="20dp"
+                    android:src="@mipmap/help_blue" />
+            </LinearLayout>
+        </RelativeLayout>
+
+    </android.support.design.widget.AppBarLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <cc.seeed.iot.view.FontButton
             android:id="@+id/mBtnGo"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="48dp"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/btn_long_bg"
-            android:text="@string/smartconfig_ready"
+            android:layout_marginBottom="48dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:textColor="@android:color/white" />
+            android:background="@drawable/btn_long_bg"
+            android:text="@string/smartconfig_ready"
+            android:textColor="@android:color/white"
+            app:cusButtonFont="@string/Proxima_Nova_Semibold" />
 
         <ImageView
             android:id="@+id/mIvCourse"
             android:layout_width="wrap_content"
-            android:layout_marginBottom="40dp"
+            android:layout_height="wrap_content"
             android:layout_above="@id/mBtnGo"
             android:layout_centerHorizontal="true"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/link_config"
-            android:scaleType="fitXY"/>
+            android:layout_marginBottom="40dp"
+            android:scaleType="fitXY"
+            android:src="@mipmap/link_config" />
 
 
     </RelativeLayout>

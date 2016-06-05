@@ -35,6 +35,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
+import cc.seeed.iot.activity.add_step.Step04ApConnectActivity;
 import cc.seeed.iot.adapter.set_node.GroveFilterRecyclerAdapter;
 import cc.seeed.iot.adapter.set_node.GroveI2cListRecyclerAdapter;
 import cc.seeed.iot.adapter.set_node.GroveListRecyclerAdapter;
@@ -42,7 +44,7 @@ import cc.seeed.iot.entity.DialogBean;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_main.NodeApiActivity;
+import cc.seeed.iot.ui_main.WebActivity;
 import cc.seeed.iot.ui_setnode.View.GrovePinsView;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
@@ -179,9 +181,9 @@ public class SetupDeviceActivity extends BaseActivity
         pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
         getSupportActionBar().setTitle(node.name);
         if (node.online) {
-            mToolbar.setLogo(R.drawable.online_led);
+            mToolbar.setLogo(R.mipmap.online_led);
         } else {
-            mToolbar.setLogo(R.drawable.offline_led);
+            mToolbar.setLogo(R.mipmap.offline_led);
         }
 
         if (mGroveListView != null) {
@@ -291,6 +293,8 @@ public class SetupDeviceActivity extends BaseActivity
             List<String> menu = new ArrayList<>();
             menu.add("View API");
             menu.add("Device Setting");
+            menu.add("Change Wi-Fi Network");
+            menu.add("Help");
             DialogUtils.showMenuPopWindow(this, mToolbar, menu, new DialogUtils.OnMenuItemChickListener() {
                 @Override
                 public void chickItem(View v, int position) {
@@ -302,7 +306,7 @@ public class SetupDeviceActivity extends BaseActivity
                             if (node_josn.connections.isEmpty()) {
                                 DialogUtils.showErrorDialog(SetupDeviceActivity.this, "Tip", "OK", "", "Forger add grove?", null);
                             } else {
-                                intent = new Intent(SetupDeviceActivity.this, NodeApiActivity.class);
+                                intent = new Intent(SetupDeviceActivity.this, WebActivity.class);
                                 intent.putExtra("node_sn", node.node_sn);
                                 startActivity(intent);
                             }
@@ -311,6 +315,15 @@ public class SetupDeviceActivity extends BaseActivity
                             MobclickAgent.onEvent(SetupDeviceActivity.this, "15004");
                             intent = new Intent(SetupDeviceActivity.this, NodeSettingActivity.class);
                             intent.putExtra(NodeSettingActivity.Intent_NodeSn, node.node_sn);
+                            startActivity(intent);
+                            break;
+                        case 2:
+                            intent = new Intent(SetupDeviceActivity.this, Step01GoReadyActivity.class);
+                            intent.putExtra(Step04ApConnectActivity.Intent_NodeSn, node.node_sn);
+                            startActivity(intent);
+                            break;
+                        case 3:
+                            intent = new Intent(SetupDeviceActivity.this, HelpActivity.class);
                             startActivity(intent);
                             break;
                     }

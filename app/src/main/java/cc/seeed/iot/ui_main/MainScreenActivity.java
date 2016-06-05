@@ -13,7 +13,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -43,15 +42,15 @@ import java.util.List;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.GrovesActivity;
+import cc.seeed.iot.activity.HelpActivity;
 import cc.seeed.iot.activity.NodeSettingActivity;
 import cc.seeed.iot.activity.SetupDeviceActivity;
-import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
-import cc.seeed.iot.activity.SetupIotNodeActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.util.ComparatorUtils;
 import cc.seeed.iot.util.Constant;
@@ -379,6 +378,8 @@ public class MainScreenActivity extends BaseActivity
                 startActivity(intent);
                 break;
             case R.id.mTvFAQ:
+                intent = new Intent(MainScreenActivity.this, HelpActivity.class);
+                startActivity(intent);
                 MobclickAgent.onEvent(this, "12002");
                 break;
             case R.id.mTvGetDevices:
@@ -506,7 +507,7 @@ public class MainScreenActivity extends BaseActivity
     }
 
     public boolean nodeApi(Node node) {
-        Intent intent = new Intent(this, NodeApiActivity.class);
+        Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;

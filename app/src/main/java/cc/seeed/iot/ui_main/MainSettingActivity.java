@@ -69,7 +69,7 @@ public class MainSettingActivity extends BaseActivity {
                 startActivity(new Intent(MainSettingActivity.this, ChangePwdActivity.class));
                 break;
             case R.id.mLLConnectServer:
-                MobclickAgent.onEvent(this, "14002");
+              /*  MobclickAgent.onEvent(this, "14002");
                 DialogUtils.showSelectServer(this, App.getApp().getOtaServerUrl(),new DialogUtils.ButtonClickListenter() {
 
                     @Override
@@ -88,7 +88,7 @@ public class MainSettingActivity extends BaseActivity {
                     public void cancelClick() {
 
                     }
-                });
+                });*/
                 break;
             case R.id.mLLLogout:
                 MobclickAgent.onEvent(this, "14003");

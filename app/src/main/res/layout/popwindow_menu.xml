@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:id="@+id/mLLMenuContainer"
-        android:layout_width="138dp"
+        android:layout_width="185dp"
         android:elevation="3dp"
         android:layout_alignParentRight="true"
         android:layout_height="wrap_content"

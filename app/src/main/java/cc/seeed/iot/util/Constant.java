@@ -44,6 +44,7 @@ public class Constant {
     public final static String SP_SERVER_URL = "sp_server_url";
     public final static String SP_SERVER_IP = "sp_server_ip";
     public final static String SP_USER_EMAIL = "sp_user_email";
+    public final static String SP_HISTORY_IP = "sp_history_ip";
     public final static String APP_FIRST_START = "app_first_start";//app first start
 
 

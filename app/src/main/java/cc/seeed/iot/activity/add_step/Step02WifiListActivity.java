@@ -74,6 +74,7 @@ public class Step02WifiListActivity extends BaseActivity
     private ConfigUdpSocket udpClient;
     private Animation animation;
     private ProgressDialog dialog;
+    private boolean isChangeWifi = false;
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
@@ -95,6 +96,7 @@ public class Step02WifiListActivity extends BaseActivity
         setContentView(R.layout.wifi_list);
         ButterKnife.inject(this);
         mProgressBar.setVisibility(View.GONE);
+//        mProgressBar.setMax(30);
 
         initToolBar();
         initData();
@@ -126,6 +128,7 @@ public class Step02WifiListActivity extends BaseActivity
         board = intent.getStringExtra(Step04ApConnectActivity.Intent_Board);
         node_sn = intent.getStringExtra(Step04ApConnectActivity.Intent_NodeSn);
         node_key = intent.getStringExtra(Step04ApConnectActivity.Intent_NodeKey);
+        isChangeWifi = intent.getBooleanExtra(Step04ApConnectActivity.Intent_ChangeWifi,false);
 
         IntentFilter actionFilter = new IntentFilter(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
         registerReceiver(wifiActionReceiver, actionFilter);
@@ -263,6 +266,7 @@ public class Step02WifiListActivity extends BaseActivity
 
     private void gotoStep03() {
         Intent intent = new Intent(Step02WifiListActivity.this, Step03WifiWioListActivity.class);
+        intent.putExtra(Step04ApConnectActivity.Intent_ChangeWifi, isChangeWifi);
         intent.putExtra(Step04ApConnectActivity.Intent_Ssid, scanResult.SSID);
         intent.putExtra(Step04ApConnectActivity.Intent_Board, board);
         intent.putExtra(Step04ApConnectActivity.Intent_NodeKey, node_key);

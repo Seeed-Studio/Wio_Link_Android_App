@@ -24,7 +24,7 @@ public class FontButton extends Button {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CusFontButton);
         String fontType = a.getString(R.styleable.CusFontButton_cusButtonFont);
         if (!TextUtils.isEmpty(fontType)){
-            Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontType + ".ttf");
+            Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontType);
             this.setTypeface(typeFace);
         }
     }

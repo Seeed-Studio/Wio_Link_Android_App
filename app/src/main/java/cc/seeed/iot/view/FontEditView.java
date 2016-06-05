@@ -23,7 +23,7 @@ public class FontEditView extends EditText {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CusFontEditView);
         String fontType = a.getString(R.styleable.CusFontEditView_cusEditFont);
         if (!TextUtils.isEmpty(fontType)){
-            Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontType + ".ttf");
+            Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontType);
             this.setTypeface(typeFace);
         }
     }

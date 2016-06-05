@@ -13,7 +13,7 @@
 
     <RelativeLayout
         android:layout_width="120dp"
-        android:elevation="3dp"
+        android:elevation="5dp"
         android:layout_height="162dp">
 
         <ImageView
@@ -32,7 +32,7 @@
             android:ellipsize="end"
             android:textColor="#3A4271"
             android:textSize="11sp"
-            app:cusTextFont="@string/Roboto_Regular"
+            app:cusTextFont="@string/Proxima_Nova_Regular"
             android:layout_alignParentBottom="true"
             android:gravity="center"/>
     </RelativeLayout>

@@ -1,19 +1,12 @@
 package cc.seeed.iot.logic;
 
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Message;
-import android.preference.EditTextPreference;
-import android.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
-import java.util.List;
-
 import cc.seeed.iot.R;
-import cc.seeed.iot.activity.SetupIotLinkActivity;
 import cc.seeed.iot.entity.DialogBean;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.mgr.UiObserverManager;
@@ -22,8 +15,6 @@ import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.GroveDriverListResponse;
-import cc.seeed.iot.webapi.model.GroverDriver;
 import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.OtaStatusResponse;

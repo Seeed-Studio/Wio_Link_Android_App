@@ -24,7 +24,7 @@ public class FontTextView extends TextView {
         String fontType = a.getString(R.styleable.CusFontTextView_cusTextFont);
         if (!TextUtils.isEmpty(fontType)) {
             try {
-                Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontType + ".ttf");
+                Typeface typeFace = Typeface.createFromAsset(context.getAssets(), "fonts/" + fontType);
                 this.setTypeface(typeFace);
             }catch (Exception e){
                 e.printStackTrace();

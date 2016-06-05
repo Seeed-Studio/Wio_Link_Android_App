@@ -33,11 +33,13 @@ import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.SelectServerActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.adapter.LoginAndRegistAdapter;
 import cc.seeed.iot.fragment.LoginFragment;
 import cc.seeed.iot.fragment.RegistFragment;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.OtherPlatformUtils;
 import cc.seeed.iot.util.ToolUtil;
@@ -67,6 +69,8 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     FontTextView mTvSelectServer;
     @InjectView(R.id.mLLOrtherLogin)
     LinearLayout mLLOrtherLogin;
+    @InjectView(R.id.mRlSelectServer)
+    RelativeLayout mRlSelectServer;
 
     private List<Fragment> mFList;
     private LoginAndRegistAdapter mAdapter;
@@ -88,6 +92,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     }
 
     private void initData() {
+
         callbackManager = CallbackManager.Factory.create();
         mMainPager.setOffscreenPageLimit(2);
         mFList = new ArrayList<Fragment>();
@@ -129,6 +134,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         mGoogleApiClient.connect();*/
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
@@ -150,16 +156,24 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     @Override
     protected void onResume() {
         super.onResume();
+        String serverUrl = App.getApp().getOtaServerUrl();
+        if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)) {
+            mTvSelectServer.setText(getString(R.string.server_chinese));
+        } else if (CommonUrl.OTA_INTERNATIONAL_URL.equals(serverUrl)) {
+            mTvSelectServer.setText(getString(R.string.server_global));
+        } else {
+            mTvSelectServer.setText(getString(R.string.server_customize));
+        }
     }
 
-    @OnClick({R.id.mTvSelectServer, R.id.mRlLogin, R.id.mRlRegist, R.id.mRlGoogle, R.id.mRlFacebook})
+    @OnClick({R.id.mTvSelectServer, R.id.mRlLogin, R.id.mRlRegist, R.id.mRlGoogle, R.id.mRlFacebook, R.id.mRlSelectServer})
     public void onClick(View view) {
         seleted(view.getId());
         mMainPager.setCurrentItem(mSelectTab, false);
         switch (view.getId()) {
             case R.id.mTvSelectServer:
-                MobclickAgent.onEvent(this, "10005");
-                DialogUtils.showSelectServer(LoginAndRegistActivity.this,App.getApp().getOtaServerUrl(), new DialogUtils.ButtonClickListenter() {
+              /*  MobclickAgent.onEvent(this, "10005");
+                DialogUtils.showSelectServer(LoginAndRegistActivity.this, App.getApp().getOtaServerUrl(), new DialogUtils.ButtonClickListenter() {
                     @Override
                     public void okClick(String url, String ip) {
                         App.getApp().saveUrlAndIp(url, ip);
@@ -169,7 +183,8 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                     public void cancelClick() {
 
                     }
-                });
+                });*/
+                startActivity(new Intent(LoginAndRegistActivity.this, SelectServerActivity.class));
                 break;
             case R.id.mRlGoogle:
                 //  App.showToastShrot("G+");
@@ -183,7 +198,10 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                     return;
                 }
                 OtherPlatformUtils.getFacebookInfo(this, callbackManager, OtherPlatformUtils.LoginWithFacebook);
-            //    dialog = DialogUtils.showProgressDialog(LoginAndRegistActivity.this, getString(R.string.loading_login));
+                //    dialog = DialogUtils.showProgressDialog(LoginAndRegistActivity.this, getString(R.string.loading_login));
+                break;
+            case R.id.mRlSelectServer:
+                startActivity(new Intent(LoginAndRegistActivity.this, SelectServerActivity.class));
                 break;
         }
     }
@@ -290,7 +308,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            android.os.Process.killProcess(Process.myPid());
+            Process.killProcess(Process.myPid());
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -354,4 +372,5 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     public void onConnectionFailed(ConnectionResult connectionResult) {
         App.showToastShrot(connectionResult.toString());
     }
+
 }

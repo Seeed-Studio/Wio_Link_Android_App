@@ -42,7 +42,7 @@
                 android:text="Wio Link"
                 android:textColor="#A6000000"
                 android:textSize="18sp"
-                app:cusTextFont="@string/Roboto_Medium" />
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                     android:text="CONNECTED"
                     android:textColor="#FF9B9B9B"
                     android:textSize="10sp"
-                    app:cusTextFont="@string/Roboto_Medium" />
+                    app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
                 <cc.seeed.iot.view.FontTextView
                     android:id="@+id/mTvConnectedNum"
@@ -70,7 +70,7 @@
                     android:text="3"
                     android:textColor="#A6000000"
                     android:textSize="10sp"
-                    app:cusTextFont="@string/Roboto_Medium" />
+                    app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
                 <cc.seeed.iot.view.FontTextView
                     android:id="@+id/mTvState"
@@ -82,7 +82,7 @@
                     android:text="ONLINE"
                     android:textColor="#FFFFFFFF"
                     android:textSize="10sp"
-                    app:cusTextFont="@string/Roboto_Medium" />
+                    app:cusTextFont="@string/Proxima_Nova_Semibold" />
             </LinearLayout>
 
             <LinearLayout
@@ -142,7 +142,7 @@
                         android:text="+2"
                         android:textColor="#FFFFFFFF"
                         android:textSize="14sp"
-                        app:cusTextFont="@string/Roboto_Regular" />
+                        app:cusTextFont="@string/Proxima_Nova_Regular" />
                 </RelativeLayout>
             </LinearLayout>
         </LinearLayout>

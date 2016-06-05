@@ -18,7 +18,7 @@
         android:text="Use Comstumer Server"
         android:textColor="#A6000000"
         android:textSize="20sp"
-        app:cusTextFont="@string/Roboto_Medium" />
+        app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
     <cc.seeed.iot.view.FontTextView
         android:id="@+id/mTvDesc"
@@ -31,7 +31,7 @@
 Alternivetely, you can choose our default server which justhas been optimized."
         android:textColor="#777777"
         android:textSize="12sp"
-        app:cusTextFont="@string/Roboto_Regular" />
+        app:cusTextFont="@string/Proxima_Nova_Regular" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -55,7 +55,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
             android:text="Default Server"
             android:textColor="#333333"
             android:textSize="20sp"
-            app:cusTextFont="@string/Roboto_Regular" />
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
 
     </LinearLayout>
 
@@ -79,7 +79,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
             android:layout_height="45dp">
 
             <cc.seeed.iot.view.FontEditView
-                android:id="@+id/mTvCustomServer"
+                android:id="@+id/mEtCustomServer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -87,7 +87,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
                 android:hint="Customize Server"
                 android:textColor="#9B9B9B"
                 android:textSize="20sp"
-                app:cusEditFont="@string/Roboto_Regular" />
+                app:cusEditFont="@string/Proxima_Nova_Regular" />
 
             <View
                 android:id="@+id/mCustomServer"
@@ -137,7 +137,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
                 android:text="CANCEL"
                 android:textColor="#C7C7C7"
                 android:textSize="14sp"
-                app:cusTextFont="@string/Roboto_Medium" />
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
             <cc.seeed.iot.view.FontTextView
                 android:id="@+id/mTvSubmit"
@@ -149,7 +149,7 @@ Alternivetely, you can choose our default server which justhas been optimized."
                 android:text="SUBMIT"
                 android:textColor="#4A4A4A"
                 android:textSize="14sp"
-                app:cusTextFont="@string/Roboto_Medium" />
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
         </LinearLayout>
 

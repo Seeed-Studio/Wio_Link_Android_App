@@ -6,8 +6,10 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Message;
 import android.os.Process;
@@ -29,6 +31,7 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.List;
 import java.util.Random;
 
@@ -45,9 +48,9 @@ import cc.seeed.iot.view.FontTextView;
  * description:
  */
 public class DialogUtils {
-    private static void hideKeyboard(Context context,View view) {
-        InputMethodManager inputManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(view.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+    private static void hideKeyboard(Context context, View view) {
+        InputMethodManager inputManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
 
@@ -74,9 +77,10 @@ public class DialogUtils {
         builder.show();
     }
 
-  static   boolean isShow = false;
+    static boolean isShow = false;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public static Dialog showSelectServer(final Activity context,String serverUrl, final ButtonClickListenter listenter) {
+    public static Dialog showSelectServer(final Activity context, String serverUrl, final ButtonClickListenter listenter) {
 
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_select_server, null);
@@ -85,27 +89,27 @@ public class DialogUtils {
         final RadioButton mRbDefaultServer = (RadioButton) view.findViewById(R.id.mRbDefaultServer);
         final FontTextView mTvDefaultServer = (FontTextView) view.findViewById(R.id.mTvDefaultServer);
         final RadioButton mRbCustomServer = (RadioButton) view.findViewById(R.id.mRbCustomServer);
-        final FontEditView mTvCustomServer = (FontEditView) view.findViewById(R.id.mTvCustomServer);
+        final FontEditView mEtCustomServer = (FontEditView) view.findViewById(R.id.mEtCustomServer);
         final View mCustomServer = (View) view.findViewById(R.id.mCustomServer);
-         final RelativeLayout mRlHelp = (RelativeLayout) view.findViewById(R.id.mRlHelp);
+        final RelativeLayout mRlHelp = (RelativeLayout) view.findViewById(R.id.mRlHelp);
         FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
         FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
 
-        if (serverUrl == null){
+        if (serverUrl == null) {
             serverUrl = "";
         }
         // final String serverUrl = App.getSp().getString(Constant.SP_SERVER_URL, "");
         if (CommonUrl.OTA_SERVER_URL.equals(serverUrl)) {
             mRbDefaultServer.setChecked(true);
             mRbCustomServer.setChecked(false);
-            mTvCustomServer.setEnabled(false);
+            mEtCustomServer.setEnabled(false);
             mRlHelp.setVisibility(View.GONE);
         } else {
             mRbDefaultServer.setChecked(false);
             mRbCustomServer.setChecked(true);
-            mTvCustomServer.setEnabled(true);
-            mTvCustomServer.setText(serverUrl);
-            mTvCustomServer.setSelection(serverUrl.length());
+            mEtCustomServer.setEnabled(true);
+            mEtCustomServer.setText(serverUrl);
+            mEtCustomServer.setSelection(serverUrl.length());
             mRlHelp.setVisibility(View.VISIBLE);
         }
 
@@ -113,17 +117,17 @@ public class DialogUtils {
             @Override
             public void onClick(View v) {
                 isShow = false;
-                mTvCustomServer.setError(null);
+                mEtCustomServer.setError(null);
             }
         });
 
         mRlHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isShow){
-                    mTvCustomServer.setError(null);
-                }else {
-                    mTvCustomServer.setError(context.getResources().getString(R.string.website_format_hint),context.getDrawable(R.mipmap.edit_help));
+                if (isShow) {
+                    mEtCustomServer.setError(null);
+                } else {
+                    mEtCustomServer.setError(context.getResources().getString(R.string.website_format_hint), context.getDrawable(R.mipmap.edit_help));
                 }
                 isShow = !isShow;
             }
@@ -133,10 +137,10 @@ public class DialogUtils {
             public void onClick(View v) {
                 mRbCustomServer.setChecked(false);
                 mRbDefaultServer.setChecked(true);
-                mTvCustomServer.setEnabled(false);
+                mEtCustomServer.setEnabled(false);
                 mCustomServer.setVisibility(View.VISIBLE);
                 mRlHelp.setVisibility(View.GONE);
-                mTvCustomServer.setError(null);
+                mEtCustomServer.setError(null);
             }
         });
 
@@ -146,7 +150,7 @@ public class DialogUtils {
                 mCustomServer.setVisibility(View.GONE);
                 mRbDefaultServer.setChecked(false);
                 mRbCustomServer.setChecked(true);
-                mTvCustomServer.setEnabled(true);
+                mEtCustomServer.setEnabled(true);
                 mRlHelp.setVisibility(View.VISIBLE);
             }
         });
@@ -156,9 +160,9 @@ public class DialogUtils {
             public void onClick(View v) {
                 mCustomServer.setVisibility(View.VISIBLE);
                 mRbCustomServer.setChecked(false);
-                mTvCustomServer.setEnabled(false);
+                mEtCustomServer.setEnabled(false);
                 mRlHelp.setVisibility(View.GONE);
-                mTvCustomServer.setError(null);
+                mEtCustomServer.setError(null);
             }
         });
         mRbCustomServer.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +170,7 @@ public class DialogUtils {
             public void onClick(View v) {
                 mCustomServer.setVisibility(View.GONE);
                 mRbDefaultServer.setChecked(false);
-                mTvCustomServer.setEnabled(true);
+                mEtCustomServer.setEnabled(true);
                 mRlHelp.setVisibility(View.VISIBLE);
             }
         });
@@ -175,15 +179,15 @@ public class DialogUtils {
             @Override
             public void onClick(View v) {
                 if (mRbCustomServer.isChecked()) {
-                    String url = mTvCustomServer.getText().toString().trim();
+                    String url = mEtCustomServer.getText().toString().trim();
                     if (!RegularUtils.isWebsite(url)) {
                         //  App.showToastShrot(context.getString(R.string.website_format_error));
-                        mTvCustomServer.setError(context.getResources().getString(R.string.website_format_hint),context.getDrawable(R.mipmap.edit_help));
+                        mEtCustomServer.setError(context.getResources().getString(R.string.website_format_hint), context.getDrawable(R.mipmap.edit_help));
                         return;
                     }
-                    getIpAddress(context, dialog, url, mTvCustomServer, listenter);
+                    getIpAddress(context, dialog, url, mEtCustomServer, listenter);
                 } else {
-                    getIpAddress(context, dialog, CommonUrl.OTA_SERVER_URL, mTvCustomServer, listenter);
+                    getIpAddress(context, dialog, CommonUrl.OTA_SERVER_URL, mEtCustomServer, listenter);
                 }
             }
         });
@@ -233,7 +237,7 @@ public class DialogUtils {
                     progressDialog.dismiss();
                 }
                 if (editText != null) {
-                    editText.setError(error,context.getDrawable(R.mipmap.edit_help));
+                    editText.setError(error, context.getDrawable(R.mipmap.edit_help));
                 }
             }
         });
@@ -249,7 +253,7 @@ public class DialogUtils {
     }
 
 
-    public static Dialog showEditOneRowDialog(final Context context,String title, final ButtonEditClickListenter listenter) {
+    public static Dialog showEditOneRowDialog(final Context context, String title, final ButtonEditClickListenter listenter) {
 
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_wifi_pwd, null);
@@ -258,15 +262,15 @@ public class DialogUtils {
         FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
         FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
 
-        if (!TextUtils.isEmpty(title)){
+        if (!TextUtils.isEmpty(title)) {
             mTvTitle.setText(title);
         }
         mTvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listenter != null) {
-                    listenter.okClick(dialog,mEtPwd.getText().toString().trim());
-                    hideKeyboard(context,mEtPwd);
+                    listenter.okClick(dialog, mEtPwd.getText().toString().trim());
+                    hideKeyboard(context, mEtPwd);
                 }
             }
         });
@@ -275,7 +279,7 @@ public class DialogUtils {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-                hideKeyboard(context,mEtPwd);
+                hideKeyboard(context, mEtPwd);
             }
         });
 
@@ -286,12 +290,13 @@ public class DialogUtils {
     }
 
     public interface ButtonEditClickListenter {
-        void okClick(Dialog dialog,String content);
+        void okClick(Dialog dialog, String content);
     }
 
     public static Dialog showEditNodeNameDialog(Context context, final String defaultName, final ButtonEditClickListenter listenter) {
 
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_node_name, null);
 
@@ -307,10 +312,10 @@ public class DialogUtils {
 
                 if (listenter != null) {
                     String name = mEtName.getText().toString().trim();
-                    if (TextUtils.isEmpty(name)){
-                        name  = defaultName;
+                    if (TextUtils.isEmpty(name)) {
+                        name = defaultName;
                     }
-                    listenter.okClick(dialog,name);
+                    listenter.okClick(dialog, name);
                 }
             }
         });
@@ -341,11 +346,11 @@ public class DialogUtils {
             View mDivider = itemView.findViewById(R.id.mDivider);
 
             mTVItem.setText(list.get(i));
-            if (i == 0 && list.size() == 1){
+            if (i == 0 && list.size() == 1) {
                 mDivider.setVisibility(View.GONE);
-            }else if (i == list.size()-1){
+            } else if (i == list.size() - 1) {
                 mDivider.setVisibility(View.GONE);
-            }else {
+            } else {
                 mDivider.setVisibility(View.VISIBLE);
             }
 
@@ -362,7 +367,7 @@ public class DialogUtils {
             mLLMenuContainer.addView(itemView);
         }
 
-      //  mLLMenuContainer.setBackgroundResource(R.drawable.withe_shadow_bg);
+        //  mLLMenuContainer.setBackgroundResource(R.drawable.withe_shadow_bg);
 
         popWindow.setFocusable(true);
         popWindow.setOutsideTouchable(true);
@@ -372,11 +377,11 @@ public class DialogUtils {
         popWindow.showAsDropDown(targetView);
     }
 
-    public interface OnMenuItemChickListener{
-        void chickItem(View v,int position);
+    public interface OnMenuItemChickListener {
+        void chickItem(View v, int position);
     }
 
-    public static Dialog showErrorDialog(Context context,String title,String okName,String cancelName,String content, final OnErrorButtonClickListenter listenter){
+    public static Dialog showErrorDialog(Context context, String title, String okName, String cancelName, String content, final OnErrorButtonClickListenter listenter) {
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         dialog.setCanceledOnTouchOutside(false);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_show_error, null);
@@ -385,26 +390,26 @@ public class DialogUtils {
         FontTextView mTvCancel = (FontTextView) view.findViewById(R.id.mTvCancel);
         FontTextView mTvSubmit = (FontTextView) view.findViewById(R.id.mTvSubmit);
 
-        if (!TextUtils.isEmpty(title)){
+        if (!TextUtils.isEmpty(title)) {
             dialog.setTitle(title);
-        }else {
+        } else {
             mTvTitle.setVisibility(View.GONE);
         }
         if (!TextUtils.isEmpty(okName)) {
             mTvSubmit.setText(okName);
-        }else {
+        } else {
             mTvSubmit.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(cancelName)){
+        if (!TextUtils.isEmpty(cancelName)) {
             mTvCancel.setText(cancelName);
-        }else {
+        } else {
             mTvCancel.setVisibility(View.GONE);
         }
 
-        if (!TextUtils.isEmpty(content)){
+        if (!TextUtils.isEmpty(content)) {
             mTvDesc.setText(content);
-        }else {
+        } else {
             mTvDesc.setVisibility(View.GONE);
         }
 
@@ -431,7 +436,7 @@ public class DialogUtils {
         dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
             @Override
             public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_BACK ) {
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
                     return true;
                 } else {
                     return false;
@@ -446,6 +451,7 @@ public class DialogUtils {
 
     public interface OnErrorButtonClickListenter {
         void okClick();
+
         void cancelClick();
     }
 
@@ -466,8 +472,8 @@ public class DialogUtils {
             mGroveI2cListAdapter.setOnRemoveItemListener(new GroveI2cListRecyclerAdapter.OnRemoveItemListener() {
                 @Override
                 public void onRemoveItem(PinConfig pinConfig, int position, int totalPin) {
-                    if (listenter != null){
-                        listenter.onRemoveItem(dialog,pinConfig, position, totalPin);
+                    if (listenter != null) {
+                        listenter.onRemoveItem(dialog, pinConfig, position, totalPin);
                     }
                 }
             });
@@ -479,6 +485,22 @@ public class DialogUtils {
     }
 
     public interface OnItemRemoveClickListenter {
-        void onRemoveItem( Dialog dialog,PinConfig pinConfig, int position, int totalPin);
+        void onRemoveItem(Dialog dialog, PinConfig pinConfig, int position, int totalPin);
+    }
+
+    /**
+     * 分享功能
+     * @param context       上下文
+     * @param activityTitle Activity的名字
+     * @param msgTitle      消息标题
+     * @param msgText       消息内容
+     */
+    public static void showShare(Context context, String activityTitle, String msgTitle, String msgText) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain"); // 纯文本
+        intent.putExtra(Intent.EXTRA_SUBJECT, msgTitle);
+        intent.putExtra(Intent.EXTRA_TEXT, msgText);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(Intent.createChooser(intent, activityTitle));
     }
 }

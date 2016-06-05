@@ -218,12 +218,14 @@ public class ToolUtil {
             groveName = name.split("Grove-")[1];
         }else if (name.startsWith("Grove - ")){
             groveName = name.split("Grove - ")[1];
-        }else if (name.startsWith("Generic ")){
+        }/*else if (name.startsWith("Generic ")){
             groveName = name.split("Generic ")[1];
-        }else {
+        }*/else {
             groveName = name;
         }
 
         return groveName;
     }
+
+
 }

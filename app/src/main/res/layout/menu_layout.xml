@@ -40,7 +40,7 @@
                 android:text="awong1900@163.com"
                 android:textColor="#ffffff"
                 android:textSize="12sp"
-                app:cusTextFont="@string/Roboto_Regular" />
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
 
             <cc.seeed.iot.view.FontTextView
                 android:id="@+id/mTvDeviceNum"
@@ -51,7 +51,7 @@
                 android:text="3 DEVICES"
                 android:textColor="#7dffffff"
                 android:textSize="14sp"
-                app:cusTextFont="@string/Roboto_Medium" />
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
         </LinearLayout>
 
         <TextView
@@ -63,14 +63,12 @@
         <TextView
             android:id="@+id/mTvFAQ"
             style="@style/menuItemStyle"
-            android:visibility="gone"
             android:text="FAQ" />
 
 
         <TextView
             android:id="@+id/mTvGetDevices"
             style="@style/menuItemStyle"
-            android:visibility="gone"
             android:text="Get Devices" />
 
         <View

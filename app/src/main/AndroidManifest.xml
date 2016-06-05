@@ -35,10 +35,21 @@
         <activity
             android:name="cc.seeed.iot.ui_main.MainScreenActivity"
             android:theme="@style/DrawTheme" />
-        <activity android:name=".activity.SetupIotLinkActivity" />
-        <activity android:name=".activity.SetupDeviceActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".activity.SetupIotNodeActivity" />
+        <activity android:name=".reserve_file.SetupIotLinkActivity" />
+        <activity
+            android:name=".activity.SetupDeviceActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".reserve_file.SetupIotNodeActivity" />
+        <activity
+            android:name=".activity.GroveDetailActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.HelpActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.SelectServerActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.user.ResetPwd01Activity"
             android:launchMode="singleTop"
@@ -50,16 +61,17 @@
             android:name=".activity.user.ResetPwd03Activity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name=".activity.add_step.Step01GoReadyActivity" />
-        <activity android:name=".activity.add_step.Step03WifiWioListActivity"
-            />
-        <activity android:name=".activity.add_step.Step02WifiListActivity"
-            android:windowSoftInputMode="stateHidden|adjustPan"/>
+        <activity android:name=".activity.add_step.Step03WifiWioListActivity" />
+        <activity
+            android:name=".activity.add_step.Step02WifiListActivity"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
-        <activity android:name="cc.seeed.iot.ui_main.GrovesActivity" />
-        <activity android:name="cc.seeed.iot.ui_main.NodeApiActivity" />
+        <activity android:name=".activity.GrovesActivity" />
+        <activity android:name=".ui_main.WebActivity" />
         <activity android:name=".activity.NodeSettingActivity" />
         <activity android:name="cc.seeed.iot.ui_main.MainSettingActivity" />
-        <activity android:name="cc.seeed.iot.activity.TestActivity" />
+        <activity android:name="cc.seeed.iot.activity.TestActivity"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".activity.user.LoginAndRegistActivity"
             android:launchMode="singleTask"

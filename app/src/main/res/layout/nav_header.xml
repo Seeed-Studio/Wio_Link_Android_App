@@ -28,14 +28,14 @@
         android:text="awong1900@163.com"
         android:textColor="#ffffff"
         android:textSize="12sp"
-        app:cusTextFont="@string/Roboto_Regular" />
+        app:cusTextFont="@string/Proxima_Nova_Regular" />
 
     <cc.seeed.iot.view.FontTextView
         android:id="@+id/mTvDeviceNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        app:cusTextFont="@string/Roboto_Medium"
+        app:cusTextFont="@string/Proxima_Nova_Semibold"
         android:singleLine="true"
         android:text="3 DEVICES"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"

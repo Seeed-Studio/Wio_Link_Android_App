@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,12 +20,15 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.HelpActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.Constant;
+import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.webapi.IotApi;
 import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.Node;
 import cc.seeed.iot.webapi.model.NodeResponse;
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -34,12 +39,16 @@ public class Step01GoReadyActivity extends BaseActivity {
     Toolbar mToolbar;
     @InjectView(R.id.mIvCourse)
     ImageView mIvCourse;
+    @InjectView(R.id.mIvHelp)
+    ImageView mIvHelp;
     @InjectView(R.id.mBtnGo)
     Button mBtnGo;
 
     private String board;
     private String node_sn;
     private String node_key;
+
+    Node node;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,17 +70,30 @@ public class Step01GoReadyActivity extends BaseActivity {
     }
 
     private void initData() {
-        this.board = getIntent().getStringExtra("board");
-
+        node_sn = getIntent().getStringExtra(Step04ApConnectActivity.Intent_NodeSn);
+        if (TextUtils.isEmpty(node_sn)) {
+            this.board = getIntent().getStringExtra("board");
+        } else {
+            node = DBHelper.getNodes(node_sn).get(0);
+            board = node.board;
+        }
         switch (board) {
             default:
             case Constant.WIO_LINK_V1_0:
                 mIvCourse.setImageResource(R.mipmap.link_config);
-                getSupportActionBar().setTitle(R.string.add_device_step01_link_title);
+                if (node != null){
+                    getSupportActionBar().setTitle(R.string.add_device_step01_change_wifi);
+                }else {
+                    getSupportActionBar().setTitle(R.string.add_device_step01_link_title);
+                }
                 break;
             case Constant.WIO_NODE_V1_0:
                 mIvCourse.setImageResource(R.mipmap.node_config);
-                getSupportActionBar().setTitle(R.string.add_device_step01_node_title);
+                if (node != null){
+                    getSupportActionBar().setTitle(R.string.add_device_step01_change_wifi);
+                }else {
+                    getSupportActionBar().setTitle(R.string.add_device_step01_node_title);
+                }
                 break;
         }
 
@@ -93,8 +115,8 @@ public class Step01GoReadyActivity extends BaseActivity {
         super.onBackPressed();
     }
 
-    private void attemptLogin(final String node_name, final String board) {
-        final ProgressDialog mProgressBar = new ProgressDialog(this);
+    private void creatDevice(final String node_name, final String board) {
+        final ProgressDialog mProgressBar = DialogUtils.showProgressDialog(this,"");
 
         mProgressBar.setMessage(getString(R.string.add_device_step01_progress_connect_server));
         mProgressBar.show();
@@ -124,17 +146,39 @@ public class Step01GoReadyActivity extends BaseActivity {
         );
     }
 
-    @OnClick(R.id.mBtnGo)
-    public void onClick() {
-        MobclickAgent.onEvent(this, "17001");
-        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        if (wifiManager.isWifiEnabled()){
-            attemptLogin("node000", board);
-            wifiManager.startScan();
-        }else {
-            DialogUtils.showErrorDialog(this,getString(R.string.add_device_step01_err_not_connect_wifi),getString(R.string.dialog_btn_OK),"",getString(R.string.link_to_wifi),null);
+    @OnClick({R.id.mBtnGo,R.id.mIvHelp})
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.mBtnGo:
+                MobclickAgent.onEvent(this, "17001");
+                WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                if (wifiManager.isWifiEnabled()) {
+                    if (node != null) {
+                        startWifiList();
+                    } else {
+                        creatDevice("node000", board);
+                    }
+                    wifiManager.startScan();
+                } else {
+                    DialogUtils.showErrorDialog(this, getString(R.string.add_device_step01_err_not_connect_wifi), getString(R.string.dialog_btn_OK), "", getString(R.string.link_to_wifi), null);
+                }
+                break;
+
+            case R.id.mIvHelp:
+                Intent intent = new Intent(Step01GoReadyActivity.this, HelpActivity.class);
+                startActivity(intent);
+                break;
         }
 
+    }
+
+    private void startWifiList() {
+        Intent intent = new Intent(Step01GoReadyActivity.this, Step02WifiListActivity.class);
+        intent.putExtra(Step04ApConnectActivity.Intent_ChangeWifi, true);
+        intent.putExtra(Step04ApConnectActivity.Intent_Board, node.board);
+        intent.putExtra(Step04ApConnectActivity.Intent_NodeKey, node.node_key);
+        intent.putExtra(Step04ApConnectActivity.Intent_NodeSn, node.node_sn);
+        startActivity(intent);
     }
 
 

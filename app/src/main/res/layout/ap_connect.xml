@@ -14,13 +14,22 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/ProgressBar_Mini"
+        android:layout_width="match_parent"
+        android:layout_below="@id/toolbar"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0" />
+
     <ImageView
         android:id="@+id/mIvLoading"
         android:layout_width="57dp"
         android:layout_height="59.85dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="170dp"
-        android:src="@mipmap/uploading" />
+        android:src="@mipmap/uploading_blue" />
 
     <cc.seeed.iot.view.FontTextView
         android:id="@+id/mTvHint"
@@ -33,7 +42,7 @@
         android:text="We are almost there!\r\nThis process will take about a minute."
         android:textColor="#A6000000"
         android:textSize="14sp"
-        app:cusTextFont="@string/Roboto_Regular" />
+        app:cusTextFont="@string/Proxima_Nova_Regular" />
 
     <cc.seeed.iot.view.StepView
         android:id="@+id/mStepView"

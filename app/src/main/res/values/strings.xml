@@ -8,13 +8,10 @@
     <string name="title_activity_main2">Main2Activity</string>
 
     <!-- 字体-->
-    <string name="Roboto_Thin">Roboto-Thin</string>
-    <string name="Roboto_Bold">Roboto-Bold</string>
-    <string name="Roboto_Italic">Roboto-Italic</string>
-    <string name="Roboto_Light">Roboto-Light</string>
-    <string name="Roboto_LightItalic">Roboto-LightItalic</string>
-    <string name="Roboto_Regular">Roboto-Regular</string>
-    <string name="Roboto_Medium">Roboto-Medium</string>
+    <string name="Proxima_Nova_Bold">Proxima_Nova_Bold.otf</string>
+    <string name="Proxima_Nova_Light">Proxima_Nova_Light.otf</string>
+    <string name="Proxima_Nova_Regular">Proxima_Nova_Regular.otf</string>
+    <string name="Proxima_Nova_Semibold">Proxima_Nova_Semibold.otf</string>
 
     <!-- common-->
     <string name="ok">OK</string>
@@ -31,6 +28,9 @@
     <string name="dialog_btn_OK">OK</string>
     <string name="dialog_btn_Cancel">CANCEL</string>
     <string name="dialog_btn_FAQ">FAQ</string>
+    <string name="server_global">Global</string>
+    <string name="server_chinese">Chinese</string>
+    <string name="server_customize">Customize</string>
 
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
@@ -171,9 +171,15 @@
     <!-- add device step 01-->
     <string name="add_device_step01_link_title">Setup Your Wio Link</string>
     <string name="add_device_step01_node_title">Setup Your Wio Node</string>
+    <string name="add_device_step01_change_wifi">Change Wi-Fi Networks</string>
     <string name="add_device_step01_progress_connect_server">connect server...</string>
     <string name="add_device_step01_err_not_connect_wifi">You are not connected to Wifi</string>
 
     <!-- add device step 02-->
     <string name="title_wifi_list_activity">Connect to Wi-Fi Network</string>
+
+
+    <string name="grove_detail">Detail</string>
+    <string name="help_toolbar">Support</string>
+    <string name="choose_server_toolbar">Choose a Server</string>
 </resources>

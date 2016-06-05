@@ -37,7 +37,7 @@
                 android:textColor="#000000"
                 android:textColorHint="#FFC7C7C7"
                 android:textSize="14sp"
-                app:cusEditFont="@string/Roboto_Regular" />
+                app:cusEditFont="@string/Proxima_Nova_Regular" />
 
             <cc.seeed.iot.view.FontEditView
                 android:id="@+id/mEtRePwd"
@@ -50,7 +50,7 @@
                 android:textColor="#000000"
                 android:textColorHint="#FFC7C7C7"
                 android:textSize="14sp"
-                app:cusEditFont="@string/Roboto_Regular" />
+                app:cusEditFont="@string/Proxima_Nova_Regular" />
 
             <cc.seeed.iot.view.FontButton
                 android:id="@+id/mBtnSubmit"
@@ -62,7 +62,7 @@
                 android:text="SUBMIT"
                 android:textColor="@color/white"
                 android:textSize="14sp"
-                app:cusButtonFont="@string/Roboto_Medium" />
+                app:cusButtonFont="@string/Proxima_Nova_Semibold" />
 
             <View
                 android:layout_width="match_parent"

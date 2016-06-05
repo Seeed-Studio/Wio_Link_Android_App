@@ -110,7 +110,7 @@
                     android:layout_width="12dp"
                     android:layout_height="12dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/offline_led" />
+                    android:src="@mipmap/offline_led" />
 
                 <TextView
                     android:id="@+id/online"

@@ -62,7 +62,7 @@ public class ResetPwd01Activity extends BaseActivity {
             mEtEmail.requestFocus();
             return;
         }
-        dialog = DialogUtils.showProgressDialog(this, getString(R.string.reset_pwd_email));
+        dialog = DialogUtils.showProgressDialog(this, "");
         App.getSp().edit().putString(Constant.SP_USER_EMAIL, email).commit();
         UserLogic.getInstance().sendCheckCodeToEmail(email);
     }

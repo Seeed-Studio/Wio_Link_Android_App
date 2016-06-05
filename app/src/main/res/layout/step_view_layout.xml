@@ -51,7 +51,7 @@
             android:layout_marginTop="5.6dp"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp"
-            app:cusTextFont="@string/Roboto_Regular" />
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
 
     </LinearLayout>
 
@@ -78,7 +78,7 @@
             android:layout_marginTop="5.6dp"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp"
-            app:cusTextFont="@string/Roboto_Regular" />
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
 
     </LinearLayout>
 
@@ -106,7 +106,7 @@
             android:layout_marginTop="5.6dp"
             android:textColor="#FFFFFFFF"
             android:textSize="12sp"
-            app:cusTextFont="@string/Roboto_Regular" />
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
 
     </LinearLayout>
 

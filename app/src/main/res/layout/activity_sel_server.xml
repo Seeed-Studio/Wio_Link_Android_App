@@ -1,72 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:fitsSystemWindows="true">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingRight="24dp"
-        android:paddingTop="56dp">
+        android:elevation="5dp">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="72dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/logo_mini" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Server" />
-
-        <Spinner
-            android:id="@+id/spinner_server"
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="4dp" />
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-        <!--  Custom server Label -->
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout"
+        <LinearLayout
+            android:id="@+id/mLLSave"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="25dp"
+            android:gravity="center">
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textColor="#ADB0C3"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:visibility="gone">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/input_ip"
+            <cc.seeed.iot.view.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="22dp"
+                android:text="Wio recommend the fastest server for you, simply choose your own region and we will do the rest to optimize data exchange speed. \r\n\r\nBy using customized server, you will be running your data on your own server. "
+                android:textColor="#777777"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="26dp"
+                android:background="#E7E7E7" />
+
+            <LinearLayout
+                android:id="@+id/mLlGlobalServer"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/mRbGlobalServer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Global Server"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E7E7E7" />
+
+            <LinearLayout
+                android:id="@+id/mLlChineseServer"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/mRbChineseServer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Chinese Server"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E7E7E7" />
+
+            <LinearLayout
+                android:id="@+id/mLlCustomizeServer"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/mRbCustomizeServer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Customize Server"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Server Url"
-                android:singleLine="true"
-                android:text="https://" />
-        </android.support.design.widget.TextInputLayout>
+                android:layout_marginTop="-10dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btn_save"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginTop="24dp"
-            android:padding="12dp"
-            android:text="Save" />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible" />
 
-
-        <TextView
-            android:id="@+id/link_cancel"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:gravity="center"
-            android:text="Cancel"
-            android:textSize="16sp" />
-    </LinearLayout>
-</ScrollView>
+                <cc.seeed.iot.view.FontEditView
+                    android:id="@+id/mEtCustomServer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="22dp"
+                    android:hint="eg. https://wio.seeed.io or https://192.168.31.2"
+                    android:singleLine="true"
+                    android:textColor="#333333"
+                    android:textColorHint="#9B9B9B"
+                    android:textSize="13sp"
+                    app:cusEditFont="@string/Proxima_Nova_Regular" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

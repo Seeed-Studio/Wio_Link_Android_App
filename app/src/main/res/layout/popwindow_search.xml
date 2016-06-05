@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#A6000000"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/mRlAction"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffff">
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="#FF777777"
+            android:textSize="14sp"
+            app:cusTextFont="@string/Proxima_Nova_Bold" />
+
+        <RelativeLayout
+            android:id="@+id/mRlSearch"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="11dp"
+            android:layout_marginRight="12dp"
+            android:layout_toLeftOf="@id/mTvCancel"
+            android:background="@drawable/grove_search_bg">
+
+            <ImageView
+                android:id="@+id/mIvSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="18.5dp"
+                android:layout_marginRight="8.1dp"
+                android:src="@mipmap/search" />
+
+            <RelativeLayout
+                android:id="@+id/mRlClear"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/clear" />
+
+            </RelativeLayout>
+
+            <cc.seeed.iot.view.FontEditView
+                android:id="@+id/mEtSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/mIvSearch"
+                android:background="#00ffffff"
+                android:hint="Search"
+                android:layout_toLeftOf="@id/mRlClear"
+                android:singleLine="true"
+                android:textColor="#7A797B"
+                android:textColorHint="#FF7A797B"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="#E7E7E7" />
+
+    <ListView
+        android:id="@+id/mLvResult"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff"
+        android:divider="@null"
+        android:visibility="gone" />
+
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTvNoReault"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff"
+        android:gravity="center_horizontal"
+        android:paddingTop="96dp"
+        android:text="No result"
+        android:textColor="#7A797B"
+        android:textSize="14sp"
+        android:visibility="gone"
+        app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+</LinearLayout>

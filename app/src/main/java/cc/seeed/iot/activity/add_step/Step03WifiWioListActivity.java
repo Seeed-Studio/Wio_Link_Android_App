@@ -72,6 +72,7 @@ public class Step03WifiWioListActivity extends BaseActivity
 
     private String selected_ssid;
     private Boolean state_selected; //cause wifi broadcast up when wifi broadcast register
+    private boolean isChangeWifi = false;
 
     private long startTime = 0;
     private long endTime = 0;
@@ -111,7 +112,6 @@ public class Step03WifiWioListActivity extends BaseActivity
         } else {
             mTip.setVisibility(View.GONE);
         }
-        mWaitDialog = new ProgressDialog(this);
     }
 
     @Override
@@ -122,6 +122,7 @@ public class Step03WifiWioListActivity extends BaseActivity
         showProgress(true);
 
         Intent intent = getIntent();
+        isChangeWifi = intent.getBooleanExtra(Step04ApConnectActivity.Intent_ChangeWifi,false);
         board = intent.getStringExtra(Step04ApConnectActivity.Intent_Board);
         node_sn = intent.getStringExtra(Step04ApConnectActivity.Intent_NodeSn);
         node_key = intent.getStringExtra(Step04ApConnectActivity.Intent_NodeKey);
@@ -204,7 +205,7 @@ public class Step03WifiWioListActivity extends BaseActivity
 
         showProgress(false);
         if (selected_ssid.equals(getCurrentSsid()))
-            goWifiListActivity();
+            goStep04();
         else {
             wifiConnect(selected_ssid);
         }
@@ -230,7 +231,7 @@ public class Step03WifiWioListActivity extends BaseActivity
                 wifiManager.disconnect();
                 wifiManager.enableNetwork(i.networkId, true);
                 wifiManager.reconnect();
-
+                mWaitDialog = DialogUtils.showProgressDialog(this,"");
                 mWaitDialog.setMessage("Connecting to " + SSID + "...");
                 mWaitDialog.setCanceledOnTouchOutside(false);
                 mWaitDialog.show();
@@ -260,7 +261,7 @@ public class Step03WifiWioListActivity extends BaseActivity
                         mWaitDialog.dismiss();
                         state_selected = false;
                         reEnableAllAps(context);
-                        goWifiListActivity();
+                        goStep04();
                     }
                 }
             } else if (intent.getAction().equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
@@ -290,8 +291,9 @@ public class Step03WifiWioListActivity extends BaseActivity
         mWifiListAdapter.updateAll(getPionWifiList());
     }
 
-    private void goWifiListActivity() {
+    private void goStep04() {
         Intent intentActivity = new Intent(this, Step04ApConnectActivity.class);
+        intentActivity.putExtra(Step04ApConnectActivity.Intent_ChangeWifi, isChangeWifi);
         intentActivity.putExtra(Step04ApConnectActivity.Intent_Board, board);
         intentActivity.putExtra(Step04ApConnectActivity.Intent_NodeKey, node_key);
         intentActivity.putExtra(Step04ApConnectActivity.Intent_NodeSn, node_sn);
