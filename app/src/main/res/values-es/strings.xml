@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">Wio</string>
+
+    <string name="hello_world">Hola mundo!</string>
+    <string name="action_settings">Ajustes</string>
+    <string name="title_activity_main2">Actividad  Principal 2</string>
+
+    <!-- common-->
+    <string name="ok">Aceptar</string>
+    <string name="cancel">Cancelar</string>
+    <!--Setup Activity-->
+    <string name="title_section1">Seccion 1</string>
+    <string name="title_section2">Seccion 2</string>
+    <string name="title_section3">Seccion 3</string>
+    <string name="setup_signin">Ingresar</string>
+    <string name="setup_signup">Registrarse</string>
+    <string name="setup_switch_international">Cambiar a  Internacional</string>
+    <string name="setup_switch_china">Cambiar a China</string>
+    <string name="signin_email">Tu  Email</string>
+    <string name="signin_password">Contrase?a</string>
+    <string name="signin_forgot_password"><u>Olvid¨® su contrase?a?</u></string>
+    <string name="signup_email">Email</string>
+    <string name="signup_password">Contrase?a</string>
+    <string name="signup_verify_password">Verifique contrase?a</string>
+
+
+    <!--Smart Config-->
+    <string name="smartconfig_ready">Est¨¦ Preparado</string>
+    <string name="smartconfig_connect">Conecte su nodo a WiFi</string>
+    <string name="smartconfig_error">Fall¨®  la conexi¨®n</string>
+    <string name="smartconfig_connected">Conectado</string>
+
+    <string name="smartconfig_hint_SSID">Nombre de red (SSID):</string>
+    <string name="smartconfig_hint_password">Contrase?a</string>
+    <string name="smartconfig_hint_node_name">Ponga un nombre al nodo</string>
+
+    <string name="smartconfig_btn_connect">Conectar</string>
+    <string name="smartconfig_btn_try_again">Intente de nuevo</string>
+    <string name="smartconfig_btn_play">D¨¦jelo correr</string>Fc
+
+    <string name="smartconfig_tips_connect">Smart config lo ayuda a conectar su/s nodo/s de dispositivo IoT a un AP WiFi de cada entrada SSID debajo.
+    </string>
+    <string name="ap_config_tips_connect">Esto ayuda a conectar su\n
+        wio a un WiFi AP en cada\n
+        entrada SSID debajo.
+    </string>
+    <string name="smartconfig_tips_failed">Si usted tiene algún problema,  por favor visite :\n
+        http://seeedsutido.com.
+    </string>
+    <string name="smartconfig_tips_node_name">El nombre del nodo ayuda a identificarlo.</string>
+    <string name="title_activity_test">test</string>
+
+    <!--Mian Screen-->
+    <string name="online">En línea</string>
+    <string name="offline">Fuera de línea</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_name">Nuevo nombre de Wio</string>
+
+
+    <!--NavigationView-->
+    <string name="node_list_view">Nodos</string>
+    <string name="grove_list_view">Bosques</string>
+    <string name="smartconfig_view">Smart Config</string>
+    <string name="sn_key_view">Actualice /Key</string>
+    <string name="about_view">Acerca de</string>
+    <string name="setting_view">Ajustes</string>
+    <string name="logout_view">Cerrar sesión</string>
+    <string name="title_activity_setup_iot_node">SetearActividadDeNodoIoT</string>
+    <string name="title_activity_go_ready">Ir a Actividad Preparada</string>
+
+    <string name="about_body"><![CDATA[ESP8266 Nodo de Internet de las Cosas basado en Wi-Fi<br>
+        <br>
+        <b>Copyright:</b>by <b><a href="http://www.seeed.cc/">Seeed Studio</a> 2015</b><br>
+        <br>
+        <br>
+        Get: <a href="https://github.com/awong1900/WiFi_Iot_Node_App/tree/master/android">Source and doc</a><br>
+        <br>
+        <b>Many thanks for code and ideas to:</b><br>
+        <b><a href="https://github.com/JakeWharton/ViewPagerIndicator">viewpagerindicator</a></b><br>
+        <i>by Jake Wharton</i><br><br>
+        <b><a href="https://github.com/square/retrofit">retrofit</a></b><br>
+        <i>by Square</i><br><br>
+        <b><a href="https://github.com/EsotericSoftware/yamlbeans">yamlbeans</a></b><br>
+        <i>by EsotericSoftware</i><br><br>
+        <b><a href="https://github.com/zxing/zxing">zxing</a></b><br>
+        <i>by zxing</i><br><br>
+        <br>]]>
+    </string>
+
+    <string name="title_about"><![CDATA[
+        <b>Wio </b>&nbsp;<font color="#888888">v%1$s</font>
+    ]]></string>
+
+    <string name="ap_config_hint_node_name">Establezca el nombre de su wio</string>
+
+    <!--login-->
+    <string-array name="server">
+        <item>Internacional</item>
+        <item>China</item>
+        <item>Personalizado</item>
+    </string-array>
+
+    <!-- ui_ap_config -->
+    <string name="title_wio_activity">Seleccione Wio</string>
+    <string name="title_wifi_list_activity">Seleccione AP</string>
+    <string name="title_ap_connect_activity">Establezca Wio</string>
+    <string name="ap_config_progress_msg">Estableciendo nombre de  Wio...</string>
+
+    <!-- main list-->
+    <string name="setting">"  Ajuste  "</string>
+    <string name="remove">"  Remover  "</string>
+    <string name="detail">"  API  "</string>
+
+    <!-- set node config-->
+    <string name="update">Actualizar</string>
+    <string name="api">API</string>
+    <string name="share_api_to">Comparte  API url con?</string>
+    <string name="groves">Lista de Bosques</string>
+    <string name="ConnectServerFail">No se puede conectar al servidor...</string>
+    <string name="serverOn">Server on</string>
+    <string name="change">. Cambiar?</string>
+    <string name="location_tip">Este seguro de que los servicios de localización están activados</string>
+
+</resources>
