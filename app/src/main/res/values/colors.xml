@@ -46,10 +46,10 @@
     <color name="tag_text_press">#000000</color>
 
     <!-- CommonUrl -->
-    <color name="primary">#3A4271</color>
-    <color name="primary_dark">#3A4271</color>
-    <color name="primary_darker">#3A4271</color>
-    <color name="second_color">#3A4271</color>
+    <color name="primary">#3A4b71</color>
+    <color name="primary_dark">#324061</color>
+    <color name="primary_darker">#3A4b71</color>
+    <color name="second_color">#3A4b71</color>
     <color name="third_color">#5a5a5a</color>
     <color name="accent">#FFFFFF</color>
 

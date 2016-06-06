@@ -42,7 +42,7 @@
             android:src="@drawable/link_large" />
 
         <ImageButton
-            android:id="@+id/grove_6"
+            android:id="@+id/mNodeGrove_01"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"
@@ -54,7 +54,7 @@
             android:scaleType="centerCrop" />
 
         <ImageButton
-            android:id="@+id/grove_7"
+            android:id="@+id/mNodeGrove_02"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"
@@ -66,7 +66,7 @@
             android:scaleType="centerCrop" />
 
         <ImageButton
-            android:id="@+id/grove_2"
+            android:id="@+id/mLinkGrove_03"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"
@@ -78,7 +78,7 @@
             android:scaleType="centerCrop" />
 
         <ImageButton
-            android:id="@+id/grove_3"
+            android:id="@+id/mLinkGrove_04"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"
@@ -90,7 +90,7 @@
             android:scaleType="centerCrop" />
 
         <ImageButton
-            android:id="@+id/grove_4"
+            android:id="@+id/mLinkGrove_05"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"
@@ -102,7 +102,7 @@
             android:scaleType="centerCrop" />
 
         <ImageButton
-            android:id="@+id/grove_5"
+            android:id="@+id/mLinkGrove_06"
             android:layout_width="80dp"
             android:layout_height="@dimen/grove_width"
             android:layout_alignTop="@+id/node_view"

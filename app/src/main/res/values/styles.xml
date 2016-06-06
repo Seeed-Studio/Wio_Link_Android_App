@@ -111,5 +111,13 @@
         <item name="android:progressDrawable">@drawable/progressbar_mini</item>
     </style>
 
+    <style name="NodePinStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/grove_width</item>
+        <item name="android:background">@drawable/state_grove_bg</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
 
 </resources>

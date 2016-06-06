@@ -53,7 +53,7 @@ public class MainSettingActivity extends BaseActivity {
 
     private void initData(){
         String url = App.getApp().getOtaServerUrl();
-        if (CommonUrl.OTA_SERVER_URL.equals(url)){
+        if (CommonUrl.OTA_CHINA_URL.equals(url) || CommonUrl.OTA_INTERNATIONAL_URL.equals(url) ){
             mTvConnectServer.setText(url +"(default)");
         }else {
             mTvConnectServer.setText(url +"(custom)");

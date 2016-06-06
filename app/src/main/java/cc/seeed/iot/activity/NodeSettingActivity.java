@@ -1,12 +1,16 @@
 package cc.seeed.iot.activity;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.umeng.analytics.MobclickAgent;
@@ -20,6 +24,8 @@ import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.NetworkUtils;
+import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.Node;
@@ -104,11 +110,11 @@ public class NodeSettingActivity extends BaseActivity {
                 break;
             case R.id.mLLConnectServer:
                 MobclickAgent.onEvent(this, "16002");
-              saveUrl();
+                saveUrl();
                 break;
             case R.id.mLlDeleteDevice:
                 MobclickAgent.onEvent(this, "16003");
-                ConfigDeviceLogic.getInstance().removeNode(NodeSettingActivity.this,node,0);
+                ConfigDeviceLogic.getInstance().removeNode(NodeSettingActivity.this, node, 0);
                 break;
         }
     }
@@ -123,30 +129,55 @@ public class NodeSettingActivity extends BaseActivity {
                 } else {
                     dialog.dismiss();
                     progressDialog = DialogUtils.showProgressDialog(NodeSettingActivity.this, getString(R.string.loading));
-                    ConfigDeviceLogic.getInstance().nodeReName(node.node_sn,content);
+                    ConfigDeviceLogic.getInstance().nodeReName(node.node_sn, content);
                 }
             }
         });
     }
 
-    private void saveUrl(){
-        DialogUtils.showSelectServer(NodeSettingActivity.this,node.dataxserver, new DialogUtils.ButtonClickListenter() {
+    private void saveUrl() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Customized Server", new DialogUtils.ButtonEditClickListenter() {
             @Override
-            public void okClick(String url, String ip) {
-                progressDialog = DialogUtils.showProgressDialog(NodeSettingActivity.this, getString(R.string.loading));
-                ConfigDeviceLogic.getInstance().nodeXserverIp(node,ip,url);
-            }
-
-            @Override
-            public void cancelClick() {
-
+            public void okClick(Dialog dialog, String content) {
+                if (TextUtils.isEmpty(content)) {
+                    content = App.getApp().getOtaServerUrl();
+                }
+                if (!RegularUtils.isWebsite(content)) {
+                    App.showToastLong(getString(R.string.website_format_hint));
+                    return;
+                } else {
+                    getIpAddress(NodeSettingActivity.this, dialog, content);
+                }
             }
         });
     }
 
+    public void getIpAddress(final Activity context, final Dialog dialog, final String url) {
+        progressDialog = DialogUtils.showProgressDialog(context, getString(R.string.loading));
+        NetworkUtils.getIpAddress(context, NetworkUtils.getDomainName(url), new NetworkUtils.OnIpCallback() {
+            @Override
+            public void okCallback(String ip) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                ConfigDeviceLogic.getInstance().nodeXserverIp(node, ip, url);
+            }
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void failCallback(String error) {
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
+                }
+                App.showToastShrot(error);
+            }
+        });
+    }
+
+
     @Override
     public String[] monitorEvents() {
-        return new String[]{Cmd_Node_ReName,Cmd_Node_SaveIp,Cmd_Node_Remove};
+        return new String[]{Cmd_Node_ReName, Cmd_Node_SaveIp, Cmd_Node_Remove};
     }
 
     @Override
@@ -157,25 +188,25 @@ public class NodeSettingActivity extends BaseActivity {
             }
             if (ret) {
                 mTvName.setText(errInfo);
-            }else {
+            } else {
                 App.showToastShrot(errInfo);
             }
-        }else if (Cmd_Node_SaveIp.equals(event)){
+        } else if (Cmd_Node_SaveIp.equals(event)) {
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
             if (ret) {
                 mTvConnectServer.setText(errInfo);
-            }else {
+            } else {
                 App.showToastShrot(errInfo);
             }
-        }else if (Cmd_Node_Remove.equals(event)){
-            if (ret){
-                if (ToolUtil.isTopActivity(NodeSettingActivity.this, NodeSettingActivity.this.getClass().getSimpleName())){
+        } else if (Cmd_Node_Remove.equals(event)) {
+            if (ret) {
+                if (ToolUtil.isTopActivity(NodeSettingActivity.this, NodeSettingActivity.this.getClass().getSimpleName())) {
                     startActivity(new Intent(NodeSettingActivity.this, MainScreenActivity.class));
                     finish();
                 }
-            }else {
+            } else {
                 App.showToastShrot(errInfo);
             }
         }

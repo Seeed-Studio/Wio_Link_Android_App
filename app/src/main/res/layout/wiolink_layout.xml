@@ -17,76 +17,52 @@
         android:src="@mipmap/link_large" />
 
     <ImageButton
-        android:id="@+id/grove_0"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/grove_width"
+        android:id="@+id/mLinkGrove_01"
+        style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
         android:layout_marginRight="2dp"
         android:layout_marginTop="38dp"
-        android:layout_toLeftOf="@+id/node_view"
-        android:background="@drawable/state_grove_bg"
-        android:clickable="true"
-        android:scaleType="fitXY" />
+        android:layout_toLeftOf="@+id/node_view" />
 
     <ImageButton
-        android:id="@+id/grove_1"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/grove_width"
+        android:id="@+id/mLinkGrove_02"
+        style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
         android:layout_marginRight="2dp"
         android:layout_marginTop="79dp"
-        android:layout_toLeftOf="@+id/node_view"
-        android:background="@drawable/state_grove_bg"
-        android:clickable="true"
-        android:scaleType="fitXY" />
+        android:layout_toLeftOf="@+id/node_view" />
 
     <ImageButton
-        android:id="@+id/grove_2"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/grove_width"
+        android:id="@+id/mLinkGrove_03"
+        style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
         android:layout_marginRight="2dp"
         android:layout_marginTop="120dp"
-        android:layout_toLeftOf="@+id/node_view"
-        android:background="@drawable/state_grove_bg"
-        android:clickable="true"
-        android:scaleType="fitXY" />
+        android:layout_toLeftOf="@+id/node_view" />
 
     <ImageButton
-        android:id="@+id/grove_3"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/grove_width"
+        android:id="@+id/mLinkGrove_04"
+        style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
         android:layout_marginLeft="2dp"
         android:layout_marginTop="38dp"
-        android:layout_toRightOf="@+id/node_view"
-        android:background="@drawable/state_grove_bg"
-        android:clickable="true"
-        android:scaleType="fitXY" />
+        android:layout_toRightOf="@+id/node_view" />
 
     <ImageButton
-        android:id="@+id/grove_4"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/grove_width"
+        android:id="@+id/mLinkGrove_05"
+        style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
         android:layout_marginLeft="2dp"
         android:layout_marginTop="79dp"
-        android:layout_toRightOf="@+id/node_view"
-        android:background="@drawable/state_grove_bg"
-        android:clickable="true"
-        android:scaleType="fitXY" />
+        android:layout_toRightOf="@+id/node_view" />
 
 
-        <ImageButton
-            android:id="@+id/grove_5"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/grove_width"
-            android:background="@drawable/state_grove_bg"
-            android:layout_alignTop="@+id/node_view"
-            android:layout_marginLeft="2dp"
-            android:layout_marginTop="120dp"
-            android:layout_toRightOf="@+id/node_view"
-            android:clickable="true"
-            android:scaleType="fitXY" />
+    <ImageButton
+        android:id="@+id/mLinkGrove_06"
+        style="@style/NodePinStyle"
+        android:layout_alignTop="@+id/node_view"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="120dp"
+        android:layout_toRightOf="@+id/node_view" />
 
 </RelativeLayout>

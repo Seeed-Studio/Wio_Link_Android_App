@@ -103,7 +103,7 @@ public class HelpActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.help_toolbar);
     }
 
-    @Override
+ /*   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.grove_detail, menu);
         return true;
@@ -121,5 +121,5 @@ public class HelpActivity extends BaseActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
+*/
 }

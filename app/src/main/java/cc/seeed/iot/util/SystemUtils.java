@@ -82,7 +82,7 @@ public class SystemUtils {
      * @param content
      */
     public static void copy(String content, Context context) {
-        App.showToastShrot("Copy Success");
+        App.showToastShrot("URL Copied");
 // 得到剪贴板管理器
         ClipboardManager cmb = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         cmb.setText(content.trim());

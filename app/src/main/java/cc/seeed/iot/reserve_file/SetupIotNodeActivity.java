@@ -107,9 +107,9 @@ public class SetupIotNodeActivity extends BaseActivity
     FontButton mBtnUpdate;
     @InjectView(R.id.node_view)
     ImageView nodeView;
-    @InjectView(R.id.grove_6)
+    @InjectView(R.id.mNodeGrove_01)
     ImageButton grove0;
-    @InjectView(R.id.grove_7)
+    @InjectView(R.id.mNodeGrove_02)
     ImageButton grove1;
     @InjectView(R.id.grove_i2c_list)
     RecyclerView groveI2cList;
@@ -419,8 +419,8 @@ public class SetupIotNodeActivity extends BaseActivity
     @OnClick(R.id.mRlUpdate)
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.grove_6:
-            case R.id.grove_7:
+            case R.id.mNodeGrove_01:
+            case R.id.mNodeGrove_02:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
                 if (pinDeviceCount(position) > 1)
@@ -440,8 +440,8 @@ public class SetupIotNodeActivity extends BaseActivity
     @Override
     public boolean onLongClick(View v) {
         switch (v.getId()) {
-            case R.id.grove_6:
-            case R.id.grove_7:
+            case R.id.mNodeGrove_01:
+            case R.id.mNodeGrove_02:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
                 if (pinDeviceCount(position) == 1) {
@@ -493,8 +493,8 @@ public class SetupIotNodeActivity extends BaseActivity
         int action = event.getAction();
 
         switch (v.getId()) {
-            case R.id.grove_6:
-            case R.id.grove_7:
+            case R.id.mNodeGrove_01:
+            case R.id.mNodeGrove_02:
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED: {
                         if (!event.getClipDescription().hasMimeType(GROVE_ADD))

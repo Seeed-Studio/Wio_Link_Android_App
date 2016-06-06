@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.DragEvent;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,21 +102,21 @@ public class SetupDeviceActivity extends BaseActivity
     FontButton mBtnUpdate;
     @InjectView(R.id.node_view)
     ImageView nodeView;
-    @InjectView(R.id.grove_0)
+    @InjectView(R.id.mLinkGrove_01)
     ImageButton grove0;
-    @InjectView(R.id.grove_1)
+    @InjectView(R.id.mLinkGrove_02)
     ImageButton grove1;
-    @InjectView(R.id.grove_2)
+    @InjectView(R.id.mLinkGrove_03)
     ImageButton grove2;
-    @InjectView(R.id.grove_3)
+    @InjectView(R.id.mLinkGrove_04)
     ImageButton grove3;
-    @InjectView(R.id.grove_4)
+    @InjectView(R.id.mLinkGrove_05)
     ImageButton grove4;
-    @InjectView(R.id.grove_5)
+    @InjectView(R.id.mLinkGrove_06)
     ImageButton grove5;
-    @InjectView(R.id.grove_6)
+    @InjectView(R.id.mNodeGrove_01)
     ImageButton grove6;
-    @InjectView(R.id.grove_7)
+    @InjectView(R.id.mNodeGrove_02)
     ImageButton grove7;
     @InjectView(R.id.set_link)
     RelativeLayout mSetNodeLayout;
@@ -166,7 +167,7 @@ public class SetupDeviceActivity extends BaseActivity
         if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             mWioLinkLayout.setVisibility(View.VISIBLE);
             mWioNodeLayout.setVisibility(View.GONE);
-        }else {
+        } else {
             mWioLinkLayout.setVisibility(View.GONE);
             mWioNodeLayout.setVisibility(View.VISIBLE);
         }
@@ -287,7 +288,8 @@ public class SetupDeviceActivity extends BaseActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            finish();
+            quitHint();
+         //   finish();
             return true;
         } else if (id == R.id.update) {
             List<String> menu = new ArrayList<>();
@@ -304,7 +306,7 @@ public class SetupDeviceActivity extends BaseActivity
                             MobclickAgent.onEvent(SetupDeviceActivity.this, "15003");
                             NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
                             if (node_josn.connections.isEmpty()) {
-                                DialogUtils.showErrorDialog(SetupDeviceActivity.this, "Tip", "OK", "", "Forger add grove?", null);
+                                DialogUtils.showErrorDialog(SetupDeviceActivity.this, "Tip", "OK", "", "Sure leave without updating hardware?", null);
                             } else {
                                 intent = new Intent(SetupDeviceActivity.this, WebActivity.class);
                                 intent.putExtra("node_sn", node.node_sn);
@@ -337,17 +339,15 @@ public class SetupDeviceActivity extends BaseActivity
     private void startUpdate() {
         if (node.name == null)
             return;
-        mBtnUpdate.setEnabled(false);
-        mBtnUpdate.setSelected(false);
-
-        progressDialog = new CustomProgressDialog(this, R.style.AlertDialogBg);
-        setProgressMsg("Preparing Server (10%)");
-
         NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
         if (node_josn.connections.isEmpty()) {
-            DialogUtils.showErrorDialog(this, "Tip", "OK", "", "Forger add grove?", null);
+            DialogUtils.showErrorDialog(this, "Tip", "OK", "", "No Grove was found in API. Please update hardware and try again.", null);
             return;
         }
+        mBtnUpdate.setEnabled(false);
+        mBtnUpdate.setSelected(false);
+        progressDialog = new CustomProgressDialog(this, R.style.AlertDialogBg);
+        setProgressMsg("Preparing Server (10%)");
         mRlRemove.setVisibility(View.GONE);
         isUpdateIng = true;
         ConfigDeviceLogic.getInstance().updateFirware(node.node_key, node_josn);
@@ -359,6 +359,35 @@ public class SetupDeviceActivity extends BaseActivity
         mRlRemove.setVisibility(View.GONE);
         mBtnUpdate.setEnabled(true);
         mBtnUpdate.setSelected(true);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            quitHint();
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void quitHint() {
+        List<PinConfig> list = PinConfigDBHelper.getPinConfigs(node.node_sn);
+        NodeJson old_node_josn = new NodeConfigHelper().getConfigJson(list, node);
+        NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
+        if (old_node_josn.connections.toString().equals(node_josn.connections.toString())) {
+            finish();
+        } else {
+            DialogUtils.showErrorDialog(this, "", "OK", "Cancel", "Sure leave without updating hardware?", new DialogUtils.OnErrorButtonClickListenter() {
+                @Override
+                public void okClick() {
+                    finish();
+                }
+
+                @Override
+                public void cancelClick() {
+
+                }
+            });
+        }
     }
 
     @Override
@@ -429,9 +458,9 @@ public class SetupDeviceActivity extends BaseActivity
     @OnClick(R.id.mBtnUpdate)
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.grove_6:
-            case R.id.grove_7:
-            case R.id.grove_5:
+            case R.id.mNodeGrove_01:
+            case R.id.mNodeGrove_02:
+            case R.id.mLinkGrove_06:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
                 displayI2cListView(position);
@@ -453,23 +482,23 @@ public class SetupDeviceActivity extends BaseActivity
         int position = tag.position;
         if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             switch (v.getId()) {
-                case R.id.grove_0:
-                case R.id.grove_1:
-                case R.id.grove_2:
-                case R.id.grove_3:
-                case R.id.grove_4:
+                case R.id.mLinkGrove_01:
+                case R.id.mLinkGrove_02:
+                case R.id.mLinkGrove_03:
+                case R.id.mLinkGrove_04:
+                case R.id.mLinkGrove_05:
                     if (pinDeviceCount(position) == 1) {
                         startDragRemove(v);
                     }
                     break;
-                case R.id.grove_5:
+                case R.id.mLinkGrove_06:
                     displayI2cListView(position);
                     break;
             }
         } else {
             switch (v.getId()) {
-                case R.id.grove_6:
-                case R.id.grove_7:
+                case R.id.mNodeGrove_01:
+                case R.id.mNodeGrove_02:
                     if (pinDeviceCount(position) == 1) {
                         startDragRemove(v);
                     } else if (pinDeviceCount(position) > 1) {
@@ -521,14 +550,14 @@ public class SetupDeviceActivity extends BaseActivity
         int action = event.getAction();
 
         switch (v.getId()) {
-            case R.id.grove_0:
-            case R.id.grove_1:
-            case R.id.grove_2:
-            case R.id.grove_3:
-            case R.id.grove_4:
-            case R.id.grove_5:
-            case R.id.grove_6:
-            case R.id.grove_7:
+            case R.id.mLinkGrove_01:
+            case R.id.mLinkGrove_02:
+            case R.id.mLinkGrove_03:
+            case R.id.mLinkGrove_04:
+            case R.id.mLinkGrove_05:
+            case R.id.mLinkGrove_06:
+            case R.id.mNodeGrove_01:
+            case R.id.mNodeGrove_02:
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED: {
                         if (!event.getClipDescription().hasMimeType(GROVE_ADD))

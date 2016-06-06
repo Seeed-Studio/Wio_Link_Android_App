@@ -264,6 +264,8 @@ public class DialogUtils {
 
         if (!TextUtils.isEmpty(title)) {
             mTvTitle.setText(title);
+        }else {
+            mTvTitle.setVisibility(View.GONE);
         }
         mTvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

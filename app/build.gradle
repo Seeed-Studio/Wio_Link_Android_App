@@ -60,12 +60,12 @@ dependencies {
     compile 'com.getbase:floatingactionbutton:1.10.1'
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-//    compile 'com.google.android.gms:play-services-plus:8.3.0'
+    //    compile 'com.google.android.gms:play-services-plus:8.3.0'
     compile('com.facebook.android:facebook-android-sdk:4.5.0') {
         exclude group: 'com.parse.bolts', module: 'bolts-android'
     }
     compile('com.facebook.fresco:fresco:0.9.0') {
-    //    exclude module: 'bolts-android'
+        //    exclude module: 'bolts-android'
     }
     compile files('libs/sun.misc.BASE64Decoder.jar')
     compile(name: 'indexablelistview-debug', ext: 'aar')

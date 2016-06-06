@@ -15,9 +15,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.ui_main.WebActivity;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.ImgUtil;
@@ -100,10 +98,9 @@ public class GroveDetailActivity extends BaseActivity {
 
     @OnClick(R.id.mLlLinkWiki)
     public void onClick() {
-      /*  Intent intent = new Intent(this, WebActivity.class);
+     /*   Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra(WebActivity.Intent_Url,"http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
-        startActivity(intent);
-*/
+        startActivity(intent);*/
         Uri uri = Uri.parse("http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);

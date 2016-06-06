@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 import cc.seeed.iot.R;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
@@ -61,7 +63,8 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
         final PinConfig pinConfig = pinConfigs.get(position);
         try {
             GroverDriver groverDriver = DBHelper.getGroves(pinConfig.sku).get(0);
-            UrlImageViewHelper.setUrlDrawable(holder.mIvGrove, groverDriver.ImageURL, R.mipmap.grove_default,UrlImageViewHelper.CACHE_DURATION_INFINITE);
+            ImgUtil.displayImg(holder.mIvGrove,groverDriver.ImageURL,R.mipmap.grove_default);
+//            UrlImageViewHelper.setUrlDrawable(holder.mIvGrove, groverDriver.ImageURL, R.mipmap.grove_default,UrlImageViewHelper.CACHE_DURATION_INFINITE);
         } catch (Exception e) {
             Log.e(TAG, "getGroves:" + e);
         }
@@ -104,7 +107,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
         private OnLongClickListener mOnLongClickListener;
 
         View mView;
-        ImageView mIvGrove;
+        SimpleDraweeView mIvGrove;
         RelativeLayout mRlRemove;
         FontTextView mTvName;
 
@@ -113,7 +116,7 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
             this.mOnLongClickListener = mOnLongClickListener;
 
             mView = itemView;
-            mIvGrove = (ImageView) itemView.findViewById(R.id.mIvGrove);
+            mIvGrove = (SimpleDraweeView) itemView.findViewById(R.id.mIvGrove);
             mRlRemove = (RelativeLayout) itemView.findViewById(R.id.mRlRemove);
             mTvName = (FontTextView) itemView.findViewById(R.id.mTvName);
 

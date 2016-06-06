@@ -195,11 +195,12 @@ public class App extends com.activeandroid.app.Application {
     }
 
     public boolean isDefaultServer() {
-        if (CommonUrl.OTA_SERVER_URL.equals(ota_server_url)) {
+       /* if (CommonUrl.OTA_SERVER_URL.equals(ota_server_url)) {
             return true;
         } else {
             return false;
-        }
+        }*/
+        return false;
     }
 
 }

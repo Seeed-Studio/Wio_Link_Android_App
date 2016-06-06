@@ -49,8 +49,8 @@ public class GrovePinsView {
     }
 
     private void initNodeView() {
-        pinViews[0] = (ImageButton) view.findViewById(R.id.grove_6);
-        pinViews[1] = (ImageButton) view.findViewById(R.id.grove_7);
+        pinViews[0] = (ImageButton) view.findViewById(R.id.mNodeGrove_01);
+        pinViews[1] = (ImageButton) view.findViewById(R.id.mNodeGrove_02);
 
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO, InterfaceType.UART, InterfaceType.I2C}));
         pinViews[1].setTag(new Tag(1, new String[]{InterfaceType.GPIO, InterfaceType.ANALOG, InterfaceType.I2C}));
@@ -79,12 +79,12 @@ public class GrovePinsView {
     }
 
     private void initLinkView() {
-        pinViews[0] = (ImageButton) view.findViewById(R.id.grove_0);
-        pinViews[1] = (ImageButton) view.findViewById(R.id.grove_1);
-        pinViews[2] = (ImageButton) view.findViewById(R.id.grove_2);
-        pinViews[3] = (ImageButton) view.findViewById(R.id.grove_3);
-        pinViews[4] = (ImageButton) view.findViewById(R.id.grove_4);
-        pinViews[5] = (ImageButton) view.findViewById(R.id.grove_5);
+        pinViews[0] = (ImageButton) view.findViewById(R.id.mLinkGrove_01);
+        pinViews[1] = (ImageButton) view.findViewById(R.id.mLinkGrove_02);
+        pinViews[2] = (ImageButton) view.findViewById(R.id.mLinkGrove_03);
+        pinViews[3] = (ImageButton) view.findViewById(R.id.mLinkGrove_04);
+        pinViews[4] = (ImageButton) view.findViewById(R.id.mLinkGrove_05);
+        pinViews[5] = (ImageButton) view.findViewById(R.id.mLinkGrove_06);
 
 
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO}));
@@ -145,6 +145,7 @@ public class GrovePinsView {
         int height = tragetView.getMeasuredHeight();
         int width = tragetView.getMeasuredWidth();
 
+      //  view.setBackgroundResource(R.drawable.grove_i2c_mark_bg);
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = height;
         params.width = width;

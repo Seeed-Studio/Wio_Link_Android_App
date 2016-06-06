@@ -237,7 +237,7 @@ public class MainScreenActivity extends BaseActivity
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case MESSAGE_GROVE_LIST_START:
-                        mProgressDialog.setMessage("update grove list...");
+                        mProgressDialog.setMessage("");
                         mProgressDialog.setCanceledOnTouchOutside(false);
                         mProgressDialog.show();
                         break;
@@ -246,7 +246,7 @@ public class MainScreenActivity extends BaseActivity
                         ((App) MainScreenActivity.this.getApplication()).setFirstUseState(false);
                         break;
                     case MESSAGE_NODE_LIST_START:
-                        mProgressDialog.setMessage("update wio link...");
+                        mProgressDialog.setMessage("");
                         mProgressDialog.setCanceledOnTouchOutside(false);
                         mProgressDialog.show();
                         break;

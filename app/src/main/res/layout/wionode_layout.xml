@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mWioNodeLayout"
     android:layout_width="match_parent"
     android:layout_height="144dp"
@@ -18,7 +17,7 @@
 
 
     <ImageButton
-        android:id="@+id/grove_6"
+        android:id="@+id/mNodeGrove_01"
         android:layout_width="80dp"
         android:layout_height="52dp"
         android:layout_alignTop="@+id/node_view"
@@ -31,7 +30,7 @@
         android:scaleType="centerCrop" />
 
     <ImageButton
-        android:id="@+id/grove_7"
+        android:id="@+id/mNodeGrove_02"
         android:layout_width="80dp"
         android:layout_height="52dp"
         android:layout_alignTop="@+id/node_view"

@@ -102,17 +102,17 @@ public class SetupIotLinkActivity extends BaseActivity
     FontButton mBtnUpdate;
     @InjectView(R.id.node_view)
     ImageView nodeView;
-    @InjectView(R.id.grove_6)
+    @InjectView(R.id.mNodeGrove_01)
     ImageButton grove0;
-    @InjectView(R.id.grove_7)
+    @InjectView(R.id.mNodeGrove_02)
     ImageButton grove1;
-    @InjectView(R.id.grove_2)
+    @InjectView(R.id.mLinkGrove_03)
     ImageButton grove2;
-    @InjectView(R.id.grove_3)
+    @InjectView(R.id.mLinkGrove_04)
     ImageButton grove3;
-    @InjectView(R.id.grove_4)
+    @InjectView(R.id.mLinkGrove_05)
     ImageButton grove4;
-    @InjectView(R.id.grove_5)
+    @InjectView(R.id.mLinkGrove_06)
     ImageButton grove5;
     @InjectView(R.id.set_link)
     RelativeLayout mSetNodeLayout;
@@ -412,7 +412,7 @@ public class SetupIotLinkActivity extends BaseActivity
     @OnClick(R.id.mBtnUpdate)
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.grove_5:
+            case R.id.mLinkGrove_06:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
                 displayI2cListView(position);
@@ -433,16 +433,16 @@ public class SetupIotLinkActivity extends BaseActivity
         GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
         int position = tag.position;
         switch (v.getId()) {
-            case R.id.grove_6:
-            case R.id.grove_7:
-            case R.id.grove_2:
-            case R.id.grove_3:
-            case R.id.grove_4:
+            case R.id.mNodeGrove_01:
+            case R.id.mNodeGrove_02:
+            case R.id.mLinkGrove_03:
+            case R.id.mLinkGrove_04:
+            case R.id.mLinkGrove_05:
                 if (pinDeviceCount(position) == 1) {
                     startDragRemove(v);
                 }
                 break;
-            case R.id.grove_5:
+            case R.id.mLinkGrove_06:
                 displayI2cListView(position);
                 break;
         }
@@ -488,12 +488,12 @@ public class SetupIotLinkActivity extends BaseActivity
         int action = event.getAction();
 
         switch (v.getId()) {
-            case R.id.grove_6:
-            case R.id.grove_7:
-            case R.id.grove_2:
-            case R.id.grove_3:
-            case R.id.grove_4:
-            case R.id.grove_5:
+            case R.id.mNodeGrove_01:
+            case R.id.mNodeGrove_02:
+            case R.id.mLinkGrove_03:
+            case R.id.mLinkGrove_04:
+            case R.id.mLinkGrove_05:
+            case R.id.mLinkGrove_06:
                 switch (action) {
                     case DragEvent.ACTION_DRAG_STARTED: {
                         if (!event.getClipDescription().hasMimeType(GROVE_ADD))

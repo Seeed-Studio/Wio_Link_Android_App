@@ -8,12 +8,14 @@ public class CommonUrl {
     public static String Server_Out_Prefix = "http://bazaar.seeed.cc/api/index.php?";
     public static String Server_In_Ota_Url_Prefix = "https://192.168.4.110";
     public static String Server_In_Ota_Ip_Prefix = "192.168.4.110";
-    public static String OTA_SERVER_URL = "https://wio.seeed.io";
-    public static String OTA_SERVER_IP = "120.25.216.117";
+//    public static String OTA_SERVER_URL = "https://wio.seeed.io";
+//    public static String OTA_SERVER_IP = "120.25.216.117";
     public static String OTA_CHINA_URL = "https://cn.wio.seeed.io";
     public static String OTA_CHINA_IP= "120.25.216.117";
     public static String OTA_INTERNATIONAL_URL = "https://us.wio.seeed.io";
     public static String OTA_INTERNATIONAL_IP = "54.186.196.206";
+    public static String OTA_SERVER_URL = OTA_INTERNATIONAL_URL;
+    public static String OTA_SERVER_IP = OTA_INTERNATIONAL_IP;
 
     public static final String AP_IP = "192.168.4.1";
 
