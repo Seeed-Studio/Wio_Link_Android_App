@@ -17,26 +17,26 @@
     <string name="setup_switch_international">Cambiar a  Internacional</string>
     <string name="setup_switch_china">Cambiar a China</string>
     <string name="signin_email">Tu  Email</string>
-    <string name="signin_password">Contrase?a</string>
-    <string name="signin_forgot_password"><u>Olvid®Æ su contrase?a?</u></string>
+    <string name="signin_password">Contrase√±a</string>
+    <string name="signin_forgot_password"><u>Olvid√≥ su contrase√±a?</u></string>
     <string name="signup_email">Email</string>
-    <string name="signup_password">Contrase?a</string>
-    <string name="signup_verify_password">Verifique contrase?a</string>
+    <string name="signup_password">Contrase√±a</string>
+    <string name="signup_verify_password">Verifique contrase√±a</string>
 
 
     <!--Smart Config-->
-    <string name="smartconfig_ready">Est®¶ Preparado</string>
+    <string name="smartconfig_ready">Est√° Preparado</string>
     <string name="smartconfig_connect">Conecte su nodo a WiFi</string>
-    <string name="smartconfig_error">Fall®Æ  la conexi®Æn</string>
+    <string name="smartconfig_error">Fall√≥  la conexi√≥n</string>
     <string name="smartconfig_connected">Conectado</string>
 
     <string name="smartconfig_hint_SSID">Nombre de red (SSID):</string>
-    <string name="smartconfig_hint_password">Contrase?a</string>
+    <string name="smartconfig_hint_password">Contrase√±a</string>
     <string name="smartconfig_hint_node_name">Ponga un nombre al nodo</string>
 
     <string name="smartconfig_btn_connect">Conectar</string>
     <string name="smartconfig_btn_try_again">Intente de nuevo</string>
-    <string name="smartconfig_btn_play">D®¶jelo correr</string>Fc
+    <string name="smartconfig_btn_play">D√©jelo correr</string>Fc
 
     <string name="smartconfig_tips_connect">Smart config lo ayuda a conectar su/s nodo/s de dispositivo IoT a un AP WiFi de cada entrada SSID debajo.
     </string>
@@ -44,15 +44,15 @@
         wio a un WiFi AP en cada\n
         entrada SSID debajo.
     </string>
-    <string name="smartconfig_tips_failed">Si usted tiene alg˙n problema,  por favor visite :\n
+    <string name="smartconfig_tips_failed">Si usted tiene alg√∫n problema,  por favor visite :\n
         http://seeedsutido.com.
     </string>
     <string name="smartconfig_tips_node_name">El nombre del nodo ayuda a identificarlo.</string>
     <string name="title_activity_test">test</string>
 
     <!--Mian Screen-->
-    <string name="online">En lÌnea</string>
-    <string name="offline">Fuera de lÌnea</string>
+    <string name="online">En l√≠nea</string>
+    <string name="offline">Fuera de l√≠nea</string>
     <string name="menu_settings">Ajustes</string>
     <string name="menu_name">Nuevo nombre de Wio</string>
 
@@ -64,8 +64,8 @@
     <string name="sn_key_view">Actualice /Key</string>
     <string name="about_view">Acerca de</string>
     <string name="setting_view">Ajustes</string>
-    <string name="logout_view">Cerrar sesiÛn</string>
-    <string name="title_activity_setup_iot_node">SetearActividadDeNodoIoT</string>
+    <string name="logout_view">Cerrar sesi√≥n</string>
+    <string name="title_activity_setup_iot_node">Setear Actividad De Nodo IoT</string>
     <string name="title_activity_go_ready">Ir a Actividad Preparada</string>
 
     <string name="about_body"><![CDATA[ESP8266 Nodo de Internet de las Cosas basado en Wi-Fi<br>
@@ -119,6 +119,6 @@
     <string name="ConnectServerFail">No se puede conectar al servidor...</string>
     <string name="serverOn">Server on</string>
     <string name="change">. Cambiar?</string>
-    <string name="location_tip">Este seguro de que los servicios de localizaciÛn est·n activados</string>
+    <string name="location_tip">Este seguro de que los servicios de localizaci√≥n est√°n activados</string>
 
 </resources>
