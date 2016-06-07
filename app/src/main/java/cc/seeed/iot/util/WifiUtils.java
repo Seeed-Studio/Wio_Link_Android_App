@@ -7,11 +7,9 @@ import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 
+import java.util.Iterator;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * author: Jerry on 2016/5/25 14:25.
@@ -151,13 +149,47 @@ public class WifiUtils {
         return (mWifiInfo == null) ? "NULL" : mWifiInfo.toString();
     }
 
+    boolean enableNework(String ssid, Context cxt) {
+        boolean state = false;
+        if (mWifiManager.setWifiEnabled(true)) {
+            List<WifiConfiguration> networks = mWifiManager.getConfiguredNetworks();
+            Iterator<WifiConfiguration> iterator = networks.iterator();
+            while (iterator.hasNext()) {
+                WifiConfiguration wifiConfig = iterator.next();
+                if (wifiConfig.SSID.equals(ssid))
+                    state = mWifiManager.enableNetwork(wifiConfig.networkId, true);
+                else
+                    mWifiManager.disableNetwork(wifiConfig.networkId);
+            }
+            mWifiManager.reconnect();
+        }
+        return state;
+    }
+
     // 添加一个网络并连接
     public void addNetwork(WifiConfiguration wcg) {
-        int wcgID = mWifiManager.addNetwork(wcg);
-        boolean b = mWifiManager.enableNetwork(wcgID, true);
-        System.out.println("a--" + wcgID);
-        System.out.println("b--" + b);
-        System.out.println("connected: " + isWifiConnected(context));
+       /* if (mWifiManager.setWifiEnabled(true)) {
+          //  mWifiManager.disconnect();
+            List<WifiConfiguration> networks = mWifiManager.getConfiguredNetworks();
+            Iterator<WifiConfiguration> iterator = networks.iterator();
+            while (iterator.hasNext()) {
+                WifiConfiguration wifiConfig = iterator.next();
+                if (wifiConfig.SSID.equals(wcg.SSID)) {
+                    int wcgID =  mWifiManager.addNetwork(wifiConfig);
+                    mWifiManager.enableNetwork(wcgID, true);
+//                    mWifiManager.reconnect();
+                } else
+                    mWifiManager.disableNetwork(wifiConfig.networkId);
+            }
+        }*/
+
+            int wcgID = mWifiManager.addNetwork(wcg);
+            if (wcgID >= 0) {
+                boolean b = mWifiManager.enableNetwork(wcgID, true);
+            }
+            System.out.println("a--" + wcgID);
+//        System.out.println("b--" + b);
+            System.out.println("connected: " + isWifiConnected(context));
     }
 
     public boolean isWifiConnected(Context context) {
@@ -220,6 +252,8 @@ public class WifiUtils {
             config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
             config.status = WifiConfiguration.Status.ENABLED;
         }
+        //android 6.0以上版本,在使用的时候,需要每次创建新的WiFiManager和保存设置
+        mWifiManager.saveConfiguration();
         return config;
     }
 

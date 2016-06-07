@@ -54,6 +54,7 @@ import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.CustomProgressDialog;
 import cc.seeed.iot.view.FontButton;
 import cc.seeed.iot.webapi.IotApi;
@@ -309,7 +310,7 @@ public class SetupDeviceActivity extends BaseActivity
                                 DialogUtils.showErrorDialog(SetupDeviceActivity.this, "Tip", "OK", "", "Sure leave without updating hardware?", null);
                             } else {
                                 intent = new Intent(SetupDeviceActivity.this, WebActivity.class);
-                                intent.putExtra("node_sn", node.node_sn);
+                                intent.putExtra(WebActivity.Intent_Url, ToolUtil.getApiUrl(node));
                                 startActivity(intent);
                             }
                             break;
@@ -342,6 +343,11 @@ public class SetupDeviceActivity extends BaseActivity
         NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
         if (node_josn.connections.isEmpty()) {
             DialogUtils.showErrorDialog(this, "Tip", "OK", "", "No Grove was found in API. Please update hardware and try again.", null);
+            return;
+        }
+
+        if (!node.online){
+            DialogUtils.showErrorDialog(this, "Tip", "OK", "", "Node is offline", null);
             return;
         }
         mBtnUpdate.setEnabled(false);

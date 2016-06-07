@@ -21,11 +21,14 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.umeng.socialize.UMShareAPI;
+
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.ShareUtils;
+import cc.seeed.iot.util.UmengUtils;
 import cc.seeed.iot.webapi.model.Node;
 
 public class WebActivity extends BaseActivity {
@@ -126,12 +129,9 @@ public class WebActivity extends BaseActivity {
         if (id == android.R.id.home) {
             onBackPressed();
             return true;
-        } else if (id == R.id.copy) {
-            copyTextUrl(getApiUrl());
-            Toast.makeText(this, "API url copied!", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.share) {
            // shareTextUrl(getApiUrl());
-            ShareUtils.show(this,"API",getApiUrl(),null);
+            ShareUtils.show(this,"API",url,null);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -158,21 +158,4 @@ public class WebActivity extends BaseActivity {
         startActivity(sendIntent);
     }
 
-    private String getApiUrl() {
-        String url;
-        String ota_server_url = App.getApp().getOtaServerUrl();
-        String server_endpoint = ota_server_url + RESOURCE;
-        server_endpoint = server_endpoint.replace("https", "http");
-        String node_key = node.node_key;
-        String dataxserver = node.dataxserver;
-        if (dataxserver == null)
-            dataxserver = ota_server_url;
-//        if (dataxserver.equals(CommonUrl.OTA_SERVER_URL) || dataxserver.equals(CommonUrl.OTA_INTERNATIONAL_URL))
-//            url = server_endpoint + "access_token=" + node_key;
-//        else
-        url = server_endpoint + "access_token=" + node_key + "&data_server=" + dataxserver;
-        Log.i("iot", "Url:" + url);
-
-        return url;
-    }
 }

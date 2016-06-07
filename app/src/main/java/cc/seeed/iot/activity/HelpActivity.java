@@ -51,7 +51,7 @@ public class HelpActivity extends BaseActivity {
         int url = R.mipmap.help01_breathing;
         String ques = "Setup mode";
         String answer = "When blue LED is breathing, your Wio device is under Setup mode and ready to be connected. \r\n" +
-                "To set your WIO device to Setup mode, please press Config button for WIO Link, RST button for WIO Node.";
+                "To set your WIO device to Setup mode, please press and hold Config button for about 4 second for WIO Link, Function button for WIO Node.";
         FAQBean bean1 = new FAQBean(url, ques, answer);
 
         url = R.mipmap.help02_blink_2;

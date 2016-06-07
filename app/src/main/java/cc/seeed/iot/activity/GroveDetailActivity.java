@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.ImgUtil;
+import cc.seeed.iot.util.ShareUtils;
+import cc.seeed.iot.util.UmengUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
@@ -89,7 +92,8 @@ public class GroveDetailActivity extends BaseActivity {
             finish();
             return true;
         } else if (id == R.id.share) {
-            DialogUtils.showShare(GroveDetailActivity.this,"activity Share","Share",grove.GroveName);
+        //    DialogUtils.showShare(GroveDetailActivity.this,"activity Share","Share",grove.GroveName);
+            ShareUtils.show(GroveDetailActivity.this,"Wiki",grove.GroveName,null);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -104,5 +108,11 @@ public class GroveDetailActivity extends BaseActivity {
         Uri uri = Uri.parse("http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        UMShareAPI.get( this ).onActivityResult( requestCode, resultCode, data);
     }
 }

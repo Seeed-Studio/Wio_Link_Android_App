@@ -37,6 +37,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cc.seeed.iot.App;
+import cc.seeed.iot.webapi.model.Node;
 
 /**
  * Created by seeed on 2016/2/25.
@@ -227,5 +228,23 @@ public class ToolUtil {
         return groveName;
     }
 
+
+    public static String getApiUrl(Node node) {
+        String url;
+        String ota_server_url = App.getApp().getOtaServerUrl();
+        String server_endpoint = ota_server_url + "/v1/node/resources?";
+        server_endpoint = server_endpoint.replace("https", "http");
+        String node_key = node.node_key;
+        String dataxserver = node.dataxserver;
+        if (dataxserver == null)
+            dataxserver = ota_server_url;
+//        if (dataxserver.equals(CommonUrl.OTA_SERVER_URL) || dataxserver.equals(CommonUrl.OTA_INTERNATIONAL_URL))
+//            url = server_endpoint + "access_token=" + node_key;
+//        else
+        url = server_endpoint + "access_token=" + node_key + "&data_server=" + dataxserver;
+        Log.i("iot", "Url:" + url);
+
+        return url;
+    }
 
 }

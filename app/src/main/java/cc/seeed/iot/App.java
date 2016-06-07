@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.umeng.socialize.PlatformConfig;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -14,7 +15,9 @@ import java.net.UnknownHostException;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
+import cc.seeed.iot.util.UmengUtils;
 import cc.seeed.iot.webapi.IotApi;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by tenwong on 15/7/9.
@@ -50,11 +53,14 @@ public class App extends com.activeandroid.app.Application {
         loginState = sp.getBoolean("loginState", false);
         firstUseState = sp.getBoolean("firstUseState", true);
         FacebookSdk.sdkInitialize(getApplicationContext());
-
+        ShareSDK.initSDK(this);
         init();
         getIpAddress();
     }
-
+    {
+//        PlatformConfig.setTwitter("3aIN7fuF685MuZ7jtXkQxalyi", "MK6FEYG63eWcpDFgRYw4w9puJhzDl0tyuqWjZ3M7XJuuG7mMbO");
+          PlatformConfig.setTwitter("W7dkMSuiGFzCrfETuri3giEov", "Wp93a4FFrCFlzhMiwXBy7QKX9KjhgCbhgrHEz8QCsqGe4pg5Sv");
+    }
     /**
      * 根据域名解析ip
      */

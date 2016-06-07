@@ -208,7 +208,6 @@ public class Step02WifiListActivity extends BaseActivity
     }
 
     int flag = 0;
-
     private void connectWifi(String ssid, String pwd) {
         flag = 0;
         final Timer timer = new Timer();

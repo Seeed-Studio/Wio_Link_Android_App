@@ -3,6 +3,8 @@ package cc.seeed.iot.util;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -14,8 +16,19 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.HashMap;
+
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.view.FontTextView;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.OnekeyShareTheme;
+import cn.sharesdk.twitter.Twitter;
 
 /**
  * author: Jerry on 2016/6/3 14:27.
@@ -27,6 +40,11 @@ public class ShareUtils {
     private static String shareTitle;
     private static String shareUrl;
     private static String shareImgUrl;
+
+    public static void initShare() {
+        /*TwitterAuthConfig authConfig =  new TwitterAuthConfig("jWP91R6MLroH8BSA32Clr9plO", "bJo6j3EtsD9Hby4UQmYzJwDgDOWxiwAduOSOqSvH3vTmKs2nOR");
+        Fabric.with(this, new TwitterCore(authConfig), new TweetComposer());*/
+    }
 
     public static PopupWindow show(Activity context, String title, String url, String imgUrl) {
         shareTitle = "";
@@ -92,17 +110,20 @@ public class ShareUtils {
                     SystemUtils.sendSmsWithBody(activity, "", TextUtils.isEmpty(shareTitle) ? shareUrl : shareTitle + " " + shareUrl);
                     break;
                 case R.id.mLlTwitter:
-                   // UmengUtils.share(activity, SHARE_MEDIA.WEIXIN, shareTitle, shareUrl, shareUrl, shareImgUrl);
+//                    UmengUtils.share(activity, SHARE_MEDIA.TWITTER, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    //   UmengUtils.shareToTwitter(activity,shareUrl);
+                    // shareToTwitter();
+                    showShare(activity, ShareSDK.getPlatform(Twitter.NAME).getName(), false);
                     break;
                 case R.id.mLlGoogle:
-                  //  UmengUtils.share(activity, SHARE_MEDIA.WEIXIN_CIRCLE, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    UmengUtils.share(activity, SHARE_MEDIA.GOOGLEPLUS, shareTitle, shareUrl, shareUrl, shareImgUrl);
                     break;
                 case R.id.mLlWhatsapp:
-                //    UmengUtils.share(activity, SHARE_MEDIA.WHATSAPP, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    UmengUtils.share(activity, SHARE_MEDIA.WHATSAPP, shareTitle, shareUrl, shareUrl, shareImgUrl);
                     break;
                 case R.id.mLlFacebook:
-                    // UmengUtils.share(activity, SHARE_MEDIA.FACEBOOK, shareTitle, shareUrl);
-                   // UmengUtils.shareFacebookMessenger(activity, shareUrl, shareImgUrl);
+                    UmengUtils.share(activity, SHARE_MEDIA.FACEBOOK, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    // UmengUtils.shareFacebookMessenger(activity, shareUrl, shareImgUrl);
                     break;
                 case R.id.mTvCancel:
                     if (popWindow != null) {
@@ -117,6 +138,129 @@ public class ShareUtils {
         }
     };
 
+    private static void shareToTwitter() {
+        Platform.ShareParams sp = new Platform.ShareParams();
+        sp.setText("测试分享的文本");
+
+        Platform twitter = ShareSDK.getPlatform(Twitter.NAME);
+        twitter.setPlatformActionListener(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+
+            }
+        }); // 设置分享事件回调
+// 执行图文分享
+        twitter.share(sp);
+    }
+
+    public static void showShare(Context context, String platformToShare, boolean showContentEdit) {
+        OnekeyShare oks = new OnekeyShare();
+        oks.setSilent(!showContentEdit);
+        if (platformToShare != null) {
+            oks.setPlatform(platformToShare);
+        }
+        //ShareSDK快捷分享提供两个界面第一个是九宫格 CLASSIC  第二个是SKYBLUE
+        oks.setTheme(OnekeyShareTheme.CLASSIC);
+        // 令编辑页面显示为Dialog模式
+//        oks.setDialogMode();
+        // 在自动授权时可以禁用SSO方式
+//        oks.disableSSOWhenAuthorize();
+        //oks.setAddress("12345678901"); //分享短信的号码和邮件的地址
+        oks.setTitle("ShareSDK--Title");
+        oks.setTitleUrl("http://mob.com");
+        oks.setText("ShareSDK--文本");
+        //oks.setImagePath("/sdcard/test-pic.jpg");  //分享sdcard目录下的图片
+        oks.setUrl("http://www.mob.com"); //微信不绕过审核分享链接
+        //oks.setFilePath("/sdcard/test-pic.jpg");  //filePath是待分享应用程序的本地路劲，仅在微信（易信）好友和Dropbox中使用，否则可以不提供
+        oks.setComment("分享"); //我对这条分享的评论，仅在人人网和QQ空间使用，否则可以不提供
+        oks.setSite("ShareSDK");  //QZone分享完之后返回应用时提示框上显示的名称
+        oks.setSiteUrl("http://mob.com");//QZone分享参数
+        oks.setVenueName("ShareSDK");
+        oks.setVenueDescription("This is a beautiful place!");
+        oks.setCallback(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                App.showToastShrot("onComplete");
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                App.showToastShrot(throwable.toString());
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+                App.showToastShrot("onCancel");
+            }
+        });
+        // 将快捷分享的操作结果将通过OneKeyShareCallback回调
+        //oks.setCallback(new OneKeyShareCallback());
+        // 去自定义不同平台的字段内容
+        //oks.setShareContentCustomizeCallback(new ShareContentCustomizeDemo());
+        // 在九宫格设置自定义的图标
+      /*  Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_mini);
+        String label = "ShareSDK";
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        };
+        oks.setCustomerLogo(logo, label, listener);*/
+        oks.show(context);
+    }
+
+  /*  @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.mLlCopy:
+                SystemUtils.copy(shareUrl, activity);
+                break;
+            case R.id.mLlSafari:
+                Uri uri = Uri.parse(shareUrl);
+                Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                activity.startActivity(intent);
+                break;
+            case R.id.mLlMail:
+                SystemUtils.sendEmail(activity, TextUtils.isEmpty(shareTitle) ? shareUrl : shareTitle + " " + shareUrl, "");
+                break;
+            case R.id.mLlMessage:
+                SystemUtils.sendSmsWithBody(activity, "", TextUtils.isEmpty(shareTitle) ? shareUrl : shareTitle + " " + shareUrl);
+                break;
+            case R.id.mLlTwitter:
+                // UmengUtils.share(activity, SHARE_MEDIA.WEIXIN, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                break;
+            case R.id.mLlGoogle:
+                //  UmengUtils.share(activity, SHARE_MEDIA.WEIXIN_CIRCLE, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                break;
+            case R.id.mLlWhatsapp:
+                UmengUtils.share(activity, SHARE_MEDIA.WHATSAPP, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                break;
+            case R.id.mLlFacebook:
+                // UmengUtils.share(activity, SHARE_MEDIA.FACEBOOK, shareTitle, shareUrl);
+                // UmengUtils.shareFacebookMessenger(activity, shareUrl, shareImgUrl);
+                break;
+            case R.id.mTvCancel:
+                if (popWindow != null) {
+                    popWindow.dismiss();
+                }
+                break;
+        }
+
+        if (popWindow != null) {
+            popWindow.dismiss();
+        }
+    }
+*/
   /*  public static void shareToGoogle(Context context){
         Intent shareIntent = new PlusShare.Builder(context)
                 .setType("text/plain")
