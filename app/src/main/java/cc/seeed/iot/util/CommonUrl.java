@@ -16,6 +16,8 @@ public class CommonUrl {
     public static String OTA_INTERNATIONAL_IP = "54.186.196.206";
     public static String OTA_SERVER_URL = OTA_INTERNATIONAL_URL;
     public static String OTA_SERVER_IP = OTA_INTERNATIONAL_IP;
+    public static String OTA_TEST_SERVER_URL = "https://192.168.4.110";
+    public static String OTA_TEST_SERVER_IP = "192.168.4.110";
 
     public static final String AP_IP = "192.168.4.1";
 

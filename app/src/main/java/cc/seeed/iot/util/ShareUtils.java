@@ -1,10 +1,7 @@
 package cc.seeed.iot.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -18,17 +15,8 @@ import android.widget.PopupWindow;
 
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
-import java.util.HashMap;
-
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.view.FontTextView;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.OnekeyShareTheme;
-import cn.sharesdk.twitter.Twitter;
 
 /**
  * author: Jerry on 2016/6/3 14:27.
@@ -110,10 +98,10 @@ public class ShareUtils {
                     SystemUtils.sendSmsWithBody(activity, "", TextUtils.isEmpty(shareTitle) ? shareUrl : shareTitle + " " + shareUrl);
                     break;
                 case R.id.mLlTwitter:
-//                    UmengUtils.share(activity, SHARE_MEDIA.TWITTER, shareTitle, shareUrl, shareUrl, shareImgUrl);
-                    //   UmengUtils.shareToTwitter(activity,shareUrl);
+                    UmengUtils.share(activity, SHARE_MEDIA.TWITTER, shareTitle, shareUrl, shareUrl, shareImgUrl);
+//                       UmengUtils.shareToTwitter(activity,shareUrl);
                     // shareToTwitter();
-                    showShare(activity, ShareSDK.getPlatform(Twitter.NAME).getName(), false);
+                 //   showShare(activity, ShareSDK.getPlatform(Twitter.NAME).getName(), false);
                     break;
                 case R.id.mLlGoogle:
                     UmengUtils.share(activity, SHARE_MEDIA.GOOGLEPLUS, shareTitle, shareUrl, shareUrl, shareImgUrl);
@@ -138,7 +126,7 @@ public class ShareUtils {
         }
     };
 
-    private static void shareToTwitter() {
+  /*  private static void shareToTwitter() {
         Platform.ShareParams sp = new Platform.ShareParams();
         sp.setText("测试分享的文本");
 
@@ -162,8 +150,8 @@ public class ShareUtils {
 // 执行图文分享
         twitter.share(sp);
     }
-
-    public static void showShare(Context context, String platformToShare, boolean showContentEdit) {
+*/
+  /*  public static void showShare(Context context, String platformToShare, boolean showContentEdit) {
         OnekeyShare oks = new OnekeyShare();
         oks.setSilent(!showContentEdit);
         if (platformToShare != null) {
@@ -208,16 +196,16 @@ public class ShareUtils {
         // 去自定义不同平台的字段内容
         //oks.setShareContentCustomizeCallback(new ShareContentCustomizeDemo());
         // 在九宫格设置自定义的图标
-      /*  Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_mini);
+      *//*  Bitmap logo = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_mini);
         String label = "ShareSDK";
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {
 
             }
         };
-        oks.setCustomerLogo(logo, label, listener);*/
+        oks.setCustomerLogo(logo, label, listener);*//*
         oks.show(context);
-    }
+    }*/
 
   /*  @Override
     public void onClick(View v) {

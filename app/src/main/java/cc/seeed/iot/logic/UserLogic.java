@@ -320,7 +320,7 @@ public class UserLogic extends BaseLogic {
         params.put("bind_region", "seeed");
         params.put("token", user.token);
         params.put("secret", "!@#$%^&*RG)))))))JM<==TTTT==>((((((&^HVFT767JJH");
-        NetManager.getInstance().post(CommonUrl.OTA_SERVER_URL + CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
+        NetManager.getInstance().post(App.getApp().getOtaServerUrl() + CommonUrl.Hinge_Set_Token, Cmd_SetToken, params, new INetUiThreadCallBack() {
             @Override
             public void onResp(Request req, Packet resp) {
                 if (resp.status) {
@@ -368,7 +368,7 @@ public class UserLogic extends BaseLogic {
 
     public boolean isLogin() {
         getUser();
-        if (user == null) {
+        if (user == null || TextUtils.isEmpty(user.token)) {
             return false;
         } else {
             return true;

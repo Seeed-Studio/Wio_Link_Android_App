@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.KeyEvent;
@@ -29,6 +30,7 @@ import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -51,6 +53,7 @@ import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.ComparatorUtils;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
@@ -70,7 +73,7 @@ import retrofit.client.Response;
 public class SetupDeviceActivity extends BaseActivity
         implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener,
         View.OnClickListener, View.OnDragListener, View.OnLongClickListener,
-        GroveI2cListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnLongClickListener {
+        GroveI2cListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnLongClickListener, GroveListRecyclerAdapter.OnItemClickListener {
 
     private static final String TAG = "SetupIotLinkActivity";
     private static final String GROVE_REMOVE = "grove/remove";
@@ -161,7 +164,22 @@ public class SetupDeviceActivity extends BaseActivity
 
     private void initData() {
         mGroveDrivers = DBHelper.getGrovesAll();
+        Collections.sort(mGroveDrivers, new ComparatorUtils.ComparatorName());
+        while (true) {
+            if (mGroveDrivers == null || mGroveDrivers.size() == 0) {
+                break;
+            }
+            int num = (int) ToolUtil.getSimpleName(mGroveDrivers.get(0).GroveName).charAt(0);
+            if ((num >= 'a' && num <= 'z') || (num >= 'A' && num <= 'Z')) {
+                break;
+            }else {
+                mGroveDrivers.add(mGroveDrivers.size(),mGroveDrivers.get(0));
+                mGroveDrivers.remove(0);
+            }
+        }
+
         user = UserLogic.getInstance().getUser();
+        getGrovesData();
         String node_sn = getIntent().getStringExtra("node_sn");
         node = DBHelper.getNodes(node_sn).get(0);
 
@@ -195,6 +213,7 @@ public class SetupDeviceActivity extends BaseActivity
             mGroveListView.setLayoutManager(layoutManager);
             mGroveListAdapter = new GroveListRecyclerAdapter(mGroveDrivers);
             mGroveListAdapter.setOnLongClickListener(this);
+            mGroveListAdapter.setOnItemClickListener(this);
             mGroveListView.setAdapter(mGroveListAdapter);
         }
 
@@ -260,7 +279,6 @@ public class SetupDeviceActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
-        getGrovesData();
     }
 
     @Override
@@ -801,6 +819,19 @@ public class SetupDeviceActivity extends BaseActivity
                     groveDriver.save();
                 }
                 List<GroverDriver> g = DBHelper.getGrovesAll();
+                Collections.sort(g, new ComparatorUtils.ComparatorName());
+                while (true) {
+                    if (g == null || g.size() == 0) {
+                        break;
+                    }
+                    int num = (int) ToolUtil.getSimpleName(g.get(0).GroveName).charAt(0);
+                    if ((num >= 'a' && num <= 'z') || (num >= 'A' && num <= 'Z')) {
+                        break;
+                    }else {
+                        g.add(g.size(),g.get(0));
+                        g.remove(0);
+                    }
+                }
                 updateGroveListAdapter(g);
             }
 
@@ -869,6 +900,13 @@ public class SetupDeviceActivity extends BaseActivity
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.setMessage(msg);
         }
+    }
+
+    @Override
+    public void onItemClick(GroverDriver grove, int position) {
+        Intent intent = new Intent(SetupDeviceActivity.this,GroveDetailActivity.class);
+        intent.putExtra(GroveDetailActivity.Intent_GroveSku,grove.SKU);
+        startActivity(intent);
     }
 }
 

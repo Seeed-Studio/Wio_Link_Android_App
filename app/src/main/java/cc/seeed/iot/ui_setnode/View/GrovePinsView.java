@@ -119,8 +119,7 @@ public class GrovePinsView {
             if (pinConfig.position == position) {
                 try {
                     String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
-                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default,
-                            UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default,UrlImageViewHelper.CACHE_DURATION_INFINITE);
                 } catch (Exception e) {
                     Log.e(TAG, "getGroves:" + e);
                 }
@@ -151,9 +150,10 @@ public class GrovePinsView {
         params.width = width;
         view.setLayoutParams(params);
         view.setBackgroundColor(Color.parseColor("#a0000000"));
-        view.setGravity(Gravity.CENTER);
+      //  view.setGravity(Gravity.CENTER);
         view.setTextColor(Color.parseColor("#ffffff"));
         view.setTextSize(14);
+        view.setBadgeGravity(Gravity.CENTER);
         view.setTargetView(tragetView);
     }
 

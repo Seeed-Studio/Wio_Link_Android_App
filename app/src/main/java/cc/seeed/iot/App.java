@@ -15,9 +15,7 @@ import java.net.UnknownHostException;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
-import cc.seeed.iot.util.UmengUtils;
 import cc.seeed.iot.webapi.IotApi;
-import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by tenwong on 15/7/9.
@@ -26,14 +24,7 @@ public class App extends com.activeandroid.app.Application {
     public static App sApp;
     private static SharedPreferences sp;
     private String ota_server_url;
-    //    private String exchange_server_url;
     private String ota_server_ip;
-    //    private String exchange_server_ip;
-
-    /**
-     * into smartconfig state
-     */
-    private Boolean configState;
 
     /**
      * login state
@@ -49,17 +40,12 @@ public class App extends com.activeandroid.app.Application {
         super.onCreate();
         sApp = this;
         sp = this.getSharedPreferences("IOT", Context.MODE_PRIVATE);
-        configState = sp.getBoolean("configState", false);
         loginState = sp.getBoolean("loginState", false);
         firstUseState = sp.getBoolean("firstUseState", true);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        ShareSDK.initSDK(this);
+        PlatformConfig.setTwitter("hDpph8vR0zZgnXCH7XStcmu8Z", "E8qVkQUVjOmhrS0OPvKllX6HFaEqnMJeu9CpRpVQY12VpzAaE9");
         init();
         getIpAddress();
-    }
-    {
-//        PlatformConfig.setTwitter("3aIN7fuF685MuZ7jtXkQxalyi", "MK6FEYG63eWcpDFgRYw4w9puJhzDl0tyuqWjZ3M7XJuuG7mMbO");
-          PlatformConfig.setTwitter("W7dkMSuiGFzCrfETuri3giEov", "Wp93a4FFrCFlzhMiwXBy7QKX9KjhgCbhgrHEz8QCsqGe4pg5Sv");
     }
     /**
      * 根据域名解析ip
@@ -76,7 +62,7 @@ public class App extends com.activeandroid.app.Application {
                         e.printStackTrace();
                     }
                     if (address != null) {
-                        getSp().edit().putString("ota_server_ip", address.getHostAddress()).commit();
+                        getSp().edit().putString(Constant.SP_SERVER_IP, address.getHostAddress()).commit();
                     }
                 }
             }).start();
@@ -84,17 +70,15 @@ public class App extends com.activeandroid.app.Application {
     }
 
     private void init() {
-        ota_server_url = sp.getString(Constant.SP_SERVER_URL, CommonUrl.OTA_SERVER_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
-        ota_server_ip = sp.getString(Constant.SP_SERVER_IP, CommonUrl.OTA_SERVER_IP);
-      /*  int firstStart = getSp().getInt(Constant.APP_FIRST_START, 0);
+        ota_server_url = sp.getString(Constant.SP_SERVER_URL, CommonUrl.OTA_INTERNATIONAL_URL); //https://iot.seeed.cc/v1 //https://cn.iot.seeed.cc/v1
+        ota_server_ip = sp.getString(Constant.SP_SERVER_IP, CommonUrl.OTA_INTERNATIONAL_IP);
+        int firstStart = getSp().getInt(Constant.APP_FIRST_START, 0);
         if (firstStart == 0) {
-            if (OLD_OTA_CHINA_URL.equals(ota_server_url) || OLD_OTA_INTERNATIONAL_URL.equals(ota_server_url)) {
+            if (CommonUrl.OTA_CHINA_URL.equals(ota_server_url) || CommonUrl.OTA_INTERNATIONAL_URL.equals(ota_server_url)) {
                 UserLogic.getInstance().logOut();
-                getSp().edit().putString("ota_server_ip", CommonUrl.OTA_SERVER_URL).commit();
-                ota_server_url = CommonUrl.OTA_SERVER_URL;
             }
             getSp().edit().putInt(Constant.APP_FIRST_START, 1).commit();
-        }*/
+        }
         IotApi.SetServerUrl(ota_server_url);
     }
 
@@ -189,7 +173,6 @@ public class App extends com.activeandroid.app.Application {
     }
 
     public void setConfigState(Boolean configState) {
-        this.configState = configState;
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean("configState", configState);
         editor.apply();
@@ -201,12 +184,11 @@ public class App extends com.activeandroid.app.Application {
     }
 
     public boolean isDefaultServer() {
-       /* if (CommonUrl.OTA_SERVER_URL.equals(ota_server_url)) {
+        if (CommonUrl.OTA_CHINA_URL.equals(ota_server_url) || CommonUrl.OTA_INTERNATIONAL_URL.equals(ota_server_url) || CommonUrl.OTA_TEST_SERVER_URL.equals(ota_server_url)) {
             return true;
         } else {
             return false;
-        }*/
-        return false;
+        }
     }
 
 }

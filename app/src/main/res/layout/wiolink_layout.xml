@@ -44,7 +44,6 @@
         android:id="@+id/mLinkGrove_04"
         style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
-        android:layout_marginLeft="2dp"
         android:layout_marginTop="38dp"
         android:layout_toRightOf="@+id/node_view" />
 
@@ -52,7 +51,6 @@
         android:id="@+id/mLinkGrove_05"
         style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
-        android:layout_marginLeft="2dp"
         android:layout_marginTop="79dp"
         android:layout_toRightOf="@+id/node_view" />
 
@@ -61,7 +59,6 @@
         android:id="@+id/mLinkGrove_06"
         style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
-        android:layout_marginLeft="2dp"
         android:layout_marginTop="120dp"
         android:layout_toRightOf="@+id/node_view" />
 

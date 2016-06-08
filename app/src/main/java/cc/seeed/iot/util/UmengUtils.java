@@ -32,7 +32,7 @@ public class UmengUtils {
 
         //微信 appid appsecret
         //  PlatformConfig.setWeixin("wx43881f3372d0a832", "f0a59af4fa6b7381af44ffb45bbe62f3");
-        PlatformConfig.setTwitter("W7dkMSuiGFzCrfETuri3giEov","Wp93a4FFrCFlzhMiwXBy7QKX9KjhgCbhgrHEz8QCsqGe4pg5Sv");
+        PlatformConfig.setTwitter("W7dkMSuiGFzCrfETuri3giEov", "Wp93a4FFrCFlzhMiwXBy7QKX9KjhgCbhgrHEz8QCsqGe4pg5Sv");
 //         PlatformConfig.setTwitter("739753776953712640", "koX7vp9UBAbekl2xPBEhHy5aYdaERxdgHtPQgdHfLA8tk");
         //Twitter appid appkey
     }
@@ -52,11 +52,14 @@ public class UmengUtils {
         if (!mShareAPI.isInstall(activity, share_media)) {
             if (share_media == SHARE_MEDIA.WHATSAPP && ToolUtil.isInstallByread("com.whatsapp")) {
 
-            } else {
+            }else  if (share_media == SHARE_MEDIA.GOOGLEPLUS && ToolUtil.isInstallByread("com.google.android.apps.plus")) {
+
+            }else {
                 App.showToastShrot("App not installed");
                 return;
             }
         }
+
         if (ToolUtil.isNetworkAvailable() && imgUrl != null) {
             image = new UMImage(activity, imgUrl);
         } else {
@@ -86,13 +89,13 @@ public class UmengUtils {
     }
 
     public static void shareToTwitter(Activity activity, String content) {
-     /*   new ShareAction(activity).setPlatform(SHARE_MEDIA.TWITTER).setCallback(umShareListener)
+        new ShareAction(activity).setPlatform(SHARE_MEDIA.TWITTER).setCallback(umShareListener)
                 .withText(content)
-                .share();*/
-        new ShareAction(activity).setDisplayList(SHARE_MEDIA.TWITTER, SHARE_MEDIA.FACEBOOK, SHARE_MEDIA.GOOGLEPLUS)
+                .share();
+     /*   new ShareAction(activity).setDisplayList(SHARE_MEDIA.TWITTER, SHARE_MEDIA.FACEBOOK, SHARE_MEDIA.GOOGLEPLUS)
                 .withText("来自友盟分享面板")
                 .setCallback(umShareListener)
-                .open();
+                .open();*/
     }
 
     public static void shareFacebookMessenger(Activity activity, String url, String imgUrl) {
@@ -112,7 +115,7 @@ public class UmengUtils {
         MessageDialog.show(activity, content);
     }
 
-    static UMShareListener umShareListener = new UMShareListener() {
+    static UMShareListener  umShareListener = new UMShareListener() {
         @Override
         public void onResult(SHARE_MEDIA platform) {
             // Toast.makeText(ShareActivity.this,platform + " 分享成功啦", Toast.LENGTH_SHORT).show();

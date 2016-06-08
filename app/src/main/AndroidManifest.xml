@@ -34,7 +34,7 @@
             android:value="Wio.db" />
         <meta-data
             android:name="AA_DB_VERSION"
-            android:value="1" />
+            android:value="3" />
         <meta-data
             android:name="AA_MODELS"
             android:value="cc.seeed.iot.webapi.model.Node, cc.seeed.iot.webapi.model.GroverDriver,
@@ -117,15 +117,6 @@
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
-
-        <activity
-            android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
-
-        </activity>
 
         <meta-data
             android:name="UMENG_APPKEY"

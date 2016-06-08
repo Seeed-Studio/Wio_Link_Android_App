@@ -18,10 +18,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.R;
 import cc.seeed.iot.util.DBHelper;
-import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.ShareUtils;
-import cc.seeed.iot.util.UmengUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
@@ -30,7 +28,7 @@ import cc.seeed.iot.webapi.model.GroverDriver;
  * description:
  */
 public class GroveDetailActivity extends BaseActivity {
-    public static String Intent_Grove = "Intent_Grove";
+    public static String Intent_GroveSku = "Intent_GroveSku";
 
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
@@ -58,7 +56,7 @@ public class GroveDetailActivity extends BaseActivity {
 
     private void initDate() {
         Intent intent = getIntent();
-        String groveSku = intent.getStringExtra(Intent_Grove);
+        String groveSku = intent.getStringExtra(Intent_GroveSku);
         List<GroverDriver> groves = DBHelper.getGroves(groveSku);
         if (groves == null && groves.size() == 0) {
             finish();
@@ -75,7 +73,7 @@ public class GroveDetailActivity extends BaseActivity {
 
         ImgUtil.displayImg(mGroveImg, grove.ImageURL, R.mipmap.grove_default);
         mTvGroveName.setText(grove.GroveName.length() > 23 ? grove.GroveName.substring(0,23)+"...":grove.GroveName);
-     //   mTvGroveDesc.setText(grove.IncludePath);
+        mTvGroveDesc.setText(grove.Description);
 
     }
 
@@ -93,7 +91,7 @@ public class GroveDetailActivity extends BaseActivity {
             return true;
         } else if (id == R.id.share) {
         //    DialogUtils.showShare(GroveDetailActivity.this,"activity Share","Share",grove.GroveName);
-            ShareUtils.show(GroveDetailActivity.this,"Wiki",grove.GroveName,null);
+            ShareUtils.show(GroveDetailActivity.this,"Wiki",grove.WikiURL,null);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -105,7 +103,7 @@ public class GroveDetailActivity extends BaseActivity {
      /*   Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra(WebActivity.Intent_Url,"http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
         startActivity(intent);*/
-        Uri uri = Uri.parse("http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
+        Uri uri = Uri.parse(grove.WikiURL);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }

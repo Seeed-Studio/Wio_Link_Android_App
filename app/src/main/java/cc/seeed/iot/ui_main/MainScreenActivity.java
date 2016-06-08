@@ -152,6 +152,9 @@ public class MainScreenActivity extends BaseActivity
             public void onRefresh() {
                 mSRL.setRefreshing(true);
                 getNodeList();
+                List<GroverDriver> drivers = DBHelper.getGrovesAll();
+                if (drivers == null || drivers.size() == 0)
+                    getGrovesData();
             }
         });
 
@@ -227,7 +230,9 @@ public class MainScreenActivity extends BaseActivity
     }
 
     private void initData() {
-
+        if (!isLogin()) {
+            return;
+        }
         user = UserLogic.getInstance().getUser();
         nodes = DBHelper.getNodesAll();
         firstUseState = ((App) MainScreenActivity.this.getApplication()).getFirstUseState();
@@ -447,7 +452,6 @@ public class MainScreenActivity extends BaseActivity
 
 
     private void setupActivity(String board) {
-        ((App) getApplication()).setConfigState(true);
         Intent intent = new Intent(MainScreenActivity.this, Step01GoReadyActivity.class);
         intent.putExtra("board", board);
         startActivity(intent);

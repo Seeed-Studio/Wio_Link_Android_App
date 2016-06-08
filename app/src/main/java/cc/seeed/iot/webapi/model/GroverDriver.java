@@ -12,6 +12,8 @@ import java.util.Map;
  */
 @Table(name = "groves")
 public class GroverDriver extends Model {
+
+
     @Column(name = "sku", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String SKU;
 
@@ -62,6 +64,13 @@ public class GroverDriver extends Model {
 
     @Column(name = "construct_arg_list")
     public List<String> ConstructArgList;
+
+    @Column(name = "wiki_url")
+    public String WikiURL;
+
+    @Column(name = "description")
+    public String Description;
+
 
     @Override
     public boolean equals(Object obj) {
