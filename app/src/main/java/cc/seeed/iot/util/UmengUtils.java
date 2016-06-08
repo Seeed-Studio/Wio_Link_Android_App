@@ -119,19 +119,19 @@ public class UmengUtils {
         @Override
         public void onResult(SHARE_MEDIA platform) {
             // Toast.makeText(ShareActivity.this,platform + " 分享成功啦", Toast.LENGTH_SHORT).show();
-            App.showToastShrot("分享成功啦");
+            App.showToastShrot("Success");
         }
 
         @Override
         public void onError(SHARE_MEDIA platform, Throwable t) {
             //  Toast.makeText(ShareActivity.this,platform + " 分享失败啦", Toast.LENGTH_SHORT).show();
-            App.showToastShrot("分享失败啦:" + t.toString());
+            App.showToastShrot("Fail");
         }
 
         @Override
         public void onCancel(SHARE_MEDIA platform) {
             //  Toast.makeText(ShareActivity.this,platform + " 分享取消了", Toast.LENGTH_SHORT).show();
-            App.showToastShrot("分享取消了");
+            App.showToastShrot("Cancel");
         }
     };
 

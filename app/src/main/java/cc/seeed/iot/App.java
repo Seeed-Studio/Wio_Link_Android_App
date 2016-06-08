@@ -16,6 +16,7 @@ import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.webapi.IotApi;
+import cn.sharesdk.framework.ShareSDK;
 
 /**
  * Created by tenwong on 15/7/9.
@@ -45,6 +46,7 @@ public class App extends com.activeandroid.app.Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         PlatformConfig.setTwitter("hDpph8vR0zZgnXCH7XStcmu8Z", "E8qVkQUVjOmhrS0OPvKllX6HFaEqnMJeu9CpRpVQY12VpzAaE9");
         init();
+        ShareSDK.initSDK(this);
         getIpAddress();
     }
     /**

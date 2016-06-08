@@ -15,8 +15,15 @@ import android.widget.PopupWindow;
 
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.util.HashMap;
+
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.view.FontTextView;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.google.GooglePlus;
 
 /**
  * author: Jerry on 2016/6/3 14:27.
@@ -101,10 +108,11 @@ public class ShareUtils {
                     UmengUtils.share(activity, SHARE_MEDIA.TWITTER, shareTitle, shareUrl, shareUrl, shareImgUrl);
 //                       UmengUtils.shareToTwitter(activity,shareUrl);
                     // shareToTwitter();
-                 //   showShare(activity, ShareSDK.getPlatform(Twitter.NAME).getName(), false);
+                    //   showShare(activity, ShareSDK.getPlatform(Twitter.NAME).getName(), false);
                     break;
                 case R.id.mLlGoogle:
-                    UmengUtils.share(activity, SHARE_MEDIA.GOOGLEPLUS, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    //  UmengUtils.share(activity, SHARE_MEDIA.GOOGLEPLUS, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    shareToGoogle(shareUrl, shareUrl);
                     break;
                 case R.id.mLlWhatsapp:
                     UmengUtils.share(activity, SHARE_MEDIA.WHATSAPP, shareTitle, shareUrl, shareUrl, shareImgUrl);
@@ -125,6 +133,36 @@ public class ShareUtils {
             }
         }
     };
+
+    private static void shareToGoogle(String context, String url) {
+        if (!ToolUtil.isInstallByread("com.google.android.apps.plus")) {
+            App.showToastShrot("App not installed");
+            return;
+        }
+        GooglePlus.ShareParams sp = new GooglePlus.ShareParams();
+        sp.setText(context);
+        sp.setUrl(url);
+
+        Platform weibo = ShareSDK.getPlatform(GooglePlus.NAME);
+        weibo.setPlatformActionListener(new PlatformActionListener() {
+            @Override
+            public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
+                App.showToastShrot("Success");
+            }
+
+            @Override
+            public void onError(Platform platform, int i, Throwable throwable) {
+                App.showToastShrot("Fail");
+            }
+
+            @Override
+            public void onCancel(Platform platform, int i) {
+                App.showToastShrot("Cancel");
+            }
+        }); // 设置分享事件回调
+// 执行图文分享
+        weibo.share(sp);
+    }
 
   /*  private static void shareToTwitter() {
         Platform.ShareParams sp = new Platform.ShareParams();
