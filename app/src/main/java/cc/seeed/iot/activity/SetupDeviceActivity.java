@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -262,9 +263,11 @@ public class SetupDeviceActivity extends BaseActivity
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         int position = pinConfig.position;
                         pinBadgeUpdateAll();
-                        if (pinDeviceCount(position) == 0)
+                        if (pinDeviceCount(position) == 0) {
                             mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
-                        else
+                            mGrovePinsView.pinViews[pinConfig.position].setActivated(false);
+                            mGrovePinsView.pinViews[pinConfig.position].setPressed(false);
+                        }else
                             mGrovePinsView.updatePin(pinConfigs, position);
                     }
                     break;
@@ -272,6 +275,8 @@ public class SetupDeviceActivity extends BaseActivity
                     case RMV_GROVE: {
                         PinConfig pinConfig = (PinConfig) msg.obj;
                         mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
+                        mGrovePinsView.pinViews[pinConfig.position].setActivated(false);
+                        mGrovePinsView.pinViews[pinConfig.position].setPressed(false);
                     }
                     break;
                 }
@@ -594,20 +599,20 @@ public class SetupDeviceActivity extends BaseActivity
                         if (!Arrays.asList(interfaceTypes).contains(groverDriver.InterfaceType))
                             return false;
 
-                        v.setActivated(true);
+                        v.setPressed(true);
                         ((ImageView) v).setImageAlpha(64);
                     }
                     break;
                     case DragEvent.ACTION_DRAG_ENTERED:
-                        v.setActivated(false);
+                        v.setPressed(false);
                         ((ImageView) v).setImageAlpha(64);
                         break;
                     case DragEvent.ACTION_DRAG_EXITED:
-                        v.setActivated(true);
+                        v.setPressed(true);
                         ((ImageView) v).setImageAlpha(64);
                         break;
                     case DragEvent.ACTION_DRAG_ENDED:
-                        v.setActivated(false);
+                        v.setPressed(false);
                         ((ImageView) v).setImageAlpha(255);
                         break;
                     case DragEvent.ACTION_DROP: {
@@ -628,6 +633,7 @@ public class SetupDeviceActivity extends BaseActivity
                             removePinAllGrove(pin_position);
                         }
                         addGrove(pinConfig);
+                        v.setActivated(true);
 
                         if (isHasI2cGrove(pin_position)) {
                             Message message = Message.obtain();
@@ -660,7 +666,6 @@ public class SetupDeviceActivity extends BaseActivity
                             PinConfig pinConfig = (PinConfig) event.getLocalState();
 
                             removeGrove(pinConfig);
-
                             if (isI2cGrove(pinConfig)) {
                                 Message message = Message.obtain();
                                 message.what = RMV_I2C_GROVE;

@@ -20,6 +20,7 @@
         android:id="@+id/mLinkGrove_01"
         style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
+        android:src="@mipmap/wio_link"
         android:layout_marginTop="38dp"
         android:layout_toLeftOf="@+id/node_view" />
 
