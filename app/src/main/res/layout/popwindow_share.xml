@@ -76,7 +76,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
-                    android:text="Safari"
+                    android:text="Browser"
                     android:textColor="#FF3A4B71"
                     android:textSize="12sp"
                     app:cusTextFont="@string/Proxima_Nova_Regular" />

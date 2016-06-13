@@ -62,7 +62,7 @@ public class HelpActivity extends BaseActivity {
 
         url = R.mipmap.help03_blink_1_quick;
         ques = "Connecting to server";
-        answer = "When blue LED blinks twice then quickly off for 1 second, your Wio device is connecting to server. It might take up to a minute.";
+        answer = "When blue LED blinks once then quickly off for 1 second, your Wio device is connecting to server. It might take up to a minute.";
         FAQBean bean3 = new FAQBean(url, ques, answer);
 
         url = R.mipmap.help04_no_blink;

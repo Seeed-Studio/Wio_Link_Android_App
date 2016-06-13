@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -74,6 +76,11 @@ public class GroveDetailActivity extends BaseActivity {
         ImgUtil.displayImg(mGroveImg, grove.ImageURL, R.mipmap.grove_default);
         mTvGroveName.setText(grove.GroveName.length() > 23 ? grove.GroveName.substring(0,23)+"...":grove.GroveName);
         mTvGroveDesc.setText(grove.Description);
+        if (TextUtils.isEmpty(grove.WikiURL)){
+            mLlLinkWiki.setVisibility(View.GONE);
+        }else {
+            mLlLinkWiki.setVisibility(View.VISIBLE);
+        }
 
     }
 

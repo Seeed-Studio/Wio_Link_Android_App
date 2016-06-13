@@ -10,5 +10,5 @@
         android:background="@color/setup_blue"
         android:contentDescription="splash"
         android:scaleType="centerCrop"
-        android:src="@drawable/logo" />
+        android:src="@mipmap/welcome" />
 </RelativeLayout>

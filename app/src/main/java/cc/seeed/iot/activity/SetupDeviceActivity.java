@@ -138,7 +138,7 @@ public class SetupDeviceActivity extends BaseActivity
     CustomProgressDialog progressDialog;
     GrovePinsView mGrovePinsView;
     private boolean isUpdateIng = false;
-
+    private NodeJson old_node_josn;
     private Handler mHandler;
 
     @Override
@@ -172,8 +172,8 @@ public class SetupDeviceActivity extends BaseActivity
             int num = (int) ToolUtil.getSimpleName(mGroveDrivers.get(0).GroveName).charAt(0);
             if ((num >= 'a' && num <= 'z') || (num >= 'A' && num <= 'Z')) {
                 break;
-            }else {
-                mGroveDrivers.add(mGroveDrivers.size(),mGroveDrivers.get(0));
+            } else {
+                mGroveDrivers.add(mGroveDrivers.size(), mGroveDrivers.get(0));
                 mGroveDrivers.remove(0);
             }
         }
@@ -190,6 +190,9 @@ public class SetupDeviceActivity extends BaseActivity
             mWioLinkLayout.setVisibility(View.GONE);
             mWioNodeLayout.setVisibility(View.VISIBLE);
         }
+
+        List<PinConfig> list = PinConfigDBHelper.getPinConfigs(node.node_sn);
+        old_node_josn = new NodeConfigHelper().getConfigJson(list, node);
 
         mGrovePinsView = new GrovePinsView(this, mSetupDevice, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
@@ -308,7 +311,7 @@ public class SetupDeviceActivity extends BaseActivity
         int id = item.getItemId();
         if (id == android.R.id.home) {
             quitHint();
-         //   finish();
+            //   finish();
             return true;
         } else if (id == R.id.update) {
             List<String> menu = new ArrayList<>();
@@ -364,7 +367,7 @@ public class SetupDeviceActivity extends BaseActivity
             return;
         }
 
-        if (!node.online){
+        if (!node.online) {
             DialogUtils.showErrorDialog(this, "Tip", "OK", "", "Node is offline", null);
             return;
         }
@@ -394,8 +397,6 @@ public class SetupDeviceActivity extends BaseActivity
     }
 
     public void quitHint() {
-        List<PinConfig> list = PinConfigDBHelper.getPinConfigs(node.node_sn);
-        NodeJson old_node_josn = new NodeConfigHelper().getConfigJson(list, node);
         NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
         if (old_node_josn.connections.toString().equals(node_josn.connections.toString())) {
             finish();
@@ -827,8 +828,8 @@ public class SetupDeviceActivity extends BaseActivity
                     int num = (int) ToolUtil.getSimpleName(g.get(0).GroveName).charAt(0);
                     if ((num >= 'a' && num <= 'z') || (num >= 'A' && num <= 'Z')) {
                         break;
-                    }else {
-                        g.add(g.size(),g.get(0));
+                    } else {
+                        g.add(g.size(), g.get(0));
                         g.remove(0);
                     }
                 }
@@ -852,6 +853,7 @@ public class SetupDeviceActivity extends BaseActivity
         if (Cmd_UpdateFirwareStute.equals(event)) {
             if (ret == ConfigDeviceLogic.UPDATE_DONE) {
                 stopUpdate();
+                old_node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
                 //  DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
                 App.showToastShrot("Firmware Updated!");
             } else if (ret == ConfigDeviceLogic.UPDATEING) {
@@ -904,8 +906,8 @@ public class SetupDeviceActivity extends BaseActivity
 
     @Override
     public void onItemClick(GroverDriver grove, int position) {
-        Intent intent = new Intent(SetupDeviceActivity.this,GroveDetailActivity.class);
-        intent.putExtra(GroveDetailActivity.Intent_GroveSku,grove.SKU);
+        Intent intent = new Intent(SetupDeviceActivity.this, GroveDetailActivity.class);
+        intent.putExtra(GroveDetailActivity.Intent_GroveSku, grove.SKU);
         startActivity(intent);
     }
 }
