@@ -35,6 +35,7 @@ public class ShareUtils {
     private static String shareTitle;
     private static String shareUrl;
     private static String shareImgUrl;
+    private static boolean isWiki = false;
 
     public static void initShare() {
         /*TwitterAuthConfig authConfig =  new TwitterAuthConfig("jWP91R6MLroH8BSA32Clr9plO", "bJo6j3EtsD9Hby4UQmYzJwDgDOWxiwAduOSOqSvH3vTmKs2nOR");
@@ -64,6 +65,10 @@ public class ShareUtils {
         return popWindow;
     }
 
+    public static void setIsWiki(boolean iswiki) {
+        isWiki = iswiki;
+    }
+
     public static void initPop(View view) {
         LinearLayout mLlCopy = (LinearLayout) view.findViewById(R.id.mLlCopy);
         LinearLayout mLlSafari = (LinearLayout) view.findViewById(R.id.mLlSafari);
@@ -91,34 +96,34 @@ public class ShareUtils {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.mLlCopy:
-                    SystemUtils.copy(shareUrl, activity);
+                    SystemUtils.copy(getShareUrl(null), activity);
                     break;
                 case R.id.mLlSafari:
-                    Uri uri = Uri.parse(shareUrl);
+                    Uri uri = Uri.parse(getShareUrl(null));
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     activity.startActivity(intent);
                     break;
                 case R.id.mLlMail:
-                    SystemUtils.sendEmail(activity, TextUtils.isEmpty(shareTitle) ? shareUrl : shareTitle + " " + shareUrl, "");
+                    SystemUtils.sendEmail(activity, TextUtils.isEmpty(shareTitle) ? getShareUrl(null) : shareTitle + " " + getShareUrl(null), "");
                     break;
                 case R.id.mLlMessage:
-                    SystemUtils.sendSmsWithBody(activity, "", TextUtils.isEmpty(shareTitle) ? shareUrl : shareTitle + " " + shareUrl);
+                    SystemUtils.sendSmsWithBody(activity, "", TextUtils.isEmpty(shareTitle) ? getShareUrl(null) : shareTitle + " " + getShareUrl(null));
                     break;
                 case R.id.mLlTwitter:
-                    UmengUtils.share(activity, SHARE_MEDIA.TWITTER, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    UmengUtils.share(activity, SHARE_MEDIA.TWITTER, shareTitle, getShareUrl("twitter"), getShareUrl("twitter"), shareImgUrl);
 //                       UmengUtils.shareToTwitter(activity,shareUrl);
                     // shareToTwitter();
                     //   showShare(activity, ShareSDK.getPlatform(Twitter.NAME).getName(), false);
                     break;
                 case R.id.mLlGoogle:
                     //  UmengUtils.share(activity, SHARE_MEDIA.GOOGLEPLUS, shareTitle, shareUrl, shareUrl, shareImgUrl);
-                    shareToGoogle(shareUrl, shareUrl);
+                    shareToGoogle(getShareUrl("google"),getShareUrl("google"));
                     break;
                 case R.id.mLlWhatsapp:
-                    UmengUtils.share(activity, SHARE_MEDIA.WHATSAPP, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    UmengUtils.share(activity, SHARE_MEDIA.WHATSAPP, shareTitle,getShareUrl("whatsapp"), getShareUrl("whatsapp"), shareImgUrl);
                     break;
                 case R.id.mLlFacebook:
-                    UmengUtils.share(activity, SHARE_MEDIA.FACEBOOK, shareTitle, shareUrl, shareUrl, shareImgUrl);
+                    UmengUtils.share(activity, SHARE_MEDIA.FACEBOOK, shareTitle, getShareUrl("facebook"),  getShareUrl("facebook"), shareImgUrl);
                     // UmengUtils.shareFacebookMessenger(activity, shareUrl, shareImgUrl);
                     break;
                 case R.id.mTvCancel:
@@ -133,6 +138,20 @@ public class ShareUtils {
             }
         }
     };
+
+    private static String getShareUrl(String utm_content) {
+        String url = "";
+        if (isWiki) {
+            if (!TextUtils.isEmpty(utm_content)) {
+                url = shareUrl + "?utm_source=Wio&utm_medium=Android&utm_content=" + utm_content + "&utm_campaign=WIKI";
+            }else {
+                url = shareUrl+"?utm_source=Wio&utm_medium=Android&utm_campaign=WIKI";
+            }
+        } else {
+            url = shareUrl;
+        }
+        return url;
+    }
 
     private static void shareToGoogle(String context, String url) {
         if (!ToolUtil.isInstallByread("com.google.android.apps.plus")) {

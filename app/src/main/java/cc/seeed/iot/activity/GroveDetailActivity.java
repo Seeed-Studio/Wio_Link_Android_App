@@ -99,6 +99,7 @@ public class GroveDetailActivity extends BaseActivity {
         } else if (id == R.id.share) {
         //    DialogUtils.showShare(GroveDetailActivity.this,"activity Share","Share",grove.GroveName);
             ShareUtils.show(GroveDetailActivity.this,"Wiki",grove.WikiURL,null);
+            ShareUtils.setIsWiki(true);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -110,7 +111,7 @@ public class GroveDetailActivity extends BaseActivity {
      /*   Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra(WebActivity.Intent_Url,"http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
         startActivity(intent);*/
-        Uri uri = Uri.parse(grove.WikiURL);
+        Uri uri = Uri.parse(grove.WikiURL+"?utm_source=Wio&utm_medium=Android&utm_campaign=WIKI");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }

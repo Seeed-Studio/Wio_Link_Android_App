@@ -257,6 +257,11 @@ public class SetupDeviceActivity extends BaseActivity
                     }
                     break;
                     case ADD_GROVE: {
+                        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+
+                        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
+                            pinBadgeUpdateAll();
+                        }
                     }
                     break;
                     case RMV_I2C_GROVE: {
@@ -267,7 +272,7 @@ public class SetupDeviceActivity extends BaseActivity
                             mGrovePinsView.pinViews[pinConfig.position].setImageDrawable(null);
                             mGrovePinsView.pinViews[pinConfig.position].setActivated(false);
                             mGrovePinsView.pinViews[pinConfig.position].setPressed(false);
-                        }else
+                        } else
                             mGrovePinsView.updatePin(pinConfigs, position);
                     }
                     break;
@@ -333,7 +338,7 @@ public class SetupDeviceActivity extends BaseActivity
                             MobclickAgent.onEvent(SetupDeviceActivity.this, "15003");
                             NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
                             if (node_josn.connections.isEmpty()) {
-                                DialogUtils.showErrorDialog(SetupDeviceActivity.this, "Tip", "OK", "", "Sure leave without updating hardware?", null);
+                                DialogUtils.showErrorDialog(SetupDeviceActivity.this, "Tip", "OK", "", "No Grove was found in API. Please update hardware and try again.", null);
                             } else {
                                 intent = new Intent(SetupDeviceActivity.this, WebActivity.class);
                                 intent.putExtra(WebActivity.Intent_Url, ToolUtil.getApiUrl(node));
@@ -367,7 +372,7 @@ public class SetupDeviceActivity extends BaseActivity
         if (node.name == null)
             return;
         NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-        if (node_josn.connections.isEmpty()) {
+        if (old_node_josn.connections.isEmpty() && node_josn.connections.isEmpty()) {
             DialogUtils.showErrorDialog(this, "Tip", "OK", "", "No Grove was found in API. Please update hardware and try again.", null);
             return;
         }
@@ -493,7 +498,9 @@ public class SetupDeviceActivity extends BaseActivity
             case R.id.mLinkGrove_06:
                 GrovePinsView.Tag tag = (GrovePinsView.Tag) v.getTag();
                 int position = tag.position;
-                displayI2cListView(position);
+                if (pinDeviceCount(position) > 1) {
+                    displayI2cListView(position);
+                }
                 break;
             case R.id.mBtnUpdate:
                 MobclickAgent.onEvent(this, "15002");
@@ -517,12 +524,12 @@ public class SetupDeviceActivity extends BaseActivity
                 case R.id.mLinkGrove_03:
                 case R.id.mLinkGrove_04:
                 case R.id.mLinkGrove_05:
+                case R.id.mLinkGrove_06:
                     if (pinDeviceCount(position) == 1) {
                         startDragRemove(v);
+                    } else if (pinDeviceCount(position) > 1) {
+                        displayI2cListView(position);
                     }
-                    break;
-                case R.id.mLinkGrove_06:
-                    displayI2cListView(position);
                     break;
             }
         } else {
@@ -542,7 +549,7 @@ public class SetupDeviceActivity extends BaseActivity
     }
 
     private void displayI2cListView(int position) {
-        if (pinDeviceCount(position) <= 1) {
+        if (pinDeviceCount(position) < 1) {
             return;
         }
         List<PinConfig> pinConfigs = new ArrayList<>();

@@ -63,8 +63,8 @@ public class GrovePinsView {
 
 //        badgeViews[0].setTargetView(pinViews[0]);
 //        badgeViews[1].setTargetView(pinViews[1]);
-        setPinView(pinViews[0],badgeViews[0]);
-        setPinView(pinViews[1],badgeViews[1]);
+        setPinView(pinViews[0], badgeViews[0]);
+        setPinView(pinViews[1], badgeViews[1]);
 
         badgeViews[0].setVisibility(View.GONE);
         badgeViews[1].setVisibility(View.GONE);
@@ -100,9 +100,9 @@ public class GrovePinsView {
 
         for (int i = 0; i < 6; i++) {
             badgeViews[i] = new BadgeView(context);
-          //  badgeViews[i].setTargetView(pinViews[i]);
+            //  badgeViews[i].setTargetView(pinViews[i]);
             badgeViews[i].setVisibility(View.GONE);
-            setPinView(pinViews[i],badgeViews[i]);
+            setPinView(pinViews[i], badgeViews[i]);
         }
 
         List<PinConfig> pinConfigs = PinConfigDBHelper.getPinConfigs(node.node_sn);
@@ -110,7 +110,7 @@ public class GrovePinsView {
             try {
                 String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
                 pinViews[pinConfig.position].setActivated(true);
-                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default,UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
             } catch (Exception e) {
                 Log.e(TAG, "getGroves:" + e);
             }
@@ -124,7 +124,7 @@ public class GrovePinsView {
                 try {
                     String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
                     pinViews[pinConfig.position].setActivated(true);
-                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default,UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
                 } catch (Exception e) {
                     Log.e(TAG, "getGroves:" + e);
                 }
@@ -143,19 +143,24 @@ public class GrovePinsView {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void setPinView(ImageButton tragetView,BadgeView view){
-        int w = View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED);
+    private void setPinView(ImageButton tragetView, BadgeView view) {
+        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         tragetView.measure(w, h);
         int height = tragetView.getMeasuredHeight();
         int width = tragetView.getMeasuredWidth();
 
-      //  view.setBackgroundResource(R.drawable.grove_i2c_mark_bg);
+        //  view.setBackgroundResource(R.drawable.grove_i2c_mark_bg);
         ViewGroup.LayoutParams params = view.getLayoutParams();
-        params.height = height- ToolUtil.dp2px(23,context.getResources());
-        params.width = width- ToolUtil.dp2px(20,context.getResources());
+        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+            params.height = height - ToolUtil.dp2px(23, context.getResources());
+            params.width = width - ToolUtil.dp2px(20, context.getResources());
+        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
+            params.height = height - ToolUtil.dp2px(9.5f, context.getResources());
+            params.width = width - ToolUtil.dp2px(20, context.getResources());
+        }
         view.setLayoutParams(params);
-      // view.setBackgroundColor(Color.parseColor("#80000000"));
+        // view.setBackgroundColor(Color.parseColor("#80000000"));
         view.setBackgroundResource(R.drawable.badgview_bg);
         //  view.setGravity(Gravity.CENTER);
         view.setTextColor(Color.parseColor("#ffffff"));

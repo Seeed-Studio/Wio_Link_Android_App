@@ -24,9 +24,10 @@
         android:layout_marginTop="43dp"
         android:layout_toLeftOf="@+id/node_view"
         android:layout_toStartOf="@+id/node_view"
+        android:padding="6.5dp"
         android:background="@drawable/state_grove_bg"
         android:clickable="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerInside" />
 
     <ImageButton
         android:id="@+id/mNodeGrove_02"
@@ -36,8 +37,9 @@
         android:layout_marginTop="43dp"
         android:layout_toEndOf="@+id/node_view"
         android:layout_toRightOf="@+id/node_view"
+        android:padding="6.5dp"
         android:background="@drawable/state_grove_bg"
         android:clickable="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerInside" />
 
 </RelativeLayout>
