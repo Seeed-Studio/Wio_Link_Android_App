@@ -152,13 +152,15 @@ public class GrovePinsView {
 
         //  view.setBackgroundResource(R.drawable.grove_i2c_mark_bg);
         ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+     /*   if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             params.height = height - ToolUtil.dp2px(23, context.getResources());
             params.width = width - ToolUtil.dp2px(20, context.getResources());
         } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
             params.height = height - ToolUtil.dp2px(9.5f, context.getResources());
             params.width = width - ToolUtil.dp2px(20, context.getResources());
-        }
+        }*/
+        params.height = height;
+        params.width = width ;
         view.setLayoutParams(params);
         // view.setBackgroundColor(Color.parseColor("#80000000"));
         view.setBackgroundResource(R.drawable.badgview_bg);

@@ -70,6 +70,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     Button mBtnOpenWifi;
     @InjectView(R.id.mBtnEditName)
     Button mBtnEditName;
+    @InjectView(R.id.mBtnNodeResult)
+    Button mBtnNodeResult;
 
     private ConfigUdpSocket udpClient;
     public int checkId = 0;
@@ -119,7 +121,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi,R.id.mBtnEditName})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi,R.id.mBtnEditName,R.id.mBtnNodeResult})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -139,7 +141,10 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 wifiManager.setWifiEnabled(true);
                 break;
             case R.id.mBtnEditName:
-                DialogUtils.showEditNodeNameDialog(this,"",null);
+                DialogUtils.showEditNodeNameDialog(this, "", null);
+                break;
+            case R.id.mBtnNodeResult:
+               startActivity(new Intent(this,GroveResultActivity.class));
                 break;
         }
     }

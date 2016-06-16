@@ -108,21 +108,21 @@ public class SetupDeviceActivity extends BaseActivity
     @InjectView(R.id.node_view)
     ImageView nodeView;
     @InjectView(R.id.mLinkGrove_01)
-    ImageButton grove0;
+    ImageButton mLinkGrove_01;
     @InjectView(R.id.mLinkGrove_02)
-    ImageButton grove1;
+    ImageButton mLinkGrove_02;
     @InjectView(R.id.mLinkGrove_03)
-    ImageButton grove2;
+    ImageButton mLinkGrove_03;
     @InjectView(R.id.mLinkGrove_04)
-    ImageButton grove3;
+    ImageButton mLinkGrove_04;
     @InjectView(R.id.mLinkGrove_05)
-    ImageButton grove4;
+    ImageButton mLinkGrove_05;
     @InjectView(R.id.mLinkGrove_06)
-    ImageButton grove5;
+    ImageButton mLinkGrove_06;
     @InjectView(R.id.mNodeGrove_01)
-    ImageButton grove6;
+    ImageButton mNodeGrove_01;
     @InjectView(R.id.mNodeGrove_02)
-    ImageButton grove7;
+    ImageButton mNodeGrove_02;
     @InjectView(R.id.set_link)
     RelativeLayout mSetNodeLayout;
     @InjectView(R.id.setup_device)

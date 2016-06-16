@@ -78,6 +78,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
         <activity android:name=".activity.GrovesActivity" />
+        <activity android:name=".activity.GroveResultActivity" />
         <activity android:name=".ui_main.WebActivity" />
         <activity android:name=".activity.NodeSettingActivity" />
         <activity android:name="cc.seeed.iot.ui_main.MainSettingActivity" />

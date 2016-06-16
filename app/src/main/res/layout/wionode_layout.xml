@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/node_view"
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="104dp"
+        android:layout_height="104dp"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
         android:src="@mipmap/node_large" />
@@ -18,27 +18,23 @@
 
     <ImageButton
         android:id="@+id/mNodeGrove_01"
-        android:layout_width="80dp"
-        android:layout_height="52dp"
+        style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="31dp"
         android:layout_toLeftOf="@+id/node_view"
+        android:layout_marginRight="1dp"
         android:layout_toStartOf="@+id/node_view"
-        android:padding="6.5dp"
-        android:background="@drawable/state_grove_bg"
         android:clickable="true"
         android:scaleType="centerInside" />
 
     <ImageButton
         android:id="@+id/mNodeGrove_02"
-        android:layout_width="80dp"
-        android:layout_height="52dp"
+        style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginLeft="1dp"
         android:layout_toEndOf="@+id/node_view"
         android:layout_toRightOf="@+id/node_view"
-        android:padding="6.5dp"
-        android:background="@drawable/state_grove_bg"
         android:clickable="true"
         android:scaleType="centerInside" />
 

@@ -83,10 +83,10 @@ public class NetManager {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 error.printStackTrace(System.out);
-                String s = new String(responseBody);
+             //   String s = new String(responseBody);
                 final Packet resp = new Packet();
                 resp.code = statusCode;
-                resp.data = s;
+                resp.data = "";
                 resp.errorMsg = error.toString();
                 resp.status = false;
 
@@ -326,6 +326,63 @@ public class NetManager {
                     }
                     resp.status = false;
                 }
+
+                if (callback != null) {
+                    if (callback instanceof INetUiThreadCallBack) {
+                        ThreadManager.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onResp(request, resp);
+                            }
+                        }, 0);
+                    } else {
+                        callback.onResp(request, resp);
+                    }
+                }
+            }
+        });
+    }
+
+    public void get(String url, String cmd, final INetCallback callback) {
+        final Request request = new Request();
+        request.callback = callback;
+        request.cmd = cmd;
+
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.setSSLSocketFactory(createSSLSocketFactory());
+        client.setTimeout(NetTimeout);
+        client.get(url, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                String s = new String(responseBody);
+                final Packet resp = new Packet();
+                resp.code = statusCode;
+                resp.data = s;
+                resp.status = true;
+
+                if (callback != null) {
+                    if (callback instanceof INetUiThreadCallBack) {
+                        ThreadManager.getInstance().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                callback.onResp(request, resp);
+                            }
+                        }, 0);
+                    } else {
+                        callback.onResp(request, resp);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                error.printStackTrace(System.out);
+                //   String s = new String(responseBody);
+                final Packet resp = new Packet();
+                resp.code = statusCode;
+                resp.data = "";
+                resp.errorMsg = error.toString();
+                resp.status = false;
 
                 if (callback != null) {
                     if (callback instanceof INetUiThreadCallBack) {
