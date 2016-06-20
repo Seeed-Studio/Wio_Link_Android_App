@@ -16,6 +16,7 @@ import android.os.Process;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -319,6 +320,30 @@ public class DialogUtils {
                     }
                     listenter.okClick(dialog, name);
                 }
+            }
+        });
+
+        dialog.show();
+        dialog.setContentView(view);
+        return dialog;
+    }
+
+    public static Dialog showWarningDialog(Context context, final View.OnClickListener listener) {
+
+        final Dialog dialog = new Dialog(context,R.style.DialogStyle);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_warning, null);
+
+        FontTextView mTvHint = (FontTextView) view.findViewById(R.id.mTvHint);
+        FontButton mTvSubmit = (FontButton) view.findViewById(R.id.mTvSubmit);
+        mTvHint.setText(Html.fromHtml(context.getString(R.string.old_server_hint)));
+
+        mTvSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null){
+                    listener.onClick(v);
+                }
+                dialog.dismiss();
             }
         });
 

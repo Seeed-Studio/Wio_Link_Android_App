@@ -23,6 +23,8 @@ public interface CmdConst {
     String Cmd_Node_Remove = "node_remove";
 
     String Cmd_App_Update = "app_update";
+    String Cmd_Update_Avatar = "update_avatar";
+    String Cmd_Change_User_Info = "change_user_info";
 
 
 }

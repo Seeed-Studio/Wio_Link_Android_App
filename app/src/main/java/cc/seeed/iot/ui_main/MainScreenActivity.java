@@ -1,11 +1,15 @@
 package cc.seeed.iot.ui_main;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,17 +20,23 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,10 +62,13 @@ import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
+import cc.seeed.iot.util.Common;
+import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.ComparatorUtils;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.FileUtil;
 import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.ToolUtil;
@@ -69,6 +82,7 @@ import cc.seeed.iot.webapi.model.NodeConfigResponse;
 import cc.seeed.iot.webapi.model.NodeJson;
 import cc.seeed.iot.webapi.model.NodeListResponse;
 import cc.seeed.iot.webapi.model.SuccessResponse;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -81,6 +95,11 @@ public class MainScreenActivity extends BaseActivity
     private static final int MESSAGE_NODE_LIST_START = 0x02;
     private static final int MESSAGE_NODE_LIST_COMPLETE = 0x03;
     private static final int MESSAGE_NODE_CONFIG_COMPLETE = 0x04;
+
+    public static final int PHOTOZOOM = 0; // 相册
+    public static final int PHOTOTAKE = 1; // 拍照
+    ProgressDialog dialog;
+
     NavigationView navview;
     DrawerLayout drawerlayout;
 
@@ -372,6 +391,9 @@ public class MainScreenActivity extends BaseActivity
                 setupActivity(Constant.WIO_NODE_V1_0);
                 break;
             case R.id.mSDVAvatar:
+                if (App.getApp().isDefaultServer()){
+                    setAvatarPopWindow(this);
+                }
                 break;
             case R.id.mTvEmail:
                 break;
@@ -680,7 +702,7 @@ public class MainScreenActivity extends BaseActivity
 
     @Override
     public String[] monitorEvents() {
-        return new String[]{Cmd_Node_Remove};
+        return new String[]{Cmd_Node_Remove, Cmd_Update_Avatar, Cmd_Change_User_Info};
     }
 
     @Override
@@ -709,6 +731,131 @@ public class MainScreenActivity extends BaseActivity
             } else {
                 App.showToastShrot(errInfo);
             }
+        } else if (Cmd_Update_Avatar.equals(event)) {
+            if (ret) {
+                if (data != null) {
+                    String path = (String) data[0];
+                    if (!TextUtils.isEmpty(path)) {
+                        UserLogic.getInstance().changeUserInfo(Common.ChangeAvatar, path);
+                    }
+                }
+            } else {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                App.showToastShrot("Network Error,Picture upload fail.");
+            }
+        } else if (Cmd_Change_User_Info.equals(event)) {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            if (ret) {
+                user = UserLogic.getInstance().getUser();
+                ImgUtil.displayImg(mSDVAvatar, user.avater, R.mipmap.icon);
+            } else {
+                App.showToastShrot(errInfo);
+            }
+        }
+    }
+
+    public void setAvatarPopWindow(Activity activity) {
+
+        View view = LayoutInflater.from(activity).inflate(R.layout.popwindow_selete_avatar, null);
+        final PopupWindow popWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popWindow.dismiss();
+            }
+        });
+        //initPop(view);
+        TextView mTVItem01 = (TextView) view.findViewById(R.id.mTVItem01);
+        TextView mTVItem02 = (TextView) view.findViewById(R.id.mTVItem02);
+        TextView mTVItem03 = (TextView) view.findViewById(R.id.mTVItem03);
+        TextView mTVItem04 = (TextView) view.findViewById(R.id.mTVItem04);
+
+        mTVItem01.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        mTVItem02.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainScreenActivity.this, MultiImageSelectorActivity.class);
+                intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, false);
+                intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, 1);
+                intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, MultiImageSelectorActivity.MODE_MULTI);
+                startActivityForResult(intent, PHOTOZOOM);
+
+                popWindow.dismiss();
+            }
+        });
+        mTVItem03.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent mIntent = new Intent();
+                mIntent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(mIntent, PHOTOTAKE);
+                popWindow.dismiss();
+            }
+        });
+        mTVItem04.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popWindow.dismiss();
+            }
+        });
+
+
+        popWindow.setFocusable(true);
+        popWindow.setOutsideTouchable(true);
+        popWindow.setBackgroundDrawable(new BitmapDrawable());
+        popWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        popWindow.showAtLocation(new View(activity), Gravity.CENTER, 0, 0);
+//        popWindow.showAsDropDown(targetView);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri = null;
+        switch (requestCode) {
+            case PHOTOZOOM://相册
+                if (data == null) {
+                    return;
+                }
+                ArrayList<String> list1 = data.getStringArrayListExtra(MultiImageSelectorActivity.EXTRA_RESULT);
+                if (list1 != null && list1.size() > 0) {
+                    String path = list1.get(0);
+                    final ImgUtil.CompressInfo compressInfo = ImgUtil.compressBitmap(path, 200, 200);
+                    if (compressInfo != null) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                FileUtil.uploadFile(Cmd_Update_Avatar, compressInfo.path, CommonUrl.Update_Img_Url.getVal());
+                            }
+                        }).start();
+                        dialog = DialogUtils.showProgressDialog(MainScreenActivity.this, "");
+                    }
+                }
+                break;
+
+            case PHOTOTAKE:
+                if (data != null) {
+                    final String filePath = FileUtil.saveImage(data);
+                    if (!TextUtils.isEmpty(filePath)) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                FileUtil.uploadFile(Cmd_Update_Avatar, filePath, CommonUrl.Update_Img_Url.getVal());
+                            }
+                        }).start();
+                        dialog = DialogUtils.showProgressDialog(MainScreenActivity.this, "");
+                    }
+                }
+                break;
         }
     }
 }

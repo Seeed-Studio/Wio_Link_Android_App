@@ -141,7 +141,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 wifiManager.setWifiEnabled(true);
                 break;
             case R.id.mBtnEditName:
-                DialogUtils.showEditNodeNameDialog(this, "", null);
+              //  DialogUtils.showEditNodeNameDialog(this, "", null);
+                DialogUtils.showWarningDialog(this,null);
                 break;
             case R.id.mBtnNodeResult:
                startActivity(new Intent(this,GroveResultActivity.class));

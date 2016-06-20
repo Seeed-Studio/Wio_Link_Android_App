@@ -21,8 +21,12 @@ public class Common {
         public static int PlatformWithWeChat = 1;
         public static int PlatformWithFaceBook = 2;
 
-        public static String AppRootPath = Environment.getExternalStorageDirectory().getPath() + "/seeed/"+ App.getApp().getPackageName()+"/";
+        public static String AppRootPath = Environment.getExternalStorageDirectory().getPath() + "/seeed/img/";
         public static String ImgPath = Environment.getExternalStorageDirectory().getPath()+ "/seeed/wiolink/img/";
+
+        public static String ChangeNickname = "nickname";
+        public static String ChangeEmail = "email";
+        public static String ChangeAvatar = "avater";
 
         public enum NodeOrder {
                 VERSION("VERSION"), APCFG("APCFG"), SCAN("SCAN"), REBOOT("REBOOT");

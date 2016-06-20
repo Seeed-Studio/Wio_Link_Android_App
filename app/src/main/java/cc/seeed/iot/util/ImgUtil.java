@@ -299,7 +299,7 @@ public class ImgUtil {
         }
 
         String path = Common.ImgPath + fileName;
-        File fileDir = new File(Common.AppRootPath);
+        File fileDir = new File(Common.ImgPath);
         if (!fileDir.exists()){
             fileDir.mkdirs();
         }

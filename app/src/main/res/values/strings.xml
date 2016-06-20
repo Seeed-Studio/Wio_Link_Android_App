@@ -28,7 +28,8 @@
     <string name="dialog_btn_OK">OK</string>
     <string name="dialog_btn_Cancel">CANCEL</string>
     <string name="dialog_btn_FAQ">FAQ</string>
-    <string name="server_global">Global</string>
+    <string name="server_global">Global(new)</string>
+    <string name="server_old_global">Global(old)</string>
     <string name="server_chinese">Chinese</string>
     <string name="server_customize">Customize</string>
 
@@ -182,4 +183,5 @@
     <string name="grove_detail">Detail</string>
     <string name="help_toolbar">Support</string>
     <string name="choose_server_toolbar">Choose a Server</string>
+    <string name="old_server_hint"><![CDATA[This option is for users who registered with our old Global Server.<br><br> Because we are making changes our server architecture, our old Global Server will be terminated on <b><font color="#484848">September 1, 2016</font></b>. At that time, all your data will be transferred automatically to new Global Server.<br><br> We highly recommend that you use our new Global Server for your new projects.]]></string>
 </resources>

@@ -53,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="22dp"
-                android:text="Wio recommend the fastest server for you, simply choose your own region and we will do the rest to optimize data exchange speed. \r\n\r\nBy using customized server, you will be running your data on your own server. "
+                android:text="Simply choose your region, and Wio will recommend the fastest server for you.\r\n
+Choosing Customized Server if you plan to run your data on your own server."
                 android:textColor="#777777"
                 android:textSize="14sp"
                 app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -78,12 +79,56 @@
                     android:checked="true" />
 
                 <cc.seeed.iot.view.FontTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
                     android:text="Global Server"
                     android:textColor="#333333"
                     android:textSize="16sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="(New)"
+                    android:textColor="#9b9b9b"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E7E7E7" />
+
+            <LinearLayout
+                android:id="@+id/mLlOldGlobalServer"
+                android:layout_width="match_parent"
+                android:layout_height="53dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/mRbOldGlobalServer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Global Server"
+                    android:textColor="#333333"
+                    android:textSize="16sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="(Old. Terminating on Sep 1st,2016)"
+                    android:textColor="#9b9b9b"
+                    android:textSize="12sp"
                     app:cusTextFont="@string/Proxima_Nova_Regular" />
             </LinearLayout>
 

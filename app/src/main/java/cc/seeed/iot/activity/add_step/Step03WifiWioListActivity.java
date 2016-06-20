@@ -300,6 +300,7 @@ public class Step03WifiWioListActivity extends BaseActivity
         intentActivity.putExtra(Step04ApConnectActivity.Intent_Ssid, wifi_ssid);
         intentActivity.putExtra(Step04ApConnectActivity.Intent_WifiPwd, wifi_pwd);
         startActivity(intentActivity);
+        finish();
     }
 
     private String getCurrentSsid() {

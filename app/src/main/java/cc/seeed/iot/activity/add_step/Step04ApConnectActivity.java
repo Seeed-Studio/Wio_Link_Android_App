@@ -34,6 +34,7 @@ import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.HelpActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.UserLogic;
@@ -165,7 +166,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        String ota_server_ip = ((App) getApplication()).getOtaServerIP();
+                                        String ota_server_ip = App.getApp().getOtaServerIP();
                                         String exchange_server_ip = ota_server_ip;
 
                                         String cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
@@ -182,8 +183,8 @@ public class Step04ApConnectActivity extends BaseActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        String ota_server_url = ((App) getApplication()).getOtaServerUrl();
-                                        ota_server_url = NetworkUtils.getDomainName(ota_server_url);
+                                        String ota_server_url = App.getApp().getOtaServerIP();
+                                     //   ota_server_url = NetworkUtils.getDomainName(ota_server_url);
                                         //  String ota_server_ip = ((App) getApplication()).getOtaServerIP();
                                         String cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
                                                 node_key + "\t" + node_sn + "\t" + ota_server_url + "\t"
@@ -275,7 +276,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Fail connect to Wifi", "TRY AGAIN", "CANCEL", "Please check your internet connection and try again.\r\n" +
+                            DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Fail connect to Wifi", "TRY AGAIN", "FAQ", "Please check your internet connection and try again.\r\n" +
                                     "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
                                 @Override
                                 public void okClick() {
@@ -284,6 +285,7 @@ public class Step04ApConnectActivity extends BaseActivity {
 
                                 @Override
                                 public void cancelClick() {
+                                  gotoHelp();
                                 }
                             });
                         }
@@ -346,6 +348,7 @@ public class Step04ApConnectActivity extends BaseActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
+                        Log.d("TAG",error.toString());
                     }
                 });
 
@@ -384,7 +387,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                     setDefaultName();
                 }
             } else {
-                DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connection Error", "TRY AGAIN", "CANCEL", "Please check your internet connection and try again.\r\n" +
+                DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connection Error", "TRY AGAIN", "Cancel", "Please check your internet connection and try again.\r\n" +
                         "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
                     @Override
                     public void okClick() {
@@ -499,5 +502,9 @@ public class Step04ApConnectActivity extends BaseActivity {
         startActivity(intent);
         stopLoading();
         finish();
+    }
+
+    private void gotoHelp(){
+        startActivity(new Intent(this,HelpActivity.class));
     }
 }

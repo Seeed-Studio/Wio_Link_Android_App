@@ -106,7 +106,7 @@
                 android:layout_below="@id/mIvRemove"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Remove Driver"
+                android:text="Remove"
                 android:textColor="#4a4a4a"
                 android:textSize="14sp"
                 app:cusTextFont="@string/Proxima_Nova_Semibold" />

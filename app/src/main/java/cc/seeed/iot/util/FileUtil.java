@@ -92,7 +92,7 @@ public class FileUtil {
     private static final String CHARSET = "utf-8"; //设置编码
     private static DataOutputStream dos;
 
-    private static void uploadFile(String cmd, final String filePath, final String RequestURL) {
+    public static void uploadFile(String cmd, final String filePath, final String RequestURL) {
 
         try {
             URL url = new URL(RequestURL);

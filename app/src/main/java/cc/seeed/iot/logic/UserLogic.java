@@ -15,6 +15,7 @@ import cc.seeed.iot.net.NetManager;
 import cc.seeed.iot.net.Packet;
 import cc.seeed.iot.net.Request;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Common;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
@@ -331,6 +332,32 @@ public class UserLogic extends BaseLogic {
             }
         });
     }
+    public void changeUserInfo(final String tag, final String content) {
+        if (user == null) {
+            return;
+        }
+        RequestParams params = new RequestParams();
+        params.put(tag, content);
+        params.put("messageId", getToken());
+        params.put("userid", user.getUserid());
+        NetManager.getInstance().postRequest(CommonUrl.Hinge_User_ChangeUserInfoUrl, Cmd_Change_User_Info, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+                    if (Common.ChangeEmail.equals(tag)) {
+                        user.setEmail(content);
+                    } else if (Common.ChangeNickname.equals(tag)) {
+                        user.setNickname(content);
+                    } else if (Common.ChangeAvatar.equals(tag)) {
+                        user.setAvatar(content);
+                    }
+                    saveUser(user);
+                }
+                UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
+            }
+        });
+    }
+
 
     public void logOut() {
         this.user = null;

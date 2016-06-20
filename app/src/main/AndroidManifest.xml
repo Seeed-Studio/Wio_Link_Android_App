@@ -101,7 +101,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.add_step.Step04ApConnectActivity" />
-
+        <activity
+            android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
+            android:configChanges="orientation|screenSize"
+            android:launchMode="singleTop" />
         <activity
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"

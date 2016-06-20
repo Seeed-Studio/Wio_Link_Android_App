@@ -49,6 +49,11 @@
         <item name="android:background">@color/primary</item>
     </style>
 
+    <style name="dividerLine">
+        <item name="android:background">#E7E7E7</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1px</item>
+    </style>
 
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
@@ -89,6 +94,15 @@
         <item name="android:windowIsFloating">true</item>
         <!--无标题-->
         <item name="android:windowBackground">@drawable/dialog_bg</item>
+        <!--背景透明-->
+    </style>
+    <style name="DialogStyleWhite" parent="@android:style/Theme.Dialog">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <!--无标题-->
+        <item name="android:windowBackground">@color/white</item>
         <!--背景透明-->
     </style>
 
