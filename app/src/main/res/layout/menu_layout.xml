@@ -68,6 +68,7 @@
 
         <TextView
             android:id="@+id/mTvGetDevices"
+            android:visibility="gone"
             style="@style/menuItemStyle"
             android:text="Get Devices" />
 
@@ -91,6 +92,7 @@
         <TextView
             android:id="@+id/mTvUpdateApp"
             style="@style/menuItemStyle"
+            android:visibility="gone"
             android:text="Update App" />
         <View
             android:layout_width="match_parent"

@@ -1,7 +1,9 @@
 package cc.seeed.iot;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -11,6 +13,8 @@ import com.umeng.socialize.PlatformConfig;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.CommonUrl;
@@ -49,6 +53,7 @@ public class App extends com.activeandroid.app.Application {
         ShareSDK.initSDK(this);
         getIpAddress();
     }
+
     /**
      * 根据域名解析ip
      */
@@ -191,6 +196,22 @@ public class App extends com.activeandroid.app.Application {
         } else {
             return false;
         }
+    }
+
+    private List<Activity> activities = new ArrayList<Activity>();
+
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+
+        for (Activity activity : activities) {
+            activity.finish();
+        }
+        System.exit(0);
     }
 
 }

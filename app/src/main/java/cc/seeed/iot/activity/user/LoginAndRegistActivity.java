@@ -308,7 +308,9 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Process.killProcess(Process.myPid());
+         //   Process.killProcess(Process.myPid());
+//            finish();
+            App.getApp().onTerminate();
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -372,5 +374,6 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     public void onConnectionFailed(ConnectionResult connectionResult) {
         App.showToastShrot(connectionResult.toString());
     }
+
 
 }

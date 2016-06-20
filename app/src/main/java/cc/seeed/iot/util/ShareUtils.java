@@ -123,8 +123,8 @@ public class ShareUtils {
                     UmengUtils.share(activity, SHARE_MEDIA.WHATSAPP, shareTitle,getShareUrl("whatsapp"), getShareUrl("whatsapp"), shareImgUrl);
                     break;
                 case R.id.mLlFacebook:
-                    UmengUtils.share(activity, SHARE_MEDIA.FACEBOOK, shareTitle, getShareUrl("facebook"),  getShareUrl("facebook"), shareImgUrl);
-                    // UmengUtils.shareFacebookMessenger(activity, shareUrl, shareImgUrl);
+                //    UmengUtils.share(activity, SHARE_MEDIA.FACEBOOK, shareTitle, getShareUrl("facebook"),  getShareUrl("facebook"), shareImgUrl);
+                     UmengUtils.shareFacebook(activity, getShareUrl("facebook"), shareImgUrl);
                     break;
                 case R.id.mTvCancel:
                     if (popWindow != null) {

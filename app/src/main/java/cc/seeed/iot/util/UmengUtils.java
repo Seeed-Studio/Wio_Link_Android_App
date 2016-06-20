@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.MessageDialog;
+import com.facebook.share.widget.ShareDialog;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMAuthListener;
@@ -98,21 +99,14 @@ public class UmengUtils {
                 .open();*/
     }
 
-    public static void shareFacebookMessenger(Activity activity, String url, String imgUrl) {
-       /* Uri imgUri = new Uri.Builder()
-                .scheme(UriUtil.LOCAL_RESOURCE_SCHEME) // "res"
-                .path(String.valueOf(R.mipmap.logo))
-                .build();*/
-
-        Uri imgUri = Uri.parse(imgUrl);
-
+    public static void shareFacebook(Activity activity, String url, String imgUrl) {
         ShareLinkContent content = new ShareLinkContent.Builder()
                 .setContentUrl(Uri.parse(url))
                 .setContentDescription(url)
-                .setContentTitle("MarkerMap")
+                .setContentTitle("Wio")
                         // .setImageUrl(imgUri)
                 .build();
-        MessageDialog.show(activity, content);
+        ShareDialog.show(activity, content);
     }
 
     static UMShareListener  umShareListener = new UMShareListener() {

@@ -96,6 +96,7 @@ public class MainSettingActivity extends BaseActivity {
                 Intent intent = new Intent(this, LoginAndRegistActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                finish();
                 break;
         }
     }

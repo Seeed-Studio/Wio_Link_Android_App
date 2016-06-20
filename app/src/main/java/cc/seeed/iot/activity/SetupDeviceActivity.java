@@ -411,7 +411,7 @@ public class SetupDeviceActivity extends BaseActivity
         if (old_node_josn.connections.toString().equals(node_josn.connections.toString())) {
             finish();
         } else {
-            DialogUtils.showErrorDialog(this, "", "OK", "Cancel", "Sure leave without updating hardware?", new DialogUtils.OnErrorButtonClickListenter() {
+            DialogUtils.showErrorDialog(this, "", "Confirm", "Cancel", "Sure leave without updating hardware?", new DialogUtils.OnErrorButtonClickListenter() {
                 @Override
                 public void okClick() {
                     finish();

@@ -59,14 +59,14 @@ public class ConfigDeviceLogic extends BaseLogic {
                                       UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirwareStute, UPDATE_DONE, "error.getLocalizedMessage()", new Object[]{otaStatusResponse});
                                       break;
                                   case "error":
-                                  DialogBean bean = new DialogBean("Connection Error", Constant.DialogButtonText.TRY_AGAIN.getValue(), Constant.DialogButtonText.CANCEL.getValue(), otaStatusResponse.ota_msg);
+                                  DialogBean bean = new DialogBean("Error", Constant.DialogButtonText.TRY_AGAIN.getValue(), Constant.DialogButtonText.CANCEL.getValue(), otaStatusResponse.ota_msg);
                                   UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirwareStute, FAIL, "error.getLocalizedMessage()", new DialogBean[]{bean});
                               }
                           }
 
                           @Override
                           public void failure(RetrofitError error) {
-                              DialogBean bean = new DialogBean("Connection Error", Constant.DialogButtonText.TRY_AGAIN.getValue(), Constant.DialogButtonText.CANCEL.getValue(), error.getLocalizedMessage());
+                              DialogBean bean = new DialogBean("Error", Constant.DialogButtonText.TRY_AGAIN.getValue(), Constant.DialogButtonText.CANCEL.getValue(), error.getLocalizedMessage());
                               UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirwareStute, FAIL, "error.getLocalizedMessage()", new DialogBean[]{bean});
                           }
                       }
@@ -86,7 +86,7 @@ public class ConfigDeviceLogic extends BaseLogic {
 
             @Override
             public void failure(RetrofitError error) {
-                DialogBean bean = new DialogBean("Connection Error", Constant.DialogButtonText.TRY_AGAIN.getValue(), Constant.DialogButtonText.CANCEL.getValue(), error.getLocalizedMessage());
+                DialogBean bean = new DialogBean("Error", Constant.DialogButtonText.TRY_AGAIN.getValue(), Constant.DialogButtonText.CANCEL.getValue(), error.getLocalizedMessage());
                 UiObserverManager.getInstance().dispatchEvent(Cmd_UpdateFirware, FAIL, "error.getLocalizedMessage()", new DialogBean[]{bean});
             }
         });

@@ -7,12 +7,17 @@ android {
         applicationId "cc.seeed.iot.ap"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 19
+        versionCode 20
         versionName "2.3.0"
     }
 
     repositories {
         mavenCentral()
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
     }
 
     signingConfigs {
@@ -27,6 +32,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
@@ -42,9 +48,10 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:support-v13:23.1.1'
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
+    compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.loopj.android:android-async-http:1.4.9'
+//    compile 'com.loopj.android:u:1.4.9'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
@@ -63,15 +70,14 @@ dependencies {
     //    compile 'com.google.android.gms:play-services-plus:8.4.0'
 
     /*  compile('com.facebook.android:facebook-android-sdk:4.5.0') {
-                                    exclude group: 'com.parse.bolts', module: 'bolts-android'
-                                }*/
+                                            exclude group: 'com.parse.bolts', module: 'bolts-android'
+                                        }*/
     compile('com.facebook.fresco:fresco:0.9.0') {
         exclude module: 'bolts-android'
     }
     compile files('libs/sun.misc.BASE64Decoder.jar')
     compile(name: 'indexablelistview-debug', ext: 'aar')
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
-    compile files('libs/ShareSDK-Core-2.7.2.jar')
 }
 
 repositories {

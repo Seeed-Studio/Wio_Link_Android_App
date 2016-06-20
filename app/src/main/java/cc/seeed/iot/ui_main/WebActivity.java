@@ -21,6 +21,7 @@ import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
 import com.umeng.socialize.UMShareAPI;
 
 import cc.seeed.iot.App;
@@ -42,10 +43,14 @@ public class WebActivity extends BaseActivity {
     private Node node;
     private String url;
 
+    CallbackManager callbackManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_api);
+
+        callbackManager = CallbackManager.Factory.create();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
@@ -132,6 +137,7 @@ public class WebActivity extends BaseActivity {
         } else if (id == R.id.share) {
            // shareTextUrl(getApiUrl());
             ShareUtils.show(this,"API",url,null);
+            ShareUtils.setIsWiki(false);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -157,5 +163,9 @@ public class WebActivity extends BaseActivity {
         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(sendIntent);
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }

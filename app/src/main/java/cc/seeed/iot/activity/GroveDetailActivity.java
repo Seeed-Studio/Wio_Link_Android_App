@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.facebook.CallbackManager;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.umeng.socialize.UMShareAPI;
 
@@ -44,6 +45,7 @@ public class GroveDetailActivity extends BaseActivity {
     FontTextView mTvGroveDesc;
 
     private GroverDriver grove;
+    CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class GroveDetailActivity extends BaseActivity {
 
         setContentView(R.layout.activity_grove_detail);
         ButterKnife.inject(this);
+        callbackManager = CallbackManager.Factory.create();
 
         initDate();
         initView();
@@ -74,11 +77,11 @@ public class GroveDetailActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.grove_detail);
 
         ImgUtil.displayImg(mGroveImg, grove.ImageURL, R.mipmap.grove_default);
-        mTvGroveName.setText(grove.GroveName.length() > 23 ? grove.GroveName.substring(0,23)+"...":grove.GroveName);
+        mTvGroveName.setText(grove.GroveName.length() > 23 ? grove.GroveName.substring(0, 23) + "..." : grove.GroveName);
         mTvGroveDesc.setText(grove.Description);
-        if (TextUtils.isEmpty(grove.WikiURL)){
+        if (TextUtils.isEmpty(grove.WikiURL)) {
             mLlLinkWiki.setVisibility(View.GONE);
-        }else {
+        } else {
             mLlLinkWiki.setVisibility(View.VISIBLE);
         }
 
@@ -97,8 +100,8 @@ public class GroveDetailActivity extends BaseActivity {
             finish();
             return true;
         } else if (id == R.id.share) {
-        //    DialogUtils.showShare(GroveDetailActivity.this,"activity Share","Share",grove.GroveName);
-            ShareUtils.show(GroveDetailActivity.this,"Wiki",grove.WikiURL,null);
+            //    DialogUtils.showShare(GroveDetailActivity.this,"activity Share","Share",grove.GroveName);
+            ShareUtils.show(GroveDetailActivity.this, "Wiki", grove.WikiURL, null);
             ShareUtils.setIsWiki(true);
             return true;
         }
@@ -111,7 +114,7 @@ public class GroveDetailActivity extends BaseActivity {
      /*   Intent intent = new Intent(this, WebActivity.class);
         intent.putExtra(WebActivity.Intent_Url,"http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
         startActivity(intent);*/
-        Uri uri = Uri.parse(grove.WikiURL+"?utm_source=Wio&utm_medium=Android&utm_campaign=WIKI");
+        Uri uri = Uri.parse(grove.WikiURL + "?utm_source=Wio&utm_medium=Android&utm_campaign=WIKI");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         startActivity(intent);
     }
@@ -119,6 +122,8 @@ public class GroveDetailActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        UMShareAPI.get( this ).onActivityResult( requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+       /* if (UMShareAPI.get(this) != null)
+            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);*/
     }
 }

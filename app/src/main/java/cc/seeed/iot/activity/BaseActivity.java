@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.CmdConst;
@@ -25,6 +26,7 @@ public class BaseActivity extends AppCompatActivity implements IUiObserver, CmdC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        App.getApp().addActivity(this);
         UiObserverManager.getInstance().registerEvent(monitorEvents(), this);
     }
 
