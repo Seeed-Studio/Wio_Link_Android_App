@@ -28,8 +28,8 @@
     <string name="dialog_btn_OK">OK</string>
     <string name="dialog_btn_Cancel">CANCEL</string>
     <string name="dialog_btn_FAQ">FAQ</string>
-    <string name="server_global">Global(new)</string>
-    <string name="server_old_global">Global(old)</string>
+    <string name="server_global">Global (new)</string>
+    <string name="server_old_global">Global (old)</string>
     <string name="server_chinese">Chinese</string>
     <string name="server_customize">Customize</string>
 

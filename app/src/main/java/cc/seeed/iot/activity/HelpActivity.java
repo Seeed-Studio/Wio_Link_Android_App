@@ -1,15 +1,11 @@
 package cc.seeed.iot.activity;
 
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +15,6 @@ import butterknife.InjectView;
 import cc.seeed.iot.R;
 import cc.seeed.iot.adapter.HelpAdapter;
 import cc.seeed.iot.entity.FAQBean;
-import cc.seeed.iot.util.ToolUtil;
-import cc.seeed.iot.view.FontTextView;
 
 /**
  * author: Jerry on 2016/6/1 16:01.
@@ -31,7 +25,7 @@ public class HelpActivity extends BaseActivity {
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.mLvSupport)
-    ListView mLvSupport;
+    RecyclerView mLvSupport;
 
     List<FAQBean> beanList = new ArrayList<>();
 
@@ -89,12 +83,17 @@ public class HelpActivity extends BaseActivity {
         beanList.add(bean5);
         beanList.add(bean6);
 
-        HelpAdapter adapter = new HelpAdapter(this, beanList);
+        HelpAdapter adapter = new HelpAdapter( beanList);
         View headerView = LayoutInflater.from(this).inflate(R.layout.help_header_layout, null);
         View footerView = LayoutInflater.from(this).inflate(R.layout.help_footer_layout, null);
-        mLvSupport.setAdapter(adapter);
-        mLvSupport.addHeaderView(headerView);
-        mLvSupport.addFooterView(footerView);
+
+        if (mLvSupport != null) {
+            mLvSupport.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            mLvSupport.setLayoutManager(layoutManager);
+            mLvSupport.setAdapter(adapter);
+        }
     }
 
     private void initView() {

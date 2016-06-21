@@ -16,6 +16,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import cc.seeed.iot.util.MLog;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 import retrofit.android.MainThreadExecutor;
@@ -52,6 +53,7 @@ public class IotApi {
         Executor httpExecutor = Executors.newSingleThreadExecutor();
         MainThreadExecutor callbackExecutor = new MainThreadExecutor();
         mIotService = init(httpExecutor, callbackExecutor,iot_url);
+        MLog.e("request_url: "+iot_url);
     }
 
 
