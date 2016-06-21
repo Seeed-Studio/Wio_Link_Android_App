@@ -120,7 +120,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     private void reName() {
-        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Edit Device Name", new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Edit Device Name","", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
                 if (TextUtils.isEmpty(content)) {
@@ -136,7 +136,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     private void saveUrl() {
-        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Customized Server", new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Customized Server","", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
                 if (TextUtils.isEmpty(content)) {

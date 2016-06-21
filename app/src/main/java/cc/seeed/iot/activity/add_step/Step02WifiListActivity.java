@@ -196,7 +196,8 @@ public class Step02WifiListActivity extends BaseActivity
     public void onItem(View caller) {
         int position = mWifiListView.getChildLayoutPosition(caller);
         scanResult = mWifiListAdapter.getItem(position);
-        DialogUtils.showEditOneRowDialog(Step02WifiListActivity.this, "Enter Wifi Password", new DialogUtils.ButtonEditClickListenter() {
+        String pwd = App.getSp().getString(scanResult.SSID, "");
+        DialogUtils.showEditOneRowDialog(Step02WifiListActivity.this, "Enter Wifi Password", pwd,new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String pwd) {
                 MobclickAgent.onEvent(Step02WifiListActivity.this, "17003");
@@ -264,6 +265,7 @@ public class Step02WifiListActivity extends BaseActivity
     }
 
     private void gotoStep03() {
+        App.getSp().edit().putString(scanResult.SSID,wifiPwd).commit();
         Intent intent = new Intent(Step02WifiListActivity.this, Step03WifiWioListActivity.class);
         intent.putExtra(Step04ApConnectActivity.Intent_ChangeWifi, isChangeWifi);
         intent.putExtra(Step04ApConnectActivity.Intent_Ssid, scanResult.SSID);

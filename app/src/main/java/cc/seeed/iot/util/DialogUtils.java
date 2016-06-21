@@ -254,7 +254,7 @@ public class DialogUtils {
     }
 
 
-    public static Dialog showEditOneRowDialog(final Context context, String title, final ButtonEditClickListenter listenter) {
+    public static Dialog showEditOneRowDialog(final Context context, String title,String content, final ButtonEditClickListenter listenter) {
 
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_edit_wifi_pwd, null);
@@ -267,6 +267,11 @@ public class DialogUtils {
             mTvTitle.setText(title);
         }else {
             mTvTitle.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(content)){
+            mEtPwd.setText(content);
+            mEtPwd.setSelection(content.length());
         }
         mTvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
