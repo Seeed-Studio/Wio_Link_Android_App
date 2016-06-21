@@ -82,7 +82,7 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
     private void initData() {
         serverUrl = App.getApp().getOtaServerUrl();
         changeServer = serverUrl;
-        if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)) {
+        if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)||CommonUrl.OTA_CHINA_OLD_URL.equals(serverUrl)) {
             mRbChineseServer.setChecked(true);
             mRbGlobalServer.setChecked(false);
             mRbCustomizeServer.setChecked(false);

@@ -14,6 +14,8 @@ public class CommonUrl {
     public static String OTA_CHINA_IP= "120.25.216.117";
     public static String OTA_INTERNATIONAL_URL = "https://us.wio.seeed.io";
     public static String OTA_INTERNATIONAL_IP = "54.186.196.206";
+    public static String OTA_CHINA_OLD_URL = "https://cn.iot.seeed.cc";
+    public static String OTA_CHINA_OLD_IP = "120.25.216.117";
     public static String OTA_INTERNATIONAL_OLD_URL = "https://iot.seeed.cc";
     public static String OTA_INTERNATIONAL_OLD_IP = "45.79.4.239";
     public static String OTA_SERVER_URL = OTA_INTERNATIONAL_URL;

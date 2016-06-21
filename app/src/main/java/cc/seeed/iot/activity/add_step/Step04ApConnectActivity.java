@@ -183,8 +183,8 @@ public class Step04ApConnectActivity extends BaseActivity {
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        String ota_server_url = App.getApp().getOtaServerIP();
-                                     //   ota_server_url = NetworkUtils.getDomainName(ota_server_url);
+                                        String ota_server_url = App.getApp().getOtaServerUrl();
+                                        ota_server_url = NetworkUtils.getDomainName(ota_server_url);
                                         //  String ota_server_ip = ((App) getApplication()).getOtaServerIP();
                                         String cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
                                                 node_key + "\t" + node_sn + "\t" + ota_server_url + "\t"

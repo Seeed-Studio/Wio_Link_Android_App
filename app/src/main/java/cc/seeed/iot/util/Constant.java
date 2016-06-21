@@ -41,8 +41,8 @@ public class Constant {
     public final static String SP_SERVER_SELECT = "sp_server_select";//保存服务器选择类型,内外 or 外网
     public final static String SP_USER_INFO = "sp_user_info";//保存用户信息
     public final static String SP_USER_TEST_INFO = "sp_user_test_info";//保存用户信息
-    public final static String SP_SERVER_URL = "sp_server_url";
-    public final static String SP_SERVER_IP = "sp_server_ip";
+    public final static String SP_SERVER_URL = "ota_server_url";
+    public final static String SP_SERVER_IP = "ota_server_ip";
     public final static String SP_USER_EMAIL = "sp_user_email";
     public final static String SP_HISTORY_IP = "sp_history_ip";
     public final static String APP_FIRST_START = "app_first_start";//app first start

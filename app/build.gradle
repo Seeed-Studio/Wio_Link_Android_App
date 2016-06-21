@@ -51,17 +51,17 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:appcompat-v7:23.1.1'
-//    compile 'com.loopj.android:u:1.4.9'
+//        compile 'com.loopj.android:u:1.4.9'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
-    compile 'com.squareup.okhttp:okhttp:2.4.0'
-    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
+    compile 'com.squareup.okhttp:okhttp:2.2.0'
+//    compile 'com.squareup.okhttp:okhttp-urlconnection:2.4.0'
     //此版本要使用23.3.0以后的版本,因为23.2.0版本有bug,在使用scrollView的时候,不能显示列表
     compile 'com.android.support:recyclerview-v7:23.3.0'
-//    compile 'com.ikimuhendis:ldrawer:0.1'
-//    compile 'com.esotericsoftware.yamlbeans:yamlbeans:1.09'
+    //    compile 'com.ikimuhendis:ldrawer:0.1'
+    //    compile 'com.esotericsoftware.yamlbeans:yamlbeans:1.09'
     compile 'com.google.zxing:android-integration:3.2.0'
-//    compile 'com.google.zxing:core:3.2.0'
+    //    compile 'com.google.zxing:core:3.2.0'
     compile 'com.daimajia.swipelayout:library:1.1.8@aar'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.michaelpardo:activeandroid:3.1.0-SNAPSHOT'
@@ -71,10 +71,9 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.squareup.picasso:picasso:2.4.0'
     //    compile 'com.google.android.gms:play-services-plus:8.4.0'
-
     /*  compile('com.facebook.android:facebook-android-sdk:4.5.0') {
-                                            exclude group: 'com.parse.bolts', module: 'bolts-android'
-                                        }*/
+                                                exclude group: 'com.parse.bolts', module: 'bolts-android'
+                                            }*/
     compile('com.facebook.fresco:fresco:0.9.0') {
         exclude module: 'bolts-android'
     }
