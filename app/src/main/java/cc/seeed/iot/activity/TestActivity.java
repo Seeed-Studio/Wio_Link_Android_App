@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,7 @@ import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.LocationUtil;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.util.RegularUtils;
@@ -75,6 +77,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
 
     private ConfigUdpSocket udpClient;
     public int checkId = 0;
+    LocationUtil locationUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             mRBOutNet.setChecked(true);
         }
 
+        locationUtil = new LocationUtil();
+    //    locationUtil.init(this);
     }
 
     @Override
@@ -121,7 +126,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi,R.id.mBtnEditName,R.id.mBtnNodeResult})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi, R.id.mBtnEditName, R.id.mBtnNodeResult})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -141,11 +146,14 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 wifiManager.setWifiEnabled(true);
                 break;
             case R.id.mBtnEditName:
-              //  DialogUtils.showEditNodeNameDialog(this, "", null);
-                DialogUtils.showWarningDialog(this,null);
+                //  DialogUtils.showEditNodeNameDialog(this, "", null);
+                //  DialogUtils.showWarningDialog(this,null);
+              //  new LocationUtil().startLocation(this);
+             //   locationUtil.startLocation();
+                locationUtil.location(this);
                 break;
             case R.id.mBtnNodeResult:
-               startActivity(new Intent(this,GroveResultActivity.class));
+                startActivity(new Intent(this, GroveResultActivity.class));
                 break;
         }
     }
@@ -213,6 +221,11 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 }
             }
         }).start();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        return super.dispatchTouchEvent(ev);
     }
 
     public void regular() {

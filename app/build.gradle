@@ -80,6 +80,7 @@ dependencies {
     compile(name: 'indexablelistview-debug', ext: 'aar')
     compile(name: 'multi-image-selector-release', ext: 'aar')
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+
 }
 
 repositories {

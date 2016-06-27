@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
@@ -72,8 +73,8 @@ public class SystemLogic extends BaseLogic {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             ToolUtil.downApk(context, downUrl);
-                            MobclickAgent.onKillProcess(context);
-                            android.os.Process.killProcess(android.os.Process.myPid());
+                         //   MobclickAgent.onKillProcess(context);
+                          //  android.os.Process.killProcess(android.os.Process.myPid());
                         }
                     });
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -84,19 +85,14 @@ public class SystemLogic extends BaseLogic {
                     });
                     builder.show();
                 } else {//强制更新
-                   /* DialogUtils.showMsgInfoDialogOutsideCheck(context, bean.version_message, app.getResources().getString(R.string.sure), new DialogUtil.DismissClickListener() {
+                    DialogUtils.showMsgInfoDialogOutsideCheck(context, bean.version_message, "Confirm", new View.OnClickListener() {
                         @Override
-                        public void okClick() {
+                        public void onClick(View v) {
                             ToolUtil.downApk(context, downUrl);
                             MobclickAgent.onKillProcess(context);
                             android.os.Process.killProcess(android.os.Process.myPid());
                         }
-
-                        @Override
-                        public void cancelClick() {
-
-                        }
-                    });*/
+                    });
                 }
             }else {
                 UiObserverManager.getInstance().dispatchEvent(Cmd_App_Update, true, "", null);

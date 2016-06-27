@@ -54,6 +54,33 @@ public class DialogUtils {
         inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
+    public static Dialog showMsgInfoDialogOutsideCheck(Context context, String msg, String okName, final View.OnClickListener listener) {
+        final Dialog dialog = new Dialog(context, R.style.DialogStyle);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        View view = LayoutInflater.from(context).inflate(R.layout.dialog_err, null);
+
+        TextView mTVOk = (TextView) view.findViewById(R.id.tv_ok);
+        TextView mTVMsg = (TextView) view.findViewById(R.id.tv_msg);
+
+        if (okName != null) {
+            mTVOk.setText(okName);
+        }
+        mTVMsg.setText(msg);
+        mTVOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null)
+                    listener.onClick(v);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+        dialog.setContentView(view);
+        return dialog;
+    }
+
 
     /**
      * 退出提示
