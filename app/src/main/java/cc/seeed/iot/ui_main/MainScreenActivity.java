@@ -1,9 +1,11 @@
 package cc.seeed.iot.ui_main;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -57,8 +59,10 @@ import cc.seeed.iot.activity.HelpActivity;
 import cc.seeed.iot.activity.NodeSettingActivity;
 import cc.seeed.iot.activity.SetupDeviceActivity;
 import cc.seeed.iot.activity.TestActivity;
+import cc.seeed.iot.entity.ServerBean;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
+import cc.seeed.iot.logic.SystemLogic;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
 import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
@@ -71,6 +75,7 @@ import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.FileUtil;
 import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.MLog;
+import cc.seeed.iot.util.TimeUtils;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.IotApi;
@@ -98,7 +103,8 @@ public class MainScreenActivity extends BaseActivity
 
     public static final int PHOTOZOOM = 0; // 相册
     public static final int PHOTOTAKE = 1; // 拍照
-    ProgressDialog dialog;
+    ProgressDialog progressDialog;
+    Dialog dialog;
 
     NavigationView navview;
     DrawerLayout drawerlayout;
@@ -249,6 +255,8 @@ public class MainScreenActivity extends BaseActivity
     }
 
     private void initData() {
+        checkServerTip();
+        checkAppVersion();
         if (!isLogin()) {
             return;
         }
@@ -367,6 +375,7 @@ public class MainScreenActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         getNodeList();
     }
 
@@ -391,7 +400,7 @@ public class MainScreenActivity extends BaseActivity
                 setupActivity(Constant.WIO_NODE_V1_0);
                 break;
             case R.id.mSDVAvatar:
-                if (App.getApp().isDefaultServer()){
+                if (App.getApp().isDefaultServer()) {
                     setAvatarPopWindow(this);
                 }
                 break;
@@ -424,6 +433,7 @@ public class MainScreenActivity extends BaseActivity
                 break;
             case R.id.mTvUpdateApp:
                 MobclickAgent.onEvent(this, "12006");
+                SystemLogic.getInstance().checkUpdateApk(this, true);
                 break;
             case R.id.mBtnAddDevice:
                 showSelectAddDevicePopWindow();
@@ -740,14 +750,14 @@ public class MainScreenActivity extends BaseActivity
                     }
                 }
             } else {
-                if (dialog != null) {
-                    dialog.dismiss();
+                if (progressDialog != null) {
+                    progressDialog.dismiss();
                 }
                 App.showToastShrot("Network Error,Picture upload fail.");
             }
         } else if (Cmd_Change_User_Info.equals(event)) {
-            if (dialog != null) {
-                dialog.dismiss();
+            if (progressDialog != null) {
+                progressDialog.dismiss();
             }
             if (ret) {
                 user = UserLogic.getInstance().getUser();
@@ -837,7 +847,7 @@ public class MainScreenActivity extends BaseActivity
                                 FileUtil.uploadFile(Cmd_Update_Avatar, compressInfo.path, CommonUrl.Update_Img_Url.getVal());
                             }
                         }).start();
-                        dialog = DialogUtils.showProgressDialog(MainScreenActivity.this, "");
+                        progressDialog = DialogUtils.showProgressDialog(MainScreenActivity.this, "");
                     }
                 }
                 break;
@@ -852,10 +862,46 @@ public class MainScreenActivity extends BaseActivity
                                 FileUtil.uploadFile(Cmd_Update_Avatar, filePath, CommonUrl.Update_Img_Url.getVal());
                             }
                         }).start();
-                        dialog = DialogUtils.showProgressDialog(MainScreenActivity.this, "");
+                        progressDialog = DialogUtils.showProgressDialog(MainScreenActivity.this, "");
                     }
                 }
                 break;
         }
+    }
+
+    private void checkAppVersion() {
+        SharedPreferences sp = App.getSp();
+        long reqTime = sp.getLong(Constant.SP_APP_VERSION, 0);
+        if (reqTime == 0 || reqTime < TimeUtils.getStartTime()) {
+            if (dialog == null && !dialog.isShowing()){
+                SystemLogic.getInstance().checkUpdateApk(this, false);
+            }
+        }
+        sp.edit().putLong(Constant.SP_APP_VERSION, System.currentTimeMillis() / 1000).commit();
+    }
+
+    private void checkServerTip() {
+
+        String serverUrl = App.getApp().getOtaServerUrl();
+        if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
+            SharedPreferences sp = App.getSp();
+            long reqTime = sp.getLong(Constant.SP_APP_SERVER_REQ_TIME, 0);
+            if (reqTime == 0 || reqTime < TimeUtils.getStartTime()) {
+                SystemLogic.getInstance().getServerStopMsg();
+                ServerBean serverBean = SystemLogic.getInstance().getServerBean();
+                if (serverBean == null){
+                    return;
+                }
+                dialog = DialogUtils.showWarningDialog(this, serverBean.getContent().get(0).getPopText(), null);
+            }
+            sp.edit().putLong(Constant.SP_APP_SERVER_REQ_TIME, System.currentTimeMillis() / 1000).commit();
+        }
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

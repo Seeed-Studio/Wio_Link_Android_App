@@ -102,7 +102,7 @@ public class ResetPwd01Activity extends BaseActivity {
                         }
                     }).create();
                     builder.setTitle("Success");
-                    builder.setMessage("Verification code has been sent");
+                    builder.setMessage("Password has been sent");
                     builder.show();
                 }
             } else {
@@ -110,5 +110,17 @@ public class ResetPwd01Activity extends BaseActivity {
                 mEtEmail.requestFocus();
             }
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 }

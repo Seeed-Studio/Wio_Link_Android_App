@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.umeng.analytics.MobclickAgent;
+
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.user.LoginAndRegistActivity;
@@ -106,4 +108,6 @@ public class BaseActivity extends AppCompatActivity implements IUiObserver, CmdC
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 }

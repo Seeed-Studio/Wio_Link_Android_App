@@ -54,7 +54,7 @@ public class NetManager {
         final Request request = new Request();
         request.callback = callback;
         request.cmd = cmd;
-
+        request.url = url;
         AsyncHttpClient client = new AsyncHttpClient();
         client.setTimeout(NetTimeout);
         client.get(url, new AsyncHttpResponseHandler() {
@@ -83,7 +83,7 @@ public class NetManager {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 error.printStackTrace(System.out);
-             //   String s = new String(responseBody);
+                //   String s = new String(responseBody);
                 final Packet resp = new Packet();
                 resp.code = statusCode;
                 resp.data = "";
@@ -128,7 +128,13 @@ public class NetManager {
             params.put("source", Common.WioLink_Source);
         }
 
-        String url = CommonUrl.Server_Prefix.getVal() + uri;
+        String url = "";
+        if (uri.startsWith("http")){
+           url = uri;
+        }else {
+            url = CommonUrl.Server_Prefix.getVal() + uri;
+        }
+        request.url = url;
         AsyncHttpClient client = new AsyncHttpClient();
         client.setTimeout(NetTimeout);
         client.post(url, params, new AsyncHttpResponseHandler() {
@@ -268,7 +274,7 @@ public class NetManager {
         final Request request = new Request();
         request.callback = callback;
         request.cmd = cmd;
-
+        request.url = url;
         AsyncHttpClient client = new AsyncHttpClient();
         client.setSSLSocketFactory(createSSLSocketFactory());
         client.setTimeout(NetTimeout);
@@ -347,7 +353,7 @@ public class NetManager {
         final Request request = new Request();
         request.callback = callback;
         request.cmd = cmd;
-
+        request.url = url;
         AsyncHttpClient client = new AsyncHttpClient();
         client.setSSLSocketFactory(createSSLSocketFactory());
         client.setTimeout(NetTimeout);

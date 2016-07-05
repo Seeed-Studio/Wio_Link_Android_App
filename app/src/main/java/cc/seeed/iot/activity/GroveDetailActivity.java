@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 
 import java.util.List;
@@ -126,4 +127,17 @@ public class GroveDetailActivity extends BaseActivity {
        /* if (UMShareAPI.get(this) != null)
             UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);*/
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

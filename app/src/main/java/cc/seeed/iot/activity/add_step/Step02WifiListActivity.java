@@ -124,6 +124,7 @@ public class Step02WifiListActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         Intent intent = getIntent();
         board = intent.getStringExtra(Step04ApConnectActivity.Intent_Board);
         node_sn = intent.getStringExtra(Step04ApConnectActivity.Intent_NodeSn);
@@ -135,6 +136,7 @@ public class Step02WifiListActivity extends BaseActivity
 
         new ScanWifi().start();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -154,6 +156,7 @@ public class Step02WifiListActivity extends BaseActivity
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         unregisterReceiver(wifiActionReceiver);
     }
 

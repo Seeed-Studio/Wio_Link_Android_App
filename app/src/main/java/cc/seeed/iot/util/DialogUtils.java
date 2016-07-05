@@ -54,14 +54,21 @@ public class DialogUtils {
         inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    public static Dialog showMsgInfoDialogOutsideCheck(Context context, String msg, String okName, final View.OnClickListener listener) {
+    public static Dialog showMsgInfoDialogOutsideCheck(Context context, String title, String msg, String okName, final View.OnClickListener listener) {
         final Dialog dialog = new Dialog(context, R.style.DialogStyle);
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_err, null);
 
+        TextView mTvTitle = (TextView) view.findViewById(R.id.tv_title);
         TextView mTVOk = (TextView) view.findViewById(R.id.tv_ok);
         TextView mTVMsg = (TextView) view.findViewById(R.id.tv_msg);
+
+        if (TextUtils.isEmpty(title)){
+            mTvTitle.setVisibility(View.GONE);
+        }else {
+            mTvTitle.setVisibility(View.VISIBLE);
+        }
 
         if (okName != null) {
             mTVOk.setText(okName);
@@ -360,14 +367,14 @@ public class DialogUtils {
         return dialog;
     }
 
-    public static Dialog showWarningDialog(Context context, final View.OnClickListener listener) {
+    public static Dialog showWarningDialog(Context context,String content, final View.OnClickListener listener) {
 
         final Dialog dialog = new Dialog(context,R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_warning, null);
 
         FontTextView mTvHint = (FontTextView) view.findViewById(R.id.mTvHint);
         FontButton mTvSubmit = (FontButton) view.findViewById(R.id.mTvSubmit);
-        mTvHint.setText(Html.fromHtml(context.getString(R.string.old_server_hint)));
+        mTvHint.setText(Html.fromHtml(content));
 
         mTvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override

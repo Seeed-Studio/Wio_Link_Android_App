@@ -2,6 +2,7 @@ package cc.seeed.iot.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 
+import com.umeng.analytics.MobclickAgent;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,6 +24,8 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.entity.ServerBean;
+import cc.seeed.iot.logic.SystemLogic;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
@@ -61,6 +66,8 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
 
     private String changeServer = "";
     private String serverUrl;
+    ProgressDialog dialog;
+    ServerBean serverBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +88,23 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
 
     private void initData() {
         serverUrl = App.getApp().getOtaServerUrl();
+        serverBean = SystemLogic.getInstance().getServerBean();
+        if (serverBean == null || System.currentTimeMillis() / 1000 - serverBean.getReqTime() > 60 * 60 * 24 * 1) {
+            SystemLogic.getInstance().getServerStopMsg();
+            dialog = DialogUtils.showProgressDialog(this, null);
+        } else {
+            if (System.currentTimeMillis() / 1000 > serverBean.getContent().get(0).getServerEndTime()) {
+                mLlOldGlobalServer.setVisibility(View.GONE);
+                if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
+                    serverUrl = CommonUrl.OTA_INTERNATIONAL_URL;
+                    saveUrlAndIp(CommonUrl.OTA_INTERNATIONAL_URL, CommonUrl.OTA_INTERNATIONAL_IP);
+                }
+            } else {
+                mLlOldGlobalServer.setVisibility(View.VISIBLE);
+            }
+        }
         changeServer = serverUrl;
-        if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)||CommonUrl.OTA_CHINA_OLD_URL.equals(serverUrl)) {
+        if (CommonUrl.OTA_CHINA_URL.equals(serverUrl) || CommonUrl.OTA_CHINA_OLD_URL.equals(serverUrl)) {
             mRbChineseServer.setChecked(true);
             mRbGlobalServer.setChecked(false);
             mRbCustomizeServer.setChecked(false);
@@ -94,7 +116,7 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
             mRbOldGlobalServer.setChecked(false);
             mRbCustomizeServer.setChecked(false);
             mEtCustomServer.setEnabled(false);
-        }else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
+        } else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
             mRbChineseServer.setChecked(false);
             mRbGlobalServer.setChecked(false);
             mRbOldGlobalServer.setChecked(true);
@@ -106,17 +128,17 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
             mRbCustomizeServer.setChecked(true);
             mRbOldGlobalServer.setChecked(false);
             mEtCustomServer.setEnabled(true);
-            if (TextUtils.isEmpty(serverUrl)){
+            if (TextUtils.isEmpty(serverUrl)) {
                 mEtCustomServer.setText(App.getSp().getString(Constant.SP_HISTORY_IP, ""));
-            }else {
+            } else {
                 mEtCustomServer.setText(serverUrl);
             }
             mEtCustomServer.setSelection(serverUrl.length());
         }
     }
 
-    @OnClick({R.id.mLlGlobalServer,R.id.mLlOldGlobalServer, R.id.mLlChineseServer, R.id.mLlCustomizeServer, R.id.mLLSave,
-            R.id.mRbGlobalServer,R.id.mRbOldGlobalServer, R.id.mRbChineseServer, R.id.mRbCustomizeServer})
+    @OnClick({R.id.mLlGlobalServer, R.id.mLlOldGlobalServer, R.id.mLlChineseServer, R.id.mLlCustomizeServer, R.id.mLLSave,
+            R.id.mRbGlobalServer, R.id.mRbOldGlobalServer, R.id.mRbChineseServer, R.id.mRbCustomizeServer})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mRbGlobalServer:
@@ -142,7 +164,7 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
                 mEtCustomServer.setEnabled(false);
                 hideKeyboard(mEtCustomServer);
                 saveIpAdress();
-                DialogUtils.showWarningDialog(this, new View.OnClickListener() {
+                DialogUtils.showWarningDialog(this, serverBean.getContent().get(0).getPopText(), new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         finish();
@@ -163,7 +185,7 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
                 break;
             case R.id.mRbCustomizeServer:
             case R.id.mLlCustomizeServer:
-                if (CommonUrl.OTA_CHINA_URL.equals(serverUrl) || CommonUrl.OTA_INTERNATIONAL_URL.equals(serverUrl)){
+                if (CommonUrl.OTA_CHINA_URL.equals(serverUrl) || CommonUrl.OTA_INTERNATIONAL_URL.equals(serverUrl)) {
                     mEtCustomServer.setText(App.getSp().getString(Constant.SP_HISTORY_IP, ""));
                 }
                 mRbChineseServer.setChecked(false);
@@ -241,7 +263,7 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
         } else if (CommonUrl.OTA_INTERNATIONAL_URL.equals(changeServer)) {
             saveUrlAndIp(CommonUrl.OTA_INTERNATIONAL_URL, CommonUrl.OTA_INTERNATIONAL_IP);
             finish();
-        }else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(changeServer)) {
+        } else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(changeServer)) {
             saveUrlAndIp(CommonUrl.OTA_INTERNATIONAL_OLD_URL, CommonUrl.OTA_INTERNATIONAL_OLD_IP);
         } else {
             if (!RegularUtils.isWebsite(changeServer)) {
@@ -289,18 +311,18 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
         App.getApp().saveUrlAndIp(url, ip);
     }
 
-    private boolean isOverdue(){
+    private boolean isOverdue() {
         long nowTime = System.currentTimeMillis();
         long targetTime = stringToLong();
-        if (nowTime <= targetTime){
+        if (nowTime <= targetTime) {
 
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
-    public long stringToLong(){
+    public long stringToLong() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
         try {
@@ -310,6 +332,36 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
             date = null;
         }
         return date.getTime();
+    }
+
+
+    @Override
+    public String[] monitorEvents() {
+        return new String[]{Cmd_Stop_server};
+    }
+
+    @Override
+    public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
+        if (Cmd_Stop_server.equals(event)) {
+            if (dialog != null && dialog.isShowing()) {
+                dialog.dismiss();
+            }
+            if (ret) {
+                serverBean = SystemLogic.getInstance().getServerBean();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
     }
 
 }

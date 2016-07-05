@@ -26,5 +26,7 @@ public interface CmdConst {
     String Cmd_Update_Avatar = "update_avatar";
     String Cmd_Change_User_Info = "change_user_info";
 
+    String Cmd_Stop_server = "cmd_stop_server";
+
 
 }

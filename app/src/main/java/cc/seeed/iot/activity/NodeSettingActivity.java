@@ -120,7 +120,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     private void reName() {
-        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Edit Device Name","", new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Edit Device Name", "", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
                 if (TextUtils.isEmpty(content)) {
@@ -211,4 +211,17 @@ public class NodeSettingActivity extends BaseActivity {
             }
         }
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

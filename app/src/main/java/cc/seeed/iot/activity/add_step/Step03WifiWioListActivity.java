@@ -117,6 +117,7 @@ public class Step03WifiWioListActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         state_selected = false;
         selected_ssid = "";
         showProgress(true);
@@ -153,6 +154,7 @@ public class Step03WifiWioListActivity extends BaseActivity
     @Override
     protected void onPause() {
         super.onPause();
+        MobclickAgent.onPause(this);
         unregisterReceiver(wifiActionReceiver);
         showProgress(false);
     }

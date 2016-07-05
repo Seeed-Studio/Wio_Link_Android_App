@@ -81,17 +81,17 @@ public class Step01GoReadyActivity extends BaseActivity {
             default:
             case Constant.WIO_LINK_V1_0:
                 mIvCourse.setImageResource(R.mipmap.link_config);
-                if (node != null){
+                if (node != null) {
                     getSupportActionBar().setTitle(R.string.add_device_step01_change_wifi);
-                }else {
+                } else {
                     getSupportActionBar().setTitle(R.string.add_device_step01_link_title);
                 }
                 break;
             case Constant.WIO_NODE_V1_0:
                 mIvCourse.setImageResource(R.mipmap.node_config);
-                if (node != null){
+                if (node != null) {
                     getSupportActionBar().setTitle(R.string.add_device_step01_change_wifi);
-                }else {
+                } else {
                     getSupportActionBar().setTitle(R.string.add_device_step01_node_title);
                 }
                 break;
@@ -116,7 +116,7 @@ public class Step01GoReadyActivity extends BaseActivity {
     }
 
     private void creatDevice(final String node_name, final String board) {
-        final ProgressDialog mProgressBar = DialogUtils.showProgressDialog(this,"");
+        final ProgressDialog mProgressBar = DialogUtils.showProgressDialog(this, "");
 
         mProgressBar.setMessage(getString(R.string.add_device_step01_progress_connect_server));
         mProgressBar.show();
@@ -146,9 +146,9 @@ public class Step01GoReadyActivity extends BaseActivity {
         );
     }
 
-    @OnClick({R.id.mBtnGo,R.id.mIvHelp})
+    @OnClick({R.id.mBtnGo, R.id.mIvHelp})
     public void onClick(View view) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.mBtnGo:
                 MobclickAgent.onEvent(this, "17001");
                 WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
@@ -181,6 +181,17 @@ public class Step01GoReadyActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
 }
 

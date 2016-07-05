@@ -23,6 +23,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.lucky.indexablelistview.widget.IndexableListView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,8 +74,8 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
             int num = (int) ToolUtil.getSimpleName(mGroveDrivers.get(0).GroveName).charAt(0);
             if ((num >= 'a' && num <= 'z') || (num >= 'A' && num <= 'Z')) {
                 break;
-            }else {
-                mGroveDrivers.add(mGroveDrivers.size(),mGroveDrivers.get(0));
+            } else {
+                mGroveDrivers.add(mGroveDrivers.size(), mGroveDrivers.get(0));
                 mGroveDrivers.remove(0);
             }
         }
@@ -279,4 +280,17 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
         mLvGroves.setAdapter(mAdapter);
         mAdapter.updateAll(groverDrivers);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MobclickAgent.onResume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }

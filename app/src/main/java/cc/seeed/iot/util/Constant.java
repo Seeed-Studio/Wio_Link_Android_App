@@ -46,6 +46,9 @@ public class Constant {
     public final static String SP_USER_EMAIL = "sp_user_email";
     public final static String SP_HISTORY_IP = "sp_history_ip";
     public final static String APP_FIRST_START = "app_first_start";//app first start
+    public final static String APP_STOP_SERVER_MSG = "app_stop_server_msg";//app first start
+    public final static String SP_APP_VERSION = "sp_app_version";
+    public final static String SP_APP_SERVER_REQ_TIME = "sp_app_server_req_time";
 
 
     public enum Server {

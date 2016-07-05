@@ -92,7 +92,7 @@
         <TextView
             android:id="@+id/mTvUpdateApp"
             style="@style/menuItemStyle"
-            android:visibility="gone"
+            android:visibility="visible"
             android:text="Update App" />
         <View
             android:layout_width="match_parent"

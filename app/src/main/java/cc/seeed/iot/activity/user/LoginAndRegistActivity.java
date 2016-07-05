@@ -104,12 +104,12 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         mMainPager.setOnPageChangeListener(this);
         mMainPager.setCurrentItem(mSelectTab, false);
         seleted(menuIds[mSelectTab]);
-
+/*
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestId()
                 .requestProfile()
-                .build();
+                .build();*/
 
       /*  String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -118,10 +118,10 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 .requestEmail()
                 .build();*/
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
+      /*  mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+                .build();*/
 
 
      /*   mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -156,6 +156,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
         String serverUrl = App.getApp().getOtaServerUrl();
         if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)) {
             mTvSelectServer.setText(getString(R.string.server_chinese));
@@ -377,5 +378,11 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         App.showToastShrot(connectionResult.toString());
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
 }

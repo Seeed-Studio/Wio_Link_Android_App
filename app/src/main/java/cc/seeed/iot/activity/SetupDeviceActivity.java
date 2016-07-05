@@ -292,6 +292,7 @@ public class SetupDeviceActivity extends BaseActivity
     @Override
     protected void onResume() {
         super.onResume();
+        MobclickAgent.onResume(this);
     }
 
     @Override
@@ -922,6 +923,13 @@ public class SetupDeviceActivity extends BaseActivity
         intent.putExtra(GroveDetailActivity.Intent_GroveSku, grove.SKU);
         startActivity(intent);
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
+
 }
 
 

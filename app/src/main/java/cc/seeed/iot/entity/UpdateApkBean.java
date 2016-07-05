@@ -8,6 +8,7 @@ public class UpdateApkBean {
     public String version_message;
     public String add_time;
     public boolean is_force;
+    public String version_title;
     public String version_type;
     public String url;
 
@@ -25,6 +26,14 @@ public class UpdateApkBean {
 
     public void setVersion_message(String version_message) {
         this.version_message = version_message;
+    }
+
+    public String getVersion_title() {
+        return version_title;
+    }
+
+    public void setVersion_title(String version_title) {
+        this.version_title = version_title;
     }
 
     public String getAdd_time() {
