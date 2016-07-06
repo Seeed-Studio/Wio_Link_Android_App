@@ -194,6 +194,11 @@ public class SetupDeviceActivity extends BaseActivity
 
         List<PinConfig> list = PinConfigDBHelper.getPinConfigs(node.node_sn);
         old_node_josn = new NodeConfigHelper().getConfigJson(list, node);
+        if (old_node_josn.connections.isEmpty()){
+            mBtnUpdate.setVisibility(View.GONE);
+        }else {
+            mBtnUpdate.setVisibility(View.VISIBLE);
+        }
 
         mGrovePinsView = new GrovePinsView(this, mSetupDevice, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
@@ -236,6 +241,13 @@ public class SetupDeviceActivity extends BaseActivity
         for (int i = 0; i < mGrovePinsView.pinViews.length; i++) {
             pinBadgeUpdate(i);
         }
+        NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
+        if ( node_josn.connections.isEmpty()) {
+            mBtnUpdate.setVisibility(View.GONE);
+        }else {
+            mBtnUpdate.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void pinBadgeUpdate(int position) {
@@ -456,7 +468,7 @@ public class SetupDeviceActivity extends BaseActivity
                 case "GPIO":
                     gpioGroves.add(g);
                     break;
-                case "ANALOG":
+                case "Analog":
                     analogGroves.add(g);
                     break;
                 case "UART":
@@ -472,19 +484,19 @@ public class SetupDeviceActivity extends BaseActivity
 
         if (groveType.equals("All")) {
             updateGroveListAdapter(mGroveDrivers);
-        } else if (groveType.equals("INPUT")) {
+        } else if (groveType.equals("Input")) {
             updateGroveListAdapter(inputGroves);
-        } else if (groveType.equals("OUTPUT")) {
+        } else if (groveType.equals("Output")) {
             updateGroveListAdapter(outputGroves);
         } else if (groveType.equals("GPIO")) {
             updateGroveListAdapter(gpioGroves);
-        } else if (groveType.equals("ANALOG")) {
+        } else if (groveType.equals("Analog")) {
             updateGroveListAdapter(analogGroves);
         } else if (groveType.equals("UART")) {
             updateGroveListAdapter(uartGroves);
         } else if (groveType.equals("I2C")) {
             updateGroveListAdapter(i2cGroves);
-        } else if (groveType.equals("EVENT")) {
+        } else if (groveType.equals("Event")) {
             updateGroveListAdapter(eventGroves);
         }
 

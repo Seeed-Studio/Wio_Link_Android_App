@@ -34,6 +34,7 @@ public class CommonUrl {
     public static String Hinge_User_OtherLoginUrl = "r=common/user/other-login";
     public static String Hinge_Get_NewVersion = "r=makermap/version/get-new-version-message";
     public static String Hinge_UpdateImgUrl = "r=makermap/upload/avater";
+    public static String Hinge_StopServer = "r=wiolink/version/choose-server";
 
     public static String Hinge_Set_Token = "/v1/ext_users";
 

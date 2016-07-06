@@ -10,19 +10,19 @@ public class Constant {
 
     public final static String[] groveTypes = {
             "All",
-            "INPUT",
-            "OUTPUT",
+            "Input",
+            "Output",
             "GPIO",
-            "ANALOG",
+            "Analog",
             "UART",
             "I2C",
-            "EVENT",
+            "Event",
     };
 
 
     public enum GroveType {
-        All("All"), INPUT("INPUT"), OUTPUT("OUTPUT"), GPIO("GPIO"),
-        ANALOG("ANALOG"), UART("UART"), I2C("I2C"), EVENT("EVENT");
+        All("All"), INPUT("Input"), OUTPUT("Output"), GPIO("GPIO"),
+        ANALOG("Analog"), UART("UART"), I2C("I2C"), EVENT("Event");
         private String value;
 
         GroveType(String value) {
@@ -47,8 +47,10 @@ public class Constant {
     public final static String SP_HISTORY_IP = "sp_history_ip";
     public final static String APP_FIRST_START = "app_first_start";//app first start
     public final static String APP_STOP_SERVER_MSG = "app_stop_server_msg";//app first start
-    public final static String SP_APP_VERSION = "sp_app_version";
+    public final static String SP_APP_VERSION_REQ_TIME = "sp_app_version_req_time";
+    public final static String SP_APP_VERSION_JSON = "sp_app_version_json";
     public final static String SP_APP_SERVER_REQ_TIME = "sp_app_server_req_time";
+    public final static String SP_APP_SERVER_REMIND_AGAIN = "sp_app_server_remind_again";
 
 
     public enum Server {

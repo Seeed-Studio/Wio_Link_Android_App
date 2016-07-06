@@ -134,5 +134,10 @@
         <item name="android:padding">4.5dp</item>
     </style>
 
+        <style name="Progress" parent="Theme.AppCompat.Dialog">
+            <item name="colorAccent">@color/primary</item>
+            <item name="android:textColorPrimary">@color/iron</item>
+            <item name="android:background">#00000000</item>
+    </style>
 
 </resources>

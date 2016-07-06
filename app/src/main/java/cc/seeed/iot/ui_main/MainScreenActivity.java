@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ import cc.seeed.iot.activity.NodeSettingActivity;
 import cc.seeed.iot.activity.SetupDeviceActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.entity.ServerBean;
+import cc.seeed.iot.entity.UpdateApkBean;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
 import cc.seeed.iot.logic.SystemLogic;
@@ -75,6 +77,7 @@ import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.FileUtil;
 import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.MLog;
+import cc.seeed.iot.util.SystemUtils;
 import cc.seeed.iot.util.TimeUtils;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
@@ -121,6 +124,7 @@ public class MainScreenActivity extends BaseActivity
     private TextView mTvSetting;
     private TextView mTVAbout;
     private TextView mTvUpdateApp;
+    private ImageView mIvUpdateApp;
     private NavigationView navigationView;
     private LinearLayout mLLNoDevice;
     private Button mBtnAddDevice;
@@ -237,6 +241,19 @@ public class MainScreenActivity extends BaseActivity
                 mTvSetting = (TextView) headerLayout.findViewById(R.id.mTvSetting);
                 mTVAbout = (TextView) headerLayout.findViewById(R.id.mTVAbout);
                 mTvUpdateApp = (TextView) headerLayout.findViewById(R.id.mTvUpdateApp);
+                mIvUpdateApp = (ImageView) headerLayout.findViewById(R.id.mIvUpdateApp);
+
+                UpdateApkBean updateApkBean = SystemLogic.getInstance().getUpdateApkBean();
+                if (updateApkBean == null || TextUtils.isEmpty(updateApkBean.version_name)){
+                    mIvUpdateApp.setVisibility(View.GONE);
+                }else {
+                    PackageInfo info = SystemUtils.getPackageInfo();
+                    if (SystemLogic.getInstance().isUpdate(info.versionName,updateApkBean.version_name)){
+                        mIvUpdateApp.setVisibility(View.VISIBLE);
+                    }else {
+                        mIvUpdateApp.setVisibility(View.GONE);
+                    }
+                }
 
                 mTvEmail.setText(user.email);
                 ImgUtil.displayImg(mSDVAvatar, user.avater, R.mipmap.icon);
@@ -400,9 +417,9 @@ public class MainScreenActivity extends BaseActivity
                 setupActivity(Constant.WIO_NODE_V1_0);
                 break;
             case R.id.mSDVAvatar:
-                if (App.getApp().isDefaultServer()) {
+              /*  if (App.getApp().isDefaultServer()) {
                     setAvatarPopWindow(this);
-                }
+                }*/
                 break;
             case R.id.mTvEmail:
                 break;
@@ -871,28 +888,45 @@ public class MainScreenActivity extends BaseActivity
 
     private void checkAppVersion() {
         SharedPreferences sp = App.getSp();
-        long reqTime = sp.getLong(Constant.SP_APP_VERSION, 0);
+        long reqTime = sp.getLong(Constant.SP_APP_VERSION_REQ_TIME, 0);
         if (reqTime == 0 || reqTime < TimeUtils.getStartTime()) {
-            if (dialog == null && !dialog.isShowing()){
+            if (dialog == null || !dialog.isShowing()) {
                 SystemLogic.getInstance().checkUpdateApk(this, false);
             }
         }
-        sp.edit().putLong(Constant.SP_APP_VERSION, System.currentTimeMillis() / 1000).commit();
+        sp.edit().putLong(Constant.SP_APP_VERSION_REQ_TIME, System.currentTimeMillis() / 1000).commit();
+
     }
 
     private void checkServerTip() {
-
         String serverUrl = App.getApp().getOtaServerUrl();
         if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
-            SharedPreferences sp = App.getSp();
+            final SharedPreferences sp = App.getSp();
             long reqTime = sp.getLong(Constant.SP_APP_SERVER_REQ_TIME, 0);
+            boolean remindAgain = sp.getBoolean(Constant.SP_APP_SERVER_REMIND_AGAIN, true);
             if (reqTime == 0 || reqTime < TimeUtils.getStartTime()) {
                 SystemLogic.getInstance().getServerStopMsg();
                 ServerBean serverBean = SystemLogic.getInstance().getServerBean();
-                if (serverBean == null){
+                if (serverBean == null && serverBean.getContent().get(0) != null) {
                     return;
                 }
-                dialog = DialogUtils.showWarningDialog(this, serverBean.getContent().get(0).getPopText(), null);
+                ServerBean.ContentBean contentBean = serverBean.getContent().get(0);
+                if (contentBean.getPopStartTime() < System.currentTimeMillis() / 1000) {
+                    dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(),null, null,true, null);
+                } else {
+                    if (remindAgain)
+                        dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(),null, "Dont't remind me again",true, new DialogUtils.OnErrorButtonClickListenter() {
+                            @Override
+                            public void okClick() {
+
+                            }
+
+                            @Override
+                            public void cancelClick() {
+                                sp.edit().putBoolean(Constant.SP_APP_SERVER_REMIND_AGAIN, false).commit();
+                            }
+                        });
+                }
             }
             sp.edit().putLong(Constant.SP_APP_SERVER_REQ_TIME, System.currentTimeMillis() / 1000).commit();
         }

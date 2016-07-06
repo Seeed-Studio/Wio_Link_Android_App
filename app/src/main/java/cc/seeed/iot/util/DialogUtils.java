@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,6 +102,7 @@ public class DialogUtils {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Process.killProcess(Process.myPid());
+                System.exit(0);
             }
         });
         builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
@@ -282,7 +284,11 @@ public class DialogUtils {
         ProgressDialog progressDialog = new ProgressDialog(context, R.style.AppTheme_Dark_Dialog);
         progressDialog.setIndeterminate(true);
         progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage(str);
+        if (!TextUtils.isEmpty(str)){
+            progressDialog.setMessage(str);
+        }
+        //progressDialog.setProgressStyle(R.style.Progress);
+
         progressDialog.show();
         return progressDialog;
     }
@@ -367,24 +373,48 @@ public class DialogUtils {
         return dialog;
     }
 
-    public static Dialog showWarningDialog(Context context,String content, final View.OnClickListener listener) {
+    public static Dialog showWarningDialog(Context context,String content,String okText,String cancelText,boolean isHtml, final OnErrorButtonClickListenter listener) {
 
         final Dialog dialog = new Dialog(context,R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_warning, null);
 
         FontTextView mTvHint = (FontTextView) view.findViewById(R.id.mTvHint);
         FontButton mTvSubmit = (FontButton) view.findViewById(R.id.mTvSubmit);
-        mTvHint.setText(Html.fromHtml(content));
+        FontButton mTvCancel = (FontButton) view.findViewById(R.id.mTvCancel);
+        if (isHtml){
+            mTvHint.setText(Html.fromHtml(content));
+        }else {
+            mTvHint.setText(content);
+        }
+        if (TextUtils.isEmpty(cancelText)){
+            mTvCancel.setVisibility(View.GONE);
+        }else {
+            mTvCancel.setVisibility(View.VISIBLE);
+            mTvCancel.setText(cancelText);
+        }
+        if (!TextUtils.isEmpty(okText)){
+            mTvSubmit.setText(okText);
+        }
 
         mTvSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null){
-                    listener.onClick(v);
+                if (listener != null) {
+                    listener.okClick();
                 }
                 dialog.dismiss();
             }
         });
+        mTvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null){
+                    listener.cancelClick();
+                }
+                dialog.dismiss();
+            }
+        });
+
 
         dialog.show();
         dialog.setContentView(view);

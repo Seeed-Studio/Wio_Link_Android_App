@@ -5,6 +5,6 @@
     <!-- pressed -->
     <item android:drawable="@mipmap/grove_shape_press1" android:state_selected="true" />
     <!-- focused -->
-    <item android:drawable="@mipmap/grove_shape_normal1" />
+    <item android:drawable="@mipmap/grove_shape_normal2" />
     <!-- default -->
 </selector>

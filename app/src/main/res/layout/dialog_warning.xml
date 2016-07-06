@@ -60,6 +60,21 @@
                     app:cusButtonFont="@string/Proxima_Nova_Semibold" />
 
             </RelativeLayout>
+
+            <cc.seeed.iot.view.FontButton
+                android:id="@+id/mTvCancel"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_withe_bg"
+                android:elevation="5dp"
+                android:singleLine="true"
+                android:text="Don't remind me again"
+                android:textAllCaps="false"
+                android:textColor="#3A4B71"
+                android:textSize="14sp"
+                app:cusButtonFont="@string/Proxima_Nova_Semibold" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

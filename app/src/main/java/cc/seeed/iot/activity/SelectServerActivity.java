@@ -164,10 +164,15 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
                 mEtCustomServer.setEnabled(false);
                 hideKeyboard(mEtCustomServer);
                 saveIpAdress();
-                DialogUtils.showWarningDialog(this, serverBean.getContent().get(0).getPopText(), new View.OnClickListener() {
+                DialogUtils.showWarningDialog(this, serverBean.getContent().get(0).getPopText(),null, null,true, new DialogUtils.OnErrorButtonClickListenter() {
                     @Override
-                    public void onClick(View v) {
+                    public void okClick() {
                         finish();
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
                     }
                 });
                 break;

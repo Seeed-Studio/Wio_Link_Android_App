@@ -25,6 +25,7 @@
                 android:id="@+id/mSDVAvatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:visibility="invisible"
                 android:layout_marginTop="54dp"
                 app:placeholderImageScaleType="fitXY"
                 app:roundAsCircle="true"
@@ -89,11 +90,25 @@
             style="@style/menuItemStyle"
             android:text="About" />
 
-        <TextView
-            android:id="@+id/mTvUpdateApp"
-            style="@style/menuItemStyle"
-            android:visibility="visible"
-            android:text="Update App" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/mTvUpdateApp"
+                style="@style/menuItemStyle"
+                android:visibility="visible"
+                android:text="Update App" />
+
+            <ImageView
+                android:id="@+id/mIvUpdateApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="115dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/new_"/>
+        </RelativeLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
