@@ -1,7 +1,10 @@
 package cc.seeed.iot.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,8 +19,12 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.TranslateAnimation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -28,6 +35,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -42,6 +51,7 @@ import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontEditView;
 import cc.seeed.iot.view.FontTextView;
+import cc.seeed.iot.view.QuickReturnListView;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
 public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerAdapter.MainViewHolder.MyItemClickListener {
@@ -52,9 +62,10 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
     @InjectView(R.id.mRvGroveFilter)
     RecyclerView mRvGroveFilter;
     @InjectView(R.id.groves)
-    IndexableListView mLvGroves;
+    QuickReturnListView mLvGroves;
     @InjectView(R.id.mRlSearch)
     RelativeLayout mRlSearch;
+    View mHeader;
 
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
     private List<GroverDriver> mGroveDrivers;
@@ -86,6 +97,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.groves);
+       // init();
         if (mLvGroves != null) {
             mAdapter = new GrovesAdapter(this, mGroveDrivers);
             mLvGroves.setAdapter(mAdapter);
@@ -102,6 +114,107 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
             mRvGroveFilter.setAdapter(mGroveTypeListAdapter);
             mGroveTypeListAdapter.updateSelection(0);
         }
+
+        init();
+    }
+
+    private int mCachedVerticalScrollRange;
+    private int mQuickReturnHeight;
+    private static final int STATE_ONSCREEN = 0;
+    private static final int STATE_OFFSCREEN = 1;
+    private static final int STATE_RETURNING = 2;
+    private int mState = STATE_ONSCREEN;
+    private int mScrollY;
+    private int mMinRawY = 0;
+    private TranslateAnimation anim;
+    private View mPlaceHolder;
+
+    //初始化搜索框的滑动显示和隐藏
+    private void init() {
+        mHeader = getLayoutInflater().inflate(R.layout.header, null);
+        mPlaceHolder = mHeader.findViewById(R.id.placeholder);
+        mLvGroves.addHeaderView(mHeader);
+        mLvGroves.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        mQuickReturnHeight = mRlSearch.getHeight();
+                        mLvGroves.computeScrollY();
+                        mCachedVerticalScrollRange = mLvGroves.getListHeight();
+                    }
+                });
+
+        mLvGroves.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                mScrollY = 0;
+                int translationY = 0;
+
+                if (mLvGroves.scrollYIsComputed()) {
+                    mScrollY = mLvGroves.getComputedScrollY();
+                }
+
+                int rawY = mPlaceHolder.getTop()
+                        - Math.min(
+                        mCachedVerticalScrollRange - mLvGroves.getHeight(), mScrollY);
+
+                switch (mState) {
+                    case STATE_OFFSCREEN:
+                        if (rawY <= mMinRawY) {
+                            mMinRawY = rawY;
+                        } else {
+                            mState = STATE_RETURNING;
+                        }
+                        translationY = rawY;
+                        break;
+
+                    case STATE_ONSCREEN:
+                        if (rawY < -mQuickReturnHeight) {
+                            mState = STATE_OFFSCREEN;
+                            mMinRawY = rawY;
+                        }
+                        translationY = rawY;
+                        break;
+
+                    case STATE_RETURNING:
+                        translationY = (rawY - mMinRawY) - mQuickReturnHeight;
+                        if (translationY > 0) {
+                            translationY = 0;
+                            mMinRawY = rawY - mQuickReturnHeight;
+                        }
+
+                        if (rawY > 0) {
+                            mState = STATE_ONSCREEN;
+                            translationY = rawY;
+                        }
+
+                        if (translationY < -mQuickReturnHeight) {
+                            mState = STATE_OFFSCREEN;
+                            mMinRawY = rawY;
+                        }
+                        break;
+                }
+
+                /** this can be used if the build is below honeycomb **/
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.HONEYCOMB) {
+                    anim = new TranslateAnimation(0, 0, translationY,
+                            translationY);
+                    anim.setFillAfter(true);
+                    anim.setDuration(0);
+                    mRlSearch.startAnimation(anim);
+                } else {
+                    mRlSearch.setTranslationY(translationY);
+                }
+
+            }
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+        });
     }
 
     public void showSearchPopWindow(Activity activity) {
@@ -124,6 +237,12 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
         final ListView mLvResult = (ListView) view.findViewById(R.id.mLvResult);
         final GrovesAdapter adapter = new GrovesAdapter(activity, new ArrayList<GroverDriver>(), true);
         mLvResult.setAdapter(adapter);
+        mEtSearch.setFocusable(true);
+        mEtSearch.setFocusableInTouchMode(true);
+        mEtSearch.requestFocus();
+//        imm.showSoftInputFromInputMethod(mEtSearch.getWindowToken(), 0);
+//        imm.toggleSoftInputFromWindow(mEtSearch.getWindowToken(), 0, InputMethodManager.HIDE_NOT_ALWAYS);
+        showSoftInput(mEtSearch);
 
         mRlAction.setOnClickListener(null);
         mTvCancel.setOnClickListener(new View.OnClickListener() {
@@ -187,6 +306,16 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
 //        popWindow.showAsDropDown(targetView);
     }
 
+    public void showSoftInput(final EditText editText) {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            public void run() {
+                InputMethodManager inputManager = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(editText, 0);
+            }
+        }, 200);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -242,7 +371,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
                 case "GPIO":
                     gpioGroves.add(g);
                     break;
-                case "ANALOG":
+                case "Analog":
                     analogGroves.add(g);
                     break;
                 case "UART":
@@ -258,19 +387,19 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
 
         if (groveType.equals("All")) {
             updateGroveListAdapter(mGroveDrivers);
-        } else if (groveType.equals("INPUT")) {
+        } else if (groveType.equals("Input")) {
             updateGroveListAdapter(inputGroves);
-        } else if (groveType.equals("OUTPUT")) {
+        } else if (groveType.equals("Output")) {
             updateGroveListAdapter(outputGroves);
         } else if (groveType.equals("GPIO")) {
             updateGroveListAdapter(gpioGroves);
-        } else if (groveType.equals("ANALOG")) {
+        } else if (groveType.equals("Analog")) {
             updateGroveListAdapter(analogGroves);
         } else if (groveType.equals("UART")) {
             updateGroveListAdapter(uartGroves);
         } else if (groveType.equals("I2C")) {
             updateGroveListAdapter(i2cGroves);
-        } else if (groveType.equals("EVENT")) {
+        } else if (groveType.equals("Event")) {
             updateGroveListAdapter(eventGroves);
         }
 

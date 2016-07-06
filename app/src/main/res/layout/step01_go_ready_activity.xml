@@ -65,7 +65,7 @@
             android:layout_above="@id/mBtnGo"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="40dp"
-            android:scaleType="fitXY"
+            android:scaleType="centerInside"
             android:src="@mipmap/link_config" />
 
 

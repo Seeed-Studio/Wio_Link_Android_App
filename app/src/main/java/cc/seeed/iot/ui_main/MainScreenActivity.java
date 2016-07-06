@@ -680,6 +680,7 @@ public class MainScreenActivity extends BaseActivity
             @Override
             public void success(GroveDriverListResponse groveDriverListResponse, Response response) {
                 for (GroverDriver groveDriver : groveDriverListResponse.drivers) {
+                    groveDriver.setGroveName(ToolUtil.getSimpleName(groveDriver.GroveName));
                     groveDriver.save();
                 }
 

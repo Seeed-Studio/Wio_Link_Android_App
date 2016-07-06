@@ -92,6 +92,14 @@ public class GroverDriver extends Model {
         return result;
     }
 
+    public String getGroveName() {
+        return GroveName;
+    }
+
+    public void setGroveName(String groveName) {
+        GroveName = groveName;
+    }
+
     @Override
     public String toString() {
         return "GroveName:" + GroveName + ",GroveID:" + ID + ",GroveSKU:" + SKU;

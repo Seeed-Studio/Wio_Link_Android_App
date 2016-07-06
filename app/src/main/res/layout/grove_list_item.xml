@@ -13,7 +13,7 @@
 
     <RelativeLayout
         android:layout_width="120dp"
-        android:elevation="5dp"
+        android:elevation="8dp"
         android:layout_height="162dp">
 
         <ImageView

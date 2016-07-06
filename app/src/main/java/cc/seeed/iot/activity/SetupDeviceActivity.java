@@ -26,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.umeng.analytics.MobclickAgent;
 
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -194,11 +196,7 @@ public class SetupDeviceActivity extends BaseActivity
 
         List<PinConfig> list = PinConfigDBHelper.getPinConfigs(node.node_sn);
         old_node_josn = new NodeConfigHelper().getConfigJson(list, node);
-        if (old_node_josn.connections.isEmpty()){
-            mBtnUpdate.setVisibility(View.GONE);
-        }else {
-            mBtnUpdate.setVisibility(View.VISIBLE);
-        }
+        mBtnUpdate.setVisibility(View.GONE);
 
         mGrovePinsView = new GrovePinsView(this, mSetupDevice, node);
         for (ImageView pinView : mGrovePinsView.pinViews) {
@@ -241,13 +239,15 @@ public class SetupDeviceActivity extends BaseActivity
         for (int i = 0; i < mGrovePinsView.pinViews.length; i++) {
             pinBadgeUpdate(i);
         }
-        NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-        if ( node_josn.connections.isEmpty()) {
+       setUpdateButton();
+    }
+
+    private void setUpdateButton(){
+        if (!isChange()) {
             mBtnUpdate.setVisibility(View.GONE);
-        }else {
+        } else {
             mBtnUpdate.setVisibility(View.VISIBLE);
         }
-
     }
 
     private void pinBadgeUpdate(int position) {
@@ -256,6 +256,33 @@ public class SetupDeviceActivity extends BaseActivity
             mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
         } else {
             mGrovePinsView.badgeViews[position].setVisibility(View.GONE);
+        }
+    }
+
+    public boolean isChange(){
+        NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
+        if (old_node_josn.connections.isEmpty()){
+            if (node_josn.connections.isEmpty()){
+                return false;
+            }else {
+                return true;
+            }
+        }else {
+            if (node_josn.connections.isEmpty()){
+                return false;
+            }else if (node_josn.connections.size() != old_node_josn.connections.size()){
+                return true;
+            }else {
+                Gson gson = new Gson();
+                String newNodeJson = gson.toJson(node_josn);
+                String oldNodeJson = gson.toJson(old_node_josn);
+                if (newNodeJson.equals(oldNodeJson)){
+                    return false;
+                }else {
+                    return true;
+                }
+            }
+
         }
     }
 
@@ -269,11 +296,12 @@ public class SetupDeviceActivity extends BaseActivity
                     }
                     break;
                     case ADD_GROVE: {
-                        if (node.board.equals(Constant.WIO_LINK_V1_0)) {
-
+                      /*  if (node.board.equals(Constant.WIO_LINK_V1_0)) {
+                            pinBadgeUpdateAll();
                         } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
                             pinBadgeUpdateAll();
-                        }
+                        }*/
+                        pinBadgeUpdateAll();
                     }
                     break;
                     case RMV_I2C_GROVE: {
@@ -420,8 +448,7 @@ public class SetupDeviceActivity extends BaseActivity
     }
 
     public void quitHint() {
-        NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-        if (old_node_josn.connections.toString().equals(node_josn.connections.toString())) {
+        if (!isChange()) {
             finish();
         } else {
             DialogUtils.showErrorDialog(this, "", "Confirm", "Cancel", "Sure leave without updating hardware?", new DialogUtils.OnErrorButtonClickListenter() {
@@ -703,7 +730,7 @@ public class SetupDeviceActivity extends BaseActivity
                     case DragEvent.ACTION_DRAG_ENDED:
                         mIvRemove.setColorFilter(Color.RED, PorterDuff.Mode.DST);
                         mRlRemove.setVisibility(View.INVISIBLE);
-                        mBtnUpdate.setVisibility(View.VISIBLE);
+                        setUpdateButton();
                 }
                 break;
             default:

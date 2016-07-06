@@ -108,6 +108,7 @@ public class NetManager {
 
     /**
      * 走seeedstudiio 服务器
+     *
      * @param uri
      * @param cmd
      * @param params
@@ -129,9 +130,9 @@ public class NetManager {
         }
 
         String url = "";
-        if (uri.startsWith("http")){
-           url = uri;
-        }else {
+        if (uri.startsWith("http")) {
+            url = uri;
+        } else {
             url = CommonUrl.Server_Prefix.getVal() + uri;
         }
         request.url = url;
@@ -180,17 +181,15 @@ public class NetManager {
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 final Packet resp = new Packet();
-                if (responseBody != null) {
-                    String s = new String(responseBody);
-                    resp.code = statusCode;
-                    resp.data = "";
-                    if (error.toString().length() > 50) {
-                        resp.errorMsg = "server error";
-                    } else {
-                        resp.errorMsg = error.toString();
-                    }
-                    resp.status = false;
+                resp.code = statusCode;
+                resp.data = "";
+                if (error.toString().length() > 50) {
+                    resp.errorMsg = "server error";
+                } else {
+                    resp.errorMsg = error.toString();
                 }
+                resp.status = false;
+
 
                 if (callback != null) {
                     if (callback instanceof INetUiThreadCallBack) {
@@ -263,6 +262,7 @@ public class NetManager {
 
     /**
      * 走wio link 服务器
+     *
      * @param url
      * @param cmd
      * @param params

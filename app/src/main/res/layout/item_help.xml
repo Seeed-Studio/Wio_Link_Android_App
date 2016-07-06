@@ -29,8 +29,8 @@
             android:gravity="right"
             android:text="Requesting IP address from router"
             android:layout_alignParentRight="true"
-            android:textColor="#777777"
-            android:textSize="13sp"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp"
             app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
     </RelativeLayout>

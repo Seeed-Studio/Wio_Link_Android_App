@@ -43,7 +43,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textSize="14sp"
-                app:cusTextFont="@string/Proxima_Nova_Bold" />
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
         </LinearLayout>
 

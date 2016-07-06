@@ -77,8 +77,7 @@
             android:name=".activity.add_step.Step02WifiListActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity android:name="cc.seeed.iot.ui_main.AboutActivity" />
-        <activity android:name=".activity.GrovesActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan" />
+        <activity android:name=".activity.GrovesActivity"/>
         <activity android:name=".activity.GroveResultActivity" />
         <activity android:name=".ui_main.WebActivity" />
         <activity android:name=".activity.NodeSettingActivity" />

@@ -143,7 +143,7 @@
                     android:layout_height="114dp"
                     android:elevation="3dp"
                     android:background="@drawable/main_select_item_bg"
-                    android:src="@drawable/link_small" />
+                    android:src="@mipmap/link_small_01" />
 
                 <cc.seeed.iot.view.FontTextView
                     android:layout_width="wrap_content"
@@ -169,7 +169,7 @@
                     android:layout_height="114dp"
                     android:elevation="3dp"
                     android:background="@drawable/main_select_item_bg"
-                    android:src="@drawable/node_small" />
+                    android:src="@mipmap/node_small_01" />
 
                 <cc.seeed.iot.view.FontTextView
                     android:layout_width="wrap_content"

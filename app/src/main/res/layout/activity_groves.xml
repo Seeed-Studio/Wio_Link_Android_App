@@ -27,60 +27,61 @@
         android:layout_alignParentBottom="true"
         android:background="#E7E7E7" />
 
-    <RelativeLayout
-        android:id="@+id/mRlSearch"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:background="@drawable/grove_filter_bg">
+        android:layout_height="match_parent">
+
+        <cc.seeed.iot.view.QuickReturnListView
+            android:id="@+id/groves"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:divider="@null" />
 
         <RelativeLayout
+            android:id="@+id/mRlSearch"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="11dp"
-            android:layout_marginRight="11dp"
-            android:background="@drawable/grove_search_bg">
+            android:layout_height="44dp"
+            android:background="@drawable/grove_filter_bg">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="11dp"
+                android:layout_marginRight="11dp"
+                android:background="@drawable/grove_search_bg">
 
-                <ImageView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="8.1dp"
-                    android:src="@mipmap/search" />
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <cc.seeed.iot.view.FontTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search"
-                    android:textColor="#7A797B"
-                    android:textSize="14sp"
-                    app:cusTextFont="@string/Proxima_Nova_Regular" />
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8.1dp"
+                        android:src="@mipmap/search" />
+
+                    <cc.seeed.iot.view.FontTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Search"
+                        android:textColor="#7A797B"
+                        android:textSize="14sp"
+                        app:cusTextFont="@string/Proxima_Nova_Regular" />
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentBottom="true"
+                android:background="#E7E7E7" />
 
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_alignParentBottom="true"
-            android:background="#E7E7E7" />
-
-    </RelativeLayout>
-
-    <com.lucky.indexablelistview.widget.IndexableListView
-        android:id="@+id/groves"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:divider="@null" />
-
-    <!--<android.support.v7.widget.RecyclerView
-        android:id="@+id/groves"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />-->
+    </FrameLayout>
 </LinearLayout>
