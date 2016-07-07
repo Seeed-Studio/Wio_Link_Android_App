@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.SectionIndexer;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -37,12 +38,13 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
         this.context = context;
     }
 
-    public GrovesAdapter(Context context, List<GroverDriver> groves,boolean isShowFullName) {
+    public GrovesAdapter(Context context, List<GroverDriver> groves, boolean isShowFullName) {
         this.groves = new ArrayList<>();
         this.groves = groves;
         this.context = context;
         this.isShowFullName = isShowFullName;
     }
+
     @Override
     public int getCount() {
         return groves.size();
@@ -61,11 +63,11 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if (convertView == null){
-           convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grove, parent, false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_grove, parent, false);
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
-        }else {
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -76,7 +78,7 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
             public void onClick(View v) {
                 GroverDriver grove = groves.get(position);
                 Intent intent = new Intent(context, GroveDetailActivity.class);
-                intent.putExtra(GroveDetailActivity.Intent_GroveSku,grove.SKU);
+                intent.putExtra(GroveDetailActivity.Intent_GroveSku, grove.SKU);
                 context.startActivity(intent);
             }
         });
@@ -86,8 +88,9 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
 
     public void onBindViewHolder(ViewHolder holder, final int position) {
         GroverDriver grove = groves.get(position);
-        ImgUtil.displayImg(holder.grove_image,grove.ImageURL,R.mipmap.grove_default);
-        holder.mGroveNameView.setText(isShowFullName?grove.GroveName:ToolUtil.getSimpleName(grove.GroveName));
+        ImgUtil.displayImg(holder.grove_image, grove.ImageURL, R.mipmap.grove_default);
+        holder.mGroveNameView.setText(isShowFullName ? grove.GroveName : ToolUtil.getSimpleName(grove.GroveName));
+        holder.mIvNewGrove.setVisibility(ToolUtil.isNewGrove(grove.AddedAt)?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -102,7 +105,7 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
     public int getPositionForSection(int sectionIndex) {
         for (int i = sectionIndex; i >= 0; i--) {
             for (int j = 0; j < getCount(); j++) {
-                if (i == 0) {
+                if (i == mSections.length()-1) {
                     // For numeric section
                     for (int k = 0; k <= 9; k++) {
                         if (StringMatcher.match(String.valueOf(ToolUtil.getSimpleName(((GroverDriver) getItem(j)).GroveName).charAt(0)), String.valueOf(k)))
@@ -122,15 +125,17 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
         return 0;
     }
 
-    public class ViewHolder  {
+    public class ViewHolder {
         SimpleDraweeView grove_image;
         FontTextView mGroveNameView;
+        ImageView mIvNewGrove;
         View mView;
 
         public ViewHolder(View itemView) {
             mView = itemView;
             grove_image = (SimpleDraweeView) itemView.findViewById(R.id.image);
             mGroveNameView = (FontTextView) itemView.findViewById(R.id.name);
+            mIvNewGrove = (ImageView) itemView.findViewById(R.id.mIvNewGrove);
         }
     }
 

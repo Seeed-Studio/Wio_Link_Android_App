@@ -79,4 +79,6 @@ public class Constant {
             return value;
         }
     }
+
+    public static long SaveNewGroveTime = 60*60*24*30;//30天
 }

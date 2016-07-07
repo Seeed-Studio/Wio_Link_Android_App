@@ -243,6 +243,9 @@ public class MainScreenActivity extends BaseActivity
                 mTvUpdateApp = (TextView) headerLayout.findViewById(R.id.mTvUpdateApp);
                 mIvUpdateApp = (ImageView) headerLayout.findViewById(R.id.mIvUpdateApp);
 
+                ImageView mIvNewGrove = (ImageView) headerLayout.findViewById(R.id.mIvNewGrove);
+                mIvNewGrove.setVisibility(DBHelper.isHasNewGrove()?View.VISIBLE:View.GONE);
+
                 UpdateApkBean updateApkBean = SystemLogic.getInstance().getUpdateApkBean();
                 if (updateApkBean == null || TextUtils.isEmpty(updateApkBean.version_name)){
                     mIvUpdateApp.setVisibility(View.GONE);

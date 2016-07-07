@@ -247,4 +247,22 @@ public class ToolUtil {
         return url;
     }
 
+    public static boolean isNewGrove(String time){
+        if (TextUtils.isEmpty(time)){
+            return false;
+        }else {
+            try {
+                long addTime = Long.parseLong(time);
+                long nowTime = System.currentTimeMillis() / 1000;
+                if (nowTime - addTime > Constant.SaveNewGroveTime){//10天
+                    return false;
+                }else {
+                    return true;
+                }
+            }catch (Exception e){
+                return false;
+            }
+        }
+    }
+
 }

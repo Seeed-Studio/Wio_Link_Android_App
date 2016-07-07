@@ -25,7 +25,6 @@
                 android:id="@+id/mSDVAvatar"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:visibility="invisible"
                 android:layout_marginTop="54dp"
                 app:placeholderImageScaleType="fitXY"
                 app:roundAsCircle="true"
@@ -55,23 +54,36 @@
                 app:cusTextFont="@string/Proxima_Nova_Semibold" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/mTvSupportDevices"
-            style="@style/menuItemStyle"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_marginTop="20dp"
-            android:text="Support Devices" />
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/mTvSupportDevices"
+                style="@style/menuItemStyle"
+                android:text="Groves" />
+
+            <ImageView
+                android:id="@+id/mIvNewGrove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="90dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/new_"/>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/mTvFAQ"
             style="@style/menuItemStyle"
-            android:text="FAQ" />
+            android:text="Support" />
 
 
         <TextView
             android:id="@+id/mTvGetDevices"
-            android:visibility="gone"
+            android:visibility="visible"
             style="@style/menuItemStyle"
-            android:text="Get Devices" />
+            android:text="Get Hardwares" />
 
         <View
             android:layout_width="match_parent"

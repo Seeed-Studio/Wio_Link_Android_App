@@ -71,6 +71,11 @@ public class GroverDriver extends Model {
     @Column(name = "description")
     public String Description;
 
+    @Column(name = "added_at")
+    public String AddedAt;
+
+    @Column(name = "author")
+    public String Author;
 
 
     @Override

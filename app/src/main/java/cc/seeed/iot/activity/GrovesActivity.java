@@ -100,10 +100,12 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.groves);
         // init();
+        init();
         if (mLvGroves != null) {
             mAdapter = new GrovesAdapter(this, mGroveDrivers);
             mLvGroves.setAdapter(mAdapter);
             mLvGroves.setFastScrollEnabled(true);
+            updateGroveListAdapter(mGroveDrivers);
         }
 
         if (mRvGroveFilter != null) {
@@ -117,7 +119,6 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
             mGroveTypeListAdapter.updateSelection(0);
         }
 
-        init();
     }
 
     private int mCachedVerticalScrollRange;

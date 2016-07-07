@@ -16,86 +16,175 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:paddingBottom="20dp"
         android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:paddingLeft="19dp"
-            android:paddingRight="19dp"
-            android:orientation="vertical">
+            android:paddingRight="19dp">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-        <com.facebook.drawee.view.SimpleDraweeView
-            android:id="@+id/mGroveImg"
-            android:layout_width="222dp"
-            android:layout_height="150dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="30dp"
-            app:placeholderImage="@mipmap/grove_default"
-            app:placeholderImageScaleType="fitXY" />
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/mGroveImg"
+                    android:layout_width="222dp"
+                    android:layout_height="150dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    app:placeholderImage="@mipmap/grove_default"
+                    app:placeholderImageScaleType="fitXY" />
 
-    </RelativeLayout>
+            </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="50dp">
-
-        <cc.seeed.iot.view.FontTextView
-            android:id="@+id/mTvGroveName"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="bottom"
-            android:singleLine="true"
-            android:text="Grove Button"
-            android:textColor="#4A4A4A"
-            android:textSize="18sp"
-            app:cusTextFont="@string/Proxima_Nova_Bold" />
-
-        <RelativeLayout
-            android:layout_width="53dp"
-            android:layout_marginLeft="14.7dp"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:id="@+id/mLlLinkWiki"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="34dp"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="19.2dp"
-                    android:layout_height="16.9dp"
-                    android:layout_marginRight="3dp"
-                    android:src="@mipmap/link_wiki"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:id="@+id/mLlLinkWiki"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="19.2dp"
+                                android:layout_height="16.9dp"
+                                android:layout_marginRight="3dp"
+                                android:src="@mipmap/link_wiki" />
+
+                            <cc.seeed.iot.view.FontTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="WIKI"
+                                android:textColor="#3A4B71"
+                                android:textSize="14sp"
+                                app:cusTextFont="@string/Proxima_Nova_Bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/mLlLinkWiki"
+                            android:gravity="center_vertical">
+
+                            <cc.seeed.iot.view.FontTextView
+                                android:id="@+id/mTvGroveName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="Grove Buttonsssssssssssssssssssssssssssss"
+                                android:maxLength="25"
+                                android:textColor="#3A4B71"
+                                android:textSize="18sp"
+                                app:cusTextFont="@string/Proxima_Nova_Bold" />
+
+                            <ImageView
+                                android:id="@+id/mIvNewGrove"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="3dp"
+                                android:src="@mipmap/new_" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp">
+
+                        <cc.seeed.iot.view.FontTextView
+                            android:id="@+id/mTvAddDate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:layout_centerVertical="true"
+                            android:text="Added on 08/12/2016"
+                            android:textColor="#9B9B9B"
+                            android:textSize="12sp"
+                            app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+                        <cc.seeed.iot.view.FontTextView
+                            android:id="@+id/mDigital"
+                            android:layout_width="wrap_content"
+                            android:layout_height="16dp"
+                            android:background="@drawable/digital_gray_bg"
+                            android:singleLine="true"
+                            android:layout_alignParentRight="true"
+                            android:gravity="center_vertical"
+                            android:layout_centerVertical="true"
+                            android:text="Digital"
+                            android:textColor="#ffffff"
+                            android:textSize="10sp"
+                            app:cusTextFont="@string/Proxima_Nova_Bold" />
+
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="#777777"/>
+
+            </RelativeLayout>
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvGroveDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="11dp"
+                android:text="This new version of button twig contains one independent button, which are configured with pull-down resistor ? Ready for use with our microcontrollers as digital input. The button signals the SIG wire,NC is not used on this twig."
+                android:textColor="#4A4A4A"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+            <LinearLayout
+                android:id="@+id/mLlContributer"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
 
                 <cc.seeed.iot.view.FontTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:singleLine="true"
-                    android:text="wiki"
+                    android:text="Contributer"
                     android:textColor="#9B9B9B"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:id="@+id/mTvContributer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="KillJack"
+                    android:layout_marginLeft="8dp"
+                    android:textColor="#3A4B71"
+                    android:textSize="12sp"
                     app:cusTextFont="@string/Proxima_Nova_Bold" />
             </LinearLayout>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <cc.seeed.iot.view.FontTextView
-        android:id="@+id/mTvGroveDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="11dp"
-        android:text="This new version of button twig contains one independent button, which are configured with pull-down resistor ? Ready for use with our microcontrollers as digital input. The button signals the SIG wire,NC is not used on this twig."
-        android:textColor="#9B9B9B"
-        android:textSize="14sp"
-        app:cusTextFont="@string/Proxima_Nova_Regular" />
 
         </LinearLayout>
     </ScrollView>

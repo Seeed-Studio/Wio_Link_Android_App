@@ -8,11 +8,11 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 
 import java.util.List;
@@ -24,6 +24,8 @@ import cc.seeed.iot.R;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.ShareUtils;
+import cc.seeed.iot.util.TimeUtil;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
@@ -44,6 +46,14 @@ public class GroveDetailActivity extends BaseActivity {
     FontTextView mTvGroveName;
     @InjectView(R.id.mTvGroveDesc)
     FontTextView mTvGroveDesc;
+    @InjectView(R.id.mIvNewGrove)
+    ImageView mIvNewGrove;
+    @InjectView(R.id.mTvAddDate)
+    FontTextView mTvAddDate;
+    @InjectView(R.id.mTvContributer)
+    FontTextView mTvContributer;
+    @InjectView(R.id.mLlContributer)
+    LinearLayout mLlContributer;
 
     private GroverDriver grove;
     CallbackManager callbackManager;
@@ -84,6 +94,26 @@ public class GroveDetailActivity extends BaseActivity {
             mLlLinkWiki.setVisibility(View.GONE);
         } else {
             mLlLinkWiki.setVisibility(View.VISIBLE);
+        }
+
+        mIvNewGrove.setVisibility(ToolUtil.isNewGrove(grove.AddedAt)?View.VISIBLE:View.GONE);
+        if (TextUtils.isEmpty(grove.Author)){
+            mLlContributer.setVisibility(View.GONE);
+        }else {
+            mLlContributer.setVisibility(View.VISIBLE);
+            mTvContributer.setText(grove.Author);
+        }
+
+        if (TextUtils.isEmpty(grove.AddedAt)){
+            mTvAddDate.setVisibility(View.GONE);
+        }else {
+            mTvAddDate.setVisibility(View.VISIBLE);
+            try {
+                long addTime = Long.parseLong(grove.AddedAt);
+                mTvAddDate.setText("Added on "+ TimeUtil.long2String(addTime,"dd/MM/yyyy"));
+            }catch (Exception e){
+                mTvAddDate.setVisibility(View.GONE);
+            }
         }
 
     }
@@ -127,17 +157,4 @@ public class GroveDetailActivity extends BaseActivity {
        /* if (UMShareAPI.get(this) != null)
             UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);*/
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        MobclickAgent.onResume(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        MobclickAgent.onPause(this);
-    }
-
 }
