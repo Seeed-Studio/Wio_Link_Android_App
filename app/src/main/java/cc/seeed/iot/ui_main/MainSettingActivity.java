@@ -52,13 +52,23 @@ public class MainSettingActivity extends BaseActivity {
     }
 
     private void initData(){
-        String url = App.getApp().getOtaServerUrl();
-        if (CommonUrl.OTA_CHINA_URL.equals(url) || CommonUrl.OTA_INTERNATIONAL_URL.equals(url) ){
+        String serverUrl = App.getApp().getOtaServerUrl();
+      /*  if (CommonUrl.OTA_CHINA_URL.equals(url) || CommonUrl.OTA_INTERNATIONAL_URL.equals(url) ){
             mTvConnectServer.setText(url +"(default)");
         }else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(url)) {
             mTvConnectServer.setText(url+"("+getString(R.string.server_old_global)+")");
         } else {
             mTvConnectServer.setText(url +"(custom)");
+        }*/
+
+        if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)) {
+            mTvConnectServer.setText("("+getString(R.string.server_chinese)+")");
+        } else if (CommonUrl.OTA_INTERNATIONAL_URL.equals(serverUrl)) {
+            mTvConnectServer.setText("("+getString(R.string.server_global)+")");
+        } else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
+            mTvConnectServer.setText("("+getString(R.string.server_old_global)+")");
+        } else {
+            mTvConnectServer.setText("("+getString(R.string.server_customize)+")");
         }
     }
 

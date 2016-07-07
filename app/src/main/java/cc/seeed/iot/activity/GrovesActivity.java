@@ -70,6 +70,8 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
     GroveFilterRecyclerAdapter mGroveTypeListAdapter;
     private List<GroverDriver> mGroveDrivers;
 
+    private boolean isChickTag = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +99,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.groves);
-       // init();
+        // init();
         if (mLvGroves != null) {
             mAdapter = new GrovesAdapter(this, mGroveDrivers);
             mLvGroves.setAdapter(mAdapter);
@@ -141,6 +143,9 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
                         mQuickReturnHeight = mRlSearch.getHeight();
                         mLvGroves.computeScrollY();
                         mCachedVerticalScrollRange = mLvGroves.getListHeight();
+                        if (isChickTag) {
+                            isChickTag = false;
+                        }
                     }
                 });
 
@@ -156,10 +161,14 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
                 if (mLvGroves.scrollYIsComputed()) {
                     mScrollY = mLvGroves.getComputedScrollY();
                 }
-
-                int rawY = mPlaceHolder.getTop()
-                        - Math.min(
-                        mCachedVerticalScrollRange - mLvGroves.getHeight(), mScrollY);
+                int rawY;
+                if (isChickTag) {
+                    rawY = 0;
+                } else {
+                    rawY = mPlaceHolder.getTop()
+                            - Math.min(
+                            mCachedVerticalScrollRange - mLvGroves.getHeight(), mScrollY);
+                }
 
                 switch (mState) {
                     case STATE_OFFSCREEN:
@@ -208,7 +217,6 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
                 } else {
                     mRlSearch.setTranslationY(translationY);
                 }
-
             }
 
             @Override
@@ -343,6 +351,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
 
     @Override
     public void onItemClick(View view, int postion) {
+        isChickTag = true;
         String groveType = Constant.groveTypes[postion];
 
         List<GroverDriver> inputGroves = new ArrayList<GroverDriver>();
@@ -371,7 +380,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
                 case "GPIO":
                     gpioGroves.add(g);
                     break;
-                case "Analog":
+                case "ANALOG":
                     analogGroves.add(g);
                     break;
                 case "UART":
@@ -408,6 +417,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
     private void updateGroveListAdapter(List<GroverDriver> groverDrivers) {
         mLvGroves.setAdapter(mAdapter);
         mAdapter.updateAll(groverDrivers);
+        //     mRlSearch.setTranslationY(mLvGroves.getTop());
     }
 
     @Override

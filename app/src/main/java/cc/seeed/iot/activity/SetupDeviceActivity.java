@@ -495,7 +495,7 @@ public class SetupDeviceActivity extends BaseActivity
                 case "GPIO":
                     gpioGroves.add(g);
                     break;
-                case "Analog":
+                case "ANALOG":
                     analogGroves.add(g);
                     break;
                 case "UART":

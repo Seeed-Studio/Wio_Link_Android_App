@@ -38,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:singleLine="true"
-                android:text="awong1900@163.com"
+                android:text=""
                 android:textColor="#ffffff"
                 android:textSize="12sp"
                 app:cusTextFont="@string/Proxima_Nova_Regular" />
