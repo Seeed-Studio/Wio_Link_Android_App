@@ -44,6 +44,7 @@ import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
+import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.util.WifiUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.view.StepView;
@@ -160,8 +161,14 @@ public class Step04ApConnectActivity extends BaseActivity {
                     try {
                         byte[] bytes = udpClient.receiveData();
                         String resurt = new String(bytes);
-                        if (resurt != null && resurt.length() >= 3) {
-                            if (resurt.substring(0, 3).equals("1.1")) {
+                        if (resurt != null && RegularUtils.isNodeVersionCode(resurt)) {
+                            float versionCode;
+                            try {
+                                versionCode = Float.parseFloat(resurt);
+                            } catch (Exception e) {
+                                return;
+                            }
+                            if (versionCode <= 1.1) {
                                 MLog.d(this, "get version success: " + new String(bytes));
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -178,7 +185,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                                     }
                                 });
                                 break;
-                            } else if (resurt.substring(0, 3).equals("1.2")) {
+                            } else if (versionCode >= 1.2) {
                                 MLog.d(this, "get version success: " + new String(bytes));
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -285,7 +292,7 @@ public class Step04ApConnectActivity extends BaseActivity {
 
                                 @Override
                                 public void cancelClick() {
-                                  gotoHelp();
+                                    gotoHelp();
                                 }
                             });
                         }
@@ -308,7 +315,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        mProgressBar.setProgress(30+flag);
+                        mProgressBar.setProgress(30 + flag);
                         mTvHint.setText("Waiting Wio get ip address...[" + (30 - flag) + "]");
                     }
                 });
@@ -348,7 +355,7 @@ public class Step04ApConnectActivity extends BaseActivity {
 
                     @Override
                     public void failure(RetrofitError error) {
-                        Log.d("TAG",error.toString());
+                        Log.d("TAG", error.toString());
                     }
                 });
 
@@ -370,7 +377,7 @@ public class Step04ApConnectActivity extends BaseActivity {
             int i = values[0];
             //  showProgressDialog("Waiting Wio get ip address...[" + i + "]");
             showProgressText("Get device status...[" + i + "]");
-            mProgressBar.setProgress(60+(30-i));
+            mProgressBar.setProgress(60 + (30 - i));
         }
 
         @Override
@@ -504,8 +511,8 @@ public class Step04ApConnectActivity extends BaseActivity {
         finish();
     }
 
-    private void gotoHelp(){
-        startActivity(new Intent(this,HelpActivity.class));
+    private void gotoHelp() {
+        startActivity(new Intent(this, HelpActivity.class));
     }
 
     @Override

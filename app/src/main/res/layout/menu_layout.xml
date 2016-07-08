@@ -27,6 +27,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="54dp"
                 app:placeholderImageScaleType="fitXY"
+                android:visibility="invisible"
                 app:roundAsCircle="true"
                 app:roundingBorderColor="#cacaca"
                 app:roundingBorderWidth="1dp" />
@@ -81,7 +82,7 @@
 
         <TextView
             android:id="@+id/mTvGetDevices"
-            android:visibility="visible"
+            android:visibility="gone"
             style="@style/menuItemStyle"
             android:text="Get Hardwares" />
 
@@ -101,6 +102,11 @@
             android:id="@+id/mTVAbout"
             style="@style/menuItemStyle"
             android:text="About" />
+
+        <TextView
+            android:id="@+id/mTvFeedBack"
+            style="@style/menuItemStyle"
+            android:text="Feedback" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -59,4 +59,16 @@ public class RegularUtils {
     public static boolean isPhone(String phone) {
         return Patterns.PHONE.matcher(phone).matches();
     }
+
+    /**
+     * 判断是不是node的版本号
+     * @param code
+     * @return
+     */
+    public static boolean isNodeVersionCode(String code){
+        String reg = "[0-9]+.[0-9]+";
+        Pattern p = Pattern.compile(reg);
+        Matcher matcher = p.matcher(code);
+        return matcher.matches();
+    }
 }

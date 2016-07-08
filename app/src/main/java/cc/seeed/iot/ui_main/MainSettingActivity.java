@@ -62,13 +62,13 @@ public class MainSettingActivity extends BaseActivity {
         }*/
 
         if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)) {
-            mTvConnectServer.setText("("+getString(R.string.server_chinese)+")");
+            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_chinese)+")");
         } else if (CommonUrl.OTA_INTERNATIONAL_URL.equals(serverUrl)) {
-            mTvConnectServer.setText("("+getString(R.string.server_global)+")");
+            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_global)+")");
         } else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
-            mTvConnectServer.setText("("+getString(R.string.server_old_global)+")");
+            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_old_global)+")");
         } else {
-            mTvConnectServer.setText("("+getString(R.string.server_customize)+")");
+            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_customize)+")");
         }
     }
 

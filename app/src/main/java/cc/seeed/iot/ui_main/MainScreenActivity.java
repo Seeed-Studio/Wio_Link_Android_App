@@ -55,6 +55,7 @@ import java.util.List;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.FeedbackActivity;
 import cc.seeed.iot.activity.GrovesActivity;
 import cc.seeed.iot.activity.HelpActivity;
 import cc.seeed.iot.activity.NodeSettingActivity;
@@ -123,6 +124,7 @@ public class MainScreenActivity extends BaseActivity
     private TextView mTvGetDevices;
     private TextView mTvSetting;
     private TextView mTVAbout;
+    private TextView mTvFeedBack;
     private TextView mTvUpdateApp;
     private ImageView mIvUpdateApp;
     private NavigationView navigationView;
@@ -240,6 +242,7 @@ public class MainScreenActivity extends BaseActivity
                 mTvGetDevices = (TextView) headerLayout.findViewById(R.id.mTvGetDevices);
                 mTvSetting = (TextView) headerLayout.findViewById(R.id.mTvSetting);
                 mTVAbout = (TextView) headerLayout.findViewById(R.id.mTVAbout);
+                mTvFeedBack = (TextView) headerLayout.findViewById(R.id.mTvFeedBack);
                 mTvUpdateApp = (TextView) headerLayout.findViewById(R.id.mTvUpdateApp);
                 mIvUpdateApp = (ImageView) headerLayout.findViewById(R.id.mIvUpdateApp);
 
@@ -269,6 +272,7 @@ public class MainScreenActivity extends BaseActivity
                 mTvGetDevices.setOnClickListener(this);
                 mTvSetting.setOnClickListener(this);
                 mTVAbout.setOnClickListener(this);
+                mTvFeedBack.setOnClickListener(this);
                 mTvUpdateApp.setOnClickListener(this);
             }
         }
@@ -449,6 +453,10 @@ public class MainScreenActivity extends BaseActivity
             case R.id.mTVAbout:
                 MobclickAgent.onEvent(this, "12005");
                 intent = new Intent(MainScreenActivity.this, AboutActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.mTvFeedBack:
+                intent = new Intent(MainScreenActivity.this, FeedbackActivity.class);
                 startActivity(intent);
                 break;
             case R.id.mTvUpdateApp:

@@ -186,4 +186,11 @@
     <string name="choose_server_toolbar">Choose a Server</string>
     <string name="old_server_hint"><![CDATA[This option is for users who registered with our old Global Server.<br><br> Because we are making changes our server architecture, our old Global Server will be terminated on <b><font color="#484848">September 1, 2016</font></b>. At that time, all your data will be transferred automatically to new Global Server.<br><br> We highly recommend that you use our new Global Server for your new projects.]]></string>
     <string name="choose_display_grove">Choose Display Grove</string>
+
+    <string name="feedback_desc_hint">Tell us about your experience</string>
+    <string name="feedback_email_adress">Your email address</string>
+    <string name="feedback_email_format_error">hmmm..email address looks wrong..</string>
+    <string name="feedback_submit_fail">Server Error. Please try again.</string>
+    <string name="feedback_title">Feedback</string>
+    <string name="feedback_submit">Submit</string>
 </resources>

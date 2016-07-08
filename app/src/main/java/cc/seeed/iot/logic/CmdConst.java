@@ -28,5 +28,7 @@ public interface CmdConst {
 
     String Cmd_Stop_server = "cmd_stop_server";
 
+    String Cmd_Feedback = "cmd_feedback";
+
 
 }
