@@ -45,6 +45,7 @@
 
         <activity
             android:name="cc.seeed.iot.ui_main.MainScreenActivity"
+            android:launchMode="singleTask"
             android:theme="@style/DrawTheme" />
         <activity android:name=".reserve_file.SetupIotLinkActivity" />
         <activity

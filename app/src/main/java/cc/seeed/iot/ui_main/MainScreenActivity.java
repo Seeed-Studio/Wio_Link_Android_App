@@ -247,16 +247,16 @@ public class MainScreenActivity extends BaseActivity
                 mIvUpdateApp = (ImageView) headerLayout.findViewById(R.id.mIvUpdateApp);
 
                 ImageView mIvNewGrove = (ImageView) headerLayout.findViewById(R.id.mIvNewGrove);
-                mIvNewGrove.setVisibility(DBHelper.isHasNewGrove()?View.VISIBLE:View.GONE);
+                mIvNewGrove.setVisibility(DBHelper.isHasNewGrove() ? View.VISIBLE : View.GONE);
 
                 UpdateApkBean updateApkBean = SystemLogic.getInstance().getUpdateApkBean();
-                if (updateApkBean == null || TextUtils.isEmpty(updateApkBean.version_name)){
+                if (updateApkBean == null || TextUtils.isEmpty(updateApkBean.version_name)) {
                     mIvUpdateApp.setVisibility(View.GONE);
-                }else {
+                } else {
                     PackageInfo info = SystemUtils.getPackageInfo();
-                    if (SystemLogic.getInstance().isUpdate(info.versionName,updateApkBean.version_name)){
+                    if (SystemLogic.getInstance().isUpdate(info.versionName, updateApkBean.version_name)) {
                         mIvUpdateApp.setVisibility(View.VISIBLE);
-                    }else {
+                    } else {
                         mIvUpdateApp.setVisibility(View.GONE);
                     }
                 }
@@ -400,6 +400,7 @@ public class MainScreenActivity extends BaseActivity
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+        user = UserLogic.getInstance().getUser();
         getNodeList();
     }
 
@@ -645,11 +646,13 @@ public class MainScreenActivity extends BaseActivity
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(MainScreenActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                Message message = Message.obtain();
-                message.arg2 = 0;
-                message.what = MESSAGE_NODE_LIST_COMPLETE;
-                mHandler.sendMessage(message);
+                if (!isGotoLogin(error.getLocalizedMessage())) {
+                    Toast.makeText(MainScreenActivity.this, error.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    Message message = Message.obtain();
+                    message.arg2 = 0;
+                    message.what = MESSAGE_NODE_LIST_COMPLETE;
+                    mHandler.sendMessage(message);
+                }
             }
         });
 
@@ -677,6 +680,7 @@ public class MainScreenActivity extends BaseActivity
 
             @Override
             public void failure(RetrofitError error) {
+                isGotoLogin(error.getLocalizedMessage());
                 Log.e(TAG, error.getLocalizedMessage());
             }
         });
@@ -924,10 +928,10 @@ public class MainScreenActivity extends BaseActivity
                 }
                 ServerBean.ContentBean contentBean = serverBean.getContent().get(0);
                 if (contentBean.getPopStartTime() < System.currentTimeMillis() / 1000) {
-                    dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(),null, null,true, null);
+                    dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(), null, null, true, null);
                 } else {
                     if (remindAgain)
-                        dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(),null, "Dont't remind me again",true, new DialogUtils.OnErrorButtonClickListenter() {
+                        dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(), null, "Dont't remind me again", true, new DialogUtils.OnErrorButtonClickListenter() {
                             @Override
                             public void okClick() {
 

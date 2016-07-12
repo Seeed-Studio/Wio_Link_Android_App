@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -17,6 +18,7 @@ import cc.seeed.iot.logic.CmdConst;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.mgr.IUiObserver;
 import cc.seeed.iot.mgr.UiObserverManager;
+import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.ToolUtil;
 
 /**
@@ -35,13 +37,13 @@ public class BaseActivity extends AppCompatActivity implements IUiObserver, CmdC
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        if (ToolUtil.isApkDebug()){
+        if (ToolUtil.isApkDebug()) {
             View toolbar = findViewById(R.id.mToolbar);
-            if (toolbar != null){
+            if (toolbar != null) {
                 toolbar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        startActivity(new Intent(BaseActivity.this,TestActivity.class));
+                        startActivity(new Intent(BaseActivity.this, TestActivity.class));
                     }
                 });
             }
@@ -85,17 +87,28 @@ public class BaseActivity extends AppCompatActivity implements IUiObserver, CmdC
     }
 
     public void hideKeyboard(View view) {
-        InputMethodManager inputManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputManager.hideSoftInputFromWindow(view.getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+        InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    public boolean isLogin(){
-        if (UserLogic.getInstance().isLogin()){
+    public boolean isLogin() {
+        if (UserLogic.getInstance().isLogin()) {
             return true;
-        }else {
+        } else {
             startActivity(new Intent(this, LoginAndRegistActivity.class));
             return false;
         }
+    }
+
+    public boolean isGotoLogin(String key) {
+        if ("Please login to get the token".equals(key)) {
+            Toast.makeText(this, key, Toast.LENGTH_LONG).show();
+            UserLogic.getInstance().logOut();
+            startActivity(new Intent(this, LoginAndRegistActivity.class));
+            return true;
+        }
+
+        return false;
     }
 
     @Override
