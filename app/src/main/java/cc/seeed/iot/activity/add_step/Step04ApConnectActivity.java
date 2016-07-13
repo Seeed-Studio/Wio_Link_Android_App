@@ -162,7 +162,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                         byte[] bytes = udpClient.receiveData();
                         String resurt = new String(bytes);
                         if (resurt != null && RegularUtils.isNodeVersionCode(resurt)) {
-                            float versionCode;
+                            float versionCode = 1.1f;
                             try {
                                 versionCode = Float.parseFloat(resurt);
                             } catch (Exception e) {
