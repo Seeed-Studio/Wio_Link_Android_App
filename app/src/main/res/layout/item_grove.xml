@@ -45,7 +45,7 @@
                 android:maxLength="35"
                 android:maxLines="1"
                 android:textSize="14sp"
-                app:cusTextFont="@string/Proxima_Nova_Bold" />
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
             <ImageView
                 android:id="@+id/mIvNewGrove"

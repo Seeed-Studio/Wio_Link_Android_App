@@ -239,10 +239,10 @@ public class SetupDeviceActivity extends BaseActivity
         for (int i = 0; i < mGrovePinsView.pinViews.length; i++) {
             pinBadgeUpdate(i);
         }
-       setUpdateButton();
+        setUpdateButton();
     }
 
-    private void setUpdateButton(){
+    private void setUpdateButton() {
         if (!isChange()) {
             mBtnUpdate.setVisibility(View.GONE);
         } else {
@@ -259,26 +259,26 @@ public class SetupDeviceActivity extends BaseActivity
         }
     }
 
-    public boolean isChange(){
+    public boolean isChange() {
         NodeJson node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-        if (old_node_josn.connections.isEmpty()){
-            if (node_josn.connections.isEmpty()){
+        if (old_node_josn.connections.isEmpty()) {
+            if (node_josn.connections.isEmpty()) {
                 return false;
-            }else {
+            } else {
                 return true;
             }
-        }else {
-            if (node_josn.connections.isEmpty()){
+        } else {
+            if (node_josn.connections.isEmpty()) {
                 return false;
-            }else if (node_josn.connections.size() != old_node_josn.connections.size()){
+            } else if (node_josn.connections.size() != old_node_josn.connections.size()) {
                 return true;
-            }else {
+            } else {
                 Gson gson = new Gson();
                 String newNodeJson = gson.toJson(node_josn);
                 String oldNodeJson = gson.toJson(old_node_josn);
-                if (newNodeJson.equals(oldNodeJson)){
+                if (newNodeJson.equals(oldNodeJson)) {
                     return false;
-                }else {
+                } else {
                     return true;
                 }
             }
@@ -391,11 +391,10 @@ public class SetupDeviceActivity extends BaseActivity
                             intent = new Intent(SetupDeviceActivity.this, NodeSettingActivity.class);
                             intent.putExtra(NodeSettingActivity.Intent_NodeSn, node.node_sn);
                             startActivity(intent);
+
                             break;
                         case 2:
-                            intent = new Intent(SetupDeviceActivity.this, Step01GoReadyActivity.class);
-                            intent.putExtra(Step04ApConnectActivity.Intent_NodeSn, node.node_sn);
-                            startActivity(intent);
+                            setWifiChange();
                             break;
                         case 3:
                             intent = new Intent(SetupDeviceActivity.this, HelpActivity.class);
@@ -407,6 +406,23 @@ public class SetupDeviceActivity extends BaseActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setWifiChange() {
+        DialogUtils.showWarningDialog(this, "Sure to switch Wi-Fi network?", "This process is suggested to keep your Wio device working under a diffrent Wi-Fi network.",
+                "Comfirm", "Cancel", false, new DialogUtils.OnErrorButtonClickListenter() {
+                    @Override
+                    public void okClick() {
+                        Intent intent = new Intent(SetupDeviceActivity.this, Step01GoReadyActivity.class);
+                        intent.putExtra(Step04ApConnectActivity.Intent_NodeSn, node.node_sn);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
     }
 
     private void startUpdate() {
@@ -451,7 +467,7 @@ public class SetupDeviceActivity extends BaseActivity
         if (!isChange()) {
             finish();
         } else {
-            DialogUtils.showErrorDialog(this, "", "Confirm", "Cancel", "Sure leave without updating hardware?", new DialogUtils.OnErrorButtonClickListenter() {
+            DialogUtils.showErrorDialog(this, "", "Confirm", "Cancel", "Sure leave without updating firmware?", new DialogUtils.OnErrorButtonClickListenter() {
                 @Override
                 public void okClick() {
                     finish();
@@ -908,6 +924,7 @@ public class SetupDeviceActivity extends BaseActivity
                 old_node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
                 //  DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
                 App.showToastShrot("Firmware Updated!");
+                setUpdateButton();
             } else if (ret == ConfigDeviceLogic.UPDATEING) {
                 if (progress <= 80) {
                     progress += 12;

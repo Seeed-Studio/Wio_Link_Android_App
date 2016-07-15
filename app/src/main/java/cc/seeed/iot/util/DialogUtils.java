@@ -373,12 +373,13 @@ public class DialogUtils {
         return dialog;
     }
 
-    public static Dialog showWarningDialog(Context context,String content,String okText,String cancelText,boolean isHtml, final OnErrorButtonClickListenter listener) {
+    public static Dialog showWarningDialog(Context context,String title,String content,String okText,String cancelText,boolean isHtml, final OnErrorButtonClickListenter listener) {
 
         final Dialog dialog = new Dialog(context,R.style.DialogStyle);
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_warning, null);
 
         FontTextView mTvHint = (FontTextView) view.findViewById(R.id.mTvHint);
+        FontTextView mTvTitle = (FontTextView) view.findViewById(R.id.mTvTitle);
         FontButton mTvSubmit = (FontButton) view.findViewById(R.id.mTvSubmit);
         FontButton mTvCancel = (FontButton) view.findViewById(R.id.mTvCancel);
         if (isHtml){
@@ -386,6 +387,14 @@ public class DialogUtils {
         }else {
             mTvHint.setText(content);
         }
+
+        if (TextUtils.isEmpty(title)){
+            mTvTitle.setVisibility(View.GONE);
+        }else {
+            mTvTitle.setVisibility(View.VISIBLE);
+            mTvTitle.setText(title);
+        }
+
         if (TextUtils.isEmpty(cancelText)){
             mTvCancel.setVisibility(View.GONE);
         }else {

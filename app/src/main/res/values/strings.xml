@@ -168,7 +168,7 @@
     <string name="delete_device">Delete this device</string>
     <string name="toolBar_title">Device Setting</string>
     <string name="cont_connection_wifi">Could not connection to Wi-Fi. Please check Wi-Fi password and try again</string>
-    <string name="link_to_wifi">Linking Wio Devices can only be done under wifi,Please connect to wifi network before you start</string>
+    <string name="link_to_wifi">Please connect to wifi network before you start</string>
 
     <!-- add device step 01-->
     <string name="add_device_step01_link_title">Setup Your Wio Link</string>

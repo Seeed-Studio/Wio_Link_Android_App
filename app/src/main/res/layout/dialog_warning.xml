@@ -30,6 +30,15 @@
                     android:src="@mipmap/warning" />
 
             </RelativeLayout>
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:textColor="#3A4B71"
+                android:gravity="center_horizontal"
+                android:textSize="16sp"
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
 
             <cc.seeed.iot.view.FontTextView
                 android:id="@+id/mTvHint"

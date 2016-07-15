@@ -21,11 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.KeyStore;
 import java.util.Arrays;
 
@@ -76,7 +72,7 @@ public class OtherPlatformUtils {
                                     e.printStackTrace();
                                 }
                                 if (type == LoginWithFacebook) {
-                                    UserLogic.getInstance().loginOther(profile.getId(), Constant.OtherPlatform.Facrbook.getValue(), profile.getName(),
+                                    UserLogic.getInstance().loginOther(profile.getId(), Constant.OtherPlatform.Facebook.getValue(), profile.getName(),
                                             profile.getProfilePictureUri(300, 300).toString(), email);
                                 } else if (type == BindWithFacebook) {
                                     //   UserLogic.getInstance().bindOtherPlatform(profile.getId(), Constant.PlatformWithFaceBook, profile.getName(), profile.getProfilePictureUri(300, 300).toString());

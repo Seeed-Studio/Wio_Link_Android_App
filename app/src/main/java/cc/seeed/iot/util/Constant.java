@@ -68,7 +68,7 @@ public class Constant {
     }
     public enum  OtherPlatform {
         WeiBo(1),
-        Facrbook(2),
+        Facebook(2),
         Github(3),
         Twitter(4),
         GooGle(5);

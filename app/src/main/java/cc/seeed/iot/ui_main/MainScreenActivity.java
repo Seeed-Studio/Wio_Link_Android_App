@@ -932,10 +932,10 @@ public class MainScreenActivity extends BaseActivity
                 }
                 ServerBean.ContentBean contentBean = serverBean.getContent().get(0);
                 if (contentBean.getPopStartTime() < System.currentTimeMillis() / 1000) {
-                    dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(), null, null, true, null);
+                    dialog = DialogUtils.showWarningDialog(this, null,contentBean.getPopText(), null, null, true, null);
                 } else {
                     if (remindAgain)
-                        dialog = DialogUtils.showWarningDialog(this, contentBean.getPopText(), null, "Dont't remind me again", true, new DialogUtils.OnErrorButtonClickListenter() {
+                        dialog = DialogUtils.showWarningDialog(this,null, contentBean.getPopText(), null, "Dont't remind me again", true, new DialogUtils.OnErrorButtonClickListenter() {
                             @Override
                             public void okClick() {
 

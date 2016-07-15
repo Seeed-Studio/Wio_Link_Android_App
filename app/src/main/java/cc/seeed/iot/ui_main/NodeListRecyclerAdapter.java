@@ -100,14 +100,14 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             default:
             case Constant.WIO_LINK_V1_0:
                 if (node.online) {
-                    holder.mSDVNode.setImageResource(R.drawable.link_small);
+                    holder.mSDVNode.setImageResource(R.mipmap.link_small_01);
                 }else {
                     holder.mSDVNode.setImageResource(R.mipmap.link_small_offline);
                 }
                 break;
             case Constant.WIO_NODE_V1_0:
                 if (node.online) {
-                    holder.mSDVNode.setImageResource(R.drawable.node_small);
+                    holder.mSDVNode.setImageResource(R.mipmap.node_small_01);
                 }else {
                     holder.mSDVNode.setImageResource(R.mipmap.node_small_offline);
                 }

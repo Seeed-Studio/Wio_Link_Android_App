@@ -115,7 +115,7 @@ public class SystemLogic extends BaseLogic {
                     });
                     builder.show();*/
                     String content = TextUtils.isEmpty(bean.version_title) ? bean.version_message : bean.version_title + "\r\n" + bean.version_message;
-                    DialogUtils.showWarningDialog(context, content, "Update now", isNotice ? "Cancel" : "Skip for now",false, new DialogUtils.OnErrorButtonClickListenter() {
+                    DialogUtils.showWarningDialog(context, null,content, "Update now", isNotice ? "Cancel" : "Skip for now",false, new DialogUtils.OnErrorButtonClickListenter() {
                         @Override
                         public void okClick() {
                             ToolUtil.downApk(context, downUrl);
@@ -146,7 +146,7 @@ public class SystemLogic extends BaseLogic {
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.show();*/
                     String content = TextUtils.isEmpty(bean.version_title) ? bean.version_message : bean.version_title + "\r\n" + bean.version_message;
-                    Dialog dialog = DialogUtils.showWarningDialog(context, content, "Update now", null,false, new DialogUtils.OnErrorButtonClickListenter() {
+                    Dialog dialog = DialogUtils.showWarningDialog(context,null, content, "Update now", null,false, new DialogUtils.OnErrorButtonClickListenter() {
                         @Override
                         public void okClick() {
                             ToolUtil.downApk(context, downUrl);
