@@ -261,7 +261,11 @@ public class MainScreenActivity extends BaseActivity
                     }
                 }
 
-                mTvEmail.setText(user.email);
+                if (TextUtils.isEmpty(user.email) || user.email.startsWith("testadmin")){
+                    mTvEmail.setText(user.getNickname());
+                }else {
+                    mTvEmail.setText(user.email);
+                }
                 ImgUtil.displayImg(mSDVAvatar, user.avater, R.mipmap.icon);
                 mLLUserInfo.setOnClickListener(this);
                 mTvEmail.setOnClickListener(this);

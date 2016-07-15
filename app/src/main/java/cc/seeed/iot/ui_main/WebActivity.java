@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -28,6 +29,8 @@ import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.util.DBHelper;
+import cc.seeed.iot.util.MLog;
+import cc.seeed.iot.util.OtherPlatformUtils;
 import cc.seeed.iot.util.ShareUtils;
 import cc.seeed.iot.util.UmengUtils;
 import cc.seeed.iot.webapi.model.Node;
@@ -66,6 +69,7 @@ public class WebActivity extends BaseActivity {
 
     }
 
+    boolean isReqing = false;
     private void initView() {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient() {
@@ -76,12 +80,27 @@ public class WebActivity extends BaseActivity {
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                 }
+                String[] split = mWebView.getUrl().split("code=");
+                if (split.length > 1 && !isReqing){
+                    isReqing = true;
+                   MLog.e("code= " + split[1]);
+                    OtherPlatformUtils.getGithubToken(split[1]);
+                }
             }
         });
 
         mWebView.setWebViewClient(new WebViewClient() {
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 Toast.makeText(WebActivity.this, "Oh no! " + description, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                String[] split = url.split("code=");
+                if (split.length > 1){
+                 //   App.showToastShrot("code= "+split[1]);
+                }
             }
         });
 

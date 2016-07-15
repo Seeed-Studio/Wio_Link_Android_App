@@ -193,4 +193,6 @@
     <string name="feedback_submit_fail">Server Error. Please try again.</string>
     <string name="feedback_title">Feedback</string>
     <string name="feedback_submit">Submit</string>
+    <string name="bind_email">Bind Email</string>
+    <string name="authorization_failure">Authorization failure!</string>
 </resources>

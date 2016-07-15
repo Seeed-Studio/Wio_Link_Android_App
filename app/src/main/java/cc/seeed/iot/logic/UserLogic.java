@@ -2,10 +2,13 @@ package cc.seeed.iot.logic;
 
 import android.text.TextUtils;
 import android.app.AlertDialog;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;
+
+import org.json.JSONObject;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.entity.User;
@@ -140,25 +143,38 @@ public class UserLogic extends BaseLogic {
         });
     }
 
-    public void loginOther(String id, int type, String name, String avatar) {
+    public void loginOther(String id, int type, String name, String avatar,String email) {
         RequestParams params = new RequestParams();
 
         params.put("platformID", id);
         params.put("platformType", type);
+        params.put("toBind", 0);
         params.put("platformNickname", name);
         params.put("platformAvatar", avatar);
+        params.put("platformEmail", email);
         NetManager.getInstance().postRequest(CommonUrl.Hinge_User_OtherLoginUrl, Cmd_UserOtherLogin, params, new INetUiThreadCallBack() {
             @Override
             public void onResp(Request req, Packet resp) {
                 if (resp.status) {
-                    Gson gson = new Gson();
-                    user = gson.fromJson(resp.data, User.class);
-                    if (user != null) {
-                        saveUser(user);
-                        setToken(Cmd_UserOtherLogin);
-                    } else {
-                        UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                    JSONObject jsonObj = null;
+                    try {
+                        jsonObj = new JSONObject(resp.data);
+                        int toBind = jsonObj.getInt("toBind");
+                        if (toBind == 1) {
+                            //  App.showToastShrot("toBind");
+                            UiObserverManager.getInstance().dispatchEvent(Cmd_UserBindEmail, resp.status, resp.errorMsg, null);
+                        }
+                    } catch (Exception e) {
+                        Gson gson = new Gson();
+                        user = gson.fromJson(resp.data, User.class);
+                        if (user != null) {
+                            saveUser(user);
+                            setToken(Cmd_UserOtherLogin);
+                        } else {
+                            UiObserverManager.getInstance().dispatchEvent(req.cmd, false, "", null);
+                        }
                     }
+
                 } else {
                     UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
                 }
@@ -306,6 +322,7 @@ public class UserLogic extends BaseLogic {
         });
     }
 
+
     public void setToken(final String cmd) {
         RequestParams params = new RequestParams();
         //   User user = UserLogic.getInstance().getUser();
@@ -357,6 +374,62 @@ public class UserLogic extends BaseLogic {
             }
         });
     }
+
+    public void bindOtherPlatform(final String id, final int type, final String nickname, final String avatar) {
+        RequestParams params = new RequestParams();
+        params.put("userid", user.getUserid());
+        params.put("platformID", id);
+        params.put("platformType", type);
+        params.put("messageId", getToken());
+        params.put("platformNickname", nickname);
+        params.put("platformAvatar", avatar);
+        NetManager.getInstance().postRequest(CommonUrl.Hinge_UserBindPlatformUrl, Cmd_UserBindPlatform, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+                    App.showToastShrot(resp.data);
+                } else {
+                    App.showToastShrot(resp.errorMsg);
+                }
+                UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
+                Log.d("TAG", resp.data);
+            }
+        });
+    }
+
+  /*  public void unBindOtherPlatform(final int type) {
+        RequestParams params = new RequestParams();
+        String time = "" + System.currentTimeMillis() / 1000;
+
+        params.put("api_key", Constant.MakerMapAppId);
+        params.put("timestamp", time);
+        params.put("sign", getSign(ConstantUrl.UserUnBindPlatformUrl, time));
+        params.put("source", "2");
+        params.put("messageId", getToken());
+        params.put("userid", userBean.getUserid());
+        params.put("platformType", type);
+        NetManager.getInstance().postRequest(ConstantUrl.User_UnBindPlatform_Url.getVal(), UserUnBindPlatform, params, new INetUiThreadCallBack() {
+            @Override
+            public void onResp(Request req, Packet resp) {
+                if (resp.status) {
+
+                    if (type == Constant.PlatformWithFaceBook) {
+                        if (!TextUtils.isEmpty(userBean.facebook_id)) {
+                            userBean.setFacebook_id("");
+                        }
+                    } else if (type == Constant.PlatformWithWeChat) {
+                        if (!TextUtils.isEmpty(userBean.webchat_id)) {
+                            userBean.setWebchat_id("");
+                        }
+                    }
+                    DBUtils.insertOrUpdata(userBean.getUserid(), userBean);
+                }
+                UiObserverManager.getInstance().dispatchEvent(req.cmd, resp.status, resp.errorMsg, null);
+                Log.d("TAG", resp.data);
+            }
+        });
+    }
+*/
 
 
     public void logOut() {

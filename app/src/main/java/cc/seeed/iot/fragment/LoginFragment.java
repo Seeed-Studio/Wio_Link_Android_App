@@ -15,12 +15,14 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.user.ResetPwd01Activity;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.RegularUtils;
+import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontEditView;
 import cc.seeed.iot.view.FontTextView;
 
@@ -74,21 +76,21 @@ public class LoginFragment extends BaseFragment {
         ButterKnife.reset(this);
     }
 
-    private void login(){
+    private void login() {
         String email = mEtEmail.getText().toString().trim();
         String pwd = mEtPwd.getText().toString().trim();
-        if (!RegularUtils.isEmail(email)){
+        if (!RegularUtils.isEmail(email)) {
             mEtEmail.setError(getString(R.string.email_format_error));
             mEtEmail.requestFocus();
             return;
-        }else if (TextUtils.isEmpty(pwd) || pwd.length() < 6){
+        } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6) {
             mEtPwd.setError(getString(R.string.pwd_format_error));
             mEtPwd.requestFocus();
             return;
-        }else {
+        } else {
             dialog = DialogUtils.showProgressDialog(mActivity, "");
             App.getSp().edit().putString(Constant.SP_USER_EMAIL, email).commit();
-            UserLogic.getInstance().login(email,pwd);
+            UserLogic.getInstance().login(email, pwd);
         }
     }
 
@@ -110,16 +112,18 @@ public class LoginFragment extends BaseFragment {
 
     @Override
     public void onEvent(String event, boolean ret, String errInfo, Object[] data) {
-        if (Cmd_UserLogin.equals(event)){
+        if (Cmd_UserLogin.equals(event)) {
             if (dialog != null) {
                 dialog.dismiss();
             }
-            if (ret) {
-                Intent intent = new Intent(mActivity, MainScreenActivity.class);
-                startActivity(intent);
-                mActivity.finish();
-            } else {
-                App.showToastLong(errInfo);
+            if (ToolUtil.isTopActivity(mActivity, LoginAndRegistActivity.class.getSimpleName())) {
+                if (ret) {
+                    Intent intent = new Intent(mActivity, MainScreenActivity.class);
+                    startActivity(intent);
+                    mActivity.finish();
+                } else {
+                    App.showToastLong(errInfo);
+                }
             }
         }
     }

@@ -71,4 +71,11 @@ public class RegularUtils {
         Matcher matcher = p.matcher(code);
         return matcher.matches();
     }
+
+    public static boolean isTestEmail(String email){
+        String reg = "testadmin[0-9]+@seeed.cc";
+        Pattern p = Pattern.compile(reg);
+        Matcher matcher = p.matcher(email);
+        return matcher.matches();
+    }
 }

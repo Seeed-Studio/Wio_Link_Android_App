@@ -18,6 +18,10 @@ public class Common {
         public static String API_GET_TOKEN_KEY = "seeed_wiolink_return_token_2016#0509";
         public static String API_CHECK_TOKEN_KEY= "seeed_wiolink_check_token_2016#0509";
 
+        public static String Github_Client_ID = "1af08fd6cf012a0aeb49";
+        public static String Github_Client_Secret = "d95d6138fdd25d6696b950f2bfd3ee72f1cc7ae5";
+        public static String Github_Redirect_Uri = "http://www.seeedstudio.com";
+
         public static int PlatformWithWeChat = 1;
         public static int PlatformWithFaceBook = 2;
 

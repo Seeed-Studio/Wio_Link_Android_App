@@ -1,6 +1,7 @@
 package cc.seeed.iot.activity.user;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -19,8 +20,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.common.api.Status;
 import com.umeng.analytics.MobclickAgent;
 
@@ -36,10 +39,13 @@ import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.activity.SelectServerActivity;
 import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.adapter.LoginAndRegistAdapter;
+import cc.seeed.iot.entity.UserPlatformInfo;
 import cc.seeed.iot.fragment.LoginFragment;
 import cc.seeed.iot.fragment.RegistFragment;
+import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.CommonUrl;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.OtherPlatformUtils;
 import cc.seeed.iot.util.ToolUtil;
@@ -74,7 +80,6 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
 
     private List<Fragment> mFList;
     private LoginAndRegistAdapter mAdapter;
-    private Dialog dialog;
     private int mSelectTab = 1;//默认选择登录界面
     private CallbackManager callbackManager;
     private static final int RC_SIGN_IN = 9001;
@@ -82,6 +87,8 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
 
     GoogleApiClient mGoogleApiClient;
     int goToTest = 0;
+    UserPlatformInfo mUserPlatformInfo = new UserPlatformInfo();
+    ProgressDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -104,29 +111,27 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         mMainPager.setOnPageChangeListener(this);
         mMainPager.setCurrentItem(mSelectTab, false);
         seleted(menuIds[mSelectTab]);
-/*
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestId()
                 .requestProfile()
-                .build();*/
-
+                .build();
       /*  String serverClientId = getString(R.string.server_client_id);
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
+                .requestScopes(new Scope(Scopes.PLUS_ME))
                 .requestServerAuthCode(serverClientId)
                 .requestEmail()
                 .build();*/
 
-      /*  mGoogleApiClient = new GoogleApiClient.Builder(this)
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();*/
+                .build();
 
 
-     /*   mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this *//* FragmentActivity *//*,
-                        this *//* OnConnectionFailedListener *//*)
+       /* mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this ,this )
                 .addApi(Plus.API)
                 .addScope(Plus.SCOPE_PLUS_LOGIN)
                 .addScope(Plus.SCOPE_PLUS_PROFILE)
@@ -234,11 +239,11 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        App.showToastShrot("quxiao:" + status.toString());
+               //         App.showToastShrot("quxiao:" + status.toString());
                         // ...
                       /*  Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
                         startActivityForResult(signInIntent, RC_SIGN_IN);*/
-                        revokeAccess();
+                    //    revokeAccess();
                     }
                 });
     }
@@ -248,10 +253,10 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 new ResultCallback<Status>() {
                     @Override
                     public void onResult(Status status) {
-                        App.showToastShrot("quxiao:" + status.toString());
-                        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-                        startActivityForResult(signInIntent, RC_SIGN_IN);
-                        //   signOut();
+                  //      App.showToastShrot("quxiao:" + status.toString());
+                    /*    Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                        startActivityForResult(signInIntent, RC_SIGN_IN);*/
+                           signOut();
                     }
                 });
     }
@@ -311,7 +316,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-         //   Process.killProcess(Process.myPid());
+            //   Process.killProcess(Process.myPid());
 //            finish();
             App.getApp().onTerminate();
         }
@@ -332,7 +337,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     private void handleSignInResult(GoogleSignInResult result) {
         //   Log.d(TAG, "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-            App.showToastShrot("success");
+           // App.showToastShrot("success");
             // Signed in successfully, show authenticated UI.
             GoogleSignInAccount acct = result.getSignInAccount();
             //   mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
@@ -342,15 +347,24 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
             String personEmail = acct.getEmail();
             String personId = acct.getId();
             Uri personPhoto = acct.getPhotoUrl();
+            mUserPlatformInfo.setPlatformID(personId);
+            mUserPlatformInfo.setPlatformAvatar(personPhoto == null ? "" : personPhoto.toString());
+            mUserPlatformInfo.setPlatformEmail(personEmail);
+            mUserPlatformInfo.setPlatformNickname(personName);
+            mUserPlatformInfo.setPlatformType(Constant.OtherPlatform.GooGle.getValue());
+            dialog = DialogUtils.showProgressDialog(this,"Authorization ...");
+            UserLogic.getInstance().loginOther(personId, Constant.OtherPlatform.GooGle.getValue(), personName, personPhoto == null ? "" : personPhoto.toString(),personEmail);
         } else {
             // Signed out, show unauthenticated UI.
             //  updateUI(false);
+            App.showToastShrot(getString(R.string.authorization_failure));
+            revokeAccess();
         }
     }
 
     @Override
     public String[] monitorEvents() {
-        return new String[]{Cmd_UserOtherLogin, Cmd_AuthorizeCancel};
+        return new String[]{Cmd_UserOtherLogin, Cmd_AuthorizeCancel, Cmd_UserBindEmail};
     }
 
     @Override
@@ -366,16 +380,28 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
             } else {
                 App.showToastLong(errInfo);
             }
+
         } else if (Cmd_AuthorizeCancel.equals(event)) {
             if (dialog != null) {
                 dialog.dismiss();
+            }
+
+        } else if (Cmd_UserBindEmail.equals(event)) {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            signOut();
+            if (ret){
+                Intent intent = new Intent(this, BindEmailActivity.class);
+                intent.putExtra(BindEmailActivity.Intent_PlaUserInfo, mUserPlatformInfo);
+                startActivity(intent);
             }
         }
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        App.showToastShrot(connectionResult.toString());
+     //   App.showToastShrot(connectionResult.toString());
     }
 
 

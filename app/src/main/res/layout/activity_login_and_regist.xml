@@ -16,7 +16,7 @@
             android:layout_height="65dp"
             android:layout_alignParentBottom="true"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <RelativeLayout
                 android:id="@+id/mRlGoogle"

@@ -28,6 +28,7 @@ import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
+import cc.seeed.iot.ui_main.WebActivity;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.LocationUtil;
@@ -74,6 +75,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     Button mBtnEditName;
     @InjectView(R.id.mBtnNodeResult)
     Button mBtnNodeResult;
+    @InjectView(R.id.mBtnGithub)
+    Button mBtnGithub;
 
     private ConfigUdpSocket udpClient;
     public int checkId = 0;
@@ -126,7 +129,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi, R.id.mBtnEditName, R.id.mBtnNodeResult})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi, R.id.mBtnEditName, R.id.mBtnNodeResult,R.id.mBtnGithub})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -154,6 +157,13 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case R.id.mBtnNodeResult:
                 startActivity(new Intent(this, GroveResultActivity.class));
+                break;
+            case R.id.mBtnGithub:
+                String url = "https://github.com/login/oauth/authorize?client_id=1af08fd6cf012a0aeb49&redirect_uri=http://www.seeedstudio.com&scope=user:follow%20user:email";
+
+                Intent intent = new Intent(this, WebActivity.class);
+                intent.putExtra(WebActivity.Intent_Url,url);
+                startActivity(intent);
                 break;
         }
     }

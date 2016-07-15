@@ -66,6 +66,22 @@ public class Constant {
             return value;
         }
     }
+    public enum  OtherPlatform {
+        WeiBo(1),
+        Facrbook(2),
+        Github(3),
+        Twitter(4),
+        GooGle(5);
+        private int value;
+
+        OtherPlatform(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     public enum DialogButtonText {
         OK("OK"), CANCEL("CANCEL"), FAQ("FAQ"), TRY_AGAIN("TRY AGAIN");
