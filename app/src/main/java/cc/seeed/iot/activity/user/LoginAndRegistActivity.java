@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -99,7 +100,6 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
     }
 
     private void initData() {
-
         callbackManager = CallbackManager.Factory.create();
         mMainPager.setOffscreenPageLimit(2);
         mFList = new ArrayList<Fragment>();
@@ -111,32 +111,26 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         mMainPager.setOnPageChangeListener(this);
         mMainPager.setCurrentItem(mSelectTab, false);
         seleted(menuIds[mSelectTab]);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestId()
-                .requestProfile()
-                .build();
-      /*  String serverClientId = getString(R.string.server_client_id);
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .requestScopes(new Scope(Scopes.PLUS_ME))
-                .requestServerAuthCode(serverClientId)
-                .requestEmail()
-                .build();*/
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+        initGoogle();
+    }
 
+    private void initGoogle(){
+        if ( GooglePlayServicesUtil.isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS){
+            mRlGoogle.setVisibility(View.VISIBLE);
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .requestId()
+                    .requestProfile()
+                    .build();
 
-       /* mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this ,this )
-                .addApi(Plus.API)
-                .addScope(Plus.SCOPE_PLUS_LOGIN)
-                .addScope(Plus.SCOPE_PLUS_PROFILE)
-                .build();
-        mGoogleApiClient.connect();*/
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .enableAutoManage(this, this)
+                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                    .build();
+        }else {
+            mRlGoogle.setVisibility(View.GONE);
+        }
     }
 
 
@@ -163,6 +157,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
         super.onResume();
         MobclickAgent.onResume(this);
         String serverUrl = App.getApp().getOtaServerUrl();
+        mLLOrtherLogin.setVisibility(View.VISIBLE);
         if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)) {
             mTvSelectServer.setText(getString(R.string.server_chinese));
         } else if (CommonUrl.OTA_INTERNATIONAL_URL.equals(serverUrl)) {
@@ -171,6 +166,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
             mTvSelectServer.setText(getString(R.string.server_old_global));
         } else {
             mTvSelectServer.setText(getString(R.string.server_customize));
+            mLLOrtherLogin.setVisibility(View.GONE);
         }
     }
 
@@ -352,7 +348,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
             mUserPlatformInfo.setPlatformEmail(personEmail);
             mUserPlatformInfo.setPlatformNickname(personName);
             mUserPlatformInfo.setPlatformType(Constant.OtherPlatform.GooGle.getValue());
-            dialog = DialogUtils.showProgressDialog(this,"Authorization ...");
+            dialog = DialogUtils.showProgressDialog(this,"");
             UserLogic.getInstance().loginOther(personId, Constant.OtherPlatform.GooGle.getValue(), personName, personPhoto == null ? "" : personPhoto.toString(),personEmail);
         } else {
             // Signed out, show unauthenticated UI.
@@ -364,7 +360,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
 
     @Override
     public String[] monitorEvents() {
-        return new String[]{Cmd_UserOtherLogin, Cmd_AuthorizeCancel, Cmd_UserBindEmail};
+        return new String[]{Cmd_UserOtherLogin, Cmd_AuthorizeCancel, Cmd_UserBindEmail,Cmd_LoginWithFaceBook};
     }
 
     @Override
@@ -396,6 +392,8 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
                 intent.putExtra(BindEmailActivity.Intent_PlaUserInfo, mUserPlatformInfo);
                 startActivity(intent);
             }
+        }else if (Cmd_LoginWithFaceBook.equals(event)){
+            dialog = DialogUtils.showProgressDialog(this,"");
         }
     }
 

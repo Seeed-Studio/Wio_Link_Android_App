@@ -137,6 +137,7 @@ public class MainScreenActivity extends BaseActivity
     private LinearLayout mLLAddDevice;
     private ImageView mIvAddDevice;
     private SwipeRefreshLayout mSRL;
+    private ImageView mIvNewGrove;
 
     //    private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView mRecyclerView;
@@ -245,8 +246,7 @@ public class MainScreenActivity extends BaseActivity
                 mTvFeedBack = (TextView) headerLayout.findViewById(R.id.mTvFeedBack);
                 mTvUpdateApp = (TextView) headerLayout.findViewById(R.id.mTvUpdateApp);
                 mIvUpdateApp = (ImageView) headerLayout.findViewById(R.id.mIvUpdateApp);
-
-                ImageView mIvNewGrove = (ImageView) headerLayout.findViewById(R.id.mIvNewGrove);
+                mIvNewGrove = (ImageView) headerLayout.findViewById(R.id.mIvNewGrove);
                 mIvNewGrove.setVisibility(DBHelper.isHasNewGrove() ? View.VISIBLE : View.GONE);
 
                 UpdateApkBean updateApkBean = SystemLogic.getInstance().getUpdateApkBean();
@@ -261,9 +261,9 @@ public class MainScreenActivity extends BaseActivity
                     }
                 }
 
-                if (TextUtils.isEmpty(user.email) || user.email.startsWith("testadmin")){
+                if (TextUtils.isEmpty(user.email) || user.email.startsWith("testadmin")) {
                     mTvEmail.setText(user.getNickname());
-                }else {
+                } else {
                     mTvEmail.setText(user.email);
                 }
                 ImgUtil.displayImg(mSDVAvatar, user.avater, R.mipmap.icon);
@@ -304,6 +304,7 @@ public class MainScreenActivity extends BaseActivity
                     case MESSAGE_GROVE_LIST_COMPLETE:
                         mProgressDialog.dismiss();
                         ((App) MainScreenActivity.this.getApplication()).setFirstUseState(false);
+                        mIvNewGrove.setVisibility(DBHelper.isHasNewGrove() ? View.VISIBLE : View.GONE);
                         break;
                     case MESSAGE_NODE_LIST_START:
                         mProgressDialog.setMessage("");
@@ -932,10 +933,10 @@ public class MainScreenActivity extends BaseActivity
                 }
                 ServerBean.ContentBean contentBean = serverBean.getContent().get(0);
                 if (contentBean.getPopStartTime() < System.currentTimeMillis() / 1000) {
-                    dialog = DialogUtils.showWarningDialog(this, null,contentBean.getPopText(), null, null, true, null);
+                    dialog = DialogUtils.showWarningDialog(this, null, contentBean.getPopText(), null, null, true, null);
                 } else {
                     if (remindAgain)
-                        dialog = DialogUtils.showWarningDialog(this,null, contentBean.getPopText(), null, "Dont't remind me again", true, new DialogUtils.OnErrorButtonClickListenter() {
+                        dialog = DialogUtils.showWarningDialog(this, null, contentBean.getPopText(), null, "Dont't remind me again", true, new DialogUtils.OnErrorButtonClickListenter() {
                             @Override
                             public void okClick() {
 

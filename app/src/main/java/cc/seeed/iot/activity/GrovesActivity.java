@@ -99,8 +99,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(R.string.groves);
-        // init();
-        init();
+         init();
         if (mLvGroves != null) {
             mAdapter = new GrovesAdapter(this, mGroveDrivers);
             mLvGroves.setAdapter(mAdapter);
@@ -118,6 +117,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
             mRvGroveFilter.setAdapter(mGroveTypeListAdapter);
             mGroveTypeListAdapter.updateSelection(0);
         }
+//        init();
 
     }
 

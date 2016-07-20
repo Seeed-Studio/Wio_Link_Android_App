@@ -72,8 +72,8 @@ public class OtherPlatformUtils {
                                     e.printStackTrace();
                                 }
                                 if (type == LoginWithFacebook) {
-                                    UserLogic.getInstance().loginOther(profile.getId(), Constant.OtherPlatform.Facebook.getValue(), profile.getName(),
-                                            profile.getProfilePictureUri(300, 300).toString(), email);
+                                    UiObserverManager.getInstance().dispatchEvent(CmdConst.Cmd_LoginWithFaceBook, true, "", null);
+                                    UserLogic.getInstance().loginOther(profile.getId(), Constant.OtherPlatform.Facebook.getValue(), profile.getName(),profile.getProfilePictureUri(300, 300).toString(), email);
                                 } else if (type == BindWithFacebook) {
                                     //   UserLogic.getInstance().bindOtherPlatform(profile.getId(), Constant.PlatformWithFaceBook, profile.getName(), profile.getProfilePictureUri(300, 300).toString());
                                 }

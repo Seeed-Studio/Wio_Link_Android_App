@@ -15,6 +15,7 @@ public interface CmdConst {
     String Cmd_UserChangePwd = "user_chenge_pwd";
     String Cmd_SetToken = "set_token";
     String Cmd_AuthorizeCancel = "authorize_cancel";
+    String Cmd_LoginWithFaceBook = "cmd_loginwithfacebook";
     String Cmd_UserBindPlatform = "cmd_userbindplatform";
 
 
