@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,6 +41,7 @@ public class WebActivity extends BaseActivity {
     private final static String RESOURCE = "/v1/node/resources?";
     public final static String Intent_Url = "Intent_Url";
     private Toolbar mToolbar;
+    private SwipeRefreshLayout mSRL;
 
     private ProgressBar mProgressBar;
     private WebView mWebView;
@@ -56,6 +58,7 @@ public class WebActivity extends BaseActivity {
         callbackManager = CallbackManager.Factory.create();
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mSRL = (SwipeRefreshLayout) findViewById(R.id.mSRL);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("API");
@@ -66,7 +69,12 @@ public class WebActivity extends BaseActivity {
 
         init();
         initView();
-
+        mSRL.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mWebView.loadUrl(url);
+            }
+        });
     }
 
     boolean isReqing = false;
@@ -80,8 +88,9 @@ public class WebActivity extends BaseActivity {
                     mProgressBar.setVisibility(View.VISIBLE);
                 } else {
                     mProgressBar.setVisibility(View.GONE);
+                    mSRL.setRefreshing(false);
                 }
-                if (mWebView != null){
+                if (mWebView != null && !TextUtils.isEmpty(mWebView.getUrl())){
                     String[] split = mWebView.getUrl().split("code=");
                     if (split.length > 1 && !isReqing) {
                         isReqing = true;

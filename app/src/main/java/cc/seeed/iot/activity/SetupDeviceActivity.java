@@ -435,7 +435,17 @@ public class SetupDeviceActivity extends BaseActivity
         }
 
         if (!node.online) {
-            DialogUtils.showErrorDialog(this, "Tip", "OK", "", "Node is offline", null);
+            DialogUtils.showErrorDialog(this, "Tip", "OK", "", "Node is offline", new DialogUtils.OnErrorButtonClickListenter() {
+                @Override
+                public void okClick() {
+
+                }
+
+                @Override
+                public void cancelClick() {
+                    stopUpdate();
+                }
+            });
             return;
         }
         mBtnUpdate.setEnabled(false);

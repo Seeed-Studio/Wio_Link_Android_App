@@ -106,7 +106,7 @@ public class MainSettingActivity extends BaseActivity {
                 MobclickAgent.onEvent(this, "14003");
                 UserLogic.getInstance().logOut();
                 Intent intent = new Intent(this, LoginAndRegistActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+              //  intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 finish();
                 break;

@@ -406,6 +406,12 @@ public class MainScreenActivity extends BaseActivity
         super.onResume();
         MobclickAgent.onResume(this);
         user = UserLogic.getInstance().getUser();
+        if (TextUtils.isEmpty(user.email) || user.email.startsWith("testadmin")) {
+            mTvEmail.setText(user.getNickname());
+        } else {
+            mTvEmail.setText(user.email);
+        }
+        ImgUtil.displayImg(mSDVAvatar, user.avater, R.mipmap.icon);
         getNodeList();
     }
 

@@ -20,6 +20,7 @@ import java.util.List;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.util.CommonUrl;
 import cc.seeed.iot.util.Constant;
+import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.webapi.IotApi;
 import cn.sharesdk.framework.ShareSDK;
 
@@ -66,11 +67,12 @@ public class App extends com.activeandroid.app.Application {
                 public void run() {
                     InetAddress address = null;
                     try {
-                        address = InetAddress.getByName(CommonUrl.OTA_SERVER_URL);
+                        address = InetAddress.getByName(NetworkUtils.getDomainName(CommonUrl.OTA_SERVER_URL));
                     } catch (UnknownHostException e) {
                         e.printStackTrace();
                     }
                     if (address != null) {
+                        ota_server_ip = address.getHostAddress();
                         getSp().edit().putString(Constant.SP_SERVER_IP, address.getHostAddress()).commit();
                     }
                 }
