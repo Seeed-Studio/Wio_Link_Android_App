@@ -3,11 +3,13 @@ package cc.seeed.iot.activity.add_step;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -34,6 +36,7 @@ import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
+import cc.seeed.iot.activity.FeedbackActivity;
 import cc.seeed.iot.activity.HelpActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
@@ -85,12 +88,13 @@ public class Step04ApConnectActivity extends BaseActivity {
     private String node_sn;
     private String node_key;
     private String wifiPwd;
-    private ConfigUdpSocket udpClient;
     private Animation animation;
     private Dialog dialog;
     private String defaultName = "";
     private boolean isSetDefName = true;
     private boolean isChangeWifi = false;
+
+    private int sendOrderCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +124,6 @@ public class Step04ApConnectActivity extends BaseActivity {
         board = intent.getStringExtra(Intent_Board);
         wifiPwd = intent.getStringExtra(Intent_WifiPwd);
 
-        udpClient = new ConfigUdpSocket();
         mProgressBar.setProgress(10);
         startLoading();
         sendOrder();
@@ -154,17 +157,17 @@ public class Step04ApConnectActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                udpClient = new ConfigUdpSocket();
-                udpClient.setSoTimeout(10000); //1s timeout
+                ConfigUdpSocket udpClient = new ConfigUdpSocket();
+                udpClient.setSoTimeout(15000); //1s timeout
                 udpClient.sendData("VERSION", "192.168.4.1");
                 for (int i = 0; i < 3; i++) {
                     try {
                         byte[] bytes = udpClient.receiveData();
                         String resurt = new String(bytes);
                         if (resurt != null && RegularUtils.isNodeVersionCode(resurt)) {
-                            float versionCode = 1.1f;
+                            double versionCode = 1.1;
                             try {
-                                versionCode = Float.parseFloat(resurt);
+                                versionCode = Double.parseDouble(resurt);
                             } catch (Exception e) {
                                 return;
                             }
@@ -184,7 +187,6 @@ public class Step04ApConnectActivity extends BaseActivity {
                                         new SetNodeSn().execute(cmd_connect, AP_IP);
                                     }
                                 });
-                                break;
                             } else if (versionCode >= 1.2) {
                                 MLog.d(this, "get version success: " + new String(bytes));
                                 runOnUiThread(new Runnable() {
@@ -204,13 +206,64 @@ public class Step04ApConnectActivity extends BaseActivity {
                             }
                         }
                     } catch (SocketTimeoutException e) {
+                        showCheckVersionTip();
+                    } catch (Exception e) {
                         MLog.d(this, "get version fail");
-                    } catch (IOException e) {
-                        MLog.d(this, "get version fail");
+                        showCheckVersionTip();
                     }
                 }
             }
         }).start();
+    }
+
+    private void showCheckVersionTip() {
+        sendOrderCount++;
+        if (sendOrderCount == 3) {
+            sendOrderCount = 0;
+           /* runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    AlertDialog dialog = new AlertDialog.Builder(Step04ApConnectActivity.this)
+                            .setMessage("Failed to get the firmware version")
+                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    sendOrder();
+                                }
+                            })
+                            .setNeutralButton("Feedback", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    startActivity(new Intent(Step04ApConnectActivity.this, FeedbackActivity.class));
+                                }
+                            })
+                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                @Override
+
+                                public void onClick(DialogInterface dialog, int which) {
+                                    finish();
+                                }
+                            }).create();
+                    dialog.setCancelable(true);
+                    dialog.setCanceledOnTouchOutside(true);
+                    dialog.show();
+                }
+            });*/
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String ota_server_ip = App.getApp().getOtaServerIP();
+                    String exchange_server_ip = ota_server_ip;
+
+                    String cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
+                            node_key + "\t" + node_sn + "\t" + exchange_server_ip + "\t"
+                            + ota_server_ip + "\t";
+                    Log.i(TAG, "cmd_connect: " + cmd_connect);
+                    Log.i(TAG, "AP ip: " + AP_IP);
+                    new SetNodeSn().execute(cmd_connect, AP_IP);
+                }
+            });
+        }
     }
 
     private class SetNodeSn extends AsyncTask<String, Void, Boolean> {
@@ -224,9 +277,10 @@ public class Step04ApConnectActivity extends BaseActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
+            ConfigUdpSocket udpClient = new ConfigUdpSocket();
             String cmd = params[0];
             String ipAddr = params[1];
-            udpClient.setSoTimeout(1000); //1s timeout
+            udpClient.setSoTimeout(10000); //1s timeout
             udpClient.sendData(cmd, ipAddr);
             for (int i = 0; i < 3; i++) {
                 try {
@@ -236,9 +290,8 @@ public class Step04ApConnectActivity extends BaseActivity {
                         break;
                     }
                 } catch (SocketTimeoutException e) {
-                    udpClient.setSoTimeout(3000);
+                    udpClient.setSoTimeout(5000);
                     udpClient.sendData(cmd, ipAddr);
-
                 } catch (IOException e) {
                     Log.e(TAG, "Error[SetNodeSn]:" + e);
                     return false;

@@ -40,6 +40,7 @@ import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.adapter.add_node.WifiRecyclerViewHolder;
 import cc.seeed.iot.adapter.add_node.WifiWioListRecyclerAdapter;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.view.StepView;
 
 
@@ -59,6 +60,8 @@ public class Step03WifiWioListActivity extends BaseActivity
     RecyclerView mWifiListView;
     @InjectView(R.id.progressBar)
     ProgressBar mProgressBar;
+    @InjectView(R.id.mTvTip)
+    FontTextView mTvTip;
 
     private WifiWioListRecyclerAdapter mWifiListAdapter;
     private ProgressDialog mWaitDialog;
@@ -97,6 +100,7 @@ public class Step03WifiWioListActivity extends BaseActivity
     }
 
     private void initData() {
+        mTvTip.setText("Please check if Wio device is on configuration mode, in which the blue light appears as breathing.");
         mStepView.setDoingStep(2);
         if (mWifiListView != null) {
             mWifiListView.setHasFixedSize(true);
@@ -178,6 +182,12 @@ public class Step03WifiWioListActivity extends BaseActivity
             Log.e(TAG, "scaning...");
             getScanningResults();
             //do something, permission was previously granted; or legacy device
+        }
+
+        if (scanPionResult == null || scanPionResult.size() == 0){
+            mTvTip.setVisibility(View.VISIBLE);
+        }else {
+            mTvTip.setVisibility(View.GONE);
         }
 
         return scanPionResult;

@@ -1,5 +1,7 @@
 package cc.seeed.iot.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.add_step.Step04ApConnectActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.udp.ConfigUdpSocket;
@@ -106,7 +109,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
 
         locationUtil = new LocationUtil();
-    //    locationUtil.init(this);
+        //    locationUtil.init(this);
     }
 
     @Override
@@ -129,7 +132,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi, R.id.mBtnEditName, R.id.mBtnNodeResult,R.id.mBtnGithub})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi, R.id.mBtnEditName, R.id.mBtnNodeResult, R.id.mBtnGithub})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -149,11 +152,11 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 wifiManager.setWifiEnabled(true);
                 break;
             case R.id.mBtnEditName:
-                //  DialogUtils.showEditNodeNameDialog(this, "", null);
+                DialogUtils.showEditNodeNameDialog(this, "", null);
                 //  DialogUtils.showWarningDialog(this,null);
-              //  new LocationUtil().startLocation(this);
-             //   locationUtil.startLocation();
-                locationUtil.location(this);
+                //  new LocationUtil().startLocation(this);
+                //   locationUtil.startLocation();
+                //     locationUtil.location(this);
                 break;
             case R.id.mBtnNodeResult:
                 startActivity(new Intent(this, GroveResultActivity.class));
@@ -162,7 +165,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 String url = "https://github.com/login/oauth/authorize?client_id=1af08fd6cf012a0aeb49&redirect_uri=http://www.seeedstudio.com&scope=user:follow%20user:email";
 
                 Intent intent = new Intent(this, WebActivity.class);
-                intent.putExtra(WebActivity.Intent_Url,url);
+                intent.putExtra(WebActivity.Intent_Url, url);
                 startActivity(intent);
                 break;
         }
@@ -270,25 +273,55 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     udpClient = new ConfigUdpSocket();
                     udpClient.setSoTimeout(10000); //1s timeout
                     udpClient.sendData(order, "192.168.4.1");
-                    for (int i = 0; i < 3; i++) {
-                        try {
-                            byte[] bytes = udpClient.receiveData();
-                            if (new String(bytes).substring(0, 1 + 1).equals("ok")) {
-                                MLog.d(this, "success");
-                                break;
-                            }
-                        } catch (SocketTimeoutException e) {
-                            udpClient.setSoTimeout(30000);
-                            udpClient.sendData(order, "192.168.4.1");
-
-                        } catch (IOException e) {
-                            MLog.d(this, "fail");
+                    try {
+                        byte[] bytes = udpClient.receiveData();
+                        if (new String(bytes).substring(0, 1 + 1).equals("ok")) {
+                            MLog.d(this, "success");
                         }
+                    } catch (SocketTimeoutException e) {
+                        udpClient.setSoTimeout(30000);
+                        udpClient.sendData(order, "192.168.4.1");
+                        MLog.d("time out");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showCheckVersionTip();
+                            }
+                        });
+                    } catch (IOException e) {
+                        MLog.d(this, "fail");
                     }
                 }
             }).start();
 
         }
+    }
+
+    private void showCheckVersionTip() {
+        android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(TestActivity.this)
+                .setMessage("Failed to get the firmware version")
+                .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendOrder();
+                    }
+                })
+                .setNeutralButton("Feedback", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(TestActivity.this, FeedbackActivity.class));
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).create();
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
 }

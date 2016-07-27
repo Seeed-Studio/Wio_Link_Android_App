@@ -623,7 +623,7 @@ public class MainScreenActivity extends BaseActivity
                 List<Node> get_nodes = nodeListResponse.nodes;
                 ArrayList<Node> delNodes = new ArrayList<Node>();
                 for (Node n : get_nodes) {
-                    if (n.name.equals("node000")) {
+                    if (n.name.equals("node000")||n.name.equals("YouShouldNeverSeeMeInYourApp")) {
                         iot.nodesDelete(n.node_sn, new Callback<SuccessResponse>() {
                             @Override
                             public void success(SuccessResponse successResponse, Response response) {

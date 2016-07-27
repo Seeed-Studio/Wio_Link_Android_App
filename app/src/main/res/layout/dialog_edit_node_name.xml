@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:hint="Wio Link 1"
             android:layout_marginTop="37dp"
+            android:singleLine="true"
             android:textColorHint="#FF9B9B9B"
             android:textColor="#3A4271"
             android:textSize="14sp"

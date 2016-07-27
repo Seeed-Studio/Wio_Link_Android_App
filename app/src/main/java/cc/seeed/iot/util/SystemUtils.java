@@ -16,9 +16,12 @@ import android.provider.ContactsContract;
 import android.util.Log;
 
 
+import com.facebook.internal.PermissionType;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -132,6 +135,12 @@ public class SystemUtils {
         } catch (OperationApplicationException e) {
             Log.d(TAG, "Could not add a new contact: " + e.getMessage());
         }
+    }
+
+    public static boolean checkPermission(String per){
+        PackageManager pm = App.getApp().getPackageManager();
+        return  (PackageManager.PERMISSION_GRANTED ==pm.checkPermission(per,getPackageInfo().packageName));
+
     }
 
 }

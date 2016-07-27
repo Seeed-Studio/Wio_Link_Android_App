@@ -71,6 +71,7 @@ public class WebActivity extends BaseActivity {
 
     boolean isReqing = false;
     private void initView() {
+        mWebView.loadUrl(url);
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.setWebChromeClient(new WebChromeClient() {
             public void onProgressChanged(WebView view, int progress) {
@@ -80,11 +81,13 @@ public class WebActivity extends BaseActivity {
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                 }
-                String[] split = mWebView.getUrl().split("code=");
-                if (split.length > 1 && !isReqing){
-                    isReqing = true;
-                   MLog.e("code= " + split[1]);
-                    OtherPlatformUtils.getGithubToken(split[1]);
+                if (mWebView != null){
+                    String[] split = mWebView.getUrl().split("code=");
+                    if (split.length > 1 && !isReqing) {
+                        isReqing = true;
+                        MLog.e("code= " + split[1]);
+                        OtherPlatformUtils.getGithubToken(split[1]);
+                    }
                 }
             }
         });
@@ -127,7 +130,6 @@ public class WebActivity extends BaseActivity {
         });
 
      //   String url = getApiUrl();
-        mWebView.loadUrl(url);
     }
 
 
@@ -137,6 +139,7 @@ public class WebActivity extends BaseActivity {
         url = getIntent().getStringExtra(Intent_Url);
         if (TextUtils.isEmpty(url)){
             finish();
+            return;
         }
     }
 
