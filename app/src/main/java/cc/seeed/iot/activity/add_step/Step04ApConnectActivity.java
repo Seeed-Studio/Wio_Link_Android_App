@@ -154,11 +154,12 @@ public class Step04ApConnectActivity extends BaseActivity {
     }
 
     private void sendOrder() {
+        mTvHint.setText("Check the firmware version...");
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ConfigUdpSocket udpClient = new ConfigUdpSocket();
-                udpClient.setSoTimeout(15000); //1s timeout
+                udpClient.setSoTimeout(5000); //1s timeout
                 udpClient.sendData("VERSION", "192.168.4.1");
                 for (int i = 0; i < 3; i++) {
                     try {
@@ -187,6 +188,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                                         new SetNodeSn().execute(cmd_connect, AP_IP);
                                     }
                                 });
+                                break;
                             } else if (versionCode >= 1.2) {
                                 MLog.d(this, "get version success: " + new String(bytes));
                                 runOnUiThread(new Runnable() {
@@ -203,6 +205,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                                         new SetNodeSn().execute(cmd_connect, AP_IP);
                                     }
                                 });
+                                break;
                             }
                         }
                     } catch (SocketTimeoutException e) {
@@ -280,7 +283,7 @@ public class Step04ApConnectActivity extends BaseActivity {
             ConfigUdpSocket udpClient = new ConfigUdpSocket();
             String cmd = params[0];
             String ipAddr = params[1];
-            udpClient.setSoTimeout(10000); //1s timeout
+            udpClient.setSoTimeout(5000); //1s timeout
             udpClient.sendData(cmd, ipAddr);
             for (int i = 0; i < 3; i++) {
                 try {
@@ -290,7 +293,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                         break;
                     }
                 } catch (SocketTimeoutException e) {
-                    udpClient.setSoTimeout(5000);
+                    udpClient.setSoTimeout(3000);
                     udpClient.sendData(cmd, ipAddr);
                 } catch (IOException e) {
                     Log.e(TAG, "Error[SetNodeSn]:" + e);

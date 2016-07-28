@@ -40,6 +40,8 @@ import cc.seeed.iot.activity.BaseActivity;
 import cc.seeed.iot.adapter.add_node.WifiRecyclerViewHolder;
 import cc.seeed.iot.adapter.add_node.WifiWioListRecyclerAdapter;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.MLog;
+import cc.seeed.iot.util.WifiUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.view.StepView;
 
@@ -79,7 +81,10 @@ public class Step03WifiWioListActivity extends BaseActivity
 
     private long startTime = 0;
     private long endTime = 0;
+    private int TimeOut = 15*1000;
     Timer timer = new Timer();
+
+     WifiUtils wifiUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,10 +224,68 @@ public class Step03WifiWioListActivity extends BaseActivity
         if (selected_ssid.equals(getCurrentSsid()))
             goStep04();
         else {
+//            connectWifi(selected_ssid,"");
             wifiConnect(selected_ssid);
         }
 
 
+    }
+
+    int flag = 0;
+
+    private void connectWifi(final String ssid, final String pwd) {
+        flag = 0;
+        final Timer timer = new Timer();
+        mWaitDialog = DialogUtils.showProgressDialog(this, "Connecting to " + ssid + " WiFI ");
+        wifiUtils = new WifiUtils(this);
+        wifiUtils.openWifi();
+        wifiUtils.addNetwork(wifiUtils.CreateWifiInfo(ssid, pwd, 1));
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run() {
+                flag++;
+                if (flag >= 30) {
+                    timer.cancel();
+                    MLog.e(this, "超时");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "Fail connect to Wifi", getString(R.string.dialog_btn_tryAgain),
+                                    getString(R.string.dialog_btn_Cancel), getString(R.string.cont_connection_wifi), new DialogUtils.OnErrorButtonClickListenter() {
+                                        @Override
+                                        public void okClick() {
+                                            connectWifi(ssid, pwd);
+                                        }
+
+                                        @Override
+                                        public void cancelClick() {
+                                        }
+                                    });
+                        }
+                    });
+
+                    if (mWaitDialog != null) {
+                        mWaitDialog.dismiss();
+                    }
+                }
+                if (wifiUtils.isWifiConnected(Step03WifiWioListActivity.this)) {
+                    timer.cancel();
+                    MLog.e(this, "连接成功");
+                    if (mWaitDialog != null) {
+                        mWaitDialog.dismiss();
+                    }
+                    goStep04();
+                } else {
+                    //  MLog.e(this, "连接失败");
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWaitDialog.setMessage("Connecting to " + ssid + " WiFI (" + (30 - flag) + ")");
+                    }
+                });
+
+            }
+        }, 1500, 1000);
     }
 
     public void wifiConnect(String SSID) {
@@ -256,13 +319,21 @@ public class Step03WifiWioListActivity extends BaseActivity
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             endTime = System.currentTimeMillis();
-            if (startTime != 0 && endTime - startTime > 60 * 1000) {
+            if (startTime != 0 && endTime - startTime > TimeOut) {
+                TimeOut = 30*1000;
                 startTime = 0;
                 if (mWaitDialog != null && mWaitDialog.isShowing()) {
                     mWaitDialog.dismiss();
                 }
                 DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "", "OK", "", "Connect fail..", null);
                 showProgress(true);
+            }else {
+                if (wifiUtils != null && wifiUtils.isWifiConnected(Step03WifiWioListActivity.this) && selected_ssid.equals(wifiUtils.getBSSID())) {
+                    if (mWaitDialog != null) {
+                        mWaitDialog.dismiss();
+                    }
+                    goStep04();
+                }
             }
             if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);

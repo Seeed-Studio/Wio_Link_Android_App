@@ -80,6 +80,7 @@ public class Step02WifiListActivity extends BaseActivity
     private WifiListRecyclerAdapter mWifiListAdapter;
     private ScanResult scanResult;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

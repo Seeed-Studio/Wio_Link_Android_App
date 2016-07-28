@@ -468,6 +468,7 @@ public class MainScreenActivity extends BaseActivity
                 startActivity(intent);
                 break;
             case R.id.mTvFeedBack:
+                MobclickAgent.onEvent(this, "12007");
                 intent = new Intent(MainScreenActivity.this, FeedbackActivity.class);
                 startActivity(intent);
                 break;
@@ -476,6 +477,7 @@ public class MainScreenActivity extends BaseActivity
                 SystemLogic.getInstance().checkUpdateApk(this, true);
                 break;
             case R.id.mBtnAddDevice:
+                MobclickAgent.onEvent(this, "13006");
                 showSelectAddDevicePopWindow();
                 break;
             case R.id.mLLWioNode:
@@ -487,6 +489,7 @@ public class MainScreenActivity extends BaseActivity
                 setupActivity(Constant.WIO_LINK_V1_0);
                 break;
             case R.id.mLLAddDevice:
+                MobclickAgent.onEvent(this, "13005");
                 showSelectAddDevicePopWindow();
                 break;
             case R.id.toolbar:
