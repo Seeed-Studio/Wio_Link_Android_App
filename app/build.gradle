@@ -81,7 +81,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:8.4.0'
 //    compile 'com.google.android.gms:play-services-auth:9.0.2'
     compile 'com.umeng.analytics:analytics:latest.integration'
-    compile 'com.squareup.picasso:picasso:2.4.0'
+  //  compile 'com.squareup.picasso:picasso:2.4.0'
     //    compile 'com.google.android.gms:play-services-plus:8.4.0'
     /*  compile('com.facebook.android:facebook-android-sdk:4.5.0') {
                                                 exclude group: 'com.parse.bolts', module: 'bolts-android'

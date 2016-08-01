@@ -21,12 +21,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -56,6 +55,7 @@ import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.view.CustomProgressDialog;
 import cc.seeed.iot.view.FontButton;
 import cc.seeed.iot.view.FontTextView;
@@ -108,9 +108,9 @@ public class SetupIotNodeActivity extends BaseActivity
     @InjectView(R.id.node_view)
     ImageView nodeView;
     @InjectView(R.id.mNodeGrove_01)
-    ImageButton grove0;
+    SimpleDraweeView grove0;
     @InjectView(R.id.mNodeGrove_02)
-    ImageButton grove1;
+    SimpleDraweeView grove1;
     @InjectView(R.id.grove_i2c_list)
     RecyclerView groveI2cList;
     @InjectView(R.id.set_node)
@@ -524,8 +524,7 @@ public class SetupIotNodeActivity extends BaseActivity
                         break;
                     case DragEvent.ACTION_DROP: {
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
-                        UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL,
-                                R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                        ImgUtil.displayImg((SimpleDraweeView) v, groverDriver.ImageURL, R.mipmap.grove_default);
                         int pin_position = ((GrovePinsView.Tag) v.getTag()).position;
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = pin_position;

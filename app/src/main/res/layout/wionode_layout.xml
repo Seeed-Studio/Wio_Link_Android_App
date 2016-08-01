@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mWioNodeLayout"
     android:layout_width="match_parent"
     android:layout_height="144dp"
@@ -15,8 +16,7 @@
         android:scaleType="centerCrop"
         android:src="@mipmap/node_large" />
 
-
-    <ImageButton
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/mNodeGrove_01"
         style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
@@ -25,17 +25,17 @@
         android:layout_marginRight="1dp"
         android:layout_toStartOf="@+id/node_view"
         android:clickable="true"
-        android:scaleType="centerInside" />
+        app:actualImageScaleType="centerInside" />
 
-    <ImageButton
+    <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/mNodeGrove_02"
         style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
         android:layout_marginTop="31dp"
+        android:layout_toLeftOf="@+id/node_view"
         android:layout_marginLeft="1dp"
-        android:layout_toEndOf="@+id/node_view"
         android:layout_toRightOf="@+id/node_view"
         android:clickable="true"
-        android:scaleType="centerInside" />
+        app:actualImageScaleType="centerInside" />
 
 </RelativeLayout>

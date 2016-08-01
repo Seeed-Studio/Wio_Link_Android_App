@@ -239,17 +239,19 @@ public class Step02WifiListActivity extends BaseActivity
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            DialogUtils.showErrorDialog(Step02WifiListActivity.this, "Fail connect to Wifi", getString(R.string.dialog_btn_tryAgain),
-                                    getString(R.string.dialog_btn_Cancel), getString(R.string.cont_connection_wifi), new DialogUtils.OnErrorButtonClickListenter() {
-                                        @Override
-                                        public void okClick() {
-                                            connectWifi(scanResult.SSID, wifiPwd);
-                                        }
+                            if (!isFinishing()) {
+                                DialogUtils.showErrorDialog(Step02WifiListActivity.this, "Fail connect to Wifi", getString(R.string.dialog_btn_tryAgain),
+                                        getString(R.string.dialog_btn_Cancel), getString(R.string.cont_connection_wifi), new DialogUtils.OnErrorButtonClickListenter() {
+                                            @Override
+                                            public void okClick() {
+                                                connectWifi(scanResult.SSID, wifiPwd);
+                                            }
 
-                                        @Override
-                                        public void cancelClick() {
-                                        }
-                                    });
+                                            @Override
+                                            public void cancelClick() {
+                                            }
+                                        });
+                            }
                         }
                     });
 

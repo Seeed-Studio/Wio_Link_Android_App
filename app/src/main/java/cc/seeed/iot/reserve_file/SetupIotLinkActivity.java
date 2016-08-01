@@ -20,11 +20,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -54,6 +53,7 @@ import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.view.CustomProgressDialog;
 import cc.seeed.iot.view.FontButton;
 import cc.seeed.iot.webapi.IotApi;
@@ -103,17 +103,17 @@ public class SetupIotLinkActivity extends BaseActivity
     @InjectView(R.id.node_view)
     ImageView nodeView;
     @InjectView(R.id.mNodeGrove_01)
-    ImageButton grove0;
+    SimpleDraweeView grove0;
     @InjectView(R.id.mNodeGrove_02)
-    ImageButton grove1;
+    SimpleDraweeView grove1;
     @InjectView(R.id.mLinkGrove_03)
-    ImageButton grove2;
+    SimpleDraweeView grove2;
     @InjectView(R.id.mLinkGrove_04)
-    ImageButton grove3;
+    SimpleDraweeView grove3;
     @InjectView(R.id.mLinkGrove_05)
-    ImageButton grove4;
+    SimpleDraweeView grove4;
     @InjectView(R.id.mLinkGrove_06)
-    ImageButton grove5;
+    SimpleDraweeView grove5;
     @InjectView(R.id.set_link)
     RelativeLayout mSetNodeLayout;
     @InjectView(R.id.setup_iot_link)
@@ -523,8 +523,7 @@ public class SetupIotLinkActivity extends BaseActivity
                         break;
                     case DragEvent.ACTION_DROP: {
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
-                        UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL,
-                                R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                        ImgUtil.displayImg((SimpleDraweeView)v,groverDriver.ImageURL,R.mipmap.grove_default);
                         int pin_position = ((GrovePinsView.Tag) v.getTag()).position;
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = pin_position;

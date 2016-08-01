@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.ButterKnife;
@@ -38,7 +39,7 @@ public class Step01GoReadyActivity extends BaseActivity {
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.mIvCourse)
-    ImageView mIvCourse;
+    SimpleDraweeView mIvCourse;
     @InjectView(R.id.mIvHelp)
     ImageView mIvHelp;
     @InjectView(R.id.mBtnGo)

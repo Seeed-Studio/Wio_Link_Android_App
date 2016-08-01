@@ -7,31 +7,24 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.CommonUrl;
-import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.Node;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by tenwong on 15/6/25.

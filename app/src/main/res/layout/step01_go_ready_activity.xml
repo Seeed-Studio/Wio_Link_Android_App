@@ -58,7 +58,7 @@
             android:textColor="@android:color/white"
             app:cusButtonFont="@string/Proxima_Nova_Semibold" />
 
-        <ImageView
+    <!--    <ImageView
             android:id="@+id/mIvCourse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -66,7 +66,17 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="40dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/link_config" />
+            android:src="@mipmap/link_config" />-->
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/mIvCourse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/mBtnGo"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="40dp"
+            app:placeholderImage="@mipmap/link_config"
+            app:placeholderImageScaleType="centerInside"/>
 
 
     </RelativeLayout>

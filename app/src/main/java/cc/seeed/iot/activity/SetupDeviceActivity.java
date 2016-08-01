@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.ClipData;
 import android.content.ClipDescription;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.os.Build;
@@ -15,26 +14,23 @@ import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.gson.Gson;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -60,6 +56,7 @@ import cc.seeed.iot.util.ComparatorUtils;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.DialogUtils;
+import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.CustomProgressDialog;
 import cc.seeed.iot.view.FontButton;
@@ -110,21 +107,21 @@ public class SetupDeviceActivity extends BaseActivity
     @InjectView(R.id.node_view)
     ImageView nodeView;
     @InjectView(R.id.mLinkGrove_01)
-    ImageButton mLinkGrove_01;
+    SimpleDraweeView mLinkGrove_01;
     @InjectView(R.id.mLinkGrove_02)
-    ImageButton mLinkGrove_02;
+    SimpleDraweeView mLinkGrove_02;
     @InjectView(R.id.mLinkGrove_03)
-    ImageButton mLinkGrove_03;
+    SimpleDraweeView mLinkGrove_03;
     @InjectView(R.id.mLinkGrove_04)
-    ImageButton mLinkGrove_04;
+    SimpleDraweeView mLinkGrove_04;
     @InjectView(R.id.mLinkGrove_05)
-    ImageButton mLinkGrove_05;
+    SimpleDraweeView mLinkGrove_05;
     @InjectView(R.id.mLinkGrove_06)
-    ImageButton mLinkGrove_06;
+    SimpleDraweeView mLinkGrove_06;
     @InjectView(R.id.mNodeGrove_01)
-    ImageButton mNodeGrove_01;
+    SimpleDraweeView mNodeGrove_01;
     @InjectView(R.id.mNodeGrove_02)
-    ImageButton mNodeGrove_02;
+    SimpleDraweeView mNodeGrove_02;
     @InjectView(R.id.set_link)
     RelativeLayout mSetNodeLayout;
     @InjectView(R.id.setup_device)
@@ -459,7 +456,8 @@ public class SetupDeviceActivity extends BaseActivity
 
     private void stopUpdate() {
         isUpdateIng = false;
-        progressDialog.dismiss();
+        if (progressDialog != null && progressDialog.isShowing())
+            progressDialog.dismiss();
         mRlRemove.setVisibility(View.GONE);
         mBtnUpdate.setEnabled(true);
         mBtnUpdate.setSelected(true);
@@ -690,8 +688,7 @@ public class SetupDeviceActivity extends BaseActivity
                         break;
                     case DragEvent.ACTION_DROP: {
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
-                        UrlImageViewHelper.setUrlDrawable((ImageView) v, groverDriver.ImageURL,
-                                R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                        ImgUtil.displayImg((SimpleDraweeView)v,groverDriver.ImageURL,R.mipmap.grove_default);
                         int pin_position = ((GrovePinsView.Tag) v.getTag()).position;
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = pin_position;

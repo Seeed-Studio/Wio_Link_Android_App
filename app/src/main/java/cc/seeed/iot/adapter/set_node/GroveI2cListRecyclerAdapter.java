@@ -5,12 +5,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +61,6 @@ public class GroveI2cListRecyclerAdapter extends RecyclerView.Adapter<GroveI2cLi
         try {
             GroverDriver groverDriver = DBHelper.getGroves(pinConfig.sku).get(0);
             ImgUtil.displayImg(holder.mIvGrove,groverDriver.ImageURL,R.mipmap.grove_default);
-//            UrlImageViewHelper.setUrlDrawable(holder.mIvGrove, groverDriver.ImageURL, R.mipmap.grove_default,UrlImageViewHelper.CACHE_DURATION_INFINITE);
         } catch (Exception e) {
             Log.e(TAG, "getGroves:" + e);
         }

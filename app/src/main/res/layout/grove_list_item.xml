@@ -13,28 +13,37 @@
 
     <RelativeLayout
         android:layout_width="120dp"
-        android:elevation="8dp"
-        android:layout_height="162dp">
+        android:layout_height="162dp"
+        android:elevation="8dp">
 
-        <ImageView
+       <!-- <ImageView
             android:id="@+id/grove_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
+            android:layout_above="@+id/grove_text"
             android:background="@color/white"
-            android:layout_above="@+id/grove_text" />
+            android:scaleType="centerCrop" />-->
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/grove_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/grove_text"
+            android:background="@color/white"
+            app:placeholderImage="@mipmap/grove_default"
+            app:placeholderImageScaleType="centerCrop" />
 
         <cc.seeed.iot.view.FontTextView
             android:id="@+id/grove_text"
             android:layout_width="match_parent"
             android:layout_height="42dp"
+            android:layout_alignParentBottom="true"
             android:background="#F5F4F1"
-            android:maxLines="2"
             android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
             android:textColor="#3A4271"
             android:textSize="11sp"
-            app:cusTextFont="@string/Proxima_Nova_Regular"
-            android:layout_alignParentBottom="true"
-            android:gravity="center"/>
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

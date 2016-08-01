@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -39,6 +42,13 @@ import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.util.ToolUtil;
+import cc.seeed.iot.webapi.IotApi;
+import cc.seeed.iot.webapi.IotService;
+import cc.seeed.iot.webapi.model.Node;
+import cc.seeed.iot.webapi.model.NodeListResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 /**
@@ -152,7 +162,8 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 wifiManager.setWifiEnabled(true);
                 break;
             case R.id.mBtnEditName:
-                DialogUtils.showEditNodeNameDialog(this, "", null);
+//                DialogUtils.showEditNodeNameDialog(this, "", null);
+                showDialog();
                 //  DialogUtils.showWarningDialog(this,null);
                 //  new LocationUtil().startLocation(this);
                 //   locationUtil.startLocation();
@@ -168,6 +179,57 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 intent.putExtra(WebActivity.Intent_Url, url);
                 startActivity(intent);
                 break;
+        }
+    }
+
+    private void showDialog(){
+        new checkNodeIsOnline().execute();
+    }
+
+    private class checkNodeIsOnline extends AsyncTask<Void, Integer, Boolean> {
+        private Boolean state_online = false;
+
+        @Override
+        protected void onPreExecute() {
+            //  showProgressDialog("Waiting Wio get ip address...");
+            //   showProgressText("Get device status...");
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            state_online = true;
+            return state_online;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+        }
+
+        @Override
+        protected void onPostExecute(Boolean state_online) {
+            if (isFinishing()) { // or call isFinishing() if min sdk version < 17
+                return;
+            }
+            if (state_online) {
+
+                DialogUtils.showErrorDialog(TestActivity.this, "Connection Error", "TRY AGAIN", "Cancel", "Please check your internet connection and try again.\r\n" +
+                        "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
+                    @Override
+                    public void okClick() {
+                        App.showToastShrot("ok");
+                    }
+
+                    @Override
+                    public void cancelClick() {
+                        App.showToastShrot("cancel");
+                    }
+                });
+            }
         }
     }
 
@@ -261,7 +323,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
     }
 
-    public void sendOrder() {
+    public void sendOrder(){
         order = mEtOrder.getText().toString().trim();
         if (TextUtils.isEmpty(order)) {
             App.showToastShrot("input is emputy");
@@ -293,7 +355,6 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                     }
                 }
             }).start();
-
         }
     }
 

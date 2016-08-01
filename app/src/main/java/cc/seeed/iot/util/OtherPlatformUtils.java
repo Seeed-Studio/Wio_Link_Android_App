@@ -71,6 +71,10 @@ public class OtherPlatformUtils {
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
+                                if (profile == null){
+                                    UiObserverManager.getInstance().dispatchEvent(CmdConst.Cmd_AuthorizeCancel, true, "Authorize error", null);
+                                    return;
+                                }
                                 if (type == LoginWithFacebook) {
                                     UiObserverManager.getInstance().dispatchEvent(CmdConst.Cmd_LoginWithFaceBook, true, "", null);
                                     UserLogic.getInstance().loginOther(profile.getId(), Constant.OtherPlatform.Facebook.getValue(), profile.getName(),profile.getProfilePictureUri(300, 300).toString(), email);

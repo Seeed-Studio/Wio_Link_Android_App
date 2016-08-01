@@ -438,7 +438,7 @@ public class Step04ApConnectActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Boolean state_online) {
-            if (Step04ApConnectActivity.this.isFinishing()) { // or call isFinishing() if min sdk version < 17
+            if (isFinishing()) { // or call isFinishing() if min sdk version < 17
                 return;
             }
 

@@ -8,20 +8,19 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.jauker.widget.BadgeView;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
 import java.util.List;
 
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.ui_setnode.model.InterfaceType;
 import cc.seeed.iot.ui_setnode.model.PinConfig;
 import cc.seeed.iot.ui_setnode.model.PinConfigDBHelper;
+import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DBHelper;
-import cc.seeed.iot.util.ToolUtil;
+import cc.seeed.iot.util.ImgUtil;
 import cc.seeed.iot.webapi.model.Node;
 
 /**
@@ -32,7 +31,7 @@ public class GrovePinsView {
     private Context context;
     private View view;
     private Node node;
-    public ImageButton[] pinViews;
+    public SimpleDraweeView[] pinViews;
     public BadgeView[] badgeViews;
 
     public GrovePinsView(Context context, View v, Node node) {
@@ -40,11 +39,11 @@ public class GrovePinsView {
         this.view = v;
         this.node = node;
         if (node.board.equals(Constant.WIO_LINK_V1_0)) {
-            this.pinViews = new ImageButton[6];
+            this.pinViews = new SimpleDraweeView[6];
             this.badgeViews = new BadgeView[6];
             initLinkView();
         } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
-            this.pinViews = new ImageButton[2];
+            this.pinViews = new SimpleDraweeView[2];
             this.badgeViews = new BadgeView[2];
             initNodeView();
         }
@@ -52,8 +51,8 @@ public class GrovePinsView {
     }
 
     private void initNodeView() {
-        pinViews[0] = (ImageButton) view.findViewById(R.id.mNodeGrove_01);
-        pinViews[1] = (ImageButton) view.findViewById(R.id.mNodeGrove_02);
+        pinViews[0] = (SimpleDraweeView) view.findViewById(R.id.mNodeGrove_01);
+        pinViews[1] = (SimpleDraweeView) view.findViewById(R.id.mNodeGrove_02);
 
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO, InterfaceType.UART, InterfaceType.I2C}));
         pinViews[1].setTag(new Tag(1, new String[]{InterfaceType.GPIO, InterfaceType.ANALOG, InterfaceType.I2C}));
@@ -74,8 +73,7 @@ public class GrovePinsView {
             try {
                 String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
                 pinViews[pinConfig.position].setActivated(true);
-                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default,
-                        UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                ImgUtil.displayImg(pinViews[pinConfig.position],url,R.mipmap.grove_default);
             } catch (Exception e) {
                 Log.e(TAG, "getGroves:" + e);
             }
@@ -83,12 +81,12 @@ public class GrovePinsView {
     }
 
     private void initLinkView() {
-        pinViews[0] = (ImageButton) view.findViewById(R.id.mLinkGrove_01);
-        pinViews[1] = (ImageButton) view.findViewById(R.id.mLinkGrove_02);
-        pinViews[2] = (ImageButton) view.findViewById(R.id.mLinkGrove_03);
-        pinViews[3] = (ImageButton) view.findViewById(R.id.mLinkGrove_04);
-        pinViews[4] = (ImageButton) view.findViewById(R.id.mLinkGrove_05);
-        pinViews[5] = (ImageButton) view.findViewById(R.id.mLinkGrove_06);
+        pinViews[0] = (SimpleDraweeView) view.findViewById(R.id.mLinkGrove_01);
+        pinViews[1] = (SimpleDraweeView) view.findViewById(R.id.mLinkGrove_02);
+        pinViews[2] = (SimpleDraweeView) view.findViewById(R.id.mLinkGrove_03);
+        pinViews[3] = (SimpleDraweeView) view.findViewById(R.id.mLinkGrove_04);
+        pinViews[4] = (SimpleDraweeView) view.findViewById(R.id.mLinkGrove_05);
+        pinViews[5] = (SimpleDraweeView) view.findViewById(R.id.mLinkGrove_06);
 
 
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO}));
@@ -110,7 +108,7 @@ public class GrovePinsView {
             try {
                 String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
                 pinViews[pinConfig.position].setActivated(true);
-                UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                ImgUtil.displayImg(pinViews[pinConfig.position], url, R.mipmap.grove_default);
             } catch (Exception e) {
                 Log.e(TAG, "getGroves:" + e);
             }
@@ -124,7 +122,7 @@ public class GrovePinsView {
                 try {
                     String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
                     pinViews[pinConfig.position].setActivated(true);
-                    UrlImageViewHelper.setUrlDrawable(pinViews[pinConfig.position], url, R.mipmap.grove_default, UrlImageViewHelper.CACHE_DURATION_INFINITE);
+                    ImgUtil.displayImg(pinViews[pinConfig.position],url,R.mipmap.grove_default);
                 } catch (Exception e) {
                     Log.e(TAG, "getGroves:" + e);
                 }
@@ -142,8 +140,7 @@ public class GrovePinsView {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void setPinView(ImageButton tragetView, BadgeView view) {
+    private void setPinView(SimpleDraweeView tragetView, BadgeView view) {
         int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         tragetView.measure(w, h);
