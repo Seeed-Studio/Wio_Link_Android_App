@@ -23,8 +23,6 @@
         android:layout_marginTop="31dp"
         android:layout_toLeftOf="@+id/node_view"
         android:layout_marginRight="1dp"
-        android:layout_toStartOf="@+id/node_view"
-        android:clickable="true"
         app:actualImageScaleType="centerInside" />
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -32,10 +30,8 @@
         style="@style/NodePinStyle"
         android:layout_alignTop="@+id/node_view"
         android:layout_marginTop="31dp"
-        android:layout_toLeftOf="@+id/node_view"
         android:layout_marginLeft="1dp"
         android:layout_toRightOf="@+id/node_view"
-        android:clickable="true"
         app:actualImageScaleType="centerInside" />
 
 </RelativeLayout>
