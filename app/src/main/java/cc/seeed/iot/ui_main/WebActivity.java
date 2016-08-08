@@ -26,6 +26,11 @@ import android.widget.Toast;
 import com.facebook.CallbackManager;
 import com.umeng.socialize.UMShareAPI;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
@@ -89,6 +94,7 @@ public class WebActivity extends BaseActivity {
                 } else {
                     mProgressBar.setVisibility(View.GONE);
                     mSRL.setRefreshing(false);
+                    injectJs(view);
                 }
                 if (mWebView != null && !TextUtils.isEmpty(mWebView.getUrl())){
                     String[] split = mWebView.getUrl().split("code=");
@@ -114,6 +120,7 @@ public class WebActivity extends BaseActivity {
                  //   App.showToastShrot("code= "+split[1]);
                 }
             }
+
         });
 
         mWebView.setWebViewClient(new WebViewClient() {
@@ -135,6 +142,12 @@ public class WebActivity extends BaseActivity {
                 });
                 final AlertDialog dialog = builder.create();
                 dialog.show();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                injectJs(view);
             }
         });
 
@@ -171,6 +184,29 @@ public class WebActivity extends BaseActivity {
             ShareUtils.setIsWiki(false);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void loadJs(WebView view, String path) {
+        try {
+            InputStream ins = getAssets().open(path);
+            BufferedReader in =
+                    new BufferedReader(new InputStreamReader(ins));
+            String str;
+            StringBuilder buf = new StringBuilder();
+            buf.append("javascript:");
+            while ((str = in.readLine()) != null) {
+                buf.append(str);
+            }
+            view.loadUrl(buf.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void injectJs(WebView view) {
+        loadJs(view, "android.js");
+        view.loadUrl("javascript:addJsFile('inject_js/bridge.js')");
+        view.loadUrl("javascript:addJsFile('inject_js/HostApi.js')");
     }
 
     private void copyTextUrl(String apiUrl) {

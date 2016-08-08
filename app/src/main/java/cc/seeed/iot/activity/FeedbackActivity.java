@@ -165,15 +165,11 @@ public class FeedbackActivity extends BaseActivity  {
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Thank you!");
-        builder.setMessage("Feedback is recived and your opinion is always valuable to us." +
-                "We couldn’t thank you more for helping to make Maker Map better.");
-        builder.setNeutralButton("KEEP ON EXPLORING OUR APP", new DialogInterface.OnClickListener() {
+        builder.setTitle("Success!");
+        builder.setMessage("Thank you for your feedback. We will get in touch with you soon.");
+        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(FeedbackActivity.this, MainScreenActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
                 finish();
             }
         });

@@ -3,13 +3,12 @@ package cc.seeed.iot.activity.add_step;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
+import android.provider.Settings;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,7 +35,6 @@ import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
-import cc.seeed.iot.activity.FeedbackActivity;
 import cc.seeed.iot.activity.HelpActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.ConfigDeviceLogic;
@@ -71,6 +69,8 @@ public class Step04ApConnectActivity extends BaseActivity {
     public final static String Intent_NodeKey = "Intent_NodeKey";
     public final static String Intent_NodeSn = "Intent_NodeSn";
     public final static String Intent_ChangeWifi = "Intent_ChangeWifi";
+    private final static int SETTING_REQ_CODE = 124;
+
     @InjectView(R.id.toolbar)
     Toolbar mToolbar;
     @InjectView(R.id.mIvLoading)
@@ -95,6 +95,7 @@ public class Step04ApConnectActivity extends BaseActivity {
     private boolean isChangeWifi = false;
 
     private int sendOrderCount = 0;
+    private String cmd_connect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,6 +159,11 @@ public class Step04ApConnectActivity extends BaseActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 ConfigUdpSocket udpClient = new ConfigUdpSocket();
                 udpClient.setSoTimeout(5000); //1s timeout
                 udpClient.sendData("VERSION", "192.168.4.1");
@@ -180,7 +186,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                                         String ota_server_ip = App.getApp().getOtaServerIP();
                                         String exchange_server_ip = ota_server_ip;
 
-                                        String cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
+                                        cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
                                                 node_key + "\t" + node_sn + "\t" + exchange_server_ip + "\t"
                                                 + ota_server_ip + "\t";
                                         Log.i(TAG, "cmd_connect: " + cmd_connect);
@@ -197,7 +203,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                                         String ota_server_url = App.getApp().getOtaServerUrl();
                                         ota_server_url = NetworkUtils.getDomainName(ota_server_url);
                                         //  String ota_server_ip = ((App) getApplication()).getOtaServerIP();
-                                        String cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
+                                        cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
                                                 node_key + "\t" + node_sn + "\t" + ota_server_url + "\t"
                                                 + ota_server_url + "\t";
                                         Log.i(TAG, "cmd_connect: " + cmd_connect);
@@ -223,42 +229,13 @@ public class Step04ApConnectActivity extends BaseActivity {
         sendOrderCount++;
         if (sendOrderCount == 3) {
             sendOrderCount = 0;
-           /* runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    AlertDialog dialog = new AlertDialog.Builder(Step04ApConnectActivity.this)
-                            .setMessage("Failed to get the firmware version")
-                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    sendOrder();
-                                }
-                            })
-                            .setNeutralButton("Feedback", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    startActivity(new Intent(Step04ApConnectActivity.this, FeedbackActivity.class));
-                                }
-                            })
-                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                @Override
-
-                                public void onClick(DialogInterface dialog, int which) {
-                                    finish();
-                                }
-                            }).create();
-                    dialog.setCancelable(true);
-                    dialog.setCanceledOnTouchOutside(true);
-                    dialog.show();
-                }
-            });*/
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     String ota_server_ip = App.getApp().getOtaServerIP();
                     String exchange_server_ip = ota_server_ip;
 
-                    String cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
+                    cmd_connect = "APCFG: " + ssid + "\t" + wifiPwd + "\t" +
                             node_key + "\t" + node_sn + "\t" + exchange_server_ip + "\t"
                             + ota_server_ip + "\t";
                     Log.i(TAG, "cmd_connect: " + cmd_connect);
@@ -274,12 +251,13 @@ public class Step04ApConnectActivity extends BaseActivity {
 
         @Override
         protected void onPreExecute() {
-            //  showProgressDialog("Sending wifi password to Wio...");
-            mTvHint.setText("Sending wifi password to Wio...");
+            //  showProgressDialog("Sending Wi-Fi password to Wio...");
+            mTvHint.setText("Sending Wi-Fi password to Wio...");
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
+            boolean isSuccess = false;
             ConfigUdpSocket udpClient = new ConfigUdpSocket();
             String cmd = params[0];
             String ipAddr = params[1];
@@ -290,6 +268,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                     byte[] bytes = udpClient.receiveData();
                     if (new String(bytes).substring(0, 1 + 1).equals("ok")) {
                         Log.i(TAG, "set info to node success with udp.");
+                        isSuccess = true;
                         break;
                     }
                 } catch (SocketTimeoutException e) {
@@ -300,25 +279,74 @@ public class Step04ApConnectActivity extends BaseActivity {
                     return false;
                 }
             }
-            return true;
+            return isSuccess;
         }
 
 
         @Override
         protected void onPostExecute(Boolean b) {
-            //remove Wio wifi config
-            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-            List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
-            for (WifiConfiguration c : wifiConfigurations) {
-                if (c.SSID.contains(PION_WIFI_PREFIX) || c.SSID.contains(WIO_WIFI_PREFIX)) {
-                    wifiManager.removeNetwork(c.networkId);
-                    wifiManager.saveConfiguration();
+            //remove Wio Wi-Fi config
+            if (b) {
+                WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                List<WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
+                for (WifiConfiguration c : wifiConfigurations) {
+                    if (c.SSID.contains(PION_WIFI_PREFIX) || c.SSID.contains(WIO_WIFI_PREFIX)) {
+                        wifiManager.removeNetwork(c.networkId);
+                        wifiManager.saveConfiguration();
+                    }
+                }
+                connectWifi(ssid, wifiPwd);
+                mProgressBar.setProgress(30);
+            } else {
+                if (WifiUtils.isWifiConnected(Step04ApConnectActivity.this) && WifiUtils.getCurrentSsid(Step04ApConnectActivity.this).startsWith("\"Wio")) {
+                    sendOrderError();
+                } else {
+                    phoneAndDeviceWifiDisconnect();
                 }
             }
-            connectWifi(ssid, wifiPwd);
-            mProgressBar.setProgress(30);
         }
     }
+
+    public void sendOrderError() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Send order error", "TRY AGAIN", "Cancel", "Please check your internet connection and try again.\r\n" +
+                        "If still can’t slove the problem, please try FAQ section and contact us there. \r\n\r\n" +
+                        "Error code:1041", new DialogUtils.OnErrorButtonClickListenter() {
+                    @Override
+                    public void okClick() {
+                        new SetNodeSn().execute(cmd_connect, AP_IP);
+                    }
+
+                    @Override
+                    public void cancelClick() {
+                        finish();
+                    }
+                });
+            }
+        });
+    }
+
+    private void phoneAndDeviceWifiDisconnect() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connect error", "OK", "", "Your phone disconnected from Wio's Wi-Fi hotspot.\n\r\n\r\nError code:1042" , new DialogUtils.OnErrorButtonClickListenter() {
+                    @Override
+                    public void okClick() {
+                       finish();
+                    }
+
+                    @Override
+                    public void cancelClick() {
+
+                    }
+                });
+            }
+        });
+    }
+
 
     int flag = 0;
 
@@ -327,9 +355,9 @@ public class Step04ApConnectActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
         mTvHint.setText("Waiting Wio get ip address...");
         final Timer timer = new Timer();
-        final WifiUtils wifiUtils = new WifiUtils(this);
+       /* final WifiUtils wifiUtils = new WifiUtils(this);
         wifiUtils.openWifi();
-        wifiUtils.addNetwork(wifiUtils.CreateWifiInfo(ssid, pwd, 3));
+        wifiUtils.addNetwork(wifiUtils.CreateWifiInfo(ssid, pwd, 3));*/
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 flag++;
@@ -339,22 +367,26 @@ public class Step04ApConnectActivity extends BaseActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Fail connect to Wifi", "TRY AGAIN", "FAQ", "Please check your internet connection and try again.\r\n" +
-                                    "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
+                            DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Fail connect to Wi-Fi", "TRY AGAIN", "Setting", "Please check your internet connection and try again.\r\n" +
+                                    "Or click \"Setting\" go to manual settings view.\r\n\r\nError code:1043", new DialogUtils.OnErrorButtonClickListenter() {
                                 @Override
                                 public void okClick() {
                                     connectWifi(ssid, wifiPwd);
+                                    timer.cancel();
                                 }
 
                                 @Override
                                 public void cancelClick() {
-                                    gotoHelp();
+                                   // gotoHelp();
+                                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+                                    startActivityForResult(intent, SETTING_REQ_CODE);
+                                    timer.cancel();
                                 }
                             });
                         }
                     });
                 }
-                if (wifiUtils.isWifiConnected(Step04ApConnectActivity.this)) {
+                if (WifiUtils.isWifiConnected(Step04ApConnectActivity.this) && !WifiUtils.getCurrentSsid(Step04ApConnectActivity.this).startsWith("\"Wio")) {
                     timer.cancel();
                     MLog.e(this, "连接成功");
                     //checkIsOnline();
@@ -451,7 +483,7 @@ public class Step04ApConnectActivity extends BaseActivity {
                 }
             } else {
                 DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connection Error", "TRY AGAIN", "Cancel", "Please check your internet connection and try again.\r\n" +
-                        "If still can’t slove the problem, please try FAQ section and contact us there. ", new DialogUtils.OnErrorButtonClickListenter() {
+                        "If still can’t slove the problem, please try FAQ section and contact us there. \r\n\r\nError code:1044", new DialogUtils.OnErrorButtonClickListenter() {
                     @Override
                     public void okClick() {
                         MobclickAgent.onEvent(Step04ApConnectActivity.this, "17005");
@@ -583,4 +615,13 @@ public class Step04ApConnectActivity extends BaseActivity {
         MobclickAgent.onPause(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SETTING_REQ_CODE){
+            if (WifiUtils.isWifiConnected(Step04ApConnectActivity.this)){
+                new checkNodeIsOnline().execute();
+            }
+        }
+    }
 }

@@ -61,18 +61,44 @@
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
-        <cc.seeed.iot.view.FontTextView
-            android:id="@+id/mTvTip"
+        <RelativeLayout
+            android:id="@+id/mRlMoreSetting"
             android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="match_parent"
             android:background="#ffffff"
             android:layout_above="@id/mStepView"
-            android:gravity="center"
-            android:text="Please check if Wio app get Wi-Fi permission from your phone and make sure there's available Wi-Fi around."
-            android:textColor="#4a4a4a"
-            android:textSize="16sp"
-            app:cusTextFont="@string/Proxima_Nova_Regular" />
+            android:layout_height="match_parent">
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvTip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="#ffffff"
+                android:text="Please check if Wio app get Wi-Fi permission from your phone and make sure there's available Wi-Fi around."
+                android:textColor="#4a4a4a"
+                android:textSize="16sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+            <Button
+                android:id="@+id/mBtnGotoAppConfigView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/mTvTip"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/btn_long_bg"
+                android:textAllCaps="false"
+                android:elevation="5dp"
+                android:text="Go to setting"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 

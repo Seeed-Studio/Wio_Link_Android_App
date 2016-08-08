@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.umeng.socialize.UMShareAPI;
 
 import java.util.List;
 
@@ -27,6 +26,7 @@ import cc.seeed.iot.util.ShareUtils;
 import cc.seeed.iot.util.TimeUtil;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
+import cc.seeed.iot.web.WebActivity;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
 /**
@@ -142,8 +142,8 @@ public class GroveDetailActivity extends BaseActivity {
 
     @OnClick(R.id.mLlLinkWiki)
     public void onClick() {
-     /*   Intent intent = new Intent(this, WebActivity.class);
-        intent.putExtra(WebActivity.Intent_Url,"http://www.seeedstudio.com/wiki/Grove_-_Magnetic_Switch");
+      /*  Intent intent = new Intent(this, WebActivity.class);
+        intent.putExtra(WebActivity.Param_Url,grove.WikiURL + "?utm_source=Wio&utm_medium=Android&utm_campaign=WIKI");
         startActivity(intent);*/
         Uri uri = Uri.parse(grove.WikiURL + "?utm_source=Wio&utm_medium=Android&utm_campaign=WIKI");
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);

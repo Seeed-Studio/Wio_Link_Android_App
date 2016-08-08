@@ -1,5 +1,6 @@
 package cc.seeed.iot.util;
 
+import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
@@ -11,9 +12,11 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Build;
 import android.os.RemoteException;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.widget.Toast;
 
 
 import com.facebook.internal.PermissionType;
@@ -141,6 +144,26 @@ public class SystemUtils {
         PackageManager pm = App.getApp().getPackageManager();
         return  (PackageManager.PERMISSION_GRANTED ==pm.checkPermission(per,getPackageInfo().packageName));
 
+    }
+
+    public static void gotoAppConfigView(Activity activity) {
+        PackageInfo info = getPackageInfo();
+        Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", info.packageName, null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings","com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName",info.packageName);
+        }
+
+        try {
+            activity.startActivity(localIntent);
+        } catch (Exception e) {
+//            App.showToastShrot("");
+        }
     }
 
 }

@@ -92,6 +92,7 @@
         <activity android:name=".ui_main.WebActivity" />
         <activity android:name=".activity.NodeSettingActivity" />
         <activity android:name="cc.seeed.iot.ui_main.MainSettingActivity" />
+        <activity android:name=".web.WebActivity"/>
         <activity android:name=".activity.FeedbackActivity"
             android:windowSoftInputMode="stateHidden|adjustPan"/>
         <activity android:name="cc.seeed.iot.activity.TestActivity"

@@ -16,10 +16,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
+import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
@@ -40,13 +43,14 @@ import cc.seeed.iot.adapter.add_node.WifiRecyclerViewHolder;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.MLog;
+import cc.seeed.iot.util.SystemUtils;
 import cc.seeed.iot.util.WifiUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.view.StepView;
 
 
 public class Step02WifiListActivity extends BaseActivity
-        implements WifiRecyclerViewHolder.IMyViewHolderClicks {
+        implements WifiRecyclerViewHolder.IMyViewHolderClicks, View.OnClickListener {
     private static final String AP_IP = "192.168.4.1";
     private final static String PION_WIFI_PREFIX = "PionOne_";
     private final static String WIO_WIFI_PREFIX = "Wio";
@@ -72,6 +76,10 @@ public class Step02WifiListActivity extends BaseActivity
     TextView mTip;
     @InjectView(R.id.mTvTip)
     FontTextView mTvTip;
+    @InjectView(R.id.mRlMoreSetting)
+    RelativeLayout mRlMoreSetting;
+    @InjectView(R.id.mBtnGotoAppConfigView)
+    Button mBtnGotoAppConfigView;
     @InjectView(R.id.wifi_list)
     RecyclerView mWifiListView;
     @InjectView(R.id.progressBar)
@@ -92,6 +100,7 @@ public class Step02WifiListActivity extends BaseActivity
         initToolBar();
         initData();
 
+        mBtnGotoAppConfigView.setOnClickListener(this);
     }
 
     private void initToolBar() {
@@ -106,7 +115,7 @@ public class Step02WifiListActivity extends BaseActivity
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //   App.showToastShrot("没有权限");
-            mTvTip.setVisibility(View.VISIBLE);
+            mRlMoreSetting.setVisibility(View.VISIBLE);
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSIONS);
             //申请WRITE_EXTERNAL_STORAGE权限
             //  ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 10);
@@ -195,9 +204,9 @@ public class Step02WifiListActivity extends BaseActivity
             }
 
             if (scanNoPionResult == null || scanNoPionResult.size() == 0) {
-                mTvTip.setVisibility(View.VISIBLE);
+                mRlMoreSetting.setVisibility(View.VISIBLE);
             } else {
-                mTvTip.setVisibility(View.GONE);
+                mRlMoreSetting.setVisibility(View.GONE);
             }
 
         }
@@ -209,21 +218,29 @@ public class Step02WifiListActivity extends BaseActivity
     public void onItem(View caller) {
         int position = mWifiListView.getChildLayoutPosition(caller);
         scanResult = mWifiListAdapter.getItem(position);
-        String pwd = App.getSp().getString(scanResult.SSID, "");
-        DialogUtils.showEditOneRowDialog(Step02WifiListActivity.this, "Enter Wifi Password", pwd, new DialogUtils.ButtonEditClickListenter() {
+        final String oldPwd = App.getSp().getString(scanResult.SSID, "");
+        DialogUtils.showEditOneRowDialog(Step02WifiListActivity.this, "Enter Wifi Password", oldPwd, new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String pwd) {
                 MobclickAgent.onEvent(Step02WifiListActivity.this, "17003");
                 dialog.dismiss();
                 wifiPwd = pwd;
-                connectWifi(scanResult.SSID, pwd);
+                boolean isChange = true;
+                if (!TextUtils.isEmpty(oldPwd) && oldPwd.equals(wifiPwd)){
+                    isChange = false;
+                }
+                connectWifi(scanResult.SSID, pwd,isChange);
             }
         });
     }
 
     int flag = 0;
 
-    private void connectWifi(String ssid, String pwd) {
+    private void connectWifi(String ssid, String pwd, boolean isChange) {
+        if (!isChange){
+            gotoStep03();
+            return;
+        }
         flag = 0;
         final Timer timer = new Timer();
         dialog = DialogUtils.showProgressDialog(Step02WifiListActivity.this, "Connecting to " + scanResult.SSID + " WiFI ");
@@ -240,15 +257,16 @@ public class Step02WifiListActivity extends BaseActivity
                         @Override
                         public void run() {
                             if (!isFinishing()) {
-                                DialogUtils.showErrorDialog(Step02WifiListActivity.this, "Fail connect to Wifi", getString(R.string.dialog_btn_tryAgain),
-                                        getString(R.string.dialog_btn_Cancel), getString(R.string.cont_connection_wifi), new DialogUtils.OnErrorButtonClickListenter() {
+                                DialogUtils.showErrorDialog(Step02WifiListActivity.this, "Fail connect to Wi-Fi", getString(R.string.dialog_btn_tryAgain),
+                                        getString(R.string.dialog_btn_NEXT), getString(R.string.cont_connection_wifi), new DialogUtils.OnErrorButtonClickListenter() {
                                             @Override
                                             public void okClick() {
-                                                connectWifi(scanResult.SSID, wifiPwd);
+                                                connectWifi(scanResult.SSID, wifiPwd,true);
                                             }
 
                                             @Override
                                             public void cancelClick() {
+                                                gotoStep03();
                                             }
                                         });
                             }
@@ -300,6 +318,15 @@ public class Step02WifiListActivity extends BaseActivity
             }
         }
     };
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.mBtnGotoAppConfigView:
+                SystemUtils.gotoAppConfigView(this);
+                break;
+        }
+    }
 
     private class ScanWifi extends Thread {
         public void run() {

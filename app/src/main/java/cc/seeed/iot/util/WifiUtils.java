@@ -58,6 +58,12 @@ public class WifiUtils {
         }
     }
 
+    public static String getCurrentSsid(Context context) {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+        return wifiInfo.getSSID(); //getSSID return "ssid"
+    }
+
     // 检查当前WIFI状态
     public int checkState() {
         return mWifiManager.getWifiState();
@@ -183,16 +189,18 @@ public class WifiUtils {
             }
         }*/
 
-            int wcgID = mWifiManager.addNetwork(wcg);
-            if (wcgID >= 0) {
-                boolean b = mWifiManager.enableNetwork(wcgID, true);
-            }
-            System.out.println("a--" + wcgID);
+        int wcgID = mWifiManager.addNetwork(wcg);
+        mWifiManager.disconnect();
+        if (wcgID >= 0) {
+            boolean b = mWifiManager.enableNetwork(wcgID, true);
+        }
+        mWifiManager.reconnect();
+        System.out.println("a--" + wcgID);
 //        System.out.println("b--" + b);
-            System.out.println("connected: " + isWifiConnected(context));
+        System.out.println("connected: " + isWifiConnected(context));
     }
 
-    public boolean isWifiConnected(Context context) {
+    public static boolean isWifiConnected(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo wifiNetworkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 

@@ -29,6 +29,7 @@
     <string name="dialog_btn_OK">OK</string>
     <string name="dialog_btn_Cancel">CANCEL</string>
     <string name="dialog_btn_FAQ">FAQ</string>
+    <string name="dialog_btn_NEXT">NEXT</string>
     <string name="server_global">Global (new)</string>
     <string name="server_old_global">Global (old)</string>
     <string name="server_chinese">Chinese</string>
@@ -52,7 +53,7 @@
 
     <!--Smart Config-->
     <string name="smartconfig_ready">Next</string>
-    <string name="smartconfig_connect">Connect Your Node to WiFi</string>
+    <string name="smartconfig_connect">Connect Your Node to Wi-Fi</string>
     <string name="smartconfig_error">Connection Failed</string>
     <string name="smartconfig_connected">Connected</string>
 
@@ -65,11 +66,11 @@
     <string name="smartconfig_btn_play">Let\'s Play</string>Fc
 
     <string name="smartconfig_tips_connect">Smart config help you to connect your\n
-        IoT Node devices to WiFi AP which\n
+        IoT Node devices to Wi-Fi AP which\n
         SSID input above.
     </string>
     <string name="ap_config_tips_connect">This help you to connect your\n
-        wio to WiFi AP which\n
+        wio to Wi-Fi AP which\n
         SSID input above.
     </string>
     <string name="smartconfig_tips_failed">If you have any issuse, please visit:\n
@@ -167,15 +168,16 @@
     <string name="customer_server">Customized Server</string>
     <string name="delete_device">Delete this device</string>
     <string name="toolBar_title">Device Setting</string>
-    <string name="cont_connection_wifi">Could not connection to Wi-Fi. Please check Wi-Fi password and try again</string>
-    <string name="link_to_wifi">Please connect to wifi network before you start</string>
+    <string name="cont_connection_wifi">Could not connection to Wi-Fi. Please check Wi-Fi password and try again\r\n\r\nError code:1021</string>
+    <string name="cont_connection_wio_wifi">Could not connect to Wio Wi-fi hotspot, please try again or manually choose Wio\'s Wi-Fi hotspot in system settings.\r\n\r\n Error code:1031</string>
+    <string name="link_to_wifi">Please connect to Wi-Fi network before you start</string>
 
     <!-- add device step 01-->
     <string name="add_device_step01_link_title">Setup Your Wio Link</string>
     <string name="add_device_step01_node_title">Setup Your Wio Node</string>
     <string name="add_device_step01_change_wifi">Change Wi-Fi Networks</string>
     <string name="add_device_step01_progress_connect_server">connect server...</string>
-    <string name="add_device_step01_err_not_connect_wifi">You are not connected to Wifi</string>
+    <string name="add_device_step01_err_not_connect_wifi">You are not connected to Wi-fi</string>
 
     <!-- add device step 02-->
     <string name="title_wifi_list_activity">Connect to Wi-Fi Network</string>

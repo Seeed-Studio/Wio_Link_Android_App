@@ -1,13 +1,12 @@
 package cc.seeed.iot.activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -17,7 +16,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.umeng.analytics.MobclickAgent;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -29,26 +27,19 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.activity.add_step.Step04ApConnectActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.udp.ConfigUdpSocket;
 import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.ui_main.WebActivity;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.LocationUtil;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.NetworkUtils;
 import cc.seeed.iot.util.RegularUtils;
+import cc.seeed.iot.util.SystemUtils;
 import cc.seeed.iot.util.ToolUtil;
-import cc.seeed.iot.webapi.IotApi;
-import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.Node;
-import cc.seeed.iot.webapi.model.NodeListResponse;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import cc.seeed.iot.web.WebActivity;
 
 
 /**
@@ -64,6 +55,10 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     EditText mEtRegular;
     @InjectView(R.id.mBtnCheckOut)
     Button mBtnCheckOut;
+    @InjectView(R.id.mEtWebSite)
+    EditText mEtWebSite;
+    @InjectView(R.id.mBtnWebSite)
+    Button mBtnWebSite;
 
     String order;
     @InjectView(R.id.mEtIpAdress)
@@ -91,7 +86,6 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     @InjectView(R.id.mBtnGithub)
     Button mBtnGithub;
 
-    private ConfigUdpSocket udpClient;
     public int checkId = 0;
     LocationUtil locationUtil;
 
@@ -142,7 +136,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
 
-    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi, R.id.mBtnEditName, R.id.mBtnNodeResult, R.id.mBtnGithub})
+    @OnClick({R.id.mBtnSend, R.id.mBtnCheckOut, R.id.mBtngetIp, R.id.mBtnCreatUser, R.id.mBtnOpenWifi, R.id.mBtnEditName, R.id.mBtnNodeResult, R.id.mBtnGithub,R.id.mBtnWebSite})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.mBtnSend:
@@ -154,6 +148,9 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             case R.id.mBtngetIp:
                 getDomain();
                 break;
+            case R.id.mBtnWebSite:
+                gotoWebView();
+                break;
             case R.id.mBtnCreatUser:
                 addUser();
                 break;
@@ -163,7 +160,9 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 break;
             case R.id.mBtnEditName:
 //                DialogUtils.showEditNodeNameDialog(this, "", null);
-                showDialog();
+              //  showDialog();
+               // gotoConfig();
+                gotoWifiSetting();
                 //  DialogUtils.showWarningDialog(this,null);
                 //  new LocationUtil().startLocation(this);
                 //   locationUtil.startLocation();
@@ -176,13 +175,38 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                 String url = "https://github.com/login/oauth/authorize?client_id=1af08fd6cf012a0aeb49&redirect_uri=http://www.seeedstudio.com&scope=user:follow%20user:email";
 
                 Intent intent = new Intent(this, WebActivity.class);
-                intent.putExtra(WebActivity.Intent_Url, url);
+                intent.putExtra(WebActivity.Param_Url, url);
                 startActivity(intent);
                 break;
         }
+
     }
 
-    private void showDialog(){
+    private void gotoWebView(){
+        String Url = mEtWebSite.getText().toString().trim();
+        if (!RegularUtils.isWebsite(Url)){
+            App.showToastShrot("网址不合法");
+        }else {
+            Intent intent = new Intent(this, WebActivity.class);
+            intent.putExtra(WebActivity.Param_Url,Url);
+            startActivity(intent);
+        }
+    }
+
+    private void gotoWifiSetting(){
+        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)); //直接进入手机中的wifi网络设置界面
+      /*  Intent wifiSettingsIntent = new Intent("android.settings.WIFI_SETTINGS");
+        startActivity(wifiSettingsIntent);*/
+       /* Intent intent = new Intent();
+        intent.setAction("android.net.wifi.PICK_WIFI_NETWORK");
+        intent.putExtra("extra_prefs_show_button_bar", true);
+//intent.putExtra("extra_prefs_set_next_text", "完成");
+//intent.putExtra("extra_prefs_set_back_text", "返回");
+        intent.putExtra("wifi_enable_next_on_connect", true);
+        startActivity(intent);*/
+    }
+
+    private void showDialog() {
         new checkNodeIsOnline().execute();
     }
 
@@ -323,7 +347,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         }
     }
 
-    public void sendOrder(){
+    public void sendOrder() {
         order = mEtOrder.getText().toString().trim();
         if (TextUtils.isEmpty(order)) {
             App.showToastShrot("input is emputy");
@@ -332,7 +356,12 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    udpClient = new ConfigUdpSocket();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    ConfigUdpSocket  udpClient = new ConfigUdpSocket();
                     udpClient.setSoTimeout(10000); //1s timeout
                     udpClient.sendData(order, "192.168.4.1");
                     try {
@@ -341,7 +370,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
                             MLog.d(this, "success");
                         }
                     } catch (SocketTimeoutException e) {
-                        udpClient.setSoTimeout(30000);
+                        udpClient.setSoTimeout(3000);
                         udpClient.sendData(order, "192.168.4.1");
                         MLog.d("time out");
                         runOnUiThread(new Runnable() {
@@ -383,6 +412,36 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
         dialog.setCancelable(true);
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
+    }
+
+    public void gotoConfig() {
+       /* PackageInfo info = SystemUtils.getPackageInfo();
+        Intent i = new Intent("miui.intent.action.APP_PERM_EDITOR");
+        i.setClassName("com.android.settings", "com.miui.securitycenter.permission.AppPermissionsEditor");
+        i.putExtra("extra_package_uid", info.applicationInfo.uid);
+        try {
+            startActivity(i);
+        } catch (Exception e) {
+            Toast.makeText(this, "只有MIUI才可以设置哦", Toast.LENGTH_SHORT).show();
+        }*/
+
+        /*Intent localIntent = new Intent();
+        localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (Build.VERSION.SDK_INT >= 9) {
+            localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+            localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+        } else if (Build.VERSION.SDK_INT <= 8) {
+            localIntent.setAction(Intent.ACTION_VIEW);
+            localIntent.setClassName("com.android.settings","com.android.settings.InstalledAppDetails");
+            localIntent.putExtra("com.android.settings.ApplicationPkgName", getPackageName());
+        }
+
+        try {
+            startActivity(localIntent);
+        } catch (Exception e) {
+            Toast.makeText(this, "只有MIUI才可以设置哦", Toast.LENGTH_SHORT).show();
+        }*/
+        SystemUtils.gotoAppConfigView(this);
     }
 
 }

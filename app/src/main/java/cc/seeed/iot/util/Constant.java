@@ -51,6 +51,7 @@ public class Constant {
     public final static String SP_APP_VERSION_JSON = "sp_app_version_json";
     public final static String SP_APP_SERVER_REQ_TIME = "sp_app_server_req_time";
     public final static String SP_APP_SERVER_REMIND_AGAIN = "sp_app_server_remind_again";
+    public final static String SP_Connect_Wifi_TimeOut_Count = "sp_connect_wifi_timeout_count";
 
 
     public enum Server {
