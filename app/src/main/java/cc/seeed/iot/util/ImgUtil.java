@@ -89,7 +89,7 @@ public class ImgUtil {
             String s = uuid;
             if (uuid.startsWith("/")) {
                 s = uuid.replaceFirst("/", "");
-            }else if (uuid.startsWith("http://")){
+            }else if (uuid.startsWith("http")){
                 return Uri.parse(uuid);
             }
             return Uri.parse(CommonUrl.Image_Prefix.getVal() + s);

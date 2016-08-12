@@ -316,6 +316,7 @@ public class Step03WifiWioListActivity extends BaseActivity
                                             .setNeutralButton("Setting", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
+                                                    timer.cancel();
                                                     Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
                                                     startActivityForResult(intent, SETTING_REQ_CODE);
                                                 }
