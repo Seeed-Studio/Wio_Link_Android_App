@@ -14,4 +14,4 @@ Project on [Kickstarter](https://www.kickstarter.com/projects/seeed/wio-link-3-s
 The Wio Server here: https://github.com/Seeed-Studio/Wio_Link
 
 ## Forum
-http://www.seeedstudio.com/forum/viewforum.php?f=72&sid=05f09e956d8be7f4f847d4d430a53d92
+http://www.seeed.cc/topics.html?t=wio
