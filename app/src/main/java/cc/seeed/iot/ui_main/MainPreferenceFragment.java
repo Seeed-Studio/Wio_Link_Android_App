@@ -7,9 +7,10 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 
-import cc.seeed.iot.MyApplication;
+import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.util.Common;
+import cc.seeed.iot.activity.user.ChangePwdActivity;
+import cc.seeed.iot.util.CommonUrl;
 
 /**
  * Created by tenwong on 15/12/14.
@@ -32,8 +33,8 @@ public class MainPreferenceFragment extends PreferenceFragment implements Prefer
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.main_preference);
         context = getActivity().getApplication();
-        ota_ip = ((MyApplication) getActivity().getApplication()).getOtaServerIP();
-        ota_url = ((MyApplication) getActivity().getApplication()).getOtaServerUrl();
+        ota_ip = ((App) getActivity().getApplication()).getOtaServerIP();
+        ota_url = ((App) getActivity().getApplication()).getOtaServerUrl();
 
 
         ep_server = (EditTextPreference) findPreference(PREF_OTA_SERVER);
@@ -43,10 +44,8 @@ public class MainPreferenceFragment extends PreferenceFragment implements Prefer
     }
 
     private void initView() {
-        if (ota_ip.equals(Common.OTA_CHINA_IP)) {
-            ep_server.setSummary(ota_url + " (China)");
-        } else if (ota_ip.equals(Common.OTA_INTERNATIONAL_IP)) {
-            ep_server.setSummary(ota_url + " (International)");
+        if (ota_url.equals(CommonUrl.OTA_SERVER_URL)) {
+            ep_server.setSummary(ota_url + " (Default Server)");
         } else {
             ep_server.setSummary(ota_ip + " (Custom)");
         }

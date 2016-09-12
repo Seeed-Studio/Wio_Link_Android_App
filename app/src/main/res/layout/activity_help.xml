@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="5dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <cc.seeed.iot.view.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="19dp"
+                android:layout_marginTop="20dp"
+                android:text="Blue led indicates network status, helps dignosing which status your Wio device is at."
+                android:textColor="#777777"
+                android:textSize="13sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="#f6f6f6" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mLvSupport"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <cc.seeed.iot.view.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="19dp"
+                android:layout_marginTop="24dp"
+                android:text="If this is still not sloving your problem, check out our Forum (http://seeed.cc/wio) or email us at wio@seeed.cc"
+                android:textColor="#777777"
+                android:textSize="13sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="5dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <LinearLayout
+        android:id="@+id/mLLName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/menu_item_bg"
+        android:layout_marginTop="34dp"
+        android:orientation="vertical"
+        android:paddingLeft="18dp">
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/device_name"
+            android:textColor="#4a4a4a"
+            android:textSize="16sp"
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Wio Link 1"
+            android:textColor="#9b9b9b"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/mLLConnectServer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/menu_item_bg"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical"
+        android:paddingLeft="18dp">
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/customer_server"
+            android:textColor="#4a4a4a"
+            android:textSize="16sp"
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvConnectServer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Seeed Server ( default)"
+            android:textColor="#9b9b9b"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp"
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="39dp"
+        android:background="#f6f6f6"/>
+
+    <LinearLayout
+        android:id="@+id/mLlDeleteDevice"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:background="@drawable/menu_item_bg"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        android:paddingLeft="18dp">
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/delete_device"
+            android:gravity="center_vertical"
+            android:textColor="#9b9b9b"
+            android:textSize="16sp"
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -21,7 +21,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:drawableLeft="@mipmap/icon"
+        android:drawableLeft="@mipmap/logo"
         android:drawablePadding="8dp"
         android:fontFamily="sans-serif-condensed"
         android:gravity="center_vertical"

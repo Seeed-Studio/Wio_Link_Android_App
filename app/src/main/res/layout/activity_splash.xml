@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="cc.seeed.iot.ui_splash.SplashActivity">
+    tools:context="cc.seeed.iot.activity.WelcomeActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -10,5 +10,5 @@
         android:background="@color/setup_blue"
         android:contentDescription="splash"
         android:scaleType="centerCrop"
-        android:src="@drawable/logo" />
+        android:src="@mipmap/welcome" />
 </RelativeLayout>

@@ -1,13 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/grove_type"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:gravity="center_horizontal|center_vertical"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:text="All"
-    android:textSize="20sp">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-</TextView>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:background="@drawable/grove_filter_tag_bg"
+        android:layout_height="46dp">
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/grove_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cusTextFont="@string/Proxima_Nova_Semibold"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_centerInParent="true"
+            android:singleLine="true"
+            android:textColor="#A6000000"
+            android:text="All"
+            android:textSize="14sp"/>
+
+        <View
+            android:id="@+id/mViewTag"
+            android:layout_width="match_parent"
+            android:layout_height="3.5dp"
+            android:layout_alignLeft="@id/grove_type"
+            android:layout_alignRight="@id/grove_type"
+            android:layout_alignParentBottom="true"
+            android:background="#FF3A4271" />
+    </RelativeLayout>
+</LinearLayout>

@@ -35,11 +35,21 @@
 
     <color name="background">#ECEFF1</color>
 
-    <!-- Common -->
-    <color name="primary">#96141E</color>
-    <color name="primary_dark">#8c141e</color>
-    <color name="primary_darker">#82141e</color>
-    <color name="second_color">#25467d</color>
+    <!-- SlidingTabStrip-->
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="activity_bg">#ffffff</color>
+
+    <!-- grove_filter_tag_bg-->
+    <color name="tag_check_normal">#ffffff</color>
+    <color name="tag_check_press">#f6f6f6</color>
+    <color name="tag_text_normal">#777777</color>
+    <color name="tag_text_press">#000000</color>
+
+    <!-- CommonUrl -->
+    <color name="primary">#3A4b71</color>
+    <color name="primary_dark">#324061</color>
+    <color name="primary_darker">#3A4b71</color>
+    <color name="second_color">#3A4b71</color>
     <color name="third_color">#5a5a5a</color>
     <color name="accent">#FFFFFF</color>
 
@@ -71,5 +81,13 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
+
+    <!-- main menu-->
+    <color name="main_menu_item">#a5000000</color>
+
+    <!-- add device-->
+    <color name="step_did">#FFFFFFFF</color>
+    <color name="step_do1">#21295B</color>
+    <color name="step_do2">#21295B</color>
 
 </resources>

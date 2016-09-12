@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="#ffffff"
+        android:paddingLeft="25dp"
+        android:paddingRight="27dp"
+        android:layout_height="70dp">
+
+        <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/mIvState"
+            android:layout_width="30dp"
+            android:layout_centerVertical="true"
+            android:layout_height="30dp"
+            android:src="@mipmap/help01_breathing" />
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvQues"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/mIvState"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            android:text="Requesting IP address from router"
+            android:layout_alignParentRight="true"
+            android:textColor="#4A4A4A"
+            android:textSize="14sp"
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+    </RelativeLayout>
+
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTvAnswer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f6f6f6"
+        android:padding="27dp"
+        android:text="When blue LED is breathing, your Wio device is under Setup mode and ready to be connected.
+
+To set your WIO device to Setup mode, please press Config button for WIO Link, RST button for WIO Node."
+        android:textColor="#3A4B71"
+        android:textSize="14sp"
+        app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+</LinearLayout>

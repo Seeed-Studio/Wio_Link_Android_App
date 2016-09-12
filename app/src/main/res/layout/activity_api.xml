@@ -20,11 +20,16 @@
         android:layout_height="3dp"
         android:visibility="gone" />
 
-    <WebView
-        android:id="@+id/api"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/mSRL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
-    </WebView>
+        <WebView
+            android:id="@+id/api"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </WebView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

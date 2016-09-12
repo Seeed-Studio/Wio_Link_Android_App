@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff">
+
+        <LinearLayout
+            android:id="@+id/mLLOrtherLogin"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:id="@+id/mRlGoogle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_google_login_bg">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/google_gray" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff" />
+
+            <RelativeLayout
+                android:id="@+id/mRlFacebook"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_google_login_bg">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/facebook_gray" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/mLLOrtherLogin"
+            android:layout_marginBottom="11dp"
+            android:gravity="center_horizontal"
+            android:text="OR JOIN WITH"
+            android:textColor="#9b9b9b"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/mLLOrtherLogin"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="#FF3A4271"
+                android:elevation="5dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:id="@+id/mRlRegist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <cc.seeed.iot.view.FontTextView
+                        android:id="@+id/mTvRegist"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="1dp"
+                        android:singleLine="true"
+                        android:text="SIGN UP"
+                        android:textColor="#ffffff"
+                        android:textSize="16sp"
+                        app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                    <View
+                        android:id="@+id/mRegistrTag"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/white"
+                        android:visibility="gone" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/mRlLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <cc.seeed.iot.view.FontTextView
+                        android:id="@+id/mTvLogin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="1dp"
+                        android:singleLine="true"
+                        android:text="LOG IN"
+                        android:textColor="#b2ffffff"
+                        android:textSize="16sp"
+                        app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                    <View
+                        android:id="@+id/mLoginTag"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/white" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/mMainPager"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="54dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="88dp"
+                android:background="#FF252C59"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:src="@mipmap/seeed_logo" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="14dp"
+                    android:layout_marginRight="21dp"
+                    android:text="If you registered with Seeed before, simply login with your Seeed account"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Proxima_Nova_Bold" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="35dp">
+
+                <RelativeLayout
+                    android:id="@+id/mRlSelectServer"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <cc.seeed.iot.view.FontTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="3dp"
+                            android:text="Server Location:"
+                            android:textColor="#9B9B9B"
+                            android:textSize="14sp"
+                            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                        <cc.seeed.iot.view.FontTextView
+                            android:id="@+id/mTvSelectServer"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:text="Global"
+                            android:textColor="#FF252C59"
+                            android:textSize="14sp"
+                            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="34dp"
+                            android:src="@mipmap/arrow_right" />
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

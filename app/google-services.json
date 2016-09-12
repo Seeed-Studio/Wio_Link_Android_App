@@ -1,0 +1,79 @@
+{
+  "project_info": {
+    "project_number": "350434064578",
+    "project_id": "wio-link"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350434064578:android:999bf44ccc1df0c4",
+        "android_client_info": {
+          "package_name": "cc.seeed.iot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350434064578-u19t8r6e2l019dceh5rr0knspbop0ep8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvkYAXcEaUIkSnoP7cBsaZq-9OZHgV6Hw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:350434064578:android:b0c096f5be65d0b1",
+        "android_client_info": {
+          "package_name": "cc.seeed.iot.ap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "350434064578-ntcsdur516cbg6d5vfi328mshnkcpcrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "cc.seeed.iot.ap",
+            "certificate_hash": "52E2180184E6E1292B5F18F0453CBF32BD293999"
+          }
+        },
+        {
+          "client_id": "350434064578-u19t8r6e2l019dceh5rr0knspbop0ep8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvkYAXcEaUIkSnoP7cBsaZq-9OZHgV6Hw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

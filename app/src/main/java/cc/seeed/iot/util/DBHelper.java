@@ -1,5 +1,6 @@
 package cc.seeed.iot.util;
 
+import com.activeandroid.Model;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
@@ -70,11 +71,31 @@ public class DBHelper {
                 .execute();
     }
 
+    public static List<GroverDriver> getSearchGroves(String key) {
+        return new Select()
+                .from(GroverDriver.class)
+                .where("grove_name like '%"+key+"%'")
+                .execute();
+    }
+
     public static void delGrovesAll(){
         new Delete()
                 .from(GroverDriver.class)
                 .execute();
     }
 
+
+    public static boolean isHasNewGrove() {
+        long nowTime = System.currentTimeMillis() / 1000 - Constant.SaveNewGroveTime;
+        List<Model> list = new Select().
+                from(GroverDriver.class)
+                .where("added_at > " + nowTime)
+                .execute();
+        if (list == null || list.size() == 0){
+            return false;
+        }else {
+            return true;
+        }
+    }
 
 }

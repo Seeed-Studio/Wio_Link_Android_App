@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/mLLUserInfo"
+            android:layout_width="match_parent"
+            android:layout_height="172dp"
+            android:background="@color/second_color"
+            android:orientation="vertical"
+            android:paddingLeft="35dp">
+
+            <!--  app:placeholderImage="@mipmap/icon"-->
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/mSDVAvatar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="54dp"
+                app:placeholderImageScaleType="fitXY"
+                android:visibility="invisible"
+                app:roundAsCircle="true"
+                app:roundingBorderColor="#cacaca"
+                app:roundingBorderWidth="1dp" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:singleLine="true"
+                android:text=""
+                android:textColor="#ffffff"
+                android:textSize="12sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvDeviceNum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:singleLine="true"
+                android:text="3 DEVICES"
+                android:textColor="#7dffffff"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/mTvSupportDevices"
+                style="@style/menuItemStyle"
+                android:text="Groves" />
+
+            <ImageView
+                android:id="@+id/mIvNewGrove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="90dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/new_"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/mTvFAQ"
+            style="@style/menuItemStyle"
+            android:text="Support" />
+
+
+        <TextView
+            android:id="@+id/mTvGetDevices"
+            android:visibility="gone"
+            style="@style/menuItemStyle"
+            android:text="Get Hardwares" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#9b9b9b"/>
+
+        <TextView
+            android:id="@+id/mTvSetting"
+            android:layout_marginTop="10dp"
+            style="@style/menuItemStyle"
+            android:text="Setting" />
+
+
+        <TextView
+            android:id="@+id/mTVAbout"
+            style="@style/menuItemStyle"
+            android:text="About" />
+
+        <TextView
+            android:id="@+id/mTvFeedBack"
+            style="@style/menuItemStyle"
+            android:text="Feedback" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/mTvUpdateApp"
+                style="@style/menuItemStyle"
+                android:visibility="visible"
+                android:text="Update App" />
+
+            <ImageView
+                android:id="@+id/mIvUpdateApp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="115dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/new_"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#9b9b9b"/>
+    </LinearLayout>
+</LinearLayout>

@@ -1,9 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="5dp"
-    android:background="?attr/selectableItemBackground"
+    android:background="#ffffffff"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -16,23 +15,91 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <TextView
-        android:id="@+id/tip"
-        android:layout_width="wrap_content"
+    <!--  style="?android:attr/progressBarStyleHorizontal"-->
+    <!--  style="@style/ProgressBar_Mini"-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/ProgressBar_Mini"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/location_tip"
-        android:layout_gravity="top|center"
-        android:gravity="center"
-        android:textSize="18sp"
-        android:padding="4dp"
-        android:singleLine="false"
-        android:visibility="gone"/>
+        android:max="100"
+        android:progress="0" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/wifi_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <cc.seeed.iot.view.StepView
+            android:id="@+id/mStepView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/mStepView"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center"
+                android:gravity="center"
+                android:padding="4dp"
+                android:singleLine="false"
+                android:text="@string/location_tip"
+                android:textSize="18sp"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/wifi_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/mRlMoreSetting"
+            android:layout_width="match_parent"
+            android:background="#ffffff"
+            android:layout_above="@id/mStepView"
+            android:layout_height="match_parent">
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvTip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center_horizontal"
+                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="#ffffff"
+                android:text="Please check if Wio app get Wi-Fi permission from your phone and make sure there's available Wi-Fi around."
+                android:textColor="#4a4a4a"
+                android:textSize="16sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+            <Button
+                android:id="@+id/mBtnGotoAppConfigView"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/mTvTip"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/btn_long_bg"
+                android:textAllCaps="false"
+                android:elevation="5dp"
+                android:text="Go to setting"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
 </LinearLayout>

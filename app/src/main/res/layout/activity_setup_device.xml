@@ -1,0 +1,139 @@
+<!--suppress ALL -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setup_device"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="5dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/grove_selector"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:background="@drawable/grove_filter_bg"
+                    android:elevation="3dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#fafafa"
+                    android:orientation="vertical">
+
+                    <cc.seeed.iot.view.FontTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:text="Drag and drop Groves you need to below ports"
+                        android:textColor="#777777"
+                        android:textSize="12sp"
+                        app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/grove_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="163dp"
+                        android:layout_marginBottom="19dp"
+                        android:layout_marginTop="9dp"
+                        android:background="?attr/selectableItemBackground"
+                        android:clickable="true" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:background="#FFE7E7E7" />
+
+                <include
+                    layout="@layout/wiolink_layout" />
+
+                <include
+                    layout="@layout/wionode_layout" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:gravity="center"
+                    android:text="New setting only applies after updating firware"
+                    android:textColor="#c7c7c7"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/set_link"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/mRlRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible">
+
+            <ImageView
+                android:id="@+id/mIvRemove"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/remove"
+                android:visibility="visible" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mIvRemove"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="Remove"
+                android:textColor="#4a4a4a"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+        </RelativeLayout>
+
+        <cc.seeed.iot.view.FontButton
+            android:id="@+id/mBtnUpdate"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/btn_update_firmware"
+            android:gravity="center"
+            android:textAllCaps="false"
+            android:text="Update Firmware"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+    </RelativeLayout>
+</RelativeLayout>
