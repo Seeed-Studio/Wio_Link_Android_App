@@ -31,23 +31,9 @@ android {
         }
     }
 
-    signingConfigs {
-        release {
-            storeFile file("E:\\seeed\\wio_link\\seeed.jks")
-            storePassword "depot0510se"
-            keyAlias "seeed"
-            keyPassword "depot0510se"
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled false
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
