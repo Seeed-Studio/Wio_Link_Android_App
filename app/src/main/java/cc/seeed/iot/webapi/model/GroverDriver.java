@@ -77,6 +77,12 @@ public class GroverDriver extends Model {
     @Column(name = "author")
     public String Author;
 
+    @Column(name = "need_hack")
+    public Boolean NeedHack;
+
+    @Column(name = "hack_guide_url")
+    public String HackGuideURL;
+
 
     @Override
     public boolean equals(Object obj) {
