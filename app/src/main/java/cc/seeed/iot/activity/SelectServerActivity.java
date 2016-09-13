@@ -89,20 +89,21 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
     private void initData() {
         serverUrl = App.getApp().getOtaServerUrl();
         serverBean = SystemLogic.getInstance().getServerBean();
-        if (serverBean == null || System.currentTimeMillis() / 1000 - serverBean.getReqTime() > 60 * 60 * 24 * 1) {
-            SystemLogic.getInstance().getServerStopMsg();
-            dialog = DialogUtils.showProgressDialog(this, null);
-        } else {
-            if (System.currentTimeMillis() / 1000 > serverBean.getContent().get(0).getServerEndTime()) {
-                mLlOldGlobalServer.setVisibility(View.GONE);
-                if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
-                    serverUrl = CommonUrl.OTA_INTERNATIONAL_URL;
-                    saveUrlAndIp(CommonUrl.OTA_INTERNATIONAL_URL, CommonUrl.OTA_INTERNATIONAL_IP);
-                }
-            } else {
-                mLlOldGlobalServer.setVisibility(View.VISIBLE);
-            }
-        }
+//        if (serverBean == null || System.currentTimeMillis() / 1000 - serverBean.getReqTime() > 60 * 60 * 24 * 1) {
+//            SystemLogic.getInstance().getServerStopMsg();
+//            dialog = DialogUtils.showProgressDialog(this, null);
+//        } else {
+//            if (System.currentTimeMillis() / 1000 > serverBean.getContent().get(0).getServerEndTime()) {
+//                mLlOldGlobalServer.setVisibility(View.GONE);
+//                if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
+//                    serverUrl = CommonUrl.OTA_INTERNATIONAL_URL;
+//                    saveUrlAndIp(CommonUrl.OTA_INTERNATIONAL_URL, CommonUrl.OTA_INTERNATIONAL_IP);
+//                }
+//            } else {
+//                mLlOldGlobalServer.setVisibility(View.VISIBLE);
+//            }
+//        }
+        mLlOldGlobalServer.setVisibility(View.GONE);
         changeServer = serverUrl;
         if (CommonUrl.OTA_CHINA_URL.equals(serverUrl) || CommonUrl.OTA_CHINA_OLD_URL.equals(serverUrl)) {
             mRbChineseServer.setChecked(true);
