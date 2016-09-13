@@ -54,6 +54,13 @@
                 android:layout_marginLeft="3dp"
                 android:src="@mipmap/new_" />
 
+            <ImageView
+                android:id="@+id/mIvNeedHack"
+                android:layout_width="wrap_content"
+                android:layout_height="14dp"
+                android:layout_marginLeft="3dp"
+                android:src="@mipmap/ic_warning" />
+
         </LinearLayout>
 
         <View

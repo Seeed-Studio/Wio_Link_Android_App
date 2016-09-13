@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -42,6 +43,10 @@ public class GroveDetailActivity extends BaseActivity {
     SimpleDraweeView mGroveImg;
     @InjectView(R.id.mLlLinkWiki)
     LinearLayout mLlLinkWiki;
+    @InjectView(R.id.rlHack)
+    RelativeLayout rlHack;
+    @InjectView(R.id.mLlHack)
+    LinearLayout mLlHack;
     @InjectView(R.id.mTvGroveName)
     FontTextView mTvGroveName;
     @InjectView(R.id.mTvGroveDesc)
@@ -52,6 +57,8 @@ public class GroveDetailActivity extends BaseActivity {
     FontTextView mTvAddDate;
     @InjectView(R.id.mTvContributer)
     FontTextView mTvContributer;
+    @InjectView(R.id.mTvGuide)
+    FontTextView mTvGuide;
     @InjectView(R.id.mLlContributer)
     LinearLayout mLlContributer;
 
@@ -94,6 +101,12 @@ public class GroveDetailActivity extends BaseActivity {
             mLlLinkWiki.setVisibility(View.GONE);
         } else {
             mLlLinkWiki.setVisibility(View.VISIBLE);
+        }
+
+        if (grove.NeedHack) {
+            rlHack.setVisibility(View.VISIBLE);
+        } else {
+            rlHack.setVisibility(View.GONE);
         }
 
         mIvNewGrove.setVisibility(ToolUtil.isNewGrove(grove.AddedAt)?View.VISIBLE:View.GONE);
@@ -150,6 +163,12 @@ public class GroveDetailActivity extends BaseActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.mLlHack)
+    public void hackLink() {
+        Uri uri = Uri.parse(grove.HackGuideURL + "?utm_source=Wio&utm_medium=Android&utm_campaign=GUIDE");
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

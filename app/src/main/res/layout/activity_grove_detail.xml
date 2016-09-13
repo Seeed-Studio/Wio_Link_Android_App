@@ -43,7 +43,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="34dp"
                 android:orientation="horizontal">
 
@@ -109,6 +109,62 @@
                         </LinearLayout>
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/rlHack"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp">
+
+                        <LinearLayout
+                            android:id="@+id/mLlHack"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="19.2dp"
+                                android:layout_height="16.9dp"
+                                android:layout_marginRight="3dp"
+                                android:src="@mipmap/link_wiki" />
+
+                            <cc.seeed.iot.view.FontTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="How to Hack?"
+                                android:textColor="#3A4B71"
+                                android:textSize="14sp"
+                                app:cusTextFont="@string/Proxima_Nova_Bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/mLlHack"
+                            android:gravity="center_vertical">
+
+                            <cc.seeed.iot.view.FontTextView
+                                android:id="@+id/mTvGuide"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:singleLine="true"
+                                android:text="Need hack"
+                                android:maxLength="25"
+                                android:textColor="#3A4B71"
+                                android:textSize="12sp"
+                                app:cusTextFont="@string/Proxima_Nova_Bold" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="12dp"
+                                android:layout_marginLeft="3dp"
+                                android:src="@mipmap/ic_warning" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"

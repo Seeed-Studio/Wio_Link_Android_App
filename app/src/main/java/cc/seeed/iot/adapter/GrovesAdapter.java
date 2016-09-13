@@ -91,6 +91,7 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
         ImgUtil.displayImg(holder.grove_image, grove.ImageURL, R.mipmap.grove_default);
         holder.mGroveNameView.setText(isShowFullName ? grove.GroveName : ToolUtil.getSimpleName(grove.GroveName));
         holder.mIvNewGrove.setVisibility(ToolUtil.isNewGrove(grove.AddedAt)?View.VISIBLE:View.GONE);
+        holder.mIvNeedHack.setVisibility(grove.NeedHack?View.VISIBLE:View.GONE);
     }
 
     @Override
@@ -129,6 +130,7 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
         SimpleDraweeView grove_image;
         FontTextView mGroveNameView;
         ImageView mIvNewGrove;
+        ImageView mIvNeedHack;
         View mView;
 
         public ViewHolder(View itemView) {
@@ -136,6 +138,7 @@ public class GrovesAdapter extends BaseAdapter implements SectionIndexer {
             grove_image = (SimpleDraweeView) itemView.findViewById(R.id.image);
             mGroveNameView = (FontTextView) itemView.findViewById(R.id.name);
             mIvNewGrove = (ImageView) itemView.findViewById(R.id.mIvNewGrove);
+            mIvNeedHack = (ImageView) itemView.findViewById(R.id.mIvNeedHack);
         }
     }
 
