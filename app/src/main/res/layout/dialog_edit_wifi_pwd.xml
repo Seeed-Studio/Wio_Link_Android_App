@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="285dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_bg_write"
+    android:padding="24dp"
+    android:orientation="vertical">
+
+
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enter Wifi Password"
+        android:textColor="#A6000000"
+        android:textSize="20sp"
+        app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+    <cc.seeed.iot.view.FontEditView
+        android:id="@+id/mEtPwd"
+        android:layout_width="match_parent"
+        android:layout_marginTop="48dp"
+        app:cusEditFont="@string/Proxima_Nova_Semibold"
+        android:paddingBottom="20dp"
+        android:singleLine="true"
+        android:textColor="#A6000000"
+        android:textSize="14sp"
+        android:layout_height="wrap_content" />
+
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:text="CANCEL"
+                android:paddingTop="7dp"
+                android:paddingBottom="5dp"
+                android:textColor="#C7C7C7"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvSubmit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="7dp"
+                android:paddingBottom="5dp"
+                android:layout_marginLeft="29dp"
+                android:text="SUBMIT"
+                android:textColor="#4A4A4A"
+                android:textSize="14sp"
+                app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</LinearLayout>

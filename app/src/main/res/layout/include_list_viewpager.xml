@@ -9,13 +9,37 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="5dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+            <LinearLayout
+                android:id="@+id/mLLAddDevice"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+
+                android:layout_marginRight="10dp"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/mIvAddDevice"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@mipmap/add" />
+            </LinearLayout>
+        </RelativeLayout>
+
     </android.support.design.widget.AppBarLayout>
 
     <!--
@@ -26,19 +50,140 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
     -->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/listview"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/mSRL"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/add_node_tip"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFEDEDED"
+          />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <LinearLayout
+        android:id="@+id/mLLNoDevice"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/main_bg"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:visibility="gone"
+            android:src="@drawable/main_bg" />
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:layout_marginRight="43dp"
+            android:layout_marginTop="83dp"
+            android:gravity="center_horizontal"
+            android:text="@string/hint_not_device"
+            android:textColor="#979797"
+            android:textSize="16sp"
+            android:visibility="visible"
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+        <Button
+            android:id="@+id/mBtnAddDevice"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="116dp"
+            android:background="@drawable/btn_long_bg"
+            android:text="@string/add_your_first_device"
+            android:textColor="#ffffff"
+            android:textSize="14sp"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/mRlSelectAddDevies"
+        android:layout_width="match_parent"
+        android:layout_height="207dp"
+        android:background="#F2D7D8DB"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <cc.seeed.iot.view.FontTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"
+            android:text="CHOOSE A DEVICE TO START"
+            android:textColor="#FF4A4A4A"
+            android:textSize="12sp"
+            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="49dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/mLLWioLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:elevation="3dp"
+                    android:background="@drawable/main_select_item_bg"
+                    android:src="@mipmap/link_small_01" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.2dp"
+                    android:text="Wio Link"
+                    android:textColor="#FF4A4A4A"
+                    android:textSize="14sp"
+                    app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/mLLWioNode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="35.5dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="114dp"
+                    android:layout_height="114dp"
+                    android:elevation="3dp"
+                    android:background="@drawable/main_select_item_bg"
+                    android:src="@mipmap/node_small_01" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5.2dp"
+                    android:text="Wio Node"
+                    android:textColor="#FF4A4A4A"
+                    android:textSize="14sp"
+                    app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <!--</android.support.v4.widget.SwipeRefreshLayout>-->
 
@@ -56,6 +201,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
+        android:visibility="gone"
         fab:fab_addButtonColorNormal="@color/primary"
         fab:fab_addButtonColorPressed="@color/primary_dark"
         fab:fab_addButtonPlusIconColor="@color/white"
@@ -81,5 +227,6 @@
             fab:fab_size="mini"
             fab:fab_title="Setup Wio Link" />
     </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
 
 </android.support.design.widget.CoordinatorLayout>

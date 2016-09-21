@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_bg_write"
+    android:orientation="vertical">
+
+    <TextView
+
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="确认接单"
+        android:textColor="#4a90e2"
+        android:textSize="16sp" />
+
+    <!-- <View
+         android:layout_width="match_parent"
+         android:layout_height="1px"
+         android:background="@color/divider_bg" />
+ -->
+
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="match_parent"
+        android:layout_height="141dp"
+        android:layout_above="@+id/rlt_sure"
+        android:gravity="center"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:text="CCCCC"
+        android:textColor="#030303"
+        android:textSize="16sp" />
+    <View
+      style="@style/dividerLine" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_ok"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Confirm"
+            android:textColor="#4a90e2"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+</LinearLayout>

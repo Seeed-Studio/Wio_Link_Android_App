@@ -12,6 +12,8 @@ import java.util.Map;
  */
 @Table(name = "groves")
 public class GroverDriver extends Model {
+
+
     @Column(name = "sku", unique = true, onUniqueConflict = Column.ConflictAction.REPLACE)
     public String SKU;
 
@@ -63,6 +65,25 @@ public class GroverDriver extends Model {
     @Column(name = "construct_arg_list")
     public List<String> ConstructArgList;
 
+    @Column(name = "wiki_url")
+    public String WikiURL;
+
+    @Column(name = "description")
+    public String Description;
+
+    @Column(name = "added_at")
+    public String AddedAt;
+
+    @Column(name = "author")
+    public String Author;
+
+    @Column(name = "need_hack")
+    public Boolean NeedHack = false;
+
+    @Column(name = "hack_guide_url")
+    public String HackGuideURL = "";
+
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -80,6 +101,14 @@ public class GroverDriver extends Model {
         result = result + PRIME + ID;
 
         return result;
+    }
+
+    public String getGroveName() {
+        return GroveName;
+    }
+
+    public void setGroveName(String groveName) {
+        GroveName = groveName;
     }
 
     @Override

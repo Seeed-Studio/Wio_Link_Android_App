@@ -3,13 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".ui_setnode.SetupIotLinkActivity">
     <item
-        android:id="@+id/api"
-        android:orderInCategory="100"
-        android:title="@string/api"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/update"
         android:orderInCategory="200"
+        android:icon="@mipmap/more_down"
         android:title="@string/update"
         app:showAsAction="always" />
 </menu>

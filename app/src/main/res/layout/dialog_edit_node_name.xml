@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:background="#FAFAFA"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:layout_width="97dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/success_write"
+                android:layout_height="97dp" />
+
+        </RelativeLayout>
+
+        <cc.seeed.iot.view.FontTextView
+            android:id="@+id/mTvHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="18dp"
+            android:text="Your device is now ready!\r\n\r\n Name this device if you wish."
+            android:textColor="#777777"
+            android:textSize="13sp"
+            app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+        <cc.seeed.iot.view.FontEditView
+            android:id="@+id/mEtName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Wio Link 1"
+            android:layout_marginTop="37dp"
+            android:singleLine="true"
+            android:textColorHint="#FF9B9B9B"
+            android:textColor="#3A4271"
+            android:textSize="14sp"
+            app:cusEditFont="@string/Proxima_Nova_Semibold" />
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+                <cc.seeed.iot.view.FontButton
+                    android:id="@+id/mTvSubmit"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/btn_long_bg"
+                    android:text="Start Wio-ing"
+                    android:elevation="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:singleLine="true"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="14sp"
+                    app:cusButtonFont="@string/Proxima_Nova_Semibold" />
+
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

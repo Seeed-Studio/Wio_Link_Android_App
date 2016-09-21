@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mWioLinkLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="22dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp">
+
+    <ImageView
+        android:id="@+id/node_view"
+        android:layout_width="170dp"
+        android:layout_height="189dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
+        android:src="@mipmap/link_large" />
+
+  <!--   <ImageButton
+         android:id="@+id/mLinkGrove_01"
+         android:layout_alignTop="@+id/node_view"
+         android:layout_marginTop="34dp"
+         android:scaleType="centerInside"
+         android:layout_marginRight="1dp"
+         android:layout_toLeftOf="@+id/node_view" />-->
+
+    <!--  app:placeholderImage="@mipmap/icon"-->
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mLinkGrove_01"
+        style="@style/NodePinStyle"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="34dp"
+        android:layout_toLeftOf="@+id/node_view"
+        app:actualImageScaleType="centerInside"
+        android:scaleType="centerInside" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mLinkGrove_02"
+        style="@style/NodePinStyle"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="75dp"
+        android:layout_toLeftOf="@+id/node_view"
+        app:actualImageScaleType="centerInside" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mLinkGrove_03"
+        style="@style/NodePinStyle"
+        android:layout_marginRight="1dp"
+        android:layout_marginTop="116dp"
+        android:layout_toLeftOf="@+id/node_view"
+        app:actualImageScaleType="centerInside" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mLinkGrove_04"
+        style="@style/NodePinStyle"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="34dp"
+        android:layout_toRightOf="@+id/node_view"
+        app:actualImageScaleType="centerInside" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mLinkGrove_05"
+        style="@style/NodePinStyle"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="75dp"
+        android:layout_toRightOf="@+id/node_view"
+        app:actualImageScaleType="centerInside" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mLinkGrove_06"
+        style="@style/NodePinStyle"
+        android:layout_marginLeft="1dp"
+        android:layout_marginTop="116dp"
+        android:layout_toRightOf="@+id/node_view"
+        app:actualImageScaleType="centerInside" />
+
+</RelativeLayout>

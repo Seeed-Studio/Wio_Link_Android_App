@@ -13,6 +13,7 @@
         android:paddingTop="56dp">
 
         <ImageView
+            android:id="@+id/mIvLogo"
             android:layout_width="wrap_content"
             android:layout_height="72dp"
             android:layout_gravity="center_horizontal"

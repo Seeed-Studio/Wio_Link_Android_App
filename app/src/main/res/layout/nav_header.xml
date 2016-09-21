@@ -1,32 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="192dp"
+    android:layout_height="172dp"
     android:background="@color/second_color"
-    android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark"
     android:orientation="vertical"
-    android:gravity="bottom">
+    android:paddingLeft="35dp">
 
-    <ImageView
-        android:layout_width="72.0dp"
-        android:layout_height="72.0dp"
-        android:src="@mipmap/icon"
-        android:layout_marginBottom="20.0dp"
-        />
+    <!--  app:placeholderImage="@mipmap/icon"-->
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mSDVAvatar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="54dp"
+        app:placeholderImage="@mipmap/icon"
+        app:placeholderImageScaleType="fitXY"
+        app:roundAsCircle="true"
+        app:roundingBorderColor="#cacaca"
+        app:roundingBorderWidth="1dp" />
 
-    <TextView
-        android:id="@+id/hd_name"
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTvEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
-    <TextView
-        android:id="@+id/hd_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:singleLine="true"
         android:text="awong1900@163.com"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:textColor="#ffffff"
+        android:textSize="12sp"
+        app:cusTextFont="@string/Proxima_Nova_Regular" />
 
+    <cc.seeed.iot.view.FontTextView
+        android:id="@+id/mTvDeviceNum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        app:cusTextFont="@string/Proxima_Nova_Semibold"
+        android:singleLine="true"
+        android:text="3 DEVICES"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#7dffffff"
+        android:textSize="14sp" />
 </LinearLayout>

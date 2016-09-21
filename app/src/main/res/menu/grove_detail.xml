@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui_setnode.SetupIotLinkActivity">
+    <item
+        android:id="@+id/share"
+        android:orderInCategory="200"
+        android:icon="@mipmap/share"
+        android:title="share"
+        app:showAsAction="always" />
+</menu>

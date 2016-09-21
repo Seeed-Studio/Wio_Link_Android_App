@@ -1,0 +1,145 @@
+<!--suppress ALL -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/setup_iot_link"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/background_01"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="5dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <RelativeLayout
+        android:id="@+id/set_link"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_above="@+id/grove_list"
+        android:layout_alignParentLeft="false"
+        android:layout_alignParentStart="false"
+        android:layout_below="@+id/toolbar">
+
+        <ImageView
+            android:id="@+id/grove_remove"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_cancel"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/node_view"
+            android:layout_width="193dp"
+            android:layout_height="152dp"
+            android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/link_large" />
+
+        <ImageButton
+            android:id="@+id/mNodeGrove_01"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/grove_width"
+            android:layout_alignTop="@+id/node_view"
+            android:layout_marginTop="19.5dp"
+            android:layout_toLeftOf="@+id/node_view"
+            android:layout_toStartOf="@+id/node_view"
+            android:background="@drawable/state_grove_indicator_digital0"
+            android:clickable="true"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/mNodeGrove_02"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/grove_width"
+            android:layout_alignTop="@+id/node_view"
+            android:layout_marginTop="60dp"
+            android:layout_toLeftOf="@+id/node_view"
+            android:layout_toStartOf="@+id/node_view"
+            android:background="@drawable/state_grove_indicator_digital1"
+            android:clickable="true"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/mLinkGrove_03"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/grove_width"
+            android:layout_alignTop="@+id/node_view"
+            android:layout_marginTop="102dp"
+            android:layout_toLeftOf="@+id/node_view"
+            android:layout_toStartOf="@+id/node_view"
+            android:background="@drawable/state_grove_indicator_digital2"
+            android:clickable="true"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/mLinkGrove_04"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/grove_width"
+            android:layout_alignTop="@+id/node_view"
+            android:layout_marginTop="19.5dp"
+            android:layout_toEndOf="@+id/node_view"
+            android:layout_toRightOf="@+id/node_view"
+            android:background="@drawable/state_grove_indicator_analog"
+            android:clickable="true"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/mLinkGrove_05"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/grove_width"
+            android:layout_alignTop="@+id/node_view"
+            android:layout_marginTop="61dp"
+            android:layout_toEndOf="@+id/node_view"
+            android:layout_toRightOf="@+id/node_view"
+            android:background="@drawable/state_grove_indicator_uart"
+            android:clickable="true"
+            android:scaleType="centerCrop" />
+
+        <ImageButton
+            android:id="@+id/mLinkGrove_06"
+            android:layout_width="80dp"
+            android:layout_height="@dimen/grove_width"
+            android:layout_alignTop="@+id/node_view"
+            android:layout_marginTop="102dp"
+            android:layout_toEndOf="@+id/node_view"
+            android:layout_toRightOf="@+id/node_view"
+            android:background="@drawable/state_grove_indicator_i2c"
+            android:clickable="true"
+            android:scaleType="centerCrop" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grove_i2c_list"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_below="@+id/node_view"
+            android:layout_margin="10dp"
+            android:background="@color/red"
+            android:clickable="true"
+            android:visibility="invisible">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/grove_selector"
+        android:layout_width="match_parent"
+        android:background="@drawable/grove_filter_bg"
+        android:elevation="3dp"
+        android:layout_height="56dp"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/grove_list"
+        android:layout_width="match_parent"
+        android:layout_marginTop="56dp"
+        android:layout_height="164dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"/>
+
+</LinearLayout>

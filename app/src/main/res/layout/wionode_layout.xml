@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mWioNodeLayout"
+    android:layout_width="match_parent"
+    android:layout_height="144dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
+    android:layout_marginTop="61dp">
+
+    <ImageView
+        android:id="@+id/node_view"
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/node_large" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mNodeGrove_01"
+        style="@style/NodePinStyle"
+        android:layout_alignTop="@+id/node_view"
+        android:layout_marginTop="31dp"
+        android:layout_toLeftOf="@+id/node_view"
+        android:layout_marginRight="1dp"
+        app:actualImageScaleType="centerInside" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/mNodeGrove_02"
+        style="@style/NodePinStyle"
+        android:layout_alignTop="@+id/node_view"
+        android:layout_marginTop="31dp"
+        android:layout_marginLeft="1dp"
+        android:layout_toRightOf="@+id/node_view"
+        app:actualImageScaleType="centerInside" />
+
+</RelativeLayout>

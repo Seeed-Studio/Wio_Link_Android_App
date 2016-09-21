@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffffff">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffffffff"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/mToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="5dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="vertical"
+            android:paddingLeft="40dp"
+            android:paddingRight="40dp">
+
+            <cc.seeed.iot.view.FontEditView
+                android:id="@+id/mEtCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Verification code"
+                android:textColor="#000000"
+                android:singleLine="true"
+                android:textColorHint="#FFC7C7C7"
+                android:textSize="14sp"
+                app:cusEditFont="@string/Proxima_Nova_Regular" />
+
+            <cc.seeed.iot.view.FontButton
+                android:id="@+id/mBtnSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/btn_long_bg"
+                android:elevation="5dp"
+                android:text="VERIFY"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                app:cusButtonFont="@string/Proxima_Nova_Semibold" />
+            <View
+                android:layout_width="match_parent"
+                android:background="@drawable/shadow_down_bg"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_height="3dp"/>
+
+            <cc.seeed.iot.view.FontTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="If you do not recieve verification code in your inbox"
+                android:textColor="#c7c7c7"
+                android:textSize="12sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+            <cc.seeed.iot.view.FontTextView
+                android:id="@+id/mTvReqAgain"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="Click here to request again."
+                android:textColor="#777777"
+                android:textSize="12sp"
+                app:cusTextFont="@string/Proxima_Nova_Regular" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
