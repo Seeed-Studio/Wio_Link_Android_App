@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -17,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -39,18 +37,11 @@ import java.util.TimerTask;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
-import cc.seeed.iot.activity.FeedbackActivity;
-import cc.seeed.iot.activity.TestActivity;
 import cc.seeed.iot.adapter.add_node.WifiRecyclerViewHolder;
 import cc.seeed.iot.adapter.add_node.WifiWioListRecyclerAdapter;
-import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
-import cc.seeed.iot.util.MLog;
-import cc.seeed.iot.util.SystemUtils;
-import cc.seeed.iot.util.WifiUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.view.StepView;
 
@@ -198,9 +189,9 @@ public class Step03WifiWioListActivity extends BaseActivity
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-            Log.e(TAG, "checking...");
+            Log.d(TAG, "checking...");
         } else {
-            Log.e(TAG, "scaning...");
+            Log.d(TAG, "scaning...");
             getScanningResults();
             //do something, permission was previously granted; or legacy device
         }
@@ -237,9 +228,12 @@ public class Step03WifiWioListActivity extends BaseActivity
         selected_ssid = scanResult.SSID;
 
         showProgress(false);
-        if (selected_ssid.equals(getCurrentSsid()))
+//        if (selected_ssid.equals(getCurrentSsid())) {
+        if (getCurrentSsid().contains(selected_ssid)) {
+            Log.d(TAG, "same ssid");
             goStep04();
-        else {
+        } else {
+            Log.d(TAG, "connecting...");
 //            connectWifi(selected_ssid, "");
             ConnectCount = 1;
             wifiConnect(selected_ssid);
@@ -271,116 +265,117 @@ public class Step03WifiWioListActivity extends BaseActivity
                 mWaitDialog.setMessage("Connecting to " + SSID + "...");
                 mWaitDialog.setCanceledOnTouchOutside(false);
                 mWaitDialog.show();
-                startTime = System.currentTimeMillis();
+//                startTime = System.currentTimeMillis();
+//
+//                final Timer timer = new Timer();
+//                timer.scheduleAtFixedRate(new TimerTask() {
+//                                              public void run() {
+//                                                  flag++;
+//                                                  if (flag >= TimeOutCount) {
+//                                                      //    TimeOutCount = App.getSp().getInt(Constant.SP_Connect_Wifi_TimeOut_Count, 30);
+//                                                      if (TimeOutCount <= 60) {
+//                                                          TimeOutCount += 15;
+//                                                      }
+//                                                      App.getSp().edit().putInt(Constant.SP_Connect_Wifi_TimeOut_Count, TimeOutCount).commit();
+//                                                      timer.cancel();
+//                                                      MLog.e(this, "超时");
+//                                                      runOnUiThread(new Runnable() {
+//                                                          @Override
+//                                                          public void run() {
+//                                  /*  DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "Fail connect to Wio Wifi:1031", getString(R.string.dialog_btn_tryAgain),
+//                                            getString(R.string.dialog_btn_Cancel), getString(R.string.cont_connection_wio_wifi), new DialogUtils.OnErrorButtonClickListenter() {
+//                                                @Override
+//                                                public void okClick() {
+//                                                    wifiConnect(SSID);
+//                                                    timer.cancel();
+//                                                }
+//
+//                                                @Override
+//                                                public void cancelClick() {
+//                                                    timer.cancel();
+//                                                }
+//                                            });*/
+//                                                              AlertDialog dialog = new AlertDialog.Builder(Step03WifiWioListActivity.this)
+//                                                                      .setTitle("Fail connect to Wio Wi-Fi")
+//                                                                      .setMessage(getString(R.string.cont_connection_wio_wifi))
+//                                                                      .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
+//                                                                          @Override
+//                                                                          public void onClick(DialogInterface dialog, int which) {
+//                                                                              TimeOutCount = App.getSp().getInt(Constant.SP_Connect_Wifi_TimeOut_Count, 30);
+//                                                                              wifiConnect(SSID);
+//                                                                              timer.cancel();
+//                                                                              ConnectCount++;
+//                                                                          }
+//                                                                      })
+//                                                                      .setNeutralButton("Setting", new DialogInterface.OnClickListener() {
+//                                                                          @Override
+//                                                                          public void onClick(DialogInterface dialog, int which) {
+//                                                                              timer.cancel();
+//                                                                              Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+//                                                                              startActivityForResult(intent, SETTING_REQ_CODE);
+//                                                                          }
+//                                                                      })
+//                                                                      .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                                                          @Override
+//
+//                                                                          public void onClick(DialogInterface dialog, int which) {
+//                                                                              timer.cancel();
+//                                                                          }
+//                                                                      }).create();
+//                                                              //  dialog.setCancelable(true);
+//                                                              dialog.setCanceledOnTouchOutside(true);
+//                                                              dialog.show();
+//
+//                                                              dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
+//                                  /*  if (ConnectCount > 2) {
+//                                        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
+//                                    } else {
+//                                        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.GONE);
+//                                    }*/
+//                                                          }
+//                                                      });
+//
+//                                                      if (mWaitDialog != null) {
+//                                                          mWaitDialog.dismiss();
+//                                                      }
+//                                                  } else {
+//                           /* runOnUiThread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    if (!checkWifiIsExist(SSID)) {
+//                                        timer.cancel();
+//                                        if (mWaitDialog != null) {
+//                                            mWaitDialog.dismiss();
+//                                        }
+//                                        DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "WiFi  not exist:1034", getString(R.string.dialog_btn_OK),
+//                                                null, "Equipment Wi-Fi hotspot does not exist", null);
+//                                    }
+//                                }
+//                            });*/
+//                                                  }
+//                                                  if (WifiUtils.isWifiConnected(Step03WifiWioListActivity.thi s) && getCurrentSsid().equals("\"" + SSID + "\"")) {
+//                                                      timer.cancel();
+//                                                      MLog.e(this, "连接成功");
+//                                                      if (mWaitDialog != null) {
+//                                                          mWaitDialog.dismiss();
+//                                                      }
+//                                                      Log.e(TAG, "###### connect success");
+//                                                      goStep04();
+//                                                      return;
+//                                                  } else {
+//                                                      //  MLog.e(this, "连接失败");
+//                                                  }
+//                                                  runOnUiThread(new Runnable() {
+//                                                      @Override
+//                                                      public void run() {
+//                                                          mWaitDialog.setMessage("Connecting to " + SSID + " Wi-Fi (" + (TimeOutCount - flag) + ")");
+//                                                      }
+//                                                  });
+//
+//                                              }
+//                                          }
 
-                final Timer timer = new Timer();
-                timer.scheduleAtFixedRate(new TimerTask() {
-                    public void run() {
-                        flag++;
-                        if (flag >= TimeOutCount) {
-                            //    TimeOutCount = App.getSp().getInt(Constant.SP_Connect_Wifi_TimeOut_Count, 30);
-                            if (TimeOutCount <= 60) {
-                                TimeOutCount += 15;
-                            }
-                            App.getSp().edit().putInt(Constant.SP_Connect_Wifi_TimeOut_Count, TimeOutCount).commit();
-                            timer.cancel();
-                            MLog.e(this, "超时");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                  /*  DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "Fail connect to Wio Wifi:1031", getString(R.string.dialog_btn_tryAgain),
-                                            getString(R.string.dialog_btn_Cancel), getString(R.string.cont_connection_wio_wifi), new DialogUtils.OnErrorButtonClickListenter() {
-                                                @Override
-                                                public void okClick() {
-                                                    wifiConnect(SSID);
-                                                    timer.cancel();
-                                                }
-
-                                                @Override
-                                                public void cancelClick() {
-                                                    timer.cancel();
-                                                }
-                                            });*/
-                                    AlertDialog dialog = new AlertDialog.Builder(Step03WifiWioListActivity.this)
-                                            .setTitle("Fail connect to Wio Wi-Fi")
-                                            .setMessage(getString(R.string.cont_connection_wio_wifi))
-                                            .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    TimeOutCount = App.getSp().getInt(Constant.SP_Connect_Wifi_TimeOut_Count, 30);
-                                                    wifiConnect(SSID);
-                                                    timer.cancel();
-                                                    ConnectCount++;
-                                                }
-                                            })
-                                            .setNeutralButton("Setting", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    timer.cancel();
-                                                    Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                                                    startActivityForResult(intent, SETTING_REQ_CODE);
-                                                }
-                                            })
-                                            .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                @Override
-
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    timer.cancel();
-                                                }
-                                            }).create();
-                                    //  dialog.setCancelable(true);
-                                    dialog.setCanceledOnTouchOutside(true);
-                                    dialog.show();
-
-                                    dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
-                                  /*  if (ConnectCount > 2) {
-                                        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.VISIBLE);
-                                    } else {
-                                        dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setVisibility(View.GONE);
-                                    }*/
-                                }
-                            });
-
-                            if (mWaitDialog != null) {
-                                mWaitDialog.dismiss();
-                            }
-                        } else {
-                           /* runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (!checkWifiIsExist(SSID)) {
-                                        timer.cancel();
-                                        if (mWaitDialog != null) {
-                                            mWaitDialog.dismiss();
-                                        }
-                                        DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "WiFi  not exist:1034", getString(R.string.dialog_btn_OK),
-                                                null, "Equipment Wi-Fi hotspot does not exist", null);
-                                    }
-                                }
-                            });*/
-                        }
-                        if (WifiUtils.isWifiConnected(Step03WifiWioListActivity.this) && getCurrentSsid().equals("\"" + SSID + "\"")) {
-                            timer.cancel();
-                            MLog.e(this, "连接成功");
-                            if (mWaitDialog != null) {
-                                mWaitDialog.dismiss();
-                            }
-                            goStep04();
-                            return;
-                        } else {
-                            //  MLog.e(this, "连接失败");
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mWaitDialog.setMessage("Connecting to " + SSID + " Wi-Fi (" + (TimeOutCount - flag) + ")");
-                            }
-                        });
-
-                    }
-                }
-
-                        , 1500, 1000);
+//                        , 1500, 1000);
                 break;
             }
         }
@@ -388,29 +383,13 @@ public class Step03WifiWioListActivity extends BaseActivity
 
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
-          /*  endTime = System.currentTimeMillis();
-            if (startTime != 0 && endTime - startTime > TimeOut) {
-                TimeOut = 30*1000;
-                startTime = 0;
-                if (mWaitDialog != null && mWaitDialog.isShowing()) {
-                    mWaitDialog.dismiss();
-                }
-                DialogUtils.showErrorDialog(Step03WifiWioListActivity.this, "", "OK", "", "Connect fail..", null);
-                showProgress(true);
-            }else {
-                if (wifiUtils != null && wifiUtils.isWifiConnected(Step03WifiWioListActivity.this) && selected_ssid.equals(wifiUtils.getBSSID())) {
-                    if (mWaitDialog != null) {
-                        mWaitDialog.dismiss();
-                    }
-                    goStep04();
-                }
-            }*/
             if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
                     WifiInfo wifiInfo = (WifiInfo) intent.getParcelableExtra(WifiManager.EXTRA_WIFI_INFO);
 
                     if (wifiInfo.getSSID().contains(selected_ssid) && state_selected) {
+                        Log.d(TAG, "connected!!");
                         mWaitDialog.dismiss();
                         state_selected = false;
                         reEnableAllAps(context);
@@ -491,7 +470,7 @@ public class Step03WifiWioListActivity extends BaseActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        Log.e(TAG, "onRequestPermissionsResult");
+        Log.d(TAG, "onRequestPermissionsResult");
         if (requestCode == PERMISSIONS_REQUEST_CODE_ACCESS_COARSE_LOCATION
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             // Do something with granted permission
@@ -541,64 +520,64 @@ public class Step03WifiWioListActivity extends BaseActivity
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SETTING_REQ_CODE) {
-            if (!WifiUtils.isWifiConnected(Step03WifiWioListActivity.this)) {
-                showSelectWifiError();
-            } else if (!getCurrentSsid().startsWith("\"Wio")) {
-//                App.showToastShrot("请选择WiFi热点为Wio开头的WiFi热点");
-                showSelectWifiError();
-            } else if (!TextUtils.isEmpty(selected_ssid) && !getCurrentSsid().equals("\"" + selected_ssid + "\"")) {
-                //  App.showToastShrot("连接WiFi热点和之前选择的WiFi热点不一致,是否继续");
-                showWifiInconformity();
-            } else {
-                goStep04();
-            }
-        }
-    }
-
-    //选择的WiFi热点不是WIO开头的WiFi热点
-    private void showSelectWifiError() {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Select Wi-Fi error")
-                .setMessage("Please select a Wi-Fi like\"Wio_xxxxxx\"\r\n\r\nError code:1032")
-                .setPositiveButton("Setting", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                        startActivityForResult(intent, SETTING_REQ_CODE);
-                    }
-                })
-                .setNegativeButton("Cancel", null).create();
-        //  dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
-
-    //选择的WiFi热点和手动设置的WiFi热点不一致
-    private void showWifiInconformity() {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Wifi Inconformity")
-                .setMessage("The current connection before the Wi-Fi and choice of WiFi\r\n\r\nError code:1033")
-                .setPositiveButton("Next", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        goStep04();
-                    }
-                })
-                .setNeutralButton("Setting", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
-                        startActivityForResult(intent, SETTING_REQ_CODE);
-                    }
-                })
-                .setNegativeButton("Cancel", null).create();
-        //  dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-        dialog.show();
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == SETTING_REQ_CODE) {
+//            if (!WifiUtils.isWifiConnected(Step03WifiWioListActivity.this)) {
+//                showSelectWifiError();
+//            } else if (!getCurrentSsid().startsWith("\"Wio")) {
+////                App.showToastShrot("请选择WiFi热点为Wio开头的WiFi热点");
+//                showSelectWifiError();
+//            } else if (!TextUtils.isEmpty(selected_ssid) && !getCurrentSsid().equals("\"" + selected_ssid + "\"")) {
+//                //  App.showToastShrot("连接WiFi热点和之前选择的WiFi热点不一致,是否继续");
+//                showWifiInconformity();
+//            } else {
+//                goStep04();
+//            }
+//        }
+//    }
+//
+//    //选择的WiFi热点不是WIO开头的WiFi热点
+//    private void showSelectWifiError() {
+//        AlertDialog dialog = new AlertDialog.Builder(this)
+//                .setTitle("Select Wi-Fi error")
+//                .setMessage("Please select a Wi-Fi like\"Wio_xxxxxx\"\r\n\r\nError code:1032")
+//                .setPositiveButton("Setting", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+//                        startActivityForResult(intent, SETTING_REQ_CODE);
+//                    }
+//                })
+//                .setNegativeButton("Cancel", null).create();
+//        //  dialog.setCancelable(true);
+//        dialog.setCanceledOnTouchOutside(true);
+//        dialog.show();
+//    }
+//
+//    //选择的WiFi热点和手动设置的WiFi热点不一致
+//    private void showWifiInconformity() {
+//        AlertDialog dialog = new AlertDialog.Builder(this)
+//                .setTitle("Wifi Inconformity")
+//                .setMessage("The current connection before the Wi-Fi and choice of WiFi\r\n\r\nError code:1033")
+//                .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        goStep04();
+//                    }
+//                })
+//                .setNeutralButton("Setting", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
+//                        startActivityForResult(intent, SETTING_REQ_CODE);
+//                    }
+//                })
+//                .setNegativeButton("Cancel", null).create();
+//        //  dialog.setCancelable(true);
+//        dialog.setCanceledOnTouchOutside(true);
+//        dialog.show();
+//    }
 }
 

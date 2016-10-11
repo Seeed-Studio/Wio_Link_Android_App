@@ -332,10 +332,10 @@ public class Step04ApConnectActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connect error", "OK", "", "Your phone disconnected from Wio's Wi-Fi hotspot.\n\r\n\r\nError code:1042" , new DialogUtils.OnErrorButtonClickListenter() {
+                DialogUtils.showErrorDialog(Step04ApConnectActivity.this, "Connect error", "OK", "", "Your phone disconnected from Wio's Wi-Fi hotspot.\n\r\n\r\nError code:1042", new DialogUtils.OnErrorButtonClickListenter() {
                     @Override
                     public void okClick() {
-                       finish();
+                        finish();
                     }
 
                     @Override
@@ -355,9 +355,10 @@ public class Step04ApConnectActivity extends BaseActivity {
         getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
         mTvHint.setText("Waiting Wio get ip address...");
         final Timer timer = new Timer();
-       /* final WifiUtils wifiUtils = new WifiUtils(this);
-        wifiUtils.openWifi();
-        wifiUtils.addNetwork(wifiUtils.CreateWifiInfo(ssid, pwd, 3));*/
+//        final WifiUtils wifiUtils = new WifiUtils(this);
+//        wifiUtils.openWifi();
+//        wifiUtils.addNetwork(wifiUtils.CreateWifiInfo(ssid, pwd, 3));
+        wifiConnect(ssid);
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 flag++;
@@ -410,6 +411,29 @@ public class Step04ApConnectActivity extends BaseActivity {
 
             }
         }, 1500, 1000);
+    }
+
+    private void wifiConnect(final String SSID) {
+        WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+//        WifiConfiguration conf = new WifiConfiguration();
+//        conf.SSID = "\"" + SSID + "\"";
+//        conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+//        wifiManager.addNetwork(conf);
+
+        List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+        if (list == null) {
+            Log.e(TAG, "List<WifiConfiguration> is null!");
+            return;
+        }
+
+        for (WifiConfiguration i : list) {
+            if (i.SSID != null && i.SSID.equals("\"" + SSID + "\"")) {
+//                wifiManager.disconnect();
+                wifiManager.enableNetwork(i.networkId, true);
+//                wifiManager.reconnect();
+                break;
+            }
+        }
     }
 
     private class checkNodeIsOnline extends AsyncTask<Void, Integer, Boolean> {
