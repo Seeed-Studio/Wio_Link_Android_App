@@ -1,16 +1,14 @@
 package cc.seeed.iot.ui_setnode.View;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.jauker.widget.BadgeView;
+import com.widget.milad.miladbadgeview.MiladBadgeView;
 
 import java.util.List;
 
@@ -32,7 +30,7 @@ public class GrovePinsView {
     private View view;
     private Node node;
     public SimpleDraweeView[] pinViews;
-    public BadgeView[] badgeViews;
+    public MiladBadgeView[] badgeViews;
 
     public GrovePinsView(Context context, View v, Node node) {
         this.context = context;
@@ -40,11 +38,11 @@ public class GrovePinsView {
         this.node = node;
         if (node.board.equals(Constant.WIO_LINK_V1_0)) {
             this.pinViews = new SimpleDraweeView[6];
-            this.badgeViews = new BadgeView[6];
+            this.badgeViews = new MiladBadgeView[6];
             initLinkView();
         } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
             this.pinViews = new SimpleDraweeView[2];
-            this.badgeViews = new BadgeView[2];
+            this.badgeViews = new MiladBadgeView[2];
             initNodeView();
         }
 
@@ -57,8 +55,8 @@ public class GrovePinsView {
         pinViews[0].setTag(new Tag(0, new String[]{InterfaceType.GPIO, InterfaceType.UART, InterfaceType.I2C}));
         pinViews[1].setTag(new Tag(1, new String[]{InterfaceType.GPIO, InterfaceType.ANALOG, InterfaceType.I2C}));
 
-        badgeViews[0] = new BadgeView(context);
-        badgeViews[1] = new BadgeView(context);
+        badgeViews[0] = new MiladBadgeView(context);
+        badgeViews[1] = new MiladBadgeView(context);
 
 //        badgeViews[0].setTargetView(pinViews[0]);
 //        badgeViews[1].setTargetView(pinViews[1]);
@@ -73,7 +71,7 @@ public class GrovePinsView {
             try {
                 String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
                 pinViews[pinConfig.position].setActivated(true);
-                ImgUtil.displayImg(pinViews[pinConfig.position],url,R.mipmap.grove_default);
+                ImgUtil.displayImg(pinViews[pinConfig.position], url, R.mipmap.grove_default);
             } catch (Exception e) {
                 Log.e(TAG, "getGroves:" + e);
             }
@@ -97,8 +95,8 @@ public class GrovePinsView {
         pinViews[5].setTag(new Tag(5, new String[]{InterfaceType.I2C}));
 
         for (int i = 0; i < 6; i++) {
-            badgeViews[i] = new BadgeView(context);
-            //  badgeViews[i].setTargetView(pinViews[i]);
+            badgeViews[i] = new MiladBadgeView(context);
+//            badgeViews[i].setTargetView(pinViews[i]);
             badgeViews[i].setVisibility(View.GONE);
             setPinView(pinViews[i], badgeViews[i]);
         }
@@ -122,7 +120,7 @@ public class GrovePinsView {
                 try {
                     String url = DBHelper.getGroves(pinConfig.sku).get(0).ImageURL;
                     pinViews[pinConfig.position].setActivated(true);
-                    ImgUtil.displayImg(pinViews[pinConfig.position],url,R.mipmap.grove_default);
+                    ImgUtil.displayImg(pinViews[pinConfig.position], url, R.mipmap.grove_default);
                 } catch (Exception e) {
                     Log.e(TAG, "getGroves:" + e);
                 }
@@ -140,7 +138,7 @@ public class GrovePinsView {
         }
     }
 
-    private void setPinView(SimpleDraweeView tragetView, BadgeView view) {
+    private void setPinView(SimpleDraweeView tragetView, MiladBadgeView view) {
         int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         tragetView.measure(w, h);
@@ -157,7 +155,7 @@ public class GrovePinsView {
             params.width = width - ToolUtil.dp2px(20, context.getResources());
         }*/
         params.height = height;
-        params.width = width ;
+        params.width = width;
         view.setLayoutParams(params);
         // view.setBackgroundColor(Color.parseColor("#80000000"));
         view.setBackgroundResource(R.drawable.badgview_bg);
