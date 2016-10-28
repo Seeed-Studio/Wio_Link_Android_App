@@ -418,9 +418,9 @@ public class MainScreenActivity extends BaseActivity
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            DialogUtils.showQuitDialog(MainScreenActivity.this);
-        }
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            DialogUtils.showQuitDialog(MainScreenActivity.this);
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
