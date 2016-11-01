@@ -1,12 +1,12 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "cc.seeed.iot.ap"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 25
         versionCode 30
         versionName "2.3.5"
     }
@@ -39,20 +39,24 @@ android {
     }
 
     repositories { flatDir { dirs 'libs' } }
+
+    dexOptions {
+        jumboMode = true
+    }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:support-v13:23.1.1'
+    compile 'com.android.support:support-v13:25.0.0'
     compile 'fr.avianey.com.viewpagerindicator:library:2.4.1@aar'
     compile 'com.loopj.android:android-async-http:1.4.9'
-    compile 'com.android.support:design:23.1.1'
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.android.support:design:25.0.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:cardview-v7:25.0.0'
     compile 'com.squareup.retrofit:retrofit:1.9.0'
     compile 'com.squareup.okhttp:okhttp:2.2.0'
     //此版本要使用23.3.0以后的版本,因为23.2.0版本有bug,在使用scrollView的时候,不能显示列表
-    compile 'com.android.support:recyclerview-v7:23.3.0'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
     //首页Item侧滑功能,暂时去掉没有使用
     compile 'com.daimajia.swipelayout:library:1.1.8@aar'
     //数据库操作
@@ -62,7 +66,7 @@ dependencies {
     //首页侧边菜单使用
     compile 'com.getbase:floatingactionbutton:1.10.1'
     //google登录和分享使用
-    compile 'com.google.android.gms:play-services-auth:8.4.0'
+    compile 'com.google.android.gms:play-services-auth:9.8.0'
     compile 'com.google.zxing:android-integration:3.2.0'
     //umeng统计使用
     compile 'com.umeng.analytics:analytics:latest.integration'
@@ -75,7 +79,7 @@ dependencies {
     //选择本地图片使用
     compile(name: 'multi-image-selector-release', ext: 'aar')
     //加载gif图片使用,help界面
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.+'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
 
 }
 

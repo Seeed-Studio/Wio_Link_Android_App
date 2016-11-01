@@ -39,3 +39,4 @@ captures/
 # Keystore files
 *.jks
 app/src/main/res/values-en/umeng_socialize_strings.xml
+google-services.json
