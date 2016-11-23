@@ -1,7 +1,8 @@
 # Wio Link Android App
 For Wio IOT Server, it have:
-- Enable network for Wio board
-- Add or remove the Grove for Wio board
+- Enable network for Wio device
+- Display your online/offline Wio device
+- Add or remove the Grove for Wio device
 - Update firmware for board
 - Test the available Grove Sensor/Trigger APIs 
 
@@ -15,5 +16,5 @@ Project on [Kickstarter](https://www.kickstarter.com/projects/seeed/wio-link-3-s
 The Wio Server here: https://github.com/Seeed-Studio/Wio_Link
 
 ## Forum
-Let's know if you have any question.
+Let's know if you have any question.  
 http://www.seeed.cc/topics.html?t=wio
