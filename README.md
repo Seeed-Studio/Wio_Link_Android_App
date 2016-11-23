@@ -3,7 +3,7 @@ For Wio IOT Server, it have:
 - Enable network for Wio device
 - Display your online/offline Wio device
 - Add or remove the Grove for Wio device
-- Update firmware for board
+- Update firmware for Wio device
 - Test the available Grove Sensor/Trigger APIs 
 
 ## Install
