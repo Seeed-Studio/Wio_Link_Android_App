@@ -13,7 +13,8 @@ Install on [Google Play](https://play.google.com/store/apps/details?id=cc.seeed.
 Project on [Kickstarter](https://www.kickstarter.com/projects/seeed/wio-link-3-steps-5-minutes-build-your-iot-applicat).
 
 ## Wio Link Server
-The Wio Server here: https://github.com/Seeed-Studio/Wio_Link
+The Wio Server here:   
+https://github.com/Seeed-Studio/Wio_Link
 
 ## Forum
 Let's know if you have any question.  
