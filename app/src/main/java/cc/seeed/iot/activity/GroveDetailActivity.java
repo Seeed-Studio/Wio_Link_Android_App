@@ -123,7 +123,7 @@ public class GroveDetailActivity extends BaseActivity {
             mTvAddDate.setVisibility(View.VISIBLE);
             try {
                 long addTime = Long.parseLong(grove.AddedAt);
-                mTvAddDate.setText("Added on "+ TimeUtil.long2String(addTime,"dd/MM/yyyy"));
+                mTvAddDate.setText(String.format("%s%s", getString(R.string.add_on), TimeUtil.long2String(addTime, "dd/MM/yyyy")));
             }catch (Exception e){
                 mTvAddDate.setVisibility(View.GONE);
             }

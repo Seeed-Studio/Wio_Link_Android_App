@@ -128,11 +128,11 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
             }
         }
 
-        holder.mTvConnectedNum.setText("" + pinConfigs.size());
+        holder.mTvConnectedNum.setText(String.format("%s", String.valueOf(pinConfigs.size())));
         if (pinConfigs.size() > 4) {
             Integer over_num = pinConfigs.size() - 4;
             holder.mTvMoreGroveNum.setVisibility(View.VISIBLE);
-            holder.mTvMoreGroveNum.setText("+" + over_num);
+            holder.mTvMoreGroveNum.setText(String.format("+%s", over_num.toString()));
         } else {
             holder.mTvMoreGroveNum.setVisibility(View.GONE);
         }

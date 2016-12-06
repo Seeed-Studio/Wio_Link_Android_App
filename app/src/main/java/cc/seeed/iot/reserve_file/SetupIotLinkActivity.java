@@ -205,14 +205,14 @@ public class SetupIotLinkActivity extends BaseActivity
 
     private void pinBadgeUpdate(int position) {
         if (pinDeviceCount(position) > 1) {
-                 mGrovePinsView.badgeViews[position].setText("+" + pinDeviceCount(position));
-                mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
+            mGrovePinsView.badgeViews[position].setText(String.format("+%d", pinDeviceCount(position)));
+            mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
             //      mGrovePinsView.badgeViews[position].setBackgroundColor(Color.parseColor("#80000000"));
 //            mTvI2cNum.setVisibility(View.VISIBLE);
 //            mTvI2cNum.setText("+" + pinDeviceCount(position));
         } else {
 //            mTvI2cNum.setVisibility(View.GONE);
-                mGrovePinsView.badgeViews[position].setVisibility(View.GONE);
+            mGrovePinsView.badgeViews[position].setVisibility(View.GONE);
         }
     }
 
@@ -523,7 +523,7 @@ public class SetupIotLinkActivity extends BaseActivity
                         break;
                     case DragEvent.ACTION_DROP: {
                         GroverDriver groverDriver = (GroverDriver) event.getLocalState();
-                        ImgUtil.displayImg((SimpleDraweeView)v,groverDriver.ImageURL,R.mipmap.grove_default);
+                        ImgUtil.displayImg((SimpleDraweeView) v, groverDriver.ImageURL, R.mipmap.grove_default);
                         int pin_position = ((GrovePinsView.Tag) v.getTag()).position;
                         PinConfig pinConfig = new PinConfig();
                         pinConfig.position = pin_position;
@@ -753,9 +753,9 @@ public class SetupIotLinkActivity extends BaseActivity
                 //  DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
                 App.showToastShrot("Firmware Updated!");
             } else if (ret == ConfigDeviceLogic.UPDATEING) {
-                if (progress <=80) {
-                   progress += 12;
-                    setProgressMsg("Preparing Server ("+progress+"%)");
+                if (progress <= 80) {
+                    progress += 12;
+                    setProgressMsg("Preparing Server (" + progress + "%)");
                 }
             } else if (ret == ConfigDeviceLogic.FAIL) {
                 if (data != null && data.length > 0) {
@@ -794,8 +794,8 @@ public class SetupIotLinkActivity extends BaseActivity
         });
     }
 
-    private void setProgressMsg(String msg){
-        if (progressDialog != null && progressDialog.isShowing()){
+    private void setProgressMsg(String msg) {
+        if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.setMessage(msg);
         }
     }

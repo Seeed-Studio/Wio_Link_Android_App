@@ -249,7 +249,7 @@ public class SetupDeviceActivity extends BaseActivity
 
     private void pinBadgeUpdate(int position) {
         if (pinDeviceCount(position) > 1) {
-            mGrovePinsView.badgeViews[position].setText("+" + pinDeviceCount(position));
+            mGrovePinsView.badgeViews[position].setText(String.format("+%d", pinDeviceCount(position)));
             mGrovePinsView.badgeViews[position].setVisibility(View.VISIBLE);
         } else {
             mGrovePinsView.badgeViews[position].setVisibility(View.GONE);

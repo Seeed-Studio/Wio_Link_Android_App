@@ -197,4 +197,13 @@
     <string name="feedback_submit">Submit</string>
     <string name="bind_email">Bind Email</string>
     <string name="authorization_failure">Authorization failure!</string>
+    <string name="no_wifi_permission">Please check if Wio app get Wi-Fi permission from your phone and make sure there\'s available Wi-Fi around.</string>
+    <string name="is_config_mode">Please check if Wio device is on configuration mode, in which the blue light appears as breathing.</string>
+    <string name="check_fw">Check the firmware version…</string>
+    <string name="send_wifi_passwd">Sending Wi-Fi password to Wio…</string>
+    <string name="wait_wio">Waiting Wio get ip address…</string>
+    <string name="add_on">"Added on "</string>
+    <string name="not_set">Not Set</string>
+    <string name="zero_device">0 DEVICES</string>
+    <string name="devices">"DEVICES"</string>
 </resources>

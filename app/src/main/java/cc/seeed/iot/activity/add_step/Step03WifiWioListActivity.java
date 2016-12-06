@@ -111,7 +111,7 @@ public class Step03WifiWioListActivity extends BaseActivity
     }
 
     private void initData() {
-        mTvTip.setText("Please check if Wio device is on configuration mode, in which the blue light appears as breathing.");
+        mTvTip.setText(R.string.is_config_mode);
         mStepView.setDoingStep(2);
         if (mWifiListView != null) {
             mWifiListView.setHasFixedSize(true);

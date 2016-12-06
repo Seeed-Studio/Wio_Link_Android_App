@@ -110,7 +110,7 @@ public class Step02WifiListActivity extends BaseActivity
     }
 
     private void initData() {
-        mTvTip.setText("Please check if Wio app get Wi-Fi permission from your phone and make sure there's available Wi-Fi around.");
+        mTvTip.setText(R.string.no_wifi_permission);
         mStepView.setDoingStep(1);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

@@ -94,7 +94,7 @@ public class NodeSettingActivity extends BaseActivity {
 
         mTvName.setText(node.name);
         if (TextUtils.isEmpty(node.dataxserver)) {
-            mTvConnectServer.setText("Not Set");
+            mTvConnectServer.setText(R.string.not_set);
         } else {
             mTvConnectServer.setText(node.dataxserver);
         }

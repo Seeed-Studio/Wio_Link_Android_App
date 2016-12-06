@@ -155,7 +155,7 @@ public class Step04ApConnectActivity extends BaseActivity {
     }
 
     private void sendOrder() {
-        mTvHint.setText("Check the firmware version...");
+        mTvHint.setText(R.string.check_fw);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -252,7 +252,7 @@ public class Step04ApConnectActivity extends BaseActivity {
         @Override
         protected void onPreExecute() {
             //  showProgressDialog("Sending Wi-Fi password to Wio...");
-            mTvHint.setText("Sending Wi-Fi password to Wio...");
+            mTvHint.setText(R.string.send_wifi_passwd);
         }
 
         @Override
@@ -353,7 +353,7 @@ public class Step04ApConnectActivity extends BaseActivity {
     private void connectWifi(final String ssid, String pwd) {
         flag = 0;
         getSupportActionBar().setTitle(R.string.title_ap_connect_activity);
-        mTvHint.setText("Waiting Wio get ip address...");
+        mTvHint.setText(R.string.wait_wio);
         final Timer timer = new Timer();
 //        final WifiUtils wifiUtils = new WifiUtils(this);
 //        wifiUtils.openWifi();

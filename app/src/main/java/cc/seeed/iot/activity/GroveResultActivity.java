@@ -58,7 +58,7 @@ public class GroveResultActivity extends BaseActivity {
                 try {
                     jsonObject = new JSONObject(resp.data);
                     String humidity = jsonObject.getString("humidity");
-                    mTvHumidity.setText(humidity + "%");
+                    mTvHumidity.setText(String.format("%s%%", humidity));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -73,7 +73,7 @@ public class GroveResultActivity extends BaseActivity {
                 try {
                     jsonObject = new JSONObject(resp.data);
                     String temp = jsonObject.getString("celsius_degree");
-                    mTvTemp.setText(temp + "℃");
+                    mTvTemp.setText(String.format("%s℃", temp));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

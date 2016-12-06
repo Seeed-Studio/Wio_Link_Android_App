@@ -319,20 +319,20 @@ public class MainScreenActivity extends BaseActivity
                             Collections.sort(nodes, new ComparatorUtils.ComparatorNode());
                             mAdapter.updateAll(nodes);
                             if (nodes.isEmpty()) {
-                                mTvDeviceNum.setText("0 DEVICES");
+                                mTvDeviceNum.setText(R.string.zero_device);
                                 mLLNoDevice.setVisibility(View.VISIBLE);
                                 mSRL.setVisibility(View.GONE);
                             } else {
                                 mLLNoDevice.setVisibility(View.GONE);
                                 mSRL.setVisibility(View.VISIBLE);
-                                mTvDeviceNum.setText(nodes.size() + " DEVICES");
+                                mTvDeviceNum.setText(nodes.size() + " " + getString(R.string.devices));
                             }
 
                             for (Node n : nodes) {
                                 getNodesConfig(n, nodes.indexOf(n));
                             }
                         } else if (msg.arg2 == 0) {
-                            mTvDeviceNum.setText("0 DEVICES");
+                            mTvDeviceNum.setText(R.string.zero_device);
                         }
                         break;
                     case MESSAGE_NODE_CONFIG_COMPLETE:
@@ -778,11 +778,11 @@ public class MainScreenActivity extends BaseActivity
                     nodes.remove(node);
                     mAdapter.removeItem(position);
                     if (nodes.isEmpty()) {
-                        mTvDeviceNum.setText("0 DEVICES");
+                        mTvDeviceNum.setText(R.string.zero_device);
                         mLLNoDevice.setVisibility(View.VISIBLE);
                     } else {
                         mLLNoDevice.setVisibility(View.GONE);
-                        mTvDeviceNum.setText(nodes.size() + " DEVICES");
+                        mTvDeviceNum.setText(nodes.size() + " " + R.string.devices);
                     }
                 }
             } else {
