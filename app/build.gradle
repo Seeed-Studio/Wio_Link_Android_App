@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.1"
 
     defaultConfig {
         applicationId "cc.seeed.iot.ap"
@@ -65,7 +65,7 @@ dependencies {
     //首页侧边菜单使用
     compile 'com.getbase:floatingactionbutton:1.10.1'
     //google登录和分享使用
-    compile 'com.google.android.gms:play-services-auth:10.0.0'
+    compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.google.zxing:android-integration:3.2.0'
     //umeng统计使用
     compile 'com.umeng.analytics:analytics:latest.integration'
