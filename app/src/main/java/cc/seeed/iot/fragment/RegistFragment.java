@@ -15,12 +15,14 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
+import cc.seeed.iot.activity.PrivacyPolicyActivity;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.RegularUtils;
 import cc.seeed.iot.view.FontEditView;
+import cc.seeed.iot.view.FontTextView;
 
 
 /**
@@ -36,6 +38,8 @@ public class RegistFragment extends BaseFragment {
     FontEditView mEtRePwd;
     @InjectView(R.id.mBtnRegist)
     Button mBtnRegist;
+    @InjectView(R.id.mTvPrivacy)
+    FontTextView mTvPrivacy;
 
     Dialog dialog;
 
@@ -98,10 +102,20 @@ public class RegistFragment extends BaseFragment {
         ButterKnife.reset(this);
     }
 
-    @OnClick(R.id.mBtnRegist)
-    public void onClick() {
-        MobclickAgent.onEvent(mActivity, "10003");
-        regiest();
+    @OnClick({R.id.mBtnRegist, R.id.mTvPrivacy})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.mBtnRegist:
+                MobclickAgent.onEvent(mActivity, "10003");
+                regiest();
+                break;
+            case R.id.mTvPrivacy:
+                MobclickAgent.onEvent(mActivity, "10009");
+                Intent intent2 = new Intent(mActivity, PrivacyPolicyActivity.class);
+                startActivity(intent2);
+                break;
+        }
+
     }
 
     @Override

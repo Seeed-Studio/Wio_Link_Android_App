@@ -31,6 +31,9 @@ import cc.seeed.iot.util.CommonUrl;
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.conn.ssl.SSLSocketFactory;
 
+import android.util.Log;
+
+
 /**
  * Created by seeed on 2015/12/28.
  */
@@ -142,6 +145,7 @@ public class NetManager {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 String s = new String(responseBody);
+                Log.d("AAAA", s);
                 JSONObject jsonObj = null;
                 int code = 0;
                 String errMsg = "";

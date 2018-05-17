@@ -25,7 +25,7 @@ public class AboutActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("About US");
+        getSupportActionBar().setTitle("About");
 
         aboutBodyView = (TextView) findViewById(R.id.about_body);
         nameAndVersionView = (TextView) findViewById(R.id.app_name_and_version);

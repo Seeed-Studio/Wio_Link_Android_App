@@ -100,27 +100,26 @@
     <string name="title_activity_setup_iot_node">SetupIotNodeActivity</string>
     <string name="title_activity_go_ready">GoReadyActivity</string>
 
-    <string name="about_body"><![CDATA[For Wio IOT Server<br>
+    <string name="about_body"><![CDATA[
+        <b>Copyright 2015 <a href="http://www.seeed.cc/">Seeed Technology Co.,Ltd.</a></b><br>
         <br>
-        <b>Copyright:</b>by <b><a href="http://www.seeed.cc/">Seeed Studio</a> 2015</b><br>
+        <b><a href="http://iot.seeed.cc/privacy_policy.html">Privacy Policy</a></b><br>
         <br>
         <br>
-        Get: <a href="https://github.com/awong1900/Wio_Link_Android_App">Source and doc</a><br>
+        <b>Many thanks to these libraries and ideas:</b><br><br>
+        <i><b><a href="https://github.com/JakeWharton/ViewPagerIndicator">viewpagerindicator</a></b> by Jake Wharton</i><br><br>
+        <i><b><a href="https://github.com/square/retrofit">retrofit</a></b> by Square</i><br><br>
+        <i><b><a href="https://github.com/EsotericSoftware/yamlbeans">yamlbeans</a></b> by EsotericSoftware</i><br><br>
+        <i><b><a href="https://github.com/zxing/zxing">zxing</a></b> by zxing</i><br><br>
+        <i><b><a href="https://github.com/tiagohm/MarkdownView">MarkdownView</a></b> by tiagohm</i><br><br>
         <br>
-        <b>Many thanks for code and ideas to:</b><br>
-        <b><a href="https://github.com/JakeWharton/ViewPagerIndicator">viewpagerindicator</a></b><br>
-        <i>by Jake Wharton</i><br><br>
-        <b><a href="https://github.com/square/retrofit">retrofit</a></b><br>
-        <i>by Square</i><br><br>
-        <b><a href="https://github.com/EsotericSoftware/yamlbeans">yamlbeans</a></b><br>
-        <i>by EsotericSoftware</i><br><br>
-        <b><a href="https://github.com/zxing/zxing">zxing</a></b><br>
-        <i>by zxing</i><br><br>
-        <br>]]>
+        This app is open source at <a href="https://github.com/Seeed-Studio/Wio_Link_Android_App">github</a><br>
+
+        ]]>
     </string>
 
     <string name="title_about"><![CDATA[
-        <b>Wio </b>&nbsp;<font color="#888888">v%1$s</font>
+        <b>Wio</b>&nbsp;<font color="#888888">v%1$s</font>
     ]]></string>
 
     <string name="ap_config_hint_node_name">set your wio name</string>
@@ -206,4 +205,5 @@
     <string name="not_set">Not Set</string>
     <string name="zero_device">0 DEVICES</string>
     <string name="devices">"DEVICES"</string>
+    <string name="privacy_policy">Privacy Policy</string>
 </resources>

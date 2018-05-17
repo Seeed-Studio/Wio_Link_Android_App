@@ -16,16 +16,19 @@ public class SmartValue<T> {
     }
 
     public T getVal() {
-        int server = App.getApp().getSp().getInt(Constant.SP_SERVER_SELECT, Constant.Server.In_Net.getValue());
 
-        if (ToolUtil.isApkDebug()) {
-            if (server == Constant.Server.In_Net.getValue()){
-                return debug;
-            }else {
-                return release;
-            }
-        } else {
-            return release;
-        }
+        return release;
+
+//        int server = App.getApp().getSp().getInt(Constant.SP_SERVER_SELECT, Constant.Server.In_Net.getValue());
+//
+//        if (ToolUtil.isApkDebug()) {
+//            if (server == Constant.Server.In_Net.getValue()){
+//                return debug;
+//            }else {
+//                return release;
+//            }
+//        } else {
+//            return release;
+//        }
     }
 }

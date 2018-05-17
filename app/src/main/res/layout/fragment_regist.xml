@@ -134,6 +134,41 @@
                     android:layout_height="3dp"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <cc.seeed.iot.view.FontTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="By Registering you agree to the "
+                    android:textColor="#C7C7C7"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+                <cc.seeed.iot.view.FontTextView
+                    android:id="@+id/mTvPrivacy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_horizontal"
+                    android:singleLine="true"
+                    android:text="Privacy Policy"
+                    android:textColor="@color/apptheme_dialog_button"
+                    android:textSize="12sp"
+                    app:cusTextFont="@string/Proxima_Nova_Regular" />
+
+
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

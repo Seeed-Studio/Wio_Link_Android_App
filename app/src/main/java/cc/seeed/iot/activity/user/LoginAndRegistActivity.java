@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Process;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -198,7 +199,7 @@ public class LoginAndRegistActivity extends BaseActivity implements ViewPager.On
             case R.id.mRlFacebook:
                 MobclickAgent.onEvent(this, "10007");
                 if (!ToolUtil.isInstallByread("com.facebook.katana")) {
-                    App.showToastShrot("You don't have to install Facebook");
+                    App.showToastShrot("You don't have Facebook installed");
                     return;
                 }
                 OtherPlatformUtils.getFacebookInfo(this, callbackManager, OtherPlatformUtils.LoginWithFacebook);

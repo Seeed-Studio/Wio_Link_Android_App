@@ -42,11 +42,17 @@
             android:value="5" />
         <meta-data
             android:name="AA_MODELS"
-            android:value="cc.seeed.iot.webapi.model.Node, cc.seeed.iot.webapi.model.GroverDriver,
-            cc.seeed.iot.ui_setnode.model.PinConfig" />
+            android:value="cc.seeed.iot.webapi.model.Node,cc.seeed.iot.webapi.model.GroverDriver,cc.seeed.iot.ui_setnode.model.PinConfig" />
         <meta-data
             android:name="AA_SERIALIZERS"
             android:value="cc.seeed.iot.util.UtilListSerializer,cc.seeed.iot.util.UtilMapSerializer" />
+
+        <provider
+            android:name="com.activeandroid.content.ContentProvider"
+            android:authorities="cc.seeed.iot.ap"
+            android:enabled="true"
+            android:exported="false">
+        </provider>
 
         <activity
             android:name="cc.seeed.iot.ui_main.MainScreenActivity"
@@ -62,6 +68,9 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.HelpActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".activity.PrivacyPolicyActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".activity.SelectServerActivity"

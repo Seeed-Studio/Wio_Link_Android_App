@@ -43,9 +43,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:singleLine="true"
-                        android:inputType="textEmailAddress"
                         android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
                         android:textColor="#000000"
                         android:textColorHint="#FFC7C7C7"
                         android:textSize="14sp"
@@ -77,8 +77,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
-                        android:inputType="textPassword"
                         android:hint="Password"
+                        android:inputType="textPassword"
                         android:singleLine="true"
                         android:textColor="#000000"
                         android:textColorHint="#FFC7C7C7"
@@ -101,10 +101,10 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:background="@drawable/shadow_down_bg"
+                    android:layout_height="3dp"
                     android:layout_marginLeft="1dp"
                     android:layout_marginRight="1dp"
-                    android:layout_height="3dp"/>
+                    android:background="@drawable/shadow_down_bg" />
             </LinearLayout>
 
             <cc.seeed.iot.view.FontTextView
