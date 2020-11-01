@@ -9,10 +9,9 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,21 +23,17 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
-import com.umeng.socialize.UMShareAPI;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
-import cc.seeed.iot.util.DBHelper;
 import cc.seeed.iot.util.MLog;
 import cc.seeed.iot.util.OtherPlatformUtils;
 import cc.seeed.iot.util.ShareUtils;
-import cc.seeed.iot.util.UmengUtils;
 import cc.seeed.iot.webapi.model.Node;
 
 public class WebActivity extends BaseActivity {

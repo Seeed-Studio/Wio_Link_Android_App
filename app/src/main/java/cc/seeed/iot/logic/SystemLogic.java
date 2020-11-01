@@ -2,11 +2,9 @@ package cc.seeed.iot.logic;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.text.TextUtils;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.loopj.android.http.RequestParams;

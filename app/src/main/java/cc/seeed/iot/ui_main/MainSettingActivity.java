@@ -2,7 +2,7 @@ package cc.seeed.iot.ui_main;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -18,7 +18,6 @@ import cc.seeed.iot.activity.user.LoginAndRegistActivity;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.activity.user.ChangePwdActivity;
 import cc.seeed.iot.util.CommonUrl;
-import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.view.FontTextView;
 import cc.seeed.iot.webapi.model.Node;
 
