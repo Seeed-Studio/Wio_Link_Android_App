@@ -247,7 +247,7 @@ public class Step03WifiWioListActivity extends BaseActivity
         WifiConfiguration conf = new WifiConfiguration();
         conf.SSID = "\"" + SSID + "\"";
         conf.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-        int asd = wifiManager.addNetwork(conf);
+        wifiManager.addNetwork(conf);
 
         List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
         if (list == null) {
