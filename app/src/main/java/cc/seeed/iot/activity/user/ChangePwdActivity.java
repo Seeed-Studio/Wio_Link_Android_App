@@ -1,18 +1,13 @@
 package cc.seeed.iot.activity.user;
 
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.umeng.analytics.MobclickAgent;
 
@@ -21,13 +16,7 @@ import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
 import cc.seeed.iot.activity.BaseActivity;
-import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.webapi.IotApi;
-import cc.seeed.iot.webapi.IotService;
-import cc.seeed.iot.webapi.model.UserResponse;
-import retrofit.Callback;
-import retrofit.RetrofitError;
 
 public class ChangePwdActivity extends BaseActivity {
     private static final String TAG = "ChangePwdActivity";

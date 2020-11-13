@@ -15,10 +15,10 @@ import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
@@ -96,7 +96,6 @@ public class Step03WifiWioListActivity extends BaseActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wifi_list);
         ButterKnife.inject(this);
-
         initToolBar();
         initData();
 
@@ -383,12 +382,17 @@ public class Step03WifiWioListActivity extends BaseActivity
 
     private BroadcastReceiver wifiActionReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
+            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+
             if (intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
                 NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WifiManager.EXTRA_NETWORK_INFO);
                 if (networkInfo.getState().equals(NetworkInfo.State.CONNECTED)) {
-                    WifiInfo wifiInfo = (WifiInfo) intent.getParcelableExtra(WifiManager.EXTRA_WIFI_INFO);
+                    String ssid = wifiManager.getConnectionInfo().getSSID();
+                    if(ssid == null) {
+                        return;
+                    }
 
-                    if (wifiInfo.getSSID().contains(selected_ssid) && state_selected) {
+                    if (ssid.contains(selected_ssid) && state_selected) {
                         Log.d(TAG, "connected!!");
                         mWaitDialog.dismiss();
                         state_selected = false;

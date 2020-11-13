@@ -7,7 +7,7 @@
     android:background="@mipmap/background_01"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -113,7 +113,7 @@
             android:clickable="true"
             android:scaleType="centerCrop" />
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/grove_i2c_list"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -123,18 +123,18 @@
             android:clickable="true"
             android:visibility="invisible">
 
-        </android.support.v7.widget.RecyclerView>
+        </androidx.recyclerview.widget.RecyclerView>
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/grove_selector"
         android:layout_width="match_parent"
         android:background="@drawable/grove_filter_bg"
         android:elevation="3dp"
         android:layout_height="56dp"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/grove_list"
         android:layout_width="match_parent"
         android:layout_marginTop="56dp"

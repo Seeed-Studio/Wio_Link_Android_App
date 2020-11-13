@@ -5,45 +5,31 @@ import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
-import cc.seeed.iot.activity.add_step.Step01GoReadyActivity;
-import cc.seeed.iot.activity.add_step.Step04ApConnectActivity;
 import cc.seeed.iot.entity.User;
 import cc.seeed.iot.logic.FeedbackLogic;
 import cc.seeed.iot.logic.UserLogic;
-import cc.seeed.iot.ui_main.MainScreenActivity;
-import cc.seeed.iot.ui_main.WebActivity;
-import cc.seeed.iot.ui_setnode.model.NodeConfigHelper;
-import cc.seeed.iot.util.Constant;
 import cc.seeed.iot.util.DialogUtils;
 import cc.seeed.iot.util.RegularUtils;
-import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontEditView;
-import cc.seeed.iot.view.FontTextView;
-import cc.seeed.iot.webapi.model.NodeJson;
 
 /**
  * Created by seeed on 2016/3/15.

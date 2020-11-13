@@ -1,9 +1,8 @@
 package cc.seeed.iot.adapter.add_node;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import cc.seeed.iot.R;
 import cc.seeed.iot.view.FontTextView;

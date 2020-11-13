@@ -3,7 +3,7 @@ package cc.seeed.iot.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,7 +27,6 @@ import cc.seeed.iot.util.ShareUtils;
 import cc.seeed.iot.util.TimeUtil;
 import cc.seeed.iot.util.ToolUtil;
 import cc.seeed.iot.view.FontTextView;
-import cc.seeed.iot.web.WebActivity;
 import cc.seeed.iot.webapi.model.GroverDriver;
 
 /**

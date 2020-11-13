@@ -1,7 +1,7 @@
 package cc.seeed.iot.activity;
 
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;

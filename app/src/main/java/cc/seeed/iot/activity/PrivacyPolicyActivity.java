@@ -1,25 +1,16 @@
 package cc.seeed.iot.activity;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
+
+import androidx.appcompat.widget.Toolbar;
 
 import com.umeng.analytics.MobclickAgent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import cc.seeed.iot.R;
-import cc.seeed.iot.adapter.HelpAdapter;
-import cc.seeed.iot.entity.FAQBean;
 
 import br.tiagohm.markdownview.MarkdownView;
-import br.tiagohm.markdownview.css.InternalStyleSheet;
 import br.tiagohm.markdownview.css.styles.Github;
 
 /**

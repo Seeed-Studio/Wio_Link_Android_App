@@ -388,7 +388,7 @@ public class TestActivity extends BaseActivity implements RadioGroup.OnCheckedCh
     }
 
     private void showCheckVersionTip() {
-        android.support.v7.app.AlertDialog dialog = new android.support.v7.app.AlertDialog.Builder(TestActivity.this)
+        androidx.appcompat.app.AlertDialog dialog = new androidx.appcompat.app.AlertDialog.Builder(TestActivity.this)
                 .setMessage("Failed to get the firmware version")
                 .setPositiveButton("Try again", new DialogInterface.OnClickListener() {
                     @Override

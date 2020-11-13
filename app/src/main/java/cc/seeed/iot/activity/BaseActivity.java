@@ -3,13 +3,11 @@ package cc.seeed.iot.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-
-import com.umeng.analytics.MobclickAgent;
 
 import cc.seeed.iot.App;
 import cc.seeed.iot.R;
@@ -18,7 +16,6 @@ import cc.seeed.iot.logic.CmdConst;
 import cc.seeed.iot.logic.UserLogic;
 import cc.seeed.iot.mgr.IUiObserver;
 import cc.seeed.iot.mgr.UiObserverManager;
-import cc.seeed.iot.ui_main.MainScreenActivity;
 import cc.seeed.iot.util.ToolUtil;
 
 /**
