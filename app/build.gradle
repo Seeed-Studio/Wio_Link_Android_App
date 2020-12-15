@@ -1,11 +1,13 @@
 apply plugin: 'com.android.application'
 android {
 
+//    compileSdkVersion 29
     compileSdkVersion 28
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "cc.seeed.iot.ap"
         minSdkVersion 23
+//        targetSdkVersion 29
         targetSdkVersion 28
         versionCode 32
         versionName '2.3.7'
@@ -33,10 +35,9 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.config
+//            signingConfig signingConfigs.release
         }
         debug {
-            signingConfig signingConfigs.config
         }
     }
     repositories { flatDir { dirs 'libs' } }
