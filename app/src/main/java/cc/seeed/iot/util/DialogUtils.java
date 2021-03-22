@@ -210,7 +210,6 @@ public class DialogUtils {
                 if (mRbCustomServer.isChecked()) {
                     String url = mEtCustomServer.getText().toString().trim();
                     if (!RegularUtils.isWebsite(url)) {
-                        //  App.showToastShrot(context.getString(R.string.website_format_error));
                         mEtCustomServer.setError(context.getResources().getString(R.string.website_format_hint), context.getDrawable(R.mipmap.edit_help));
                         return;
                     }

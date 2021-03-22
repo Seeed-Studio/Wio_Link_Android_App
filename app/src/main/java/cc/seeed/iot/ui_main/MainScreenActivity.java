@@ -612,11 +612,6 @@ public class MainScreenActivity extends BaseActivity
             return true;
         }
         Intent intent = new Intent(this, SetupDeviceActivity.class);
-       /* if (node.board.equals(Constant.WIO_LINK_V1_0)) {
-            intent.setClass(this, SetupIotLinkActivity.class);
-        } else if (node.board.equals(Constant.WIO_NODE_V1_0)) {
-            intent.setClass(this, SetupIotNodeActivity.class);
-        }*/
         intent.putExtra("node_sn", node.node_sn);
         startActivity(intent);
         return true;

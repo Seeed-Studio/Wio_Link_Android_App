@@ -1,5 +1,6 @@
 <resources>
 
+    <!--Word-->
     <string name="server_global">グローバル</string>
     <string name="server_old_global">グローバル(旧)</string>
     <string name="server_chinese">中国</string>
@@ -27,6 +28,7 @@
     <string name="device_name">デバイス名</string>
     <string name="data_exchange_server">データ交換サーバー</string>
 
+    <!--Message-->
     <string name="msg_select_type_of_device">追加するデバイスを選択してください。</string>
     <string name="msg_email_format_error">Eメールアドレスのフォーマットが間違っています。正しいEメールアドレスを入力してください。</string>
     <string name="msg_password_too_short_error">パスワードが短すぎます。6文字以上を入力してください。</string>
@@ -35,6 +37,7 @@
     <string name="msg_check_wio_is_in_config_mode">デバイスが設定モードになっていることを確認してください。\n青色LEDがふんわりと点滅していればOKです。</string>
     <string name="msg_hint_not_device">デバイスが登録されていません。\nデバイスを追加してください。</string>
 
+    <!--Menu-->
     <string name="menu_grove_list">Grove一覧</string>
     <string name="menu_support">サポート</string>
     <string name="menu_setting">設定</string>
@@ -47,7 +50,7 @@
     <string name="menu_change_wifi">Wi-Fi変更</string>
     <string name="menu_help">サポート</string>
 
-    <!--Activity-->
+    <!--Specific Activity-->
     <string name="main_screen_activity_title">デバイス一覧</string>
     <string name="select_server_activity_title">サーバーを選択</string>
     <string name="step01_go_ready_activity_title_wio_link">Wio Linkをセットアップ</string>
@@ -58,7 +61,7 @@
     <string name="node_setting_activity_title">デバイス設定</string>
     <string name="node_setting_activity_data_exchange_server_empty">未設定</string>
 
-    <!--View-->
+    <!--Specific View-->
     <string name="activity_sel_server_description">あなたの地域を選択してください。\n独自のサーバーを使うときは"カスタム"を選んで、サーバーのURLを入力してください。</string>
     <string name="dialog_edit_node_name_description">デバイスの追加が完了しました。\nデバイスの名前を入力してください。</string>
     <string name="dialog_edit_node_name_submit">登録</string>

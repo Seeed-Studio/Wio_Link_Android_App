@@ -36,10 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/mIvLoading"
-        android:layout_marginTop="50dp"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
         android:gravity="center_horizontal"
-        android:text="We are almost there!\r\nThis process will take about a minute."
+        android:text="We are almost there!\nThis process will take about a minute."
         android:textColor="#A6000000"
         android:textSize="14sp"
         app:cusTextFont="@string/Proxima_Nova_Regular" />
