@@ -79,7 +79,7 @@ public class NodeSettingActivity extends BaseActivity {
     private void initView() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.toolBar_title));
+        getSupportActionBar().setTitle(getString(R.string.node_setting_activity_title));
     }
 
     private void initData() {
@@ -93,7 +93,7 @@ public class NodeSettingActivity extends BaseActivity {
 
         mTvName.setText(node.name);
         if (TextUtils.isEmpty(node.dataxserver)) {
-            mTvConnectServer.setText(R.string.not_set);
+            mTvConnectServer.setText(R.string.node_setting_activity_data_exchange_server_empty);
         } else {
             mTvConnectServer.setText(node.dataxserver);
         }
@@ -135,7 +135,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     private void saveUrl() {
-        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Customized Server","", new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, getString(R.string.data_exchange_server),"", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
                 if (TextUtils.isEmpty(content)) {

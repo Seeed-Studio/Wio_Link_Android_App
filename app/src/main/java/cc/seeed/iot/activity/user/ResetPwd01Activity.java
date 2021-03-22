@@ -57,7 +57,7 @@ public class ResetPwd01Activity extends BaseActivity {
     public void resetEmail() {
         String email = mEtEmail.getText().toString().trim();
         if (!RegularUtils.isEmail(email)) {
-            mEtEmail.setError(getString(R.string.email_format_error));
+            mEtEmail.setError(getString(R.string.msg_email_format_error));
             mEtEmail.requestFocus();
             return;
         }

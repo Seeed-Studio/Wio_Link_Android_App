@@ -91,7 +91,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="1dp"
                         android:singleLine="true"
-                        android:text="SIGN UP"
+                        android:text="@string/registration"
                         android:textColor="#ffffff"
                         android:textSize="16sp"
                         app:cusTextFont="@string/Proxima_Nova_Semibold" />
@@ -118,7 +118,7 @@
                         android:layout_centerInParent="true"
                         android:layout_marginTop="1dp"
                         android:singleLine="true"
-                        android:text="LOG IN"
+                        android:text="@string/login"
                         android:textColor="#b2ffffff"
                         android:textSize="16sp"
                         app:cusTextFont="@string/Proxima_Nova_Semibold" />
@@ -192,7 +192,19 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="3dp"
-                            android:text="Server Location:"
+                            android:text="@string/server_location"
+                            android:textColor="#9B9B9B"
+                            android:textSize="14sp"
+                            app:cusTextFont="@string/Proxima_Nova_Semibold" />
+
+                        <cc.seeed.iot.view.FontTextView
+                            android:id="@+id/fontTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="3dp"
+                            android:layout_weight="1"
+                            android:text=":"
                             android:textColor="#9B9B9B"
                             android:textSize="14sp"
                             app:cusTextFont="@string/Proxima_Nova_Semibold" />
@@ -202,7 +214,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
-                            android:text="Global"
+                            android:text="-"
                             android:textColor="#FF252C59"
                             android:textSize="14sp"
                             app:cusTextFont="@string/Proxima_Nova_Semibold" />

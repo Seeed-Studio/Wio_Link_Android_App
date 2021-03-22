@@ -106,11 +106,11 @@ public class Step03WifiWioListActivity extends BaseActivity
     private void initToolBar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.title_wio_activity);
+        getSupportActionBar().setTitle(R.string.step03_wifi_wio_list_activity_title);
     }
 
     private void initData() {
-        mTvTip.setText(R.string.is_config_mode);
+        mTvTip.setText(R.string.msg_check_wio_is_in_config_mode);
         mStepView.setDoingStep(2);
         if (mWifiListView != null) {
             mWifiListView.setHasFixedSize(true);

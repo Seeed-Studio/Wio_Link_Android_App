@@ -16,12 +16,8 @@
 
     <!-- common-->
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
     <string name="notification_error_ssl_cert_invalid">"You're accessing a page with an untrusted or invalid certificate. Do you want to continue?"</string>
     <string name="website_format_error">hmmm..website looks wrong..</string>
-    <string name="email_format_error">hmmm..email address looks wrong..</string>
-    <string name="pwd_format_error">Password is too short (minimum is 6 characters)</string>
-    <string name="pwd_dont_match_error">Passwords don\'t match</string>
     <string name="website_format_hint">"e.g: https://wio.seeed.io or https://192.168.31.2"</string>
     <string name="hint_get_host_address">"Get your server's host address…"</string>
     <string name="loading">"loading…"</string>
@@ -30,10 +26,72 @@
     <string name="dialog_btn_Cancel">Cancel</string>
     <string name="dialog_btn_FAQ">FAQ</string>
     <string name="dialog_btn_NEXT">NEXT</string>
-    <string name="server_global">Global (new)</string>
+
+    <string name="server_global">Global</string>
     <string name="server_old_global">Global (old)</string>
     <string name="server_chinese">Chinese</string>
     <string name="server_customize">Customize</string>
+    <string name="registration">Registration</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="server_location">Server location</string>
+    <string name="forget_your_password">Forgot your password?</string>
+    <string name="email_address">E-mail address</string>
+    <string name="password">Password</string>
+    <string name="re_enter_password">Re-enter password</string>
+    <string name="save">Save</string>
+    <string name="online_u">ONLINE</string>
+    <string name="offline_u">OFFLINE</string>
+    <string name="grove_connected_number">CONNECTED</string>
+    <string name="zero_device">0 Devices</string>
+    <string name="devices">"Devices"</string>
+    <string name="logout">Logout</string>
+    <string name="next">Next</string>
+    <string name="step1">Step 1</string>
+    <string name="step2">Step 2</string>
+    <string name="step3">Step 3</string>
+    <string name="submit_u">SUBMIT</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_your_first_device">ADD YOUR FIRST DEVICE</string>
+    <string name="device_name">Device Name</string>
+    <string name="data_exchange_server">Customized Server</string>
+
+    <string name="msg_select_type_of_device">CHOOSE A DEVICE TO START</string>
+    <string name="msg_email_format_error">hmmm..email address looks wrong..</string>
+    <string name="msg_password_too_short_error">Password is too short (minimum is 6 characters)</string>
+    <string name="msg_password_dont_match_error">Passwords don\'t match</string>
+    <string name="msg_enter_wifi_password">Enter Wifi Password</string>
+    <string name="msg_check_wio_is_in_config_mode">Please check if Wio device is on configuration mode, in which the blue light appears as breathing.</string>
+    <string name="msg_hint_not_device">You have not connected to any device yet,get started now!</string>
+
+    <string name="menu_grove_list">Groves</string>
+    <string name="menu_support">Support</string>
+    <string name="menu_setting">Setting</string>
+    <string name="menu_about">About</string>
+    <string name="menu_feedback">Feedback</string>
+    <string name="menu_update_app">Update App</string>
+
+    <string name="menu_view_api">View API</string>
+    <string name="menu_device_setting">Device Setting</string>
+    <string name="menu_change_wifi">Change Wi-Fi Network</string>
+    <string name="menu_help">Help</string>
+
+    <!--Activity-->
+    <string name="main_screen_activity_title">Devices</string>
+    <string name="select_server_activity_title">Choose a Server</string>
+    <string name="step01_go_ready_activity_title_wio_link">Setup Your Wio Link</string>
+    <string name="step01_go_ready_activity_title_wio_node">Setup Your Wio Node</string>
+    <string name="step01_go_ready_activity_title_change_wifi">Change Wi-Fi Networks</string>
+    <string name="step02_wifi_list_activity_title">Connect to Wi-Fi Network</string>
+    <string name="step03_wifi_wio_list_activity_title">Connect to Wio Device</string>
+    <string name="node_setting_activity_title">Device Setting</string>
+    <string name="node_setting_activity_data_exchange_server_empty">Not Set</string>
+
+    <!--View-->
+    <string name="activity_sel_server_description">Simply choose your region, and Wio will recommend the fastest server for you.\nChoosing Customized Server if you plan to run your data on your own server.</string>
+    <string name="dialog_edit_node_name_description">Your device is now ready!\n\nName this device if you wish.</string>
+    <string name="dialog_edit_node_name_submit">Start Wio-ing</string>
+    <string name="activity_node_setting_delete_device">Delete this device</string>
 
     <!--Setup Activity-->
     <string name="title_section1">Section 1</string>
@@ -80,12 +138,8 @@
     <string name="title_activity_test">test</string>
 
     <!--Mian Screen-->
-    <string name="online">ONLINE</string>
-    <string name="offline">OFFLINE</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_name">New Wio name</string>
-    <string name="add_your_first_device">ADD YOUR FIRST DEVICE</string>
-    <string name="hint_not_device">You have not connected to any device yet,get started now!</string>
     <string name="confirm_quit">Confirm the exit</string>
 
 
@@ -131,7 +185,6 @@
     </string-array>
 
     <!-- ui_ap_config -->
-    <string name="title_wio_activity">Connect to Wio Device</string>
     <string name="title_ap_connect_activity">Transmitting Configuration</string>
     <string name="ap_config_progress_msg">Setting Wio name…</string>
 
@@ -144,14 +197,10 @@
     <string name="update">Update</string>
     <string name="api">API</string>
     <string name="share_api_to">Share API url to…</string>
-    <string name="groves">Grove List</string>
     <string name="ConnectServerFail">Can\'t connect server…</string>
     <string name="serverOn">Server on</string>
     <string name="change">. Change?</string>
     <string name="location_tip">Make sure that location services turned on</string>
-    <string name="password">Password</string>
-    <string name="connect_server">Connect Server</string>
-    <string name="setting_logout">Log Out</string>
 
     <!-- login and regist activity-->
     <string name="loading_login">Authenticating …</string>
@@ -163,27 +212,15 @@
     <string name="reset_pwd_title_01">Password Recovery</string>
 
     <!-- activity node setting-->
-    <string name="device_name">Device Name</string>
-    <string name="customer_server">Customized Server</string>
-    <string name="delete_device">Delete this device</string>
-    <string name="toolBar_title">Device Setting</string>
     <string name="cont_connection_wifi">Could not connection to Wi-Fi. Please check Wi-Fi password and try again\r\n\r\nError code:1021</string>
     <string name="cont_connection_wio_wifi">Could not connect to Wio Wi-fi hotspot, please try again or manually choose Wio\'s Wi-Fi hotspot in system settings.\r\n\r\n Error code:1031</string>
     <string name="link_to_wifi">Please connect to Wi-Fi network before you start</string>
 
     <!-- add device step 01-->
-    <string name="add_device_step01_link_title">Setup Your Wio Link</string>
-    <string name="add_device_step01_node_title">Setup Your Wio Node</string>
-    <string name="add_device_step01_change_wifi">Change Wi-Fi Networks</string>
     <string name="add_device_step01_progress_connect_server">Connect server…</string>
     <string name="add_device_step01_err_not_connect_wifi">You are not connected to Wi-fi</string>
 
-    <!-- add device step 02-->
-    <string name="title_wifi_list_activity">Connect to Wi-Fi Network</string>
-
-
     <string name="grove_detail">Detail</string>
-    <string name="help_toolbar">Support</string>
     <string name="choose_server_toolbar">Choose a Server</string>
     <string name="old_server_hint"><![CDATA[This option is for users who registered with our old Global Server.<br><br> Because we are making changes our server architecture, our old Global Server will be terminated on <b><font color="#484848">September 1, 2016</font></b>. At that time, all your data will be transferred automatically to new Global Server.<br><br> We highly recommend that you use our new Global Server for your new projects.]]></string>
     <string name="choose_display_grove">Choose Display Grove</string>
@@ -197,13 +234,9 @@
     <string name="bind_email">Bind Email</string>
     <string name="authorization_failure">Authorization failure!</string>
     <string name="no_wifi_permission">Please ensure that the Wio app has location permissions turned on, and that your device has location services turned on.</string>
-    <string name="is_config_mode">Please check if Wio device is on configuration mode, in which the blue light appears as breathing.</string>
     <string name="check_fw">Check the firmware version…</string>
     <string name="send_wifi_passwd">Sending Wi-Fi password to Wio…</string>
     <string name="wait_wio">Waiting Wio get ip address…</string>
     <string name="add_on">"Added on "</string>
-    <string name="not_set">Not Set</string>
-    <string name="zero_device">0 DEVICES</string>
-    <string name="devices">"DEVICES"</string>
     <string name="privacy_policy">Privacy Policy</string>
 </resources>

@@ -363,10 +363,10 @@ public class SetupDeviceActivity extends BaseActivity
             return true;
         } else if (id == R.id.update) {
             List<String> menu = new ArrayList<>();
-            menu.add("View API");
-            menu.add("Device Setting");
-            menu.add("Change Wi-Fi Network");
-            menu.add("Help");
+            menu.add(getResources().getString(R.string.menu_view_api));
+            menu.add(getResources().getString(R.string.menu_device_setting));
+            menu.add(getResources().getString(R.string.menu_change_wifi));
+            menu.add(getResources().getString(R.string.menu_help));
             DialogUtils.showMenuPopWindow(this, mToolbar, menu, new DialogUtils.OnMenuItemChickListener() {
                 @Override
                 public void chickItem(View v, int position) {

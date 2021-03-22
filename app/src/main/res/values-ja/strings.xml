@@ -1,0 +1,67 @@
+<resources>
+
+    <string name="server_global">グローバル</string>
+    <string name="server_old_global">グローバル(旧)</string>
+    <string name="server_chinese">中国</string>
+    <string name="server_customize">カスタム</string>
+    <string name="registration">登録</string>
+    <string name="register">登録</string>
+    <string name="login">ログイン</string>
+    <string name="server_location">サーバーの場所:</string>
+    <string name="forget_your_password">パスワードを忘れた</string>
+    <string name="email_address">Eメールアドレス</string>
+    <string name="password">パスワード</string>
+    <string name="re_enter_password">パスワード再入力</string>
+    <string name="save">保存</string>
+    <string name="grove_connected_number">接続数</string>
+    <string name="zero_device">0 デバイス</string>
+    <string name="devices">"デバイス"</string>
+    <string name="logout">ログアウト</string>
+    <string name="next">次へ</string>
+    <string name="step1">ステップ1</string>
+    <string name="step2">ステップ2</string>
+    <string name="step3">ステップ3</string>
+    <string name="submit_u">OK</string>
+    <string name="cancel">キャンセル</string>
+    <string name="add_your_first_device">デバイスを追加</string>
+    <string name="device_name">デバイス名</string>
+    <string name="data_exchange_server">データ交換サーバー</string>
+
+    <string name="msg_select_type_of_device">追加するデバイスを選択してください。</string>
+    <string name="msg_email_format_error">Eメールアドレスのフォーマットが間違っています。正しいEメールアドレスを入力してください。</string>
+    <string name="msg_password_too_short_error">パスワードが短すぎます。6文字以上を入力してください。</string>
+    <string name="msg_password_dont_match_error">パスワードが一致しません。入力し直してください。</string>
+    <string name="msg_enter_wifi_password">Wi-Fiのパスワードを入力してください。</string>
+    <string name="msg_check_wio_is_in_config_mode">デバイスが設定モードになっていることを確認してください。\n青色LEDがふんわりと点滅していればOKです。</string>
+    <string name="msg_hint_not_device">デバイスが登録されていません。\nデバイスを追加してください。</string>
+
+    <string name="menu_grove_list">Grove一覧</string>
+    <string name="menu_support">サポート</string>
+    <string name="menu_setting">設定</string>
+    <string name="menu_about">Wioアプリについて</string>
+    <string name="menu_feedback">意見</string>
+    <string name="menu_update_app">Wioアプリ更新</string>
+
+    <string name="menu_view_api">API</string>
+    <string name="menu_device_setting">設定</string>
+    <string name="menu_change_wifi">Wi-Fi変更</string>
+    <string name="menu_help">サポート</string>
+
+    <!--Activity-->
+    <string name="main_screen_activity_title">デバイス一覧</string>
+    <string name="select_server_activity_title">サーバーを選択</string>
+    <string name="step01_go_ready_activity_title_wio_link">Wio Linkをセットアップ</string>
+    <string name="step01_go_ready_activity_title_wio_node">Wio Nodeをセットアップ</string>
+    <string name="step01_go_ready_activity_title_change_wifi">接続先Wi-Fiを変更</string>
+    <string name="step02_wifi_list_activity_title">接続先Wi-Fi</string>
+    <string name="step03_wifi_wio_list_activity_title">デバイス</string>
+    <string name="node_setting_activity_title">デバイス設定</string>
+    <string name="node_setting_activity_data_exchange_server_empty">未設定</string>
+
+    <!--View-->
+    <string name="activity_sel_server_description">あなたの地域を選択してください。\n独自のサーバーを使うときは"カスタム"を選んで、サーバーのURLを入力してください。</string>
+    <string name="dialog_edit_node_name_description">デバイスの追加が完了しました。\nデバイスの名前を入力してください。</string>
+    <string name="dialog_edit_node_name_submit">登録</string>
+    <string name="activity_node_setting_delete_device">デバイスを削除</string>
+
+</resources>

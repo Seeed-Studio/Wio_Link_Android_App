@@ -202,7 +202,7 @@ public class MainScreenActivity extends BaseActivity
         if (ab != null) {
             ab.setHomeAsUpIndicator(R.mipmap.menu);
             ab.setDisplayHomeAsUpEnabled(true);
-            ab.setTitle("Devices");
+            ab.setTitle(R.string.main_screen_activity_title);
         }
         toolbar.setOnClickListener(this);
 

@@ -63,23 +63,23 @@ public class RegistFragment extends BaseFragment {
         String pwd = mEtPwd.getText().toString().trim();
         String rePwd = mEtRePwd.getText().toString().trim();
         if (!RegularUtils.isEmail(email)) {
-            mEtEmail.setError(getString(R.string.email_format_error));
+            mEtEmail.setError(getString(R.string.msg_email_format_error));
             mEtEmail.requestFocus();
             return;
         }
         if (TextUtils.isEmpty(pwd) || pwd.length() < 6) {
-            mEtPwd.setError(getString(R.string.pwd_format_error));
+            mEtPwd.setError(getString(R.string.msg_password_too_short_error));
             mEtPwd.requestFocus();
             return;
         }
 
         if (TextUtils.isEmpty(rePwd) || rePwd.length() < 6) {
-            mEtRePwd.setError(getString(R.string.pwd_format_error));
+            mEtRePwd.setError(getString(R.string.msg_password_too_short_error));
             mEtRePwd.requestFocus();
             return;
         } else {
             if (!rePwd.equals(pwd)) {
-                mEtRePwd.setError(getString(R.string.pwd_dont_match_error));
+                mEtRePwd.setError(getString(R.string.msg_password_dont_match_error));
                 mEtRePwd.requestFocus();
                 return;
             }

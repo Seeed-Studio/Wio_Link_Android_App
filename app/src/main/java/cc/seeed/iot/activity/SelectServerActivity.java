@@ -83,7 +83,7 @@ public class SelectServerActivity extends BaseActivity implements TextWatcher {
         mEtCustomServer.addTextChangedListener(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.choose_server_toolbar);
+        getSupportActionBar().setTitle(R.string.select_server_activity_title);
     }
 
     private void initData() {

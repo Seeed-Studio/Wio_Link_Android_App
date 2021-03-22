@@ -63,7 +63,7 @@
             <TextView
                 android:id="@+id/mTvSupportDevices"
                 style="@style/menuItemStyle"
-                android:text="Groves" />
+                android:text="@string/menu_grove_list" />
 
             <ImageView
                 android:id="@+id/mIvNewGrove"
@@ -77,7 +77,7 @@
         <TextView
             android:id="@+id/mTvFAQ"
             style="@style/menuItemStyle"
-            android:text="Support" />
+            android:text="@string/menu_support" />
 
 
         <TextView
@@ -93,20 +93,20 @@
 
         <TextView
             android:id="@+id/mTvSetting"
-            android:layout_marginTop="10dp"
             style="@style/menuItemStyle"
-            android:text="Setting" />
+            android:layout_marginTop="10dp"
+            android:text="@string/menu_setting" />
 
 
         <TextView
             android:id="@+id/mTVAbout"
             style="@style/menuItemStyle"
-            android:text="About" />
+            android:text="@string/menu_about" />
 
         <TextView
             android:id="@+id/mTvFeedBack"
             style="@style/menuItemStyle"
-            android:text="Feedback" />
+            android:text="@string/menu_feedback" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -115,8 +115,8 @@
             <TextView
                 android:id="@+id/mTvUpdateApp"
                 style="@style/menuItemStyle"
-                android:visibility="visible"
-                android:text="Update App" />
+                android:text="@string/menu_update_app"
+                android:visibility="visible" />
 
             <ImageView
                 android:id="@+id/mIvUpdateApp"

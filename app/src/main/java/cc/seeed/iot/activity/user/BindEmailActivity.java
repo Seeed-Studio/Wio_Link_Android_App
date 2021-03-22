@@ -82,11 +82,11 @@ public class BindEmailActivity extends BaseActivity {
         String email = mEtEmail.getText().toString().trim();
         String pwd = mEtPwd.getText().toString().trim();
         if (!RegularUtils.isEmail(email)) {
-            mEtEmail.setError(getString(R.string.email_format_error));
+            mEtEmail.setError(getString(R.string.msg_email_format_error));
             mEtEmail.requestFocus();
             return;
         } else if (TextUtils.isEmpty(pwd) || pwd.length() < 6) {
-            mEtPwd.setError(getString(R.string.pwd_format_error));
+            mEtPwd.setError(getString(R.string.msg_password_too_short_error));
             mEtPwd.requestFocus();
             return;
         } else {

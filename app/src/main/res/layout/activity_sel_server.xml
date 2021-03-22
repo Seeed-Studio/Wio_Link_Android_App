@@ -31,7 +31,7 @@
                 android:id="@+id/mTvSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Save"
+                android:text="@string/save"
                 android:textColor="#ADB0C3"
                 android:textSize="14sp"
                 app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -51,10 +51,9 @@
             <cc.seeed.iot.view.FontTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
                 android:layout_marginTop="22dp"
-                android:text="Simply choose your region, and Wio will recommend the fastest server for you.\r\n
-Choosing Customized Server if you plan to run your data on your own server."
+                android:layout_marginRight="16dp"
+                android:text="@string/activity_sel_server_description"
                 android:textColor="#777777"
                 android:textSize="14sp"
                 app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -82,17 +81,9 @@ Choosing Customized Server if you plan to run your data on your own server."
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text="Global Server"
+                    android:text="@string/server_global"
                     android:textColor="#333333"
                     android:textSize="16sp"
-                    app:cusTextFont="@string/Proxima_Nova_Regular" />
-                <cc.seeed.iot.view.FontTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:text="(New)"
-                    android:textColor="#9b9b9b"
-                    android:textSize="12sp"
                     app:cusTextFont="@string/Proxima_Nova_Regular" />
             </LinearLayout>
 
@@ -121,7 +112,7 @@ Choosing Customized Server if you plan to run your data on your own server."
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
-                        android:text="Global Server"
+                        android:text="@string/server_old_global"
                         android:textColor="#333333"
                         android:textSize="16sp"
                         app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -156,10 +147,10 @@ Choosing Customized Server if you plan to run your data on your own server."
                     android:layout_height="wrap_content" />
 
                 <cc.seeed.iot.view.FontTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text="Chinese Server"
+                    android:text="@string/server_chinese"
                     android:textColor="#333333"
                     android:textSize="16sp"
                     app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -183,10 +174,10 @@ Choosing Customized Server if you plan to run your data on your own server."
                     android:layout_height="wrap_content" />
 
                 <cc.seeed.iot.view.FontTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="15dp"
-                    android:text="Customize Server"
+                    android:text="@string/server_customize"
                     android:textColor="#333333"
                     android:textSize="16sp"
                     app:cusTextFont="@string/Proxima_Nova_Regular" />
