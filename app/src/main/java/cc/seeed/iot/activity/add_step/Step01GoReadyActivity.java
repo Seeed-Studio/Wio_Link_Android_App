@@ -66,7 +66,7 @@ public class Step01GoReadyActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle(R.string.add_device_step01_link_title);
+            getSupportActionBar().setTitle(R.string.step01_go_ready_activity_title_wio_link);
         }
     }
 
@@ -83,17 +83,17 @@ public class Step01GoReadyActivity extends BaseActivity {
             case Constant.WIO_LINK_V1_0:
                 mIvCourse.setImageResource(R.mipmap.link_config);
                 if (node != null) {
-                    getSupportActionBar().setTitle(R.string.add_device_step01_change_wifi);
+                    getSupportActionBar().setTitle(R.string.step01_go_ready_activity_title_change_wifi);
                 } else {
-                    getSupportActionBar().setTitle(R.string.add_device_step01_link_title);
+                    getSupportActionBar().setTitle(R.string.step01_go_ready_activity_title_wio_link);
                 }
                 break;
             case Constant.WIO_NODE_V1_0:
                 mIvCourse.setImageResource(R.mipmap.node_config);
                 if (node != null) {
-                    getSupportActionBar().setTitle(R.string.add_device_step01_change_wifi);
+                    getSupportActionBar().setTitle(R.string.step01_go_ready_activity_title_change_wifi);
                 } else {
-                    getSupportActionBar().setTitle(R.string.add_device_step01_node_title);
+                    getSupportActionBar().setTitle(R.string.step01_go_ready_activity_title_wio_node);
                 }
                 break;
         }

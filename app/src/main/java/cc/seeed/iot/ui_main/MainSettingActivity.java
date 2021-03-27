@@ -47,7 +47,7 @@ public class MainSettingActivity extends BaseActivity {
     public void initToolBar() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Setting");
+        getSupportActionBar().setTitle(R.string.menu_setting);
     }
 
     private void initData(){
@@ -61,13 +61,13 @@ public class MainSettingActivity extends BaseActivity {
         }*/
 
         if (CommonUrl.OTA_CHINA_URL.equals(serverUrl)) {
-            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_chinese)+")");
+            mTvConnectServer.setText(getString(R.string.server_chinese));
         } else if (CommonUrl.OTA_INTERNATIONAL_URL.equals(serverUrl)) {
-            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_global)+")");
+            mTvConnectServer.setText(getString(R.string.server_global));
         } else if (CommonUrl.OTA_INTERNATIONAL_OLD_URL.equals(serverUrl)) {
-            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_old_global)+")");
+            mTvConnectServer.setText(getString(R.string.server_old_global));
         } else {
-            mTvConnectServer.setText(serverUrl+"("+getString(R.string.server_customize)+")");
+            mTvConnectServer.setText(getString(R.string.server_customize)+"\n"+serverUrl);
         }
     }
 

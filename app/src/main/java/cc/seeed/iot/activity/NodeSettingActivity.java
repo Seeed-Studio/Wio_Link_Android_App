@@ -79,7 +79,7 @@ public class NodeSettingActivity extends BaseActivity {
     private void initView() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.toolBar_title));
+        getSupportActionBar().setTitle(getString(R.string.node_setting_activity_title));
     }
 
     private void initData() {
@@ -93,7 +93,7 @@ public class NodeSettingActivity extends BaseActivity {
 
         mTvName.setText(node.name);
         if (TextUtils.isEmpty(node.dataxserver)) {
-            mTvConnectServer.setText(R.string.not_set);
+            mTvConnectServer.setText(R.string.node_setting_activity_data_exchange_server_empty);
         } else {
             mTvConnectServer.setText(node.dataxserver);
         }
@@ -119,7 +119,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     private void reName() {
-        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Edit Device Name", "", new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, getString(R.string.node_setting_activity_edit_device_name), "", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
                 if (TextUtils.isEmpty(content)) {
@@ -127,7 +127,7 @@ public class NodeSettingActivity extends BaseActivity {
                     return;
                 } else {
                     dialog.dismiss();
-                    progressDialog = DialogUtils.showProgressDialog(NodeSettingActivity.this, getString(R.string.loading));
+                    progressDialog = DialogUtils.showProgressDialog(NodeSettingActivity.this, getString(R.string.msg_loading));
                     ConfigDeviceLogic.getInstance().nodeReName(node.node_sn, content);
                 }
             }
@@ -135,7 +135,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     private void saveUrl() {
-        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Customized Server","", new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, getString(R.string.data_exchange_server),"", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
                 if (TextUtils.isEmpty(content)) {
@@ -152,7 +152,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     public void getIpAddress(final Activity context, final Dialog dialog, final String url) {
-        progressDialog = DialogUtils.showProgressDialog(context, getString(R.string.loading));
+        progressDialog = DialogUtils.showProgressDialog(context, getString(R.string.msg_loading));
         NetworkUtils.getIpAddress(context, NetworkUtils.getDomainName(url), new NetworkUtils.OnIpCallback() {
             @Override
             public void okCallback(String ip) {

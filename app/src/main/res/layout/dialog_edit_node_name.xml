@@ -29,9 +29,9 @@
             android:id="@+id/mTvHint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
             android:layout_marginTop="18dp"
-            android:text="Your device is now ready!\r\n\r\n Name this device if you wish."
+            android:gravity="center_horizontal"
+            android:text="@string/dialog_edit_node_name_description"
             android:textColor="#777777"
             android:textSize="13sp"
             app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -54,19 +54,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp">
 
-                <cc.seeed.iot.view.FontButton
-                    android:id="@+id/mTvSubmit"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:background="@drawable/btn_long_bg"
-                    android:text="Start Wio-ing"
-                    android:elevation="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:singleLine="true"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFFFF"
-                    android:textSize="14sp"
-                    app:cusButtonFont="@string/Proxima_Nova_Semibold" />
+            <cc.seeed.iot.view.FontButton
+                android:id="@+id/mTvSubmit"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/btn_long_bg"
+                android:elevation="5dp"
+                android:singleLine="true"
+                android:text="@string/dialog_edit_node_name_submit"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFFFF"
+                android:textSize="14sp"
+                app:cusButtonFont="@string/Proxima_Nova_Semibold" />
 
         </RelativeLayout>
     </LinearLayout>

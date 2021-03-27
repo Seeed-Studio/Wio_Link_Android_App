@@ -95,7 +95,7 @@ public class GrovesActivity extends BaseActivity implements GroveFilterRecyclerA
     private void initView() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.groves);
+        getSupportActionBar().setTitle(R.string.menu_grove_list);
          init();
         if (mLvGroves != null) {
             mAdapter = new GrovesAdapter(this, mGroveDrivers);

@@ -50,11 +50,11 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="48dp"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:layout_marginBottom="48dp"
             android:background="@drawable/btn_long_bg"
-            android:text="@string/smartconfig_ready"
+            android:text="@string/next"
             android:textColor="@android:color/white"
             app:cusButtonFont="@string/Proxima_Nova_Semibold" />
 

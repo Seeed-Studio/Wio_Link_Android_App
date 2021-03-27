@@ -101,7 +101,7 @@ public class HelpActivity extends BaseActivity {
     private void initView() {
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(R.string.help_toolbar);
+        getSupportActionBar().setTitle(R.string.menu_support);
     }
 
  /*   @Override

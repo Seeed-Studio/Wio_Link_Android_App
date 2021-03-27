@@ -52,7 +52,7 @@
         <cc.seeed.iot.view.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/connect_server"
+            android:text="@string/server_location"
             android:textColor="#4a4a4a"
             android:textSize="16sp"
             app:cusTextFont="@string/Proxima_Nova_Semibold" />
@@ -86,8 +86,8 @@
         <cc.seeed.iot.view.FontTextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="@string/setting_logout"
             android:gravity="center_vertical"
+            android:text="@string/logout"
             android:textColor="#9b9b9b"
             android:textSize="16sp"
             app:cusTextFont="@string/Proxima_Nova_Semibold" />

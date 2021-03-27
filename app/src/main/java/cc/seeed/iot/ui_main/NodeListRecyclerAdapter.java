@@ -108,10 +108,10 @@ public class NodeListRecyclerAdapter extends RecyclerSwipeAdapter<NodeListRecycl
         }
         holder.mTvTitle.setText(TextUtils.isEmpty(node.name) ? "Wio Link" + position + 1 : node.name);
         if (node.online) {
-            holder.mTvState.setText(R.string.online);
+            holder.mTvState.setText(R.string.online_u);
             holder.mTvState.setBackgroundResource(R.drawable.online_state_bg);
         } else {
-            holder.mTvState.setText(R.string.offline);
+            holder.mTvState.setText(R.string.offline_u);
             holder.mTvState.setBackgroundResource(R.drawable.offline_state_bg);
         }
 

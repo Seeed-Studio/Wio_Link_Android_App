@@ -87,7 +87,7 @@
             android:layout_marginRight="43dp"
             android:layout_marginTop="83dp"
             android:gravity="center_horizontal"
-            android:text="@string/hint_not_device"
+            android:text="@string/msg_hint_not_device"
             android:textColor="#979797"
             android:textSize="16sp"
             android:visibility="visible"
@@ -120,7 +120,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="18dp"
-            android:text="CHOOSE A DEVICE TO START"
+            android:text="@string/msg_select_type_of_device"
             android:textColor="#FF4A4A4A"
             android:textSize="12sp"
             app:cusTextFont="@string/Proxima_Nova_Semibold" />

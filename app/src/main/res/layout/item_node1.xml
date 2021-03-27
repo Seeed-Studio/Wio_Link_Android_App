@@ -56,7 +56,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:text="CONNECTED"
+                    android:text="@string/grove_connected_number"
                     android:textColor="#FF9B9B9B"
                     android:textSize="10sp"
                     app:cusTextFont="@string/Proxima_Nova_Semibold" />
