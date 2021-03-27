@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
-                        android:text="Drag and drop Groves you need to below ports"
+                        android:text="@string/msg_drag_and_drop_grove_to_port"
                         android:textColor="#777777"
                         android:textSize="12sp"
                         app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -80,7 +80,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
                     android:gravity="center"
-                    android:text="New setting only applies after updating firware"
+                    android:text="@string/msg_new_setting_only_applies"
                     android:textColor="#c7c7c7"
                     android:textSize="12sp"
                     app:cusTextFont="@string/Proxima_Nova_Regular" />
@@ -116,7 +116,7 @@
                 android:layout_below="@id/mIvRemove"
                 android:layout_marginTop="10dp"
                 android:gravity="center"
-                android:text="Remove"
+                android:text="@string/trash_box"
                 android:textColor="#4a4a4a"
                 android:textSize="14sp"
                 app:cusTextFont="@string/Proxima_Nova_Semibold" />
@@ -130,7 +130,7 @@
             android:background="@drawable/btn_update_firmware"
             android:gravity="center"
             android:textAllCaps="false"
-            android:text="Update Firmware"
+            android:text="@string/activity_setup_device_update_firmware"
             android:textColor="#ffffff"
             android:textSize="16sp"
             app:cusTextFont="@string/Proxima_Nova_Semibold" />

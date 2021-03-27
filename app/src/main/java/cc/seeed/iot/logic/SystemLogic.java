@@ -55,7 +55,7 @@ public class SystemLogic extends BaseLogic {
 
     public void checkUpdateApk(final Context context, final boolean isNotice) {
         //   String url = "http://192.168.3.65/seeed/api/index.php?r=makermap/version/get-new-version-message";
-        final Dialog dialog = DialogUtils.showProgressDialog(context, context.getString(R.string.loading));
+        final Dialog dialog = DialogUtils.showProgressDialog(context, context.getString(R.string.msg_loading));
         RequestParams params = new RequestParams();
         params.put("type", 1);
         params.put("app_name", "wio");

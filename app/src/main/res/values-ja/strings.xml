@@ -27,6 +27,7 @@
     <string name="add_your_first_device">デバイスを追加</string>
     <string name="device_name">デバイス名</string>
     <string name="data_exchange_server">データ交換サーバー</string>
+    <string name="trash_box">ゴミ箱</string>
 
     <!--Message-->
     <string name="msg_select_type_of_device">追加するデバイスを選択してください。</string>
@@ -36,6 +37,11 @@
     <string name="msg_enter_wifi_password">Wi-Fiのパスワードを入力してください。</string>
     <string name="msg_check_wio_is_in_config_mode">デバイスが設定モードになっていることを確認してください。\n青色LEDがふんわりと点滅していればOKです。</string>
     <string name="msg_hint_not_device">デバイスが登録されていません。\nデバイスを追加してください。</string>
+    <string name="msg_loading">読み込み中</string>
+    <string name="msg_new_setting_only_applies">設定変更後、ファームウェアの更新が必要です。</string>
+    <string name="msg_drag_and_drop_grove_to_port">Groveをコネクタへドラッグ&amp;ドロップしてください。</string>
+    <string name="msg_update_firmware_in_progress">ファームウェアを更新中</string>
+    <string name="msg_updated_firmware">ファームウェアを更新しました。</string>
 
     <!--Menu-->
     <string name="menu_grove_list">Grove一覧</string>
@@ -59,6 +65,7 @@
     <string name="step02_wifi_list_activity_title">接続先Wi-Fi</string>
     <string name="step03_wifi_wio_list_activity_title">デバイス</string>
     <string name="node_setting_activity_title">デバイス設定</string>
+    <string name="node_setting_activity_edit_device_name">デバイス名</string>
     <string name="node_setting_activity_data_exchange_server_empty">未設定</string>
 
     <!--Specific View-->
@@ -66,5 +73,6 @@
     <string name="dialog_edit_node_name_description">デバイスの追加が完了しました。\nデバイスの名前を入力してください。</string>
     <string name="dialog_edit_node_name_submit">登録</string>
     <string name="activity_node_setting_delete_device">デバイスを削除</string>
+    <string name="activity_setup_device_update_firmware">ファームウェアを更新</string>
 
 </resources>

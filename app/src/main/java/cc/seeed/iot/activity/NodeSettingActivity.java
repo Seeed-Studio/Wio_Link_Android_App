@@ -119,7 +119,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     private void reName() {
-        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, "Edit Device Name", "", new DialogUtils.ButtonEditClickListenter() {
+        DialogUtils.showEditOneRowDialog(NodeSettingActivity.this, getString(R.string.node_setting_activity_edit_device_name), "", new DialogUtils.ButtonEditClickListenter() {
             @Override
             public void okClick(Dialog dialog, String content) {
                 if (TextUtils.isEmpty(content)) {
@@ -127,7 +127,7 @@ public class NodeSettingActivity extends BaseActivity {
                     return;
                 } else {
                     dialog.dismiss();
-                    progressDialog = DialogUtils.showProgressDialog(NodeSettingActivity.this, getString(R.string.loading));
+                    progressDialog = DialogUtils.showProgressDialog(NodeSettingActivity.this, getString(R.string.msg_loading));
                     ConfigDeviceLogic.getInstance().nodeReName(node.node_sn, content);
                 }
             }
@@ -152,7 +152,7 @@ public class NodeSettingActivity extends BaseActivity {
     }
 
     public void getIpAddress(final Activity context, final Dialog dialog, final String url) {
-        progressDialog = DialogUtils.showProgressDialog(context, getString(R.string.loading));
+        progressDialog = DialogUtils.showProgressDialog(context, getString(R.string.msg_loading));
         NetworkUtils.getIpAddress(context, NetworkUtils.getDomainName(url), new NetworkUtils.OnIpCallback() {
             @Override
             public void okCallback(String ip) {

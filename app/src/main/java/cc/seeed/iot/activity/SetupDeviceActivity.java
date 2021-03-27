@@ -448,7 +448,7 @@ public class SetupDeviceActivity extends BaseActivity
         mBtnUpdate.setEnabled(false);
         mBtnUpdate.setSelected(false);
         progressDialog = new CustomProgressDialog(this, R.style.AlertDialogBg);
-        setProgressMsg("Preparing Server (10%)");
+        setProgressMsg(getString(R.string.msg_update_firmware_in_progress) + " (10%)");
         mRlRemove.setVisibility(View.GONE);
         isUpdateIng = true;
         ConfigDeviceLogic.getInstance().updateFirware(node.node_key, node_josn);
@@ -929,13 +929,12 @@ public class SetupDeviceActivity extends BaseActivity
             if (ret == ConfigDeviceLogic.UPDATE_DONE) {
                 stopUpdate();
                 old_node_josn = new NodeConfigHelper().getConfigJson(pinConfigs, node);
-                //  DialogUtils.showErrorDialog(SetupIotLinkActivity.this, "", "OK", "", "Firware Updated!", null);
-                App.showToastShrot("Firmware Updated!");
+                App.showToastShrot(getString(R.string.msg_updated_firmware));
                 setUpdateButton();
             } else if (ret == ConfigDeviceLogic.UPDATEING) {
                 if (progress <= 80) {
                     progress += 12;
-                    setProgressMsg("Preparing Server (" + progress + "%)");
+                    setProgressMsg(getString(R.string.msg_update_firmware_in_progress) + " (" + progress + "%)");
                 }
             } else if (ret == ConfigDeviceLogic.FAIL) {
                 if (data != null && data.length > 0) {
@@ -950,7 +949,7 @@ public class SetupDeviceActivity extends BaseActivity
                     showErrDialog(bean);
                 }
             } else if (ret == ConfigDeviceLogic.SUCCESS) {
-                setProgressMsg("Preparing Server (40%)");
+                setProgressMsg(getString(R.string.msg_update_firmware_in_progress) + " (40%)");
                 progress = 40;
             }
         }

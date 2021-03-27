@@ -40,6 +40,7 @@
     <string name="add_your_first_device">ADD YOUR FIRST DEVICE</string>
     <string name="device_name">Device Name</string>
     <string name="data_exchange_server">Customized Server</string>
+    <string name="trash_box">Remove</string>
 
     <!--Message-->
     <string name="msg_select_type_of_device">CHOOSE A DEVICE TO START</string>
@@ -49,6 +50,11 @@
     <string name="msg_enter_wifi_password">Enter Wifi Password</string>
     <string name="msg_check_wio_is_in_config_mode">Please check if Wio device is on configuration mode, in which the blue light appears as breathing.</string>
     <string name="msg_hint_not_device">You have not connected to any device yet,get started now!</string>
+    <string name="msg_loading">"loading…"</string>
+    <string name="msg_new_setting_only_applies">New setting only applies after updating firmware</string>
+    <string name="msg_drag_and_drop_grove_to_port">Drag and drop Groves you need to below ports</string>
+    <string name="msg_update_firmware_in_progress">Preparing Server</string>
+    <string name="msg_updated_firmware">Firmware Updated!</string>
 
     <!--Menu-->
     <string name="menu_grove_list">Groves</string>
@@ -72,6 +78,7 @@
     <string name="step02_wifi_list_activity_title">Connect to Wi-Fi Network</string>
     <string name="step03_wifi_wio_list_activity_title">Connect to Wio Device</string>
     <string name="node_setting_activity_title">Device Setting</string>
+    <string name="node_setting_activity_edit_device_name">Edit Device Name</string>
     <string name="node_setting_activity_data_exchange_server_empty">Not Set</string>
 
     <!--Specific View-->
@@ -79,6 +86,7 @@
     <string name="dialog_edit_node_name_description">Your device is now ready!\n\nName this device if you wish.</string>
     <string name="dialog_edit_node_name_submit">Start Wio-ing</string>
     <string name="activity_node_setting_delete_device">Delete this device</string>
+    <string name="activity_setup_device_update_firmware">Update Firmware</string>
 
     <!-- =====Original===== -->
 
@@ -86,7 +94,6 @@
     <string name="ok">OK</string>
     <string name="website_format_hint">"e.g: https://wio.seeed.io or https://192.168.31.2"</string>
     <string name="hint_get_host_address">"Get your server's host address…"</string>
-    <string name="loading">"loading…"</string>
     <string name="setup_switch_international">Switch to International</string>
     <string name="signin_email">Your Email</string>
     <string name="grove_detail">Detail</string>
